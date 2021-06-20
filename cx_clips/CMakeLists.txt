@@ -17,6 +17,8 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(PkgConfig REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
+find_package(cx_msgs REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -24,17 +26,28 @@ set(dependencies
   rclcpp_action
   rclcpp_lifecycle
   PkgConfig
+  lifecycle_msgs
+  cx_msgs
 )
-
-#import clipsmm via pkg-config
-pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0 )
 
 include_directories(include)
 
-add_executable(clips_node src/clips_node.cpp)
-ament_target_dependencies(clips_node ${dependencies})
+set(CLIPS_SOURCES
+  src/cx_clips/CLIPSEnvManagerNode.cpp
+)
 
-target_link_libraries(clips_node PkgConfig::CLIPSMM)
+#import clipsmm via pkg-config
+pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
+
+add_library(${PROJECT_NAME} SHARED ${CLIPS_SOURCES})
+ament_target_dependencies(${PROJECT_NAME} ${dependencies})
+target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
+
+add_executable(clips_node src/clips_node.cpp)
+
+ament_target_dependencies(clips_node ${dependencies})
+target_link_libraries(clips_node ${PROJECT_NAME})
+target_link_libraries(clips_node PkgConfig::CLIPSMM )
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -53,7 +66,7 @@ install(
 )
 
 install(TARGETS
-  # ${PROJECT_NAME}
+  ${PROJECT_NAME}
   clips_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
