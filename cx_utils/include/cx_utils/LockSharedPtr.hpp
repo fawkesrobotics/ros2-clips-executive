@@ -21,6 +21,8 @@ public:
   LockSharedPtr<T> &operator=(const LockSharedPtr<T> &other);
   // LockSharedPtr<T> &operator=(T ptr);
   std::shared_ptr<T> operator->() const;
+  // Called from instances to lock the mutex for the current scope
+  void scopedLock();
 
 private:
   std::shared_ptr<T> obj;
@@ -97,6 +99,9 @@ LockSharedPtr<T> &LockSharedPtr<T>::operator=(const LockSharedPtr<T> &other) {
  */
 template <class T> std::shared_ptr<T> LockSharedPtr<T>::operator->() const {
   return obj;
+}
+template <class T> void LockSharedPtr<T>::scopedLock() {
+  std::scoped_lock<std::shared_mutex> guard(objmutex);
 }
 
 template <class T> int LockSharedPtr<T>::numbers = 0;
