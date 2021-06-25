@@ -10,11 +10,18 @@ find_package(action_msgs REQUIRED)
 
 set(MSGS
   "msg/ClipsEnvironment.msg"
+  "msg/ClipsFeature.msg"
+  "msg/ClipsContext.msg"
+  
 )
 
-# set(SERVICES
-
-# )
+set(SERVICES
+  "srv/DestroyClipsEnv.srv"
+  "srv/CreateClipsEnv.srv"
+  "srv/AddClipsFeatures.srv"
+  "srv/ClipsFeatureContext.srv"
+  "srv/ClipsRemoveFeatures.srv"
+)
 
 # set(ACTIONS
 
@@ -22,7 +29,7 @@ set(MSGS
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${MSGS}
-  # ${services}
+  ${SERVICES}
   # ${actions}
   DEPENDENCIES std_msgs builtin_interfaces action_msgs
 )
