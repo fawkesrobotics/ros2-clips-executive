@@ -14,12 +14,14 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(PkgConfig REQUIRED)
 find_package(cx_utils REQUIRED)
+find_package(cx_msgs REQUIRED)
 
 
 set(dependencies
   ament_cmake
   PkgConfig
   cx_utils
+  cx_msgs
 )
 
 set(CX_CORE_SOURCES
