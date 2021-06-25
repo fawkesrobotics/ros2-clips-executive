@@ -1,0 +1,5 @@
+string env_name
+string log_name
+---
+bool success
+string error
