@@ -21,6 +21,7 @@ public:
   LockSharedPtr<T> &operator=(const LockSharedPtr<T> &other);
   // LockSharedPtr<T> &operator=(T ptr);
   std::shared_ptr<T> operator->() const;
+  operator bool() const;
   // Called from instances to lock the mutex for the current scope
   void scopedLock();
 
@@ -31,7 +32,9 @@ private:
 };
 
 template <class T> LockSharedPtr<T>::LockSharedPtr() {
-  obj = std::make_shared<T>();
+  // obj = std::make_shared<T>();
+  RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "Constructor NO param");
+
   LockSharedPtr::numbers++;
 }
 
@@ -102,6 +105,10 @@ template <class T> std::shared_ptr<T> LockSharedPtr<T>::operator->() const {
 }
 template <class T> void LockSharedPtr<T>::scopedLock() {
   std::scoped_lock<std::shared_mutex> guard(objmutex);
+}
+
+template <class T> LockSharedPtr<T>::operator bool() const {
+  return (obj != nullptr);
 }
 
 template <class T> int LockSharedPtr<T>::numbers = 0;
