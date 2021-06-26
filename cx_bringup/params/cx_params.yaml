@@ -1,0 +1,7 @@
+cx_features:
+  ros__parameters:
+    alpha1: 0.2
+
+cx_clips:
+  ros__parameters:
+    alpha1: 0.2

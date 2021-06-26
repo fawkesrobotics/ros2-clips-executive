@@ -42,11 +42,11 @@ add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
 
-add_executable(main src/main.cpp)
+add_executable(features_node src/features_node.cpp)
 
-ament_target_dependencies(main ${dependencies})
-target_link_libraries(main ${PROJECT_NAME})
-target_link_libraries(main PkgConfig::CLIPSMM)
+ament_target_dependencies(features_node ${dependencies})
+target_link_libraries(features_node ${PROJECT_NAME})
+target_link_libraries(features_node PkgConfig::CLIPSMM)
 
 
 install(
@@ -55,7 +55,7 @@ install(
 )
 
 install(TARGETS
-  main
+  features_node
   ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
