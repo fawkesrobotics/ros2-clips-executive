@@ -12,8 +12,12 @@
 namespace cx {
 class ClipsFeature {
 public:
-  ClipsFeature(const std::string &feature_name);
+  ClipsFeature();
   virtual ~ClipsFeature();
+
+  using Ptr = std::shared_ptr<cx::ClipsFeature>;
+
+  virtual void initialise(const std::string &feature_name);
   // TODO DESCRIPTION
   // Initialises a CLIPS context to use the provided feature.
   virtual bool clips_context_init(const std::string &env_name,
@@ -24,8 +28,7 @@ public:
   std::string getFeatureName() const;
 
 protected:
-  const std::string clips_feature_name;
-  // rclcpp::Node::SharedPtr node_;
+  std::string clips_feature_name;
 };
 
 } // namespace cx
