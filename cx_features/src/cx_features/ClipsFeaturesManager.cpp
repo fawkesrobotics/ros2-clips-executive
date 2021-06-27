@@ -8,6 +8,7 @@
 
 #include "cx_core/ClipsFeature.hpp"
 #include "cx_msgs/srv/clips_feature_context.hpp"
+#include "cx_utils/params_utils.hpp"
 
 #include "lifecycle_msgs/msg/state.hpp"
 
@@ -16,7 +17,12 @@ using namespace std::placeholders;
 namespace cx {
 
 ClipsFeaturesManager::ClipsFeaturesManager()
-    : rclcpp_lifecycle::LifecycleNode("clips_features_manager") {}
+    : rclcpp_lifecycle::LifecycleNode("clips_features_manager"),
+      pg_loader_("cx_core", "cx::ClipsFeature"), default_ids_{},
+      default_types_{} {
+
+  declare_parameter("clips_features", default_ids_);
+}
 
 ClipsFeaturesManager::~ClipsFeaturesManager() {}
 
@@ -33,6 +39,8 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
 
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
+  auto node = shared_from_this();
+
   feature_init_context_service_ =
       create_service<cx_msgs::srv::ClipsFeatureContext>(
           "clips_features_manager/init_feature_context",
@@ -45,22 +53,39 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
           std::bind(&ClipsFeaturesManager::feature_destroy_context_callback,
                     this, _1, _2, _3));
 
-  // GET THE REQUESTED FEATURES FROM THE PARAMETERS LATER!!!!!!
-  auto mock_feature = std::make_shared<cx::MockFeature>("mock_feature");
-  features_[mock_feature->getFeatureName()] = std::move(mock_feature);
-  auto mock_feature_1 = std::make_shared<cx::MockFeature>("mock_feature_1");
-  features_[mock_feature_1->getFeatureName()] = std::move(mock_feature_1);
-  auto mock_feature_2 = std::make_shared<cx::MockFeature>("mock_feature_2");
-  features_[mock_feature_2->getFeatureName()] = std::move(mock_feature_2);
-  auto mock_feature_3 = std::make_shared<cx::MockFeature>("mock_feature_3");
-  features_[mock_feature_3->getFeatureName()] = std::move(mock_feature_3);
-  auto mock_feature_4 = std::make_shared<cx::MockFeature>("mock_feature_4");
-  features_[mock_feature_4->getFeatureName()] = std::move(mock_feature_4);
+  // Load all registered features in the cx_params.yml file
+  get_parameter("clips_features", features_ids_);
 
-  // auto mock_feature_5 = std::make_shared<cx::MockFeature>("mock_feature_5");
-  // auto mock_feature_6 = std::make_shared<cx::MockFeature>("mock_feature_6");
-  // auto mock_feature_7 = std::make_shared<cx::MockFeature>("mock_feature_7");
-  // auto mock_feature_8 = std::make_shared<cx::MockFeature>("mock_feature_8");
+  if (!features_ids_.empty()) {
+    features_types_.resize(features_ids_.size());
+
+    for (size_t i = 0; i < features_types_.size(); i++) {
+      try {
+        const std::string feat_name = features_ids_[i];
+        features_types_[i] = cx::get_plugin_type_param(node, feat_name);
+
+        cx::ClipsFeature::Ptr feature =
+            pg_loader_.createUniqueInstance(features_types_[i]);
+
+        // Call the feature initialisation
+        feature->initialise(feat_name);
+
+        RCLCPP_INFO(get_logger(), "Created feature : %s of type %s",
+                    feat_name.c_str(), features_types_[i].c_str());
+        // Insert loaded feature to the features map
+        features_.insert({feat_name, feature});
+
+      } catch (const pluginlib::PluginlibException &ex) {
+        RCLCPP_FATAL(get_logger(), "Failed to load feature. Exception: %s",
+                     ex.what());
+        exit(-1);
+      }
+    }
+  } else {
+    RCLCPP_WARN(
+        get_logger(),
+        "Loading Clips Feature Manager without any features specified!");
+  }
 
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
   return CallbackReturn::SUCCESS;
@@ -118,7 +143,6 @@ void ClipsFeaturesManager::feature_destroy_context_callback(
       clips_env_manager_node_->envs_[env_name].env;
 
   if (features_.find(feature_name) != features_.end()) {
-    RCLCPP_INFO(get_logger(), "IN IF FOR CONTEXT DESTROY");
     bool success =
         features_[feature_name]->clips_context_destroyed(env_name, clips);
     if (!success) {

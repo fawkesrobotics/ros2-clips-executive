@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
@@ -13,7 +14,12 @@
 
 #include "cx_clips/CLIPSEnvManagerNode.h"
 #include "cx_core/ClipsFeature.hpp"
+#include "cx_features/MockFeature.hpp"
+
 #include "cx_msgs/srv/clips_feature_context.hpp"
+
+#include "pluginlib/class_list_macros.hpp"
+#include "pluginlib/class_loader.hpp"
 
 namespace cx {
 
@@ -28,6 +34,8 @@ public:
 
   using CallbackReturn =
       rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+
+  using FeaturesMap = std::unordered_map<std::string, cx::ClipsFeature::Ptr>;
 
   CallbackReturn on_configure(const rclcpp_lifecycle::State &state);
   CallbackReturn on_activate(const rclcpp_lifecycle::State &state);
@@ -48,14 +56,24 @@ public:
           response);
 
   // MOVE TO PRIVATE LATER!
-  std::map<std::string, std::shared_ptr<cx::ClipsFeature>> features_;
+  FeaturesMap features_;
+
+  //   std::map<std::string, std::shared_ptr<cx::ClipsFeature>> features_;
   std::shared_ptr<cx::CLIPSEnvManagerNode> clips_env_manager_node_;
 
 private:
+  // Services
   rclcpp::Service<cx_msgs::srv::ClipsFeatureContext>::SharedPtr
       feature_init_context_service_;
   rclcpp::Service<cx_msgs::srv::ClipsFeatureContext>::SharedPtr
       feature_destroy_context_service_;
+
+  // Pluginlib class loaders
+  pluginlib::ClassLoader<cx::ClipsFeature> pg_loader_;
+  std::vector<std::string> default_ids_;
+  std::vector<std::string> default_types_;
+  std::vector<std::string> features_ids_;
+  std::vector<std::string> features_types_;
 };
 
 } // namespace cx

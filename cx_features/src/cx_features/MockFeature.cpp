@@ -2,20 +2,12 @@
 
 #include "cx_features/MockFeature.hpp"
 
+// To export as plugin
+#include "pluginlib/class_list_macros.hpp"
+
 using std::placeholders::_1;
 namespace cx {
-MockFeature::MockFeature(const std::string &feature_name)
-    : ClipsFeature(feature_name) {
-
-  // init_context_sub_ = create_subscription<cx_msgs::msg::ClipsContext>(
-  //     "clips_manager/request_feature_context_initialisation",
-  //     rclcpp::QoS(100).keep_all(),
-  //     std::bind(&MockFeature::clips_context_init, this, _1));
-  // destroy_context_sub_ = create_publisher<cx_msgs::msg::ClipsContext>(
-  //     "clips_manager/request_feature_context_destroy",
-  //     rclcpp::QoS(20).reliable(),
-  //     std::bind(&MockFeature::clips_context_destroyed, this, _1));
-}
+MockFeature::MockFeature() {}
 
 MockFeature::~MockFeature() {}
 
@@ -27,6 +19,10 @@ std::string MockFeature::getFeatureName() const { return clips_feature_name; }
 //               clips_feature_name.c_str());
 //   envs_[env_name] = clips;
 // }
+
+void MockFeature::initialise(const std::string &feature_name) {
+  clips_feature_name = feature_name;
+}
 
 bool MockFeature::clips_context_init(const std::string &env_name,
                                      LockSharedPtr<CLIPS::Environment> &clips) {
@@ -45,6 +41,7 @@ bool MockFeature::clips_context_init(const std::string &env_name,
               "Initialised the context!");
   return true;
 }
+
 bool MockFeature::clips_context_destroyed(
     const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
 
@@ -53,3 +50,5 @@ bool MockFeature::clips_context_destroyed(
   return true;
 }
 } // namespace cx
+
+PLUGINLIB_EXPORT_CLASS(cx::MockFeature, cx::ClipsFeature)

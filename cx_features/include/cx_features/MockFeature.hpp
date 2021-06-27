@@ -14,14 +14,16 @@ namespace cx {
 
 class MockFeature : public ClipsFeature {
 public:
-  explicit MockFeature(const std::string &feature_name);
+  MockFeature();
   ~MockFeature();
+
+  void initialise(const std::string &feature_name) override;
+
   bool clips_context_init(const std::string &env_name,
-                          LockSharedPtr<CLIPS::Environment> &clips);
-  bool clips_context_destroyed(const std::string &env_name,
-                               LockSharedPtr<CLIPS::Environment> &clips);
-  // void addEnvironment(const std::string &env_name,
-  //                     LockSharedPtr<CLIPS::Environment> &clips);
+                          LockSharedPtr<CLIPS::Environment> &clips) override;
+  bool
+  clips_context_destroyed(const std::string &env_name,
+                          LockSharedPtr<CLIPS::Environment> &clips) override;
 
   std::string getFeatureName() const;
 

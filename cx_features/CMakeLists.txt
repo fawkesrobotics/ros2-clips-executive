@@ -18,6 +18,7 @@ find_package(cx_clips REQUIRED)
 find_package(cx_core REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
+find_package(pluginlib REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -27,51 +28,72 @@ set(dependencies
   cx_core
   cx_msgs
   cx_utils
+  pluginlib
 )
 
+
 set(CX_FEATURES_SOURCES
-   src/cx_features/MockFeature.cpp
-   src/cx_features/ClipsFeaturesManager.cpp
+  # src/cx_features/mock_feature.cpp
+  src/cx_features/ClipsFeaturesManager.cpp
 )
 
 pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
 
 include_directories(include)
 
+add_library(mock_feature SHARED src/cx_features/MockFeature.cpp)
+ament_target_dependencies(mock_feature ${dependencies})
+target_link_libraries(mock_feature PkgConfig::CLIPSMM)
+# prevent pluginlib from using boost
+target_compile_definitions(mock_feature PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
+
+
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
+target_compile_definitions(${PROJECT_NAME} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
+
 
 add_executable(features_node src/features_node.cpp)
-
 ament_target_dependencies(features_node ${dependencies})
 target_link_libraries(features_node ${PROJECT_NAME})
 target_link_libraries(features_node PkgConfig::CLIPSMM)
+target_compile_definitions(features_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
+
+
 
 
 install(
   DIRECTORY include/
   DESTINATION include/
-)
+  )
+  
+  # install(
+  #   FILES features_plugin.xml
+  #   DESTINATION share/${PROJECT_NAME}
+  # )
+  
+  install(TARGETS
+    features_node
+    mock_feature
+    ${PROJECT_NAME}
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION lib/${PROJECT_NAME}
+  )
+  
+  if(BUILD_TESTING)
+    find_package(ament_lint_auto REQUIRED)
+    ament_lint_auto_find_test_dependencies()
+    find_package(ament_cmake_gtest REQUIRED)
+    add_subdirectory(test)
+  endif()
+  
+  
+  ament_export_include_directories(include)
+  ament_export_libraries(mock_feature ${PROJECT_NAME})
+  ament_export_dependencies(${dependencies})
 
-install(TARGETS
-  features_node
-  ${PROJECT_NAME}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
-
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
-  find_package(ament_cmake_gtest REQUIRED)
-  add_subdirectory(test)
-endif()
-
-
-ament_export_include_directories(include)
-ament_export_libraries(${PROJECT_NAME})
-ament_export_dependencies(${dependencies})
-
+  pluginlib_export_plugin_description_file(cx_core features_plugin.xml)
+  
 ament_package()

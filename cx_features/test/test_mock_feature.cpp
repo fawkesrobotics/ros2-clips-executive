@@ -19,6 +19,15 @@ TEST(test_mock_feature, test_context_init) {
   auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>();
   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
 
+  std::vector<std::string> allFeatures = {"mock_feature"};
+  features_manager->set_parameter(
+      rclcpp::Parameter("clips_features", allFeatures));
+  features_manager->declare_parameter("mock_feature.plugin");
+  features_manager->set_parameter(
+      rclcpp::Parameter("mock_feature.plugin", "cx::MockFeature"));
+  // features_manager->set_parameter(
+  //     rclcpp::Parameter("mock_feature.plugin", "cx::MockFeature"));
+
   features_manager->pre_configure(manager_node);
 
   std::vector<std::string> flist;
@@ -75,7 +84,7 @@ TEST(test_mock_feature, test_context_init) {
   try {
 
     ASSERT_TRUE(manager_client->addFeatures(flist));
-    
+
     ASSERT_FALSE(manager_client->addFeatures(flist));
 
     ASSERT_TRUE(manager_client->createNewClipsEnvironment(env_name, log_name));
@@ -87,11 +96,11 @@ TEST(test_mock_feature, test_context_init) {
     features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
         ->evaluate("(ff-feature-request \"mock_feature\")");
 
-    created_env->evaluate("(ff-feature-request \"mock_feature_2\")");
-    created_env->evaluate("(ff-feature-request \"mock_feature_3\")");
-    created_env->evaluate("(ff-feature-request \"mock_feature_4\")");
-    created_env->evaluate("(ff-feature-request \"mock_feature_10\")");
-    created_env->evaluate("(ff-feature-request \"mock_feature_1\")");
+    // created_env->evaluate("(ff-feature-request \"mock_feature_2\")");
+    // created_env->evaluate("(ff-feature-request \"mock_feature_3\")");
+    // created_env->evaluate("(ff-feature-request \"mock_feature_4\")");
+    // created_env->evaluate("(ff-feature-request \"mock_feature_10\")");
+    // created_env->evaluate("(ff-feature-request \"mock_feature_1\")");
 
     ASSERT_FALSE(manager_client->assertCanRemoveClipsFeatures(flist));
     // mock_feature->clips_context_init(env_name, created_env);
