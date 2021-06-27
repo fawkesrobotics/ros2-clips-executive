@@ -1,6 +1,13 @@
-cx_features:
+clips_features_manager:
   ros__parameters:
-    alpha1: 0.2
+    clips_features: ["mock_feature", "mock_feature_2", "mock_feature_3"]
+
+    mock_feature:
+      plugin: "cx::MockFeature"
+    mock_feature_2:
+      plugin: "cx::MockFeature"
+    mock_feature_3:
+      plugin: "cx::MockFeature"
 
 cx_clips:
   ros__parameters:

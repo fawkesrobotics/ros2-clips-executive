@@ -49,5 +49,5 @@ def generate_launch_description():
 
     ld.add_action(cx_clips_node_)
     ld.add_action(cx_features_node_)
-    
+
     return ld
