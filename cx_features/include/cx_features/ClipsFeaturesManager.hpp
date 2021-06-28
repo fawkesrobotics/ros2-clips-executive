@@ -12,6 +12,7 @@
 #include "lifecycle_msgs/msg/state.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
 
+#include "cx_clips/CLIPSEnvManagerClient.hpp"
 #include "cx_clips/CLIPSEnvManagerNode.h"
 #include "cx_core/ClipsFeature.hpp"
 #include "cx_features/MockFeature.hpp"
@@ -68,6 +69,8 @@ private:
   rclcpp::Service<cx_msgs::srv::ClipsFeatureContext>::SharedPtr
       feature_destroy_context_service_;
 
+  std::shared_ptr<cx::CLIPSEnvManagerClient> env_manager_client_;
+  std::vector<std::string> feature_names_vector_;
   // Pluginlib class loaders
   pluginlib::ClassLoader<cx::ClipsFeature> pg_loader_;
   std::vector<std::string> default_ids_;

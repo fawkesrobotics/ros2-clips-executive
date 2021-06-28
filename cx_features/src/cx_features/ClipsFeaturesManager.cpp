@@ -18,6 +18,7 @@ namespace cx {
 
 ClipsFeaturesManager::ClipsFeaturesManager()
     : rclcpp_lifecycle::LifecycleNode("clips_features_manager"),
+      env_manager_client_{std::make_shared<cx::CLIPSEnvManagerClient>()},
       pg_loader_("cx_core", "cx::ClipsFeature"), default_ids_{},
       default_types_{} {
 
@@ -86,7 +87,14 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
         get_logger(),
         "Loading Clips Feature Manager without any features specified!");
   }
-
+  // populate the vector of feature names
+  for (auto &feat : features_) {
+    feature_names_vector_.emplace_back(feat.second->getFeatureName());
+  }
+  RCLCPP_INFO(get_logger(), "Sending features to Clips Environment Manager");
+  // Send all available features to the env manager!
+  env_manager_client_->addFeatures(std::move(feature_names_vector_));
+  
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }

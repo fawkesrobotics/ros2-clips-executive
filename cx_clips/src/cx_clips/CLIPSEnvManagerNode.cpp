@@ -126,7 +126,7 @@ using namespace std::placeholders;
 
 CLIPSEnvManagerNode::CLIPSEnvManagerNode()
     : rclcpp_lifecycle::LifecycleNode("clips_manager") {
-
+  RCLCPP_INFO(get_logger(), "Initialising [%s]...", get_name());
   /*Register callback group for the destroy context client as it calls the
    * clips feature manager service and waits for a result*/
   callback_group_ =
