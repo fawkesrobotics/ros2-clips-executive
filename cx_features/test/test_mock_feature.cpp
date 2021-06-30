@@ -83,7 +83,7 @@ TEST(test_mock_feature, test_context_init) {
   // auto created_env = manager_node->getEnvironmentByName(env_name);
   try {
 
-    ASSERT_TRUE(manager_client->addFeatures(flist));
+    // ASSERT_TRUE(manager_client->addFeatures(flist));
 
     ASSERT_FALSE(manager_client->addFeatures(flist));
 
@@ -95,6 +95,8 @@ TEST(test_mock_feature, test_context_init) {
 
     features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
         ->evaluate("(ff-feature-request \"mock_feature\")");
+    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
+        ->evaluate("(ff-feature-request \"redefine_warning_feature\")");
 
     // created_env->evaluate("(ff-feature-request \"mock_feature_2\")");
     // created_env->evaluate("(ff-feature-request \"mock_feature_3\")");

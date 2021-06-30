@@ -15,7 +15,9 @@
 #include "cx_clips/CLIPSEnvManagerClient.hpp"
 #include "cx_clips/CLIPSEnvManagerNode.h"
 #include "cx_core/ClipsFeature.hpp"
+
 #include "cx_features/MockFeature.hpp"
+#include "cx_features/RedefineWarningFeature.hpp"
 
 #include "cx_msgs/srv/clips_feature_context.hpp"
 
@@ -61,6 +63,9 @@ public:
 
   //   std::map<std::string, std::shared_ptr<cx::ClipsFeature>> features_;
   std::shared_ptr<cx::CLIPSEnvManagerNode> clips_env_manager_node_;
+
+private:
+  void addGeneralFeatures();
 
 private:
   // Services

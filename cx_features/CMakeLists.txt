@@ -33,7 +33,7 @@ set(dependencies
 
 
 set(CX_FEATURES_SOURCES
-  # src/cx_features/mock_feature.cpp
+  src/cx_features/redefine_warning_feature/RedefineWarningFeature.cpp
   src/cx_features/ClipsFeaturesManager.cpp
 )
 
@@ -41,12 +41,13 @@ pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
 
 include_directories(include)
 
+# All features registered as plugins
 add_library(mock_feature SHARED src/cx_features/MockFeature.cpp)
 ament_target_dependencies(mock_feature ${dependencies})
 target_link_libraries(mock_feature PkgConfig::CLIPSMM)
 # prevent pluginlib from using boost
 target_compile_definitions(mock_feature PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
-
+# END OF PLUGINS REGISTRATION
 
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})

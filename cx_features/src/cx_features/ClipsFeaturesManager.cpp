@@ -5,6 +5,7 @@
 
 #include "cx_features/ClipsFeaturesManager.hpp"
 #include "cx_features/MockFeature.hpp"
+#include "cx_features/RedefineWarningFeature.hpp"
 
 #include "cx_core/ClipsFeature.hpp"
 #include "cx_msgs/srv/clips_feature_context.hpp"
@@ -54,6 +55,9 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
           std::bind(&ClipsFeaturesManager::feature_destroy_context_callback,
                     this, _1, _2, _3));
 
+  // WE FIRST ADD ALL DEFAULT FEATURES
+  addGeneralFeatures();
+
   // Load all registered features in the cx_params.yml file
   get_parameter("clips_features", features_ids_);
 
@@ -94,7 +98,7 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "Sending features to Clips Environment Manager");
   // Send all available features to the env manager!
   env_manager_client_->addFeatures(std::move(feature_names_vector_));
-  
+
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
@@ -163,5 +167,13 @@ void ClipsFeaturesManager::feature_destroy_context_callback(
     response->error = feature_name + " has not been registered!";
   }
   response->success = false;
+}
+
+void ClipsFeaturesManager::addGeneralFeatures() {
+  auto redefineWarningFeature = std::make_shared<cx::RedefineWarningFeature>();
+  redefineWarningFeature->initialise("redefine_warning_feature");
+  RCLCPP_INFO(get_logger(), "Created feature redefine_warning_feature");
+
+  features_.insert({"redefine_warning_feature", redefineWarningFeature});
 }
 } // namespace cx

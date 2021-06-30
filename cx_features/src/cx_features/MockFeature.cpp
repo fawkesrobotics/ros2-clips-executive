@@ -13,13 +13,6 @@ MockFeature::~MockFeature() {}
 
 std::string MockFeature::getFeatureName() const { return clips_feature_name; }
 
-// void MockFeature::addEnvironment(const std::string &env_name,
-//                                  LockSharedPtr<CLIPS::Environment> &clips) {
-//   RCLCPP_WARN(get_logger(), "Adding env %s to map of %s", env_name.c_str(),
-//               clips_feature_name.c_str());
-//   envs_[env_name] = clips;
-// }
-
 void MockFeature::initialise(const std::string &feature_name) {
   clips_feature_name = feature_name;
 }

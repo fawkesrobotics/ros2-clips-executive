@@ -1,6 +1,7 @@
-#ifndef CX_FEATURES__MOCKFEATURE_HPP_
-#define CX_FEATURES__MOCKFEATURE_HPP_
+#ifndef CX_FEATURES__REDEFINEWARNINGFEATURE_HPP_
+#define CX_FEATURES__REDEFINEWARNINGFEATURE_HPP_
 
+#include <clipsmm.h>
 #include <string>
 
 #include "cx_core/ClipsFeature.hpp"
@@ -8,10 +9,10 @@
 
 namespace cx {
 
-class MockFeature : public ClipsFeature {
+class RedefineWarningFeature : public ClipsFeature {
 public:
-  MockFeature();
-  ~MockFeature();
+  RedefineWarningFeature();
+  ~RedefineWarningFeature();
 
   void initialise(const std::string &feature_name) override;
 
@@ -24,8 +25,8 @@ public:
   std::string getFeatureName() const;
 
 private:
-  // const std::string clips_feature_name;
 };
+
 } // namespace cx
 
-#endif // !CX_FEATURES__MOCKFEATURE_HPP_
+#endif // !CX_FEATURES__REDEFINEWARNINGFEATURE_HPP_
