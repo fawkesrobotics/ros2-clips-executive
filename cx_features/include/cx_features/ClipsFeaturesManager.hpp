@@ -18,6 +18,7 @@
 
 #include "cx_features/MockFeature.hpp"
 #include "cx_features/RedefineWarningFeature.hpp"
+#include "cx_features/ConfigFeature.hpp"
 
 #include "cx_msgs/srv/clips_feature_context.hpp"
 

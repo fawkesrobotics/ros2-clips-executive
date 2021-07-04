@@ -97,6 +97,10 @@ TEST(test_mock_feature, test_context_init) {
         ->evaluate("(ff-feature-request \"mock_feature\")");
     features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
         ->evaluate("(ff-feature-request \"redefine_warning_feature\")");
+    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
+        ->evaluate("(ff-feature-request \"config_feature\")");
+    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
+        ->evaluate("(config-load \"/clips-executive\")");
 
     // created_env->evaluate("(ff-feature-request \"mock_feature_2\")");
     // created_env->evaluate("(ff-feature-request \"mock_feature_3\")");

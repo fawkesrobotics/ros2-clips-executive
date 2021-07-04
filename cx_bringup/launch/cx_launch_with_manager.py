@@ -17,6 +17,9 @@ def generate_launch_description():
     lc_nodes = ["clips_manager",
                 "clips_features_manager"]
 
+    stdout_linebuf_envvar = SetEnvironmentVariable(
+        'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
+
     declare_namespace_ = DeclareLaunchArgument(
         'namespace', default_value='',
         description='Default namespace')
@@ -56,6 +59,8 @@ def generate_launch_description():
     SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1'),
     # The lauchdescription to populate with defined CMDS
     ld = LaunchDescription()
+
+    ld.add_action(stdout_linebuf_envvar)
 
     ld.add_action(declare_namespace_)
     ld.add_action(declare_params_file_)

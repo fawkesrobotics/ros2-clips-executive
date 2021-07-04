@@ -6,6 +6,8 @@ if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
 endif()
 
+# set(ryml_DIR /home/userin4o/rapidyaml/install/lib/cmake/ryml)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -19,6 +21,8 @@ find_package(cx_core REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(yaml-cpp REQUIRED)
+# find_package(ryml REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -29,11 +33,14 @@ set(dependencies
   cx_msgs
   cx_utils
   pluginlib
+  yaml-cpp
+  # ryml
 )
 
 
 set(CX_FEATURES_SOURCES
   src/cx_features/redefine_warning_feature/RedefineWarningFeature.cpp
+  src/cx_features/config_feature/ConfigFeature.cpp
   src/cx_features/ClipsFeaturesManager.cpp
 )
 
@@ -52,6 +59,7 @@ target_compile_definitions(mock_feature PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIO
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
+target_link_libraries(${PROJECT_NAME} yaml-cpp)
 target_compile_definitions(${PROJECT_NAME} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 
@@ -59,6 +67,7 @@ add_executable(features_node src/features_node.cpp)
 ament_target_dependencies(features_node ${dependencies})
 target_link_libraries(features_node ${PROJECT_NAME})
 target_link_libraries(features_node PkgConfig::CLIPSMM)
+target_link_libraries(features_node yaml-cpp)
 target_compile_definitions(features_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 

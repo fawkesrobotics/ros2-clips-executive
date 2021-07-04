@@ -174,6 +174,11 @@ void ClipsFeaturesManager::addGeneralFeatures() {
   redefineWarningFeature->initialise("redefine_warning_feature");
   RCLCPP_INFO(get_logger(), "Created feature redefine_warning_feature");
 
+  auto configFeature = std::make_shared<cx::ConfigFeature>();
+  configFeature->initialise("config_feature");
+  RCLCPP_INFO(get_logger(), "Created feature config_feature");
+
   features_.insert({"redefine_warning_feature", redefineWarningFeature});
+  features_.insert({"config_feature", configFeature});
 }
 } // namespace cx
