@@ -1,13 +1,13 @@
 #ifndef CX_CLIPS__CLIPSENVMANAGERNODE_H_
 #define CX_CLIPS__CLIPSENVMANAGERNODE_H_
 
-#include <clipsmm.h>
 #include <algorithm>
+#include <clipsmm.h>
 #include <list>
 #include <map>
 #include <memory>
-#include <string>
 #include <set>
+#include <string>
 
 #include "rclcpp/clock.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -29,9 +29,11 @@
 
 namespace cx {
 class ClipsFeaturesManager;
+class ClipsExecutive;
 
 class CLIPSEnvManagerNode : public rclcpp_lifecycle::LifecycleNode {
   friend ClipsFeaturesManager;
+  friend ClipsExecutive;
 
 public:
   CLIPSEnvManagerNode();
@@ -121,8 +123,7 @@ private:
   rclcpp::CallbackGroup::SharedPtr callback_group_;
 
 private:
-  std::string clips_dir_{"/home/userin4o/galactic_ws/src/ros2-clips-executive/"
-                         "cx_clips/src/cx_clips/clips/"};
+  std::string clips_dir_;
 
   typedef struct {
     LockSharedPtr<CLIPS::Environment> env;

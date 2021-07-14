@@ -4,6 +4,8 @@
 #include <string>
 #include <utility>
 
+#include <ament_index_cpp/get_package_share_directory.hpp>
+
 #include "rclcpp/logging.hpp"
 
 #include "cx_clips/CLIPSEnvManagerNode.h"
@@ -37,13 +39,13 @@ public:
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
         // LATER DEBUG
-        RCLCPP_INFO(this->logger_, component_ ? "CLIPS", "%s",
-                    buffer_.c_str() : component_);
+        RCLCPP_DEBUG(this->logger_, component_ ? "CLIPS", "%s",
+                     buffer_.c_str() : component_);
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
                  strcmp(logical_name, WWARNING) == 0) {
-        RCLCPP_WARN(this->logger_, component_ ? component_ : "CLIPS", "%s",
-                    buffer_.c_str());
+        RCLCPP_WARN(this->logger_, component_ ? "CLIPS", "%s",
+                    buffer_.c_str() : component_);
       } else if (strcmp(logical_name, "error") == 0 ||
                  strcmp(logical_name, "logerror") == 0 ||
                  strcmp(logical_name, WERROR) == 0) {
@@ -52,8 +54,8 @@ public:
       } else if (strcmp(logical_name, WDIALOG) == 0) {
         // ignored
       } else {
-        RCLCPP_INFO(this->logger_, component_ ? component_ : "CLIPS", "%s",
-                    buffer_.c_str());
+        RCLCPP_INFO(this->logger_, component_ ? "CLIPS", "%s",
+                    buffer_.c_str() : component_);
       }
 
       buffer_.clear();
@@ -177,12 +179,19 @@ CLIPSEnvManagerNode::on_configure(const rclcpp_lifecycle::State &) {
       std::bind(&CLIPSEnvManagerNode::remove_features_callback, this, _1, _2,
                 _3));
 
+  try {
+    clips_dir_ = std::move(
+        ament_index_cpp::get_package_share_directory("cx_clips") + "/clips/");
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << '\n';
+    return CallbackReturn::FAILURE;
+  }
+
   // Initialise CLIPS
   RCLCPP_INFO(get_logger(), "Initialising CLIPS!");
 
   CLIPS::init();
 
-  RCLCPP_INFO(get_logger(), "clips_dir === %s", clips_dir_.c_str());
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
 
   return CallbackReturn::SUCCESS;

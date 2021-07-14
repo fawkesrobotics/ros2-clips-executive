@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 project(cx_clips)
 
-
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -70,6 +69,8 @@ install(
   DIRECTORY include/
   DESTINATION include/
 )
+
+install(DIRECTORY src/${PROJECT_NAME}/clips DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
   ${PROJECT_NAME}
