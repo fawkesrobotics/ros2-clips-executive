@@ -70,9 +70,6 @@ target_link_libraries(features_node PkgConfig::CLIPSMM)
 target_link_libraries(features_node yaml-cpp)
 target_compile_definitions(features_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
-
-
-
 install(
   DIRECTORY include/
   DESTINATION include/

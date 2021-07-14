@@ -14,6 +14,8 @@
   <depend>rclcpp</depend>
   <depend>cx_features</depend>
   <depend>cx_clips</depend>
+  <depend>cx_clips_executive</depend>
+  <depend>PkgConfig</depend>
 
   <exec_depend>launch_ros</exec_depend>
 

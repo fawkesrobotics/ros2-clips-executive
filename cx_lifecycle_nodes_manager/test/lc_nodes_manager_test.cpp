@@ -6,18 +6,19 @@
 #include "rclcpp/rclcpp.hpp"
 #include "gtest/gtest.h"
 
-#include "ament_index_cpp/get_package_share_directory.hpp"
-
 #include "cx_clips/CLIPSEnvManagerClient.hpp"
 #include "cx_clips/CLIPSEnvManagerNode.h"
 #include "cx_features/ClipsFeaturesManager.hpp"
 #include "cx_features/MockFeature.hpp"
+#include "cx_lifecycle_nodes_manager/LifecycleNodesManager.hpp"
+namespace cx {
 
-TEST(test_mock_feature, test_context_init) {
+TEST(lc_nodes_manager_test, test_context_init) {
   auto testing_node = rclcpp::Node::make_shared("testing_node");
   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
   auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>();
   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
+  auto lc_manager = std::make_shared<cx::LifecycleNodesManager>();
 
   std::vector<std::string> allFeatures = {"mock_feature"};
   features_manager->set_parameter(
@@ -37,8 +38,9 @@ TEST(test_mock_feature, test_context_init) {
   // std::string pkgPath =
   // ament_index_cpp::get_package_share_directory("cx_clips");
 
-  rclcpp::executors::MultiThreadedExecutor exe(rclcpp::ExecutorOptions(), 2);
+  rclcpp::executors::SingleThreadedExecutor exe;
 
+  exe.add_node(lc_manager->get_node_base_interface());
   exe.add_node(manager_node->get_node_base_interface());
   exe.add_node(features_manager->get_node_base_interface());
 
@@ -50,10 +52,6 @@ TEST(test_mock_feature, test_context_init) {
   });
 
   using lc_tr = lifecycle_msgs::msg::Transition;
-
-  manager_node->trigger_transition(lc_tr::TRANSITION_CONFIGURE);
-  features_manager->trigger_transition(lc_tr::TRANSITION_CONFIGURE);
-
   {
     rclcpp::Rate rate(10);
     auto start_time = testing_node->now();
@@ -78,14 +76,12 @@ TEST(test_mock_feature, test_context_init) {
     }
   }
 
+  // lc_manager->initialise();
+
   RCLCPP_INFO(testing_node->get_logger(), "TEST-NODE-START");
 
   // auto created_env = manager_node->getEnvironmentByName(env_name);
   try {
-
-    // ASSERT_TRUE(manager_client->addFeatures(flist));
-
-    ASSERT_FALSE(manager_client->addFeatures(flist));
 
     ASSERT_TRUE(manager_client->createNewClipsEnvironment(env_name, log_name));
 
@@ -95,12 +91,6 @@ TEST(test_mock_feature, test_context_init) {
 
     features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
         ->evaluate("(ff-feature-request \"mock_feature\")");
-    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
-        ->evaluate("(ff-feature-request \"redefine_warning_feature\")");
-    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
-        ->evaluate("(ff-feature-request \"config_feature\")");
-    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
-        ->evaluate("(config-load \"/clips_executive\")");
 
     // created_env->evaluate("(ff-feature-request \"mock_feature_2\")");
     // created_env->evaluate("(ff-feature-request \"mock_feature_3\")");
@@ -131,3 +121,4 @@ int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
   return RUN_ALL_TESTS();
 }
+} // namespace cx
