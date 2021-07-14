@@ -4,11 +4,6 @@
 #include <ament_index_cpp/get_package_prefix.hpp>
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <yaml-cpp/yaml.h>
-// #include <ryml.hpp>
-// #include <ryml_std.hpp> // optional header. BUT when used, needs to be
-// included BEFORE ryml.hpp
-
-#include "rcl_yaml_param_parser/parser.h"
 
 #include "cx_features/ConfigFeature.hpp"
 
@@ -100,6 +95,8 @@ void ConfigFeature::iterateThroughYamlRecuresively(
     std::string cfg_prefix, const std::string &env_name) {
 
   std::string config_path = cfg_prefix;
+  // RCLCPP_INFO(rclcpp::get_logger(logger_name), "CFG PATH: %s",
+  //             config_path.c_str());
 
   for (const auto &item : current_level_node) {
     std::string type = "";
@@ -123,7 +120,6 @@ void ConfigFeature::iterateThroughYamlRecuresively(
       path = config_path + "/" + item.first.as<std::string>();
 
       if (type == "STRING") {
-
         std::stringstream escaped_quotes;
         escaped_quotes << std::quoted(item.second.as<std::string>());
         // RCLCPP_INFO(rclcpp::get_logger(logger_name),
@@ -151,13 +147,18 @@ void ConfigFeature::iterateThroughYamlRecuresively(
 
       const YAML::Node &nested_node = item.second;
       path = config_path + "/" + item.first.as<std::string>();
+
       sequenceIterator(nested_node, logger_name, path, env_name);
 
       break;
     }
     // If it is a MapNode
     case YAML::NodeType::Map: {
-      path = config_path + "/" + item.first.as<std::string>();
+      if (item.first.as<std::string>() != "ros__parameters") {
+        path = config_path + "/" + item.first.as<std::string>();
+      } else {
+        path = config_path;
+      }
       iterateThroughYamlRecuresively(current_level_node[item.first],
                                      logger_name, path, env_name);
       break;
@@ -174,6 +175,7 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
   size_t i = 0;
   std::string path;
   std::string list_values{};
+  int sequenceIndex = 0;
 
   for (const auto &item2 : input_node) {
     if (*item2) {
@@ -195,14 +197,19 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
 
         continue;
       }
-      // item2 is a Sequence or Map
+      // item2 is a Map or Sequence
+
       for (const auto &item3 : item2) {
         // OF the FORM
         //   - name: domain,
         //     file: test-scenario/test-domain.clp
         if (item3.second.IsScalar()) {
 
-          path = cfg_prefix + "/" + item3.first.as<std::string>();
+          path = cfg_prefix + "/" + std::move(std::to_string(sequenceIndex)) +
+                 "/" + item3.first.as<std::string>();
+
+          // path = path + std::move(std::to_string(sequenceIndex));
+
           envs_[env_name]->assert_fact_f(
               "(confval (path \"%s\") (is-list FALSE) (type %s) (value "
               "\"%s\"))",
@@ -223,14 +230,23 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
           //    - skills-actions.clp
           //    - test-scenario-pddl/print-action.clp
 
-          path = cfg_prefix + "/" + item3.first.as<std::string>();
+          path = cfg_prefix + "/" + std::move(std::to_string(sequenceIndex)) +
+                 "/" + item3.first.as<std::string>();
+          // path = path + std::move(std::to_string(sequenceIndex));
+
           list_values = "";
 
           std::stringstream escaped_quotes;
           for (const auto &el : item3.second) {
-            list_values = list_values + " " + el.as<std::string>();
-            escaped_quotes << std::quoted(list_values);
+            // if (list_values != "") {
+            //   list_values = " " + el.as<std::string>();
+
+            // } else {
+            //   list_values = el.as<std::string>();
+            // }
+            escaped_quotes << std::quoted(el.as<std::string>());
           }
+
           envs_[env_name]->assert_fact_f("(confval (path \"%s\") (type STRING) "
                                          "(is-list TRUE) (list-value%s))",
                                          path.c_str(),
@@ -245,6 +261,7 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
           sequenceIterator(item3.second, logger_name, cfg_prefix, env_name);
         }
       }
+      sequenceIndex++;
     } else {
       RCLCPP_ERROR(rclcpp::get_logger(logger_name),
                    "Something went wrong while trying to iterate through the "
