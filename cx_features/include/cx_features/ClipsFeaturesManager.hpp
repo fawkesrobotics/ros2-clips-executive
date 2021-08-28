@@ -16,9 +16,10 @@
 #include "cx_clips/CLIPSEnvManagerNode.h"
 #include "cx_core/ClipsFeature.hpp"
 
+#include "cx_features/BlackboardFeature.hpp"
+#include "cx_features/ConfigFeature.hpp"
 #include "cx_features/MockFeature.hpp"
 #include "cx_features/RedefineWarningFeature.hpp"
-#include "cx_features/ConfigFeature.hpp"
 
 #include "cx_msgs/srv/clips_feature_context.hpp"
 

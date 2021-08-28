@@ -20,8 +20,11 @@ find_package(cx_clips REQUIRED)
 find_package(cx_core REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
+find_package(cx_blackboard REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(yaml-cpp REQUIRED)
+# find_package(ros2_introspection REQUIRED)
+find_package(rosbag2_cpp REQUIRED)
 # find_package(ryml REQUIRED)
 
 set(dependencies
@@ -34,13 +37,15 @@ set(dependencies
   cx_utils
   pluginlib
   yaml-cpp
-  # ryml
+  cx_blackboard
+  rosbag2_cpp
 )
 
 
 set(CX_FEATURES_SOURCES
   src/cx_features/redefine_warning_feature/RedefineWarningFeature.cpp
   src/cx_features/config_feature/ConfigFeature.cpp
+  src/cx_features/blackboard_feature/BlackboardFeature.cpp
   src/cx_features/ClipsFeaturesManager.cpp
 )
 

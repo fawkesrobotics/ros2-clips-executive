@@ -14,9 +14,11 @@
   <depend>cx_core</depend>
   <depend>cx_msgs</depend>
   <depend>cx_utils</depend>
+  <depend>cx_blackboard</depend>
   <depend>PkgConfig</depend>
   <depend>clipsmm</depend>
   <depend>pluginlib</depend>
+  <depend>rosbag2_cpp</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
