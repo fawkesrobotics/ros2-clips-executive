@@ -20,11 +20,12 @@
 #include <rosbag2_cpp/types/introspection_message.hpp>
 #include <rosbag2_cpp/typesupport_helpers.hpp>
 #include <rosidl_runtime_c/message_initialization.h>
+#include <rosidl_typesupport_cpp/identifier.hpp>
 #include <rosidl_typesupport_introspection_cpp/field_types.hpp>
+#include <rosidl_typesupport_introspection_cpp/identifier.hpp>
 #include <rosidl_typesupport_introspection_cpp/message_introspection.hpp>
 
 #include "test_utils.h"
-#include <ros2_introspection/ros2_introspection.hpp>
 
 #include "cx_blackboard/BlackboardNode.hpp"
 #include "cx_blackboard/Interface.hpp"
@@ -34,7 +35,6 @@
 #include "cx_blackboard/InterfaceWriter.hpp"
 
 using namespace std::chrono_literals;
-using namespace Ros2Introspection;
 
 class Mock {
 private:

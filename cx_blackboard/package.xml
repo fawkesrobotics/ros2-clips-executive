@@ -16,7 +16,6 @@
   <depend>cx_utils</depend>
   <depend>rosbag2_cpp</depend>
   <depend>test_msgs</depend>
-  <!-- <depend>ros2_introspection</depend> -->
   
 
   <test_depend>ament_lint_auto</test_depend>

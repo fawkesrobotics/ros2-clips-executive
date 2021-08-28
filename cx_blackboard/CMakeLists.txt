@@ -19,7 +19,6 @@ find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
 find_package(test_msgs REQUIRED)
-find_package(ros2_introspection REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -30,7 +29,6 @@ set(dependencies
   cx_utils
   rosbag2_cpp
   test_msgs
-  ros2_introspection
 )
 
 include_directories(include)
