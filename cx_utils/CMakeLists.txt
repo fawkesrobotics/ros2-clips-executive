@@ -24,6 +24,7 @@ include_directories(include)
 set(CX_UTILS_SOURCES
   src/LockSharedPtr.cpp
   src/NodeThread.cpp
+  src/map_skill.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${CX_UTILS_SOURCES})
