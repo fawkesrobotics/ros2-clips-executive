@@ -39,7 +39,7 @@ public:
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
         // LATER DEBUG
-        RCLCPP_DEBUG(this->logger_, component_ ? "CLIPS", "%s",
+        RCLCPP_INFO(this->logger_, component_ ? "CLIPS", "%s",
                      buffer_.c_str() : component_);
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
