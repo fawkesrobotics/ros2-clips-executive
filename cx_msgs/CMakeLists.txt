@@ -12,7 +12,9 @@ set(MSGS
   "msg/ClipsEnvironment.msg"
   "msg/ClipsFeature.msg"
   "msg/ClipsContext.msg"
-  
+  "msg/PddlGenInterface.msg"
+  "msg/PddlGenerateMessage.msg" 
+  "msg/PddlGenInterfaceMessages.msg"
 )
 
 set(SERVICES
@@ -21,6 +23,8 @@ set(SERVICES
   "srv/AddClipsFeatures.srv"
   "srv/ClipsFeatureContext.srv"
   "srv/ClipsRemoveFeatures.srv"
+  "srv/PddlGenInterfaceSrv.srv"
+  "srv/OpenInterface.srv"
 )
 
 # set(ACTIONS
