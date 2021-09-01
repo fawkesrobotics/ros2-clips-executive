@@ -20,6 +20,7 @@
 #include "cx_clips/CLIPSEnvManagerNode.h"
 
 #include "cx_utils/LockSharedPtr.hpp"
+#include "cx_utils/map_skill.h"
 
 namespace cx {
 
@@ -44,8 +45,9 @@ public:
   LockSharedPtr<CLIPS::Environment> clips_;
 
 private:
-  // std::string clips_map_skill(std::string name, CLIPS::Values param_names,
-  //                             CLIPS::Values param_values);
+  std::string clips_map_skill(std::string action_name,
+                              CLIPS::Values param_names,
+                              CLIPS::Values param_values);
   void iterateThroughYamlRecuresively(
       const YAML::Node &current_level_node, const std::string &node_to_search,
       const std::string &parent_node_name, const std::string &cfg_prefix,
@@ -60,6 +62,7 @@ private:
   std::vector<std::string> clips_dirs{};
   std::string clips_executive_share_dir;
   bool cfg_assert_time_each_cycle_;
+  std::shared_ptr<cx::ActionSkillMapping> action_skill_mapping_;
 };
 } // namespace cx
 #endif // !CX_CLIPS_EXECUTIVE__CLIPSEXECUTIVE_HPP_

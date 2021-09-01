@@ -107,7 +107,8 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
     RCLCPP_INFO(get_logger(), "Adding action mapping %s->%s",
                 action.first.c_str(), action.second.c_str());
   }
-  // action_skill_mapping_ = std::make_shared<cx::ActionSkillMapping>(mapping);
+  action_skill_mapping_ =
+      std::make_shared<cx::ActionSkillMapping>(action_mapping);
   return CallbackReturn::SUCCESS;
 }
 
@@ -146,11 +147,10 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
 
   clips_->evaluate("(ff-feature-request \"config_feature\")");
 
-  // clips_->add_function("map-action-skill",
-  //                     sigc::slot<std::string, std::string, CLIPS::Values,
-  //                     CLIPS::Values>(
-  //                       sigc::mem_fun(*this,
-  //                       &ClipsExecutive::clips_map_skill)));
+  clips_->add_function(
+      "map-action-skill",
+      sigc::slot<std::string, std::string, CLIPS::Values, CLIPS::Values>(
+          sigc::mem_fun(*this, &ClipsExecutive::clips_map_skill)));
 
   clips_->evaluate("(ff-feature-request \"redefine_warning_feature\")");
 
@@ -214,9 +214,73 @@ ClipsExecutive::on_deactivate(const rclcpp_lifecycle::State &state) {
   return CallbackReturn::SUCCESS;
 }
 
-// std::string ClipsExecutive::clips_map_skill(std::string name,
-//                                             CLIPS::Values param_names,
-//                                             CLIPS::Values param_values);
+std::string ClipsExecutive::clips_map_skill(std::string action_name,
+                                            CLIPS::Values param_names,
+                                            CLIPS::Values param_values) {
+  if (!action_skill_mapping_) {
+    RCLCPP_ERROR(get_logger(), "No action mapping has been loaded");
+    return "";
+  }
+  if (action_name == "") {
+    RCLCPP_WARN(get_logger(), "Failed to map, action name is empty");
+    return "";
+  }
+  if (!action_skill_mapping_->has_mapping(action_name)) {
+    RCLCPP_WARN(get_logger(), "No mapping for action '%s' known",
+                action_name.c_str());
+    return "";
+  }
+  if (param_names.size() != param_values.size()) {
+    RCLCPP_WARN(get_logger(),
+                "Number of parameter names and values "
+                "do not match for action '%s'",
+                action_name.c_str());
+    return "";
+  }
+  std::map<std::string, std::string> param_map;
+  for (size_t i = 0; i < param_names.size(); ++i) {
+    if (param_names[i].type() != CLIPS::TYPE_SYMBOL &&
+        param_names[i].type() != CLIPS::TYPE_STRING) {
+      RCLCPP_ERROR(get_logger(), "Param for '%s' is not a string or symbol",
+                   action_name.c_str());
+      return "";
+    }
+    switch (param_values[i].type()) {
+    case CLIPS::TYPE_FLOAT:
+      param_map[param_names[i].as_string()] =
+          std::to_string(param_values[i].as_float());
+      break;
+    case CLIPS::TYPE_INTEGER:
+      param_map[param_names[i].as_string()] =
+          std::to_string(param_values[i].as_integer());
+      break;
+    case CLIPS::TYPE_SYMBOL:
+    case CLIPS::TYPE_STRING:
+      param_map[param_names[i].as_string()] = param_values[i].as_string();
+      break;
+    default:
+      RCLCPP_ERROR(get_logger(), "Param '%s' for action '%s' of invalid type",
+                   param_names[i].as_string().c_str(), action_name.c_str());
+      break;
+    }
+  }
+
+  std::multimap<std::string, std::string> messages;
+  std::string rv =
+      action_skill_mapping_->map_skill(action_name, param_map, messages);
+  for (auto &m : messages) {
+    if (m.first == "WARN") {
+      RCLCPP_WARN(get_logger(), "%s", m.second.c_str());
+    } else if (m.first == "ERROR") {
+      RCLCPP_ERROR(get_logger(), "%s", m.second.c_str());
+    } else if (m.first == "DEBUG") {
+      RCLCPP_DEBUG(get_logger(), "%s", m.second.c_str());
+    } else {
+      RCLCPP_INFO(get_logger(), "%s", m.second.c_str());
+    }
+  }
+  return rv;
+}
 
 void ClipsExecutive::iterateThroughYamlRecuresively(
     const YAML::Node &current_level_node, const std::string &node_to_search,
