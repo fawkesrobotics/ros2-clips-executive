@@ -1,13 +1,11 @@
 clips_features_manager:
   ros__parameters:
-    clips_features: ["mock_feature", "mock_feature_2", "mock_feature_3"]
+    clips_features: ["mock_feature", "plansys2"]
 
     mock_feature:
       plugin: "cx::MockFeature"
-    mock_feature_2:
-      plugin: "cx::MockFeature"
-    mock_feature_3:
-      plugin: "cx::MockFeature"
+    plansys2:
+      plugin: "cx::Plansys2Feature"
 
 cx_clips:
   ros__parameters:

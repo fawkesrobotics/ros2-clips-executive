@@ -4,4 +4,9 @@
       <description>Mock feature to test pluginlib</description>
     </class>
   </library>
+  <library path="plansys2_feature">
+    <class type="cx::Plansys2Feature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing plansys2 interaction to Clips Environment</description>
+    </class>
+  </library>
 </class_libraries>

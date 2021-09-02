@@ -236,8 +236,6 @@ void CLIPSEnvManagerNode::create_env_callback(
       guarded_load(env_name, clips_dir_ + "path.clp");
 
       clips->evaluate("(path-add \"" + clips_dir_ + "\")");
-      clips->evaluate("(path-resolve " + clips_dir_ + ")");
-
       response->success = true;
     } else {
       RCLCPP_ERROR(get_logger(), "Failed to initialise CLIPS environment '%s'",
@@ -423,6 +421,8 @@ CLIPSEnvManagerNode::new_env(const std::string &log_component_name) {
 
     sigaction(SIGINT, &oldact, NULL);
 
+    RCLCPP_INFO(get_logger(), "Initialisied new CLIPS ENVIRONMENT: %s",
+              log_component_name.c_str());
     return clips;
   } else {
     RCLCPP_ERROR(

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
 project(cx_utils)
 
+# packages to ignore: colcon build --symlink-install --packages-ignore plansys2_executor plansys2_bt_actions plansys2_terminal plansys2_bringup plansys2_tests
+
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)

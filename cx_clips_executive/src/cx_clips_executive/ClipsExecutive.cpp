@@ -54,6 +54,9 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
     clips_executive_share_dir = std::move(
         ament_index_cpp::get_package_share_directory("cx_clips_executive"));
   } catch (const std::exception &e) {
+    RCLCPP_ERROR(
+        get_logger(),
+        "Exception when getting bringup/clips_executive shared directory!");
     std::cerr << e.what() << '\n';
     return CallbackReturn::FAILURE;
   }
@@ -61,24 +64,24 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   if (!(get_parameter("clips-dirs", clips_dirs))) {
     RCLCPP_ERROR(
         get_logger(),
-        "Couldnt get parameter /clips-executive/clips-dirs, aborting...");
+        "Couldnt get parameter /clips_executive/clips-dirs, aborting...");
     return CallbackReturn::FAILURE;
   }
 
   for (size_t i = 0; i < clips_dirs.size(); ++i) {
-    RCLCPP_INFO(get_logger(), "Configuring2 [%s]...", get_name());
-
     if (clips_dirs[i][clips_dirs[i].size() - 1] != '/') {
       clips_dirs[i] += "/";
     }
     RCLCPP_INFO(get_logger(), "CLIPS_DIR: %s", clips_dirs[i].c_str());
   }
+
   clips_dirs.insert(clips_dirs.begin(), clips_executive_share_dir + "/clips/");
 
   std::string cfg_spec;
-  if (!(get_parameter("spec", cfg_spec))) {
+  get_parameter("spec", cfg_spec);
+  if (cfg_spec == "") {
     RCLCPP_ERROR(get_logger(),
-                 "Couldnt get parameter /clips-executive/spec, aborting...");
+                 "Couldnt get parameter /clips_executive/spec, aborting...");
     return CallbackReturn::FAILURE;
   }
 
@@ -88,11 +91,13 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
 
   try {
     YAML::Node config = YAML::LoadFile(
-        std::move(cx_bringup_dir + "/params/clips-executive.yaml"));
+        std::move(cx_bringup_dir + "/params/clips_executive.yaml"));
     iterateThroughYamlRecuresively(config["clips_executive"], "action-mapping",
                                    "", cfg_spec, action_mapping);
 
   } catch (const std::exception &e) {
+    RCLCPP_INFO(get_logger(), "Error loading clips_executive config file!");
+
     std::cerr << e.what() << '\n';
     return CallbackReturn::FAILURE;
   }
@@ -109,12 +114,14 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   }
   action_skill_mapping_ =
       std::make_shared<cx::ActionSkillMapping>(action_mapping);
+
+  RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
 
 CallbackReturn
 ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
-
+  RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
   clips_agenda_refresh_pub_->on_activate();
   // Create Clips Executive environment
   if (env_manager_client_->createNewClipsEnvironment("executive",
@@ -166,6 +173,7 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
       return CallbackReturn::FAILURE;
     }
   }
+
   clips_->assert_fact("(executive-init)");
   clips_->refresh_agenda();
   clips_->run();
@@ -197,7 +205,7 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
     clips_->run();
     clips_agenda_refresh_pub_->publish(std_msgs::msg::Empty());
   });
-
+  RCLCPP_INFO(get_logger(), "Activared [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
 

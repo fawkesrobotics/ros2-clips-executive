@@ -61,6 +61,12 @@ ament_target_dependencies(mock_feature ${dependencies})
 target_link_libraries(mock_feature PkgConfig::CLIPSMM)
 # prevent pluginlib from using boost
 target_compile_definitions(mock_feature PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
+
+add_library(plansys2_feature SHARED src/cx_features/plansys2_feature/Plansys2Feature.cpp)
+ament_target_dependencies(plansys2_feature ${dependencies})
+target_link_libraries(plansys2_feature PkgConfig::CLIPSMM)
+# prevent pluginlib from using boost
+target_compile_definitions(plansys2_feature PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 # END OF PLUGINS REGISTRATION
 
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})

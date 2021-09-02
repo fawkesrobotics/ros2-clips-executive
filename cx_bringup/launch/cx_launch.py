@@ -26,7 +26,7 @@ def generate_launch_description():
 
     declare_log_level_ = DeclareLaunchArgument(
         "log_level",
-        default_value='debug',
+        default_value='info',
         description="Logging level for cx_node executable",
     )
 
@@ -42,7 +42,7 @@ def generate_launch_description():
     declare_clips_executive_params_file = DeclareLaunchArgument(
         'clips_executive_params_file',
         default_value=os.path.join(
-            bringup_dir, 'params', 'clips-executive.yaml'),
+            bringup_dir, 'params', 'clips_executive.yaml'),
         description='Path to Clips Executive params file')
 
     cx_node = Node(

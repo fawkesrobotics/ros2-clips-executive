@@ -6,7 +6,7 @@
 
 
 // To export as plugin
-// #include "pluginlib/class_list_macros.hpp"
+#include "pluginlib/class_list_macros.hpp"
 
 using std::placeholders::_1;
 namespace cx {
@@ -47,4 +47,4 @@ bool Plansys2Feature::clips_context_destroyed(
 }
 } // namespace cx
 
-// PLUGINLIB_EXPORT_CLASS(cx::Plansys2Feature, cx::ClipsFeature)
+PLUGINLIB_EXPORT_CLASS(cx::Plansys2Feature, cx::ClipsFeature)
