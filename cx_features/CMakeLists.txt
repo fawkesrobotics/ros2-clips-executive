@@ -23,9 +23,9 @@ find_package(cx_utils REQUIRED)
 find_package(cx_blackboard REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(yaml-cpp REQUIRED)
-# find_package(ros2_introspection REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
-# find_package(ryml REQUIRED)
+find_package(plansys2_problem_expert REQUIRED)
+
 
 set(dependencies
   ament_cmake
@@ -39,6 +39,7 @@ set(dependencies
   yaml-cpp
   cx_blackboard
   rosbag2_cpp
+  plansys2_problem_expert
 )
 
 
@@ -46,6 +47,7 @@ set(CX_FEATURES_SOURCES
   src/cx_features/redefine_warning_feature/RedefineWarningFeature.cpp
   src/cx_features/config_feature/ConfigFeature.cpp
   src/cx_features/blackboard_feature/BlackboardFeature.cpp
+  src/cx_features/plansys2_feature/Plansys2Feature.cpp
   src/cx_features/ClipsFeaturesManager.cpp
 )
 
