@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "plansys2_domain_expert/DomainExpertClient.hpp"
+#include "plansys2_planner/PlannerClient.hpp"
 #include "plansys2_problem_expert/ProblemExpertClient.hpp"
 
 #include "cx_core/ClipsFeature.hpp"
@@ -27,6 +29,24 @@ public:
 
 private:
   std::map<std::string, LockSharedPtr<CLIPS::Environment>> envs_;
+  // PLANSYS2 CLIENTS
+  std::shared_ptr<plansys2::DomainExpertClient> domain_client_;
+  std::shared_ptr<plansys2::ProblemExpertClient> problem_client_;
+  std::shared_ptr<plansys2::PlannerClient> planner_client_;
+
+  unsigned int plan_id_{0};
+
+private:
+  inline unsigned int next_plan_id() { return ++plan_id_; }
+
+  void addProblemInstance(const std::string &env_name, const std::string &name,
+                          const std::string &type);
+  void addProblemPredicate(const std::string &env_name,
+                           const std::string &pred);
+  void clearProblemExpertKnowledge(const std::string &env_name);
+
+  bool planWithPlansys2(const std::string &env_name, const std::string &goal_id,
+                        const std::string &goal);
 };
 
 } // namespace cx

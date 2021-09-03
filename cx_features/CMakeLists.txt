@@ -25,6 +25,8 @@ find_package(pluginlib REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
+find_package(plansys2_domain_expert REQUIRED)
+find_package(plansys2_planner REQUIRED)
 
 
 set(dependencies
@@ -40,6 +42,8 @@ set(dependencies
   cx_blackboard
   rosbag2_cpp
   plansys2_problem_expert
+  plansys2_domain_expert
+  plansys2_planner
 )
 
 

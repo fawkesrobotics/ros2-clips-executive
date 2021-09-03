@@ -70,6 +70,7 @@ clips_executive:
           # and blackboard-init.clp.
           stage-1:
             - name: redefine_warning_feature
+            - name: plansys2
             # - name: pddl_parser
             # - name: pddl-planner
             #   feature-request: false
