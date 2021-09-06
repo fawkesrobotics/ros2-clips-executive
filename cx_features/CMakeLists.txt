@@ -16,12 +16,12 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(PkgConfig REQUIRED)
+find_package(pluginlib REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_core REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(cx_blackboard REQUIRED)
-find_package(pluginlib REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
@@ -37,9 +37,9 @@ set(dependencies
   cx_core
   cx_msgs
   cx_utils
-  pluginlib
   yaml-cpp
   cx_blackboard
+  pluginlib
   rosbag2_cpp
   plansys2_problem_expert
   plansys2_domain_expert
@@ -59,18 +59,17 @@ pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
 
 include_directories(include)
 
+pluginlib_export_plugin_description_file(cx_core features_plugin.xml)
+
+
 # All features registered as plugins
 add_library(mock_feature SHARED src/cx_features/MockFeature.cpp)
 ament_target_dependencies(mock_feature ${dependencies})
 target_link_libraries(mock_feature PkgConfig::CLIPSMM)
-# prevent pluginlib from using boost
-target_compile_definitions(mock_feature PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 add_library(plansys2_feature SHARED src/cx_features/plansys2_feature/Plansys2Feature.cpp)
 ament_target_dependencies(plansys2_feature ${dependencies})
 target_link_libraries(plansys2_feature PkgConfig::CLIPSMM)
-# prevent pluginlib from using boost
-target_compile_definitions(plansys2_feature PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 # END OF PLUGINS REGISTRATION
 
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
@@ -92,14 +91,15 @@ install(
   DESTINATION include/
   )
   
-  # install(
-  #   FILES features_plugin.xml
-  #   DESTINATION share/${PROJECT_NAME}
-  # )
+  install(
+    FILES features_plugin.xml
+    DESTINATION share/${PROJECT_NAME}
+  )
   
   install(TARGETS
     features_node
     mock_feature
+    plansys2_feature
     ${PROJECT_NAME}
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
@@ -110,14 +110,13 @@ install(
     find_package(ament_lint_auto REQUIRED)
     ament_lint_auto_find_test_dependencies()
     find_package(ament_cmake_gtest REQUIRED)
+    find_package(cx_clips_executive REQUIRED)
     add_subdirectory(test)
   endif()
   
   
   ament_export_include_directories(include)
-  ament_export_libraries(mock_feature ${PROJECT_NAME})
+  ament_export_libraries(mock_feature plansys2_feature ${PROJECT_NAME})
   ament_export_dependencies(${dependencies})
-
-  pluginlib_export_plugin_description_file(cx_core features_plugin.xml)
   
 ament_package()

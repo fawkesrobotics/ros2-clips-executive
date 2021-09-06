@@ -45,8 +45,11 @@ private:
                            const std::string &pred);
   void clearProblemExpertKnowledge(const std::string &env_name);
 
-  bool planWithPlansys2(const std::string &env_name, const std::string &goal_id,
-                        const std::string &goal);
+  void planWithPlansys2(const std::string &env_name, const std::string &goal_id,
+                        const std::string &goal, const std::string &plan_id);
+
+  void call_planner(const std::string &env_name, const std::string &goal_id,
+                    const std::string &goal, const std::string &plan_id);
 };
 
 } // namespace cx
