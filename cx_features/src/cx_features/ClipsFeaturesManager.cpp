@@ -112,6 +112,15 @@ ClipsFeaturesManager::on_activate(const rclcpp_lifecycle::State &state) {
   return CallbackReturn::SUCCESS;
 }
 
+CallbackReturn
+ClipsFeaturesManager::on_deactivate(const rclcpp_lifecycle::State &state) {
+  RCLCPP_INFO(get_logger(), "[%s] Deactivating...", get_name());
+
+  RCLCPP_INFO(get_logger(), "[%s] Deactivated!", get_name());
+
+  return CallbackReturn::SUCCESS;
+}
+
 void ClipsFeaturesManager::feature_init_context_callback(
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Request> request,
@@ -179,12 +188,12 @@ void ClipsFeaturesManager::addGeneralFeatures() {
   configFeature->initialise("config_feature");
   RCLCPP_INFO(get_logger(), "Created feature config_feature");
 
-  auto blackboardFeature = std::make_shared<cx::BlackboardFeature>();
-  blackboardFeature->initialise("blackboard_feature");
-  RCLCPP_INFO(get_logger(), "Created feature blackboard_feature");
+  // auto blackboardFeature = std::make_shared<cx::BlackboardFeature>();
+  // blackboardFeature->initialise("blackboard_feature");
+  // RCLCPP_INFO(get_logger(), "Created feature blackboard_feature");
 
   features_.insert({"redefine_warning_feature", redefineWarningFeature});
   features_.insert({"config_feature", configFeature});
-  features_.insert({"blackboard_feature", blackboardFeature});
+  // features_.insert({"blackboard_feature", blackboardFeature});
 }
 } // namespace cx

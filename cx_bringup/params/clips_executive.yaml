@@ -138,6 +138,9 @@ clips_executive:
                 - skills-actions.clp
                 - test-scenario/print-action.clp
                 # - lock-actions.clp
+            - name: psys2-planner
+              files:
+                - pddl-init.clp
             - name: execution-monitoring
               files:
                 - execmon/stalled-sequential-plan.clp
