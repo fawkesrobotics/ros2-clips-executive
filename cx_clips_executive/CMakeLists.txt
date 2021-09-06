@@ -61,6 +61,13 @@ target_link_libraries(clips_executive_node yaml-cpp)
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
+  find_package(ament_cmake_gtest REQUIRED)
+  find_package(plansys2_problem_expert REQUIRED)
+  find_package(plansys2_domain_expert REQUIRED)
+  find_package(plansys2_planner REQUIRED)
+  find_package(pluginlib REQUIRED)
+  find_package(cx_features REQUIRED)
+  add_subdirectory(test)
 endif()
 
 install(
