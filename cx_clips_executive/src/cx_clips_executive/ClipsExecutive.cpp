@@ -198,14 +198,13 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   agenda_refresh_timer_ = create_wall_timer(33ms, [this]() {
     clips_.scopedLock();
     if (cfg_assert_time_each_cycle_) {
-
       // clips_->assert_fact("(time (now))");
     }
     clips_->refresh_agenda();
     clips_->run();
     clips_agenda_refresh_pub_->publish(std_msgs::msg::Empty());
   });
-  RCLCPP_INFO(get_logger(), "Activared [%s]!", get_name());
+  RCLCPP_INFO(get_logger(), "Activated [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
 
