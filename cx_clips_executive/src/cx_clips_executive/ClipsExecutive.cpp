@@ -43,16 +43,20 @@ CallbackReturn
 ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
-  env_manager_client_ = std::make_shared<cx::CLIPSEnvManagerClient>();
+  env_manager_client_ =
+      std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client_cx");
   clips_agenda_refresh_pub_ = create_publisher<std_msgs::msg::Empty>(
       "clips_executive/refresh_agenda", rclcpp::QoS(100).reliable());
 
   std::string cx_bringup_dir;
+  std::string cx_features_dir;
   try {
     cx_bringup_dir =
         std::move(ament_index_cpp::get_package_share_directory("cx_bringup"));
-    clips_executive_share_dir = std::move(
+    clips_executive_share_dir_ = std::move(
         ament_index_cpp::get_package_share_directory("cx_clips_executive"));
+    cx_features_dir =
+        std::move(ament_index_cpp::get_package_share_directory("cx_features"));
   } catch (const std::exception &e) {
     RCLCPP_ERROR(
         get_logger(),
@@ -75,7 +79,8 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
     RCLCPP_INFO(get_logger(), "CLIPS_DIR: %s", clips_dirs[i].c_str());
   }
 
-  clips_dirs.insert(clips_dirs.begin(), clips_executive_share_dir + "/clips/");
+  clips_dirs.insert(clips_dirs.begin(), clips_executive_share_dir_ + "/clips/");
+  clips_dirs.insert(clips_dirs.begin(), cx_features_dir + "/clips/");
 
   std::string cfg_spec;
   get_parameter("spec", cfg_spec);
@@ -115,6 +120,8 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   action_skill_mapping_ =
       std::make_shared<cx::ActionSkillMapping>(action_mapping);
 
+  env_manager_client_->createNewClipsEnvironment("executive",
+                                                 "CLIPS (executive)");
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
@@ -124,25 +131,33 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
   clips_agenda_refresh_pub_->on_activate();
   // Create Clips Executive environment
-  if (env_manager_client_->createNewClipsEnvironment("executive",
-                                                     "CLIPS (executive)")) {
-    clips_ = clips_env_manager_node_->envs_["executive"].env;
-    // TODO: REMOVE LATER!
-    clips_->watch("all");
-  } else {
-    RCLCPP_ERROR(get_logger(),
-                 "Clips Executive Environment creation failed, aborting...");
-    return CallbackReturn::FAILURE;
+  // Busy waiting as the function is async
+  auto start_time = now();
+  auto req_time = (now() - start_time).seconds();
+  while (clips_env_manager_node_->envs_.find("executive") ==
+         clips_env_manager_node_->envs_.end()) {
+    req_time = (now() - start_time).seconds();
+    if (req_time > 3.0) {
+      RCLCPP_ERROR(get_logger(),
+                   "Clips Executive Environment creation failed, aborting...");
+      return CallbackReturn::FAILURE;
+    }
   }
-  clips_.scopedLock();
+  clips_ = clips_env_manager_node_->envs_["executive"].env;
+  // TODO: REMOVE LATER!
+  clips_->watch("all");
+  RCLCPP_INFO(get_logger(), "After create");
+
+  std::lock_guard<std::recursive_mutex> guard(*(clips_.get_mutex_instance()));
+  RCLCPP_WARN(get_logger(), "Lock CX");
+
   std::string cx_bringup_dir;
+  std::string cx_features_dir;
   try {
     cx_bringup_dir =
         std::move(ament_index_cpp::get_package_share_directory("cx_bringup"));
-
     clips_->evaluate(std::string("(path-add-subst \"@CONFDIR@\" \"") +
                      cx_bringup_dir + "\")");
-
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     return CallbackReturn::FAILURE;
@@ -154,6 +169,8 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
 
   clips_->evaluate("(ff-feature-request \"config_feature\")");
 
+  RCLCPP_INFO(get_logger(), "After clips lock from CX");
+
   clips_->add_function(
       "map-action-skill",
       sigc::slot<std::string, std::string, CLIPS::Values, CLIPS::Values>(
@@ -161,9 +178,9 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
 
   clips_->evaluate("(ff-feature-request \"redefine_warning_feature\")");
 
-  std::vector<std::string> files{clips_executive_share_dir +
-                                     "/clips/saliences.clp",
-                                 clips_executive_share_dir + "/clips/init.clp"};
+  std::vector<std::string> files{
+      clips_executive_share_dir_ + "/clips/saliences.clp",
+      clips_executive_share_dir_ + "/clips/init.clp"};
   for (const auto &f : files) {
     if (!clips_->batch_evaluate(f)) {
       RCLCPP_ERROR(get_logger(),
@@ -195,14 +212,20 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   }
   RCLCPP_INFO(get_logger(), "CLIPS Executive was inistialised!");
 
-  agenda_refresh_timer_ = create_wall_timer(33ms, [this]() {
-    clips_.scopedLock();
-    if (cfg_assert_time_each_cycle_) {
-      // clips_->assert_fact("(time (now))");
+  agenda_refresh_timer_ = create_wall_timer(100ms, [this]() {
+    if ((*(clips_.get_mutex_instance())).try_lock()) {
+      RCLCPP_WARN(get_logger(), "Can lock the mutex");
+      std::lock_guard<std::recursive_mutex> guard(
+          *(clips_.get_mutex_instance()));
+
+      if (cfg_assert_time_each_cycle_) {
+        clips_->assert_fact("(time (now))");
+      }
+
+      clips_->refresh_agenda();
+      clips_->run();
+      clips_agenda_refresh_pub_->publish(std_msgs::msg::Empty());
     }
-    clips_->refresh_agenda();
-    clips_->run();
-    clips_agenda_refresh_pub_->publish(std_msgs::msg::Empty());
   });
   RCLCPP_INFO(get_logger(), "Activated [%s]!", get_name());
   return CallbackReturn::SUCCESS;

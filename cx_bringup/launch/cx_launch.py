@@ -3,7 +3,8 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable
+from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable, IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -14,15 +15,21 @@ def generate_launch_description():
     namespace = LaunchConfiguration('namespace')
     cx_params_file = LaunchConfiguration('cx_params_file')
     log_level = LaunchConfiguration('log_level')
+    model_file = LaunchConfiguration('model_file')
 
     clips_executive_params_file = LaunchConfiguration(
         'clips_executive_params_file')
 
-    lc_nodes = ["clips_manager",
-                "clips_features_manager", "clips_executive"]
+    lc_nodes = ["domain_expert", "problem_expert",
+                "planner", "clips_features_manager", "clips_executive"]
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
-        'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
+        'RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1')
+
+    declare_model_file_cmd = DeclareLaunchArgument(
+        'model_file',
+        default_value='/home/userin4o/galactic_ws/src/ros2-clips-executive/cx_clips_executive/src/cx_clips_executive/clips/test-scenario-pddl/domain.pddl',
+        description='PDDL Model file')
 
     declare_log_level_ = DeclareLaunchArgument(
         "log_level",
@@ -44,6 +51,18 @@ def generate_launch_description():
         default_value=os.path.join(
             bringup_dir, 'params', 'clips_executive.yaml'),
         description='Path to Clips Executive params file')
+
+    plansys2_node_cmd = Node(
+        package='cx_bringup',
+        executable='psys2_node_',
+        output='screen',
+        namespace=namespace,
+        parameters=[
+            {
+                'model_file': model_file,
+            },
+            cx_params_file
+        ])
 
     cx_node = Node(
         package='cx_bringup',
@@ -68,6 +87,7 @@ def generate_launch_description():
         namespace=namespace,
         parameters=[{"node_names_to_manage": lc_nodes}]
     )
+
     # The lauchdescription to populate with defined CMDS
     ld = LaunchDescription()
 
@@ -77,7 +97,9 @@ def generate_launch_description():
     ld.add_action(declare_namespace_)
     ld.add_action(declare_cx_params_file)
     ld.add_action(declare_clips_executive_params_file)
+    ld.add_action(declare_model_file_cmd)
 
+    ld.add_action(plansys2_node_cmd)
     ld.add_action(cx_node)
     ld.add_action(cx_lifecycle_manager)
 

@@ -36,11 +36,11 @@ clips_executive:
     automatic-goal-retraction: true
 
     # Directory where to look for CLIPS files
-    clips-dirs: ["@CONFDIR@/params"]
+    clips-dirs: ["@CONFDIR@/params", "@FEATURESTEST@"]
 
     # Agent name. On startup the clips-agent will try to resolve a file named
     # <agent name>.clp. It must be in the CLIPS path directories.
-    spec: test
+    spec: test-pddl
 
     specs:
       test:
@@ -69,8 +69,9 @@ clips_executive:
           # This stage always implicitly loads the blackboard feature
           # and blackboard-init.clp.
           stage-1:
-            - name: redefine_warning_feature
-            - name: plansys2
+            - name: clips_pddl_parser
+            - name: skill_execution
+              files: ["skills-actions.clp"]
             # - name: pddl_parser
             # - name: pddl-planner
             #   feature-request: false
@@ -108,27 +109,30 @@ clips_executive:
           # Each element of this stage must consist of a name and one or
           # more files to load.
           stage-3:
-            - name: domain
-              file: test-scenario/test-domain.clp
-            - name: state-estimation
-              file: test-scenario/state-estimation.clp
+            # - name: domain
+            #   file: test-scenario/test-domain.clp
+            # - name: state-estimation
+            #   file: test-scenario/state-estimation.clp
             - name: worldmodel
               # files: [wm-robmem-sync.clp, test-scenario/worldmodel-facts.clp]
               files: [test-scenario/worldmodel-facts.clp]
             # - name: coordination
             #   file: coordination-mutex.clp
-            - name: goal-reasoner
+            # - name: goal-reasoner
+            #   files:
+            #     - test-scenario/goal-reasoner.clp
+            #     - test-scenario/goals/always-fail.clp
+            #     - test-scenario/goals/always-reject.clp
+            #     - test-scenario/goals/succeed-second-try.clp
+            #     - test-scenario/goals/hang-noop.clp
+            #     - test-scenario/goals/talk.clp
+            - name: psys2-planner
               files:
-                - test-scenario/goal-reasoner.clp
-                - test-scenario/goals/always-fail.clp
-                - test-scenario/goals/always-reject.clp
-                - test-scenario/goals/succeed-second-try.clp
-                - test-scenario/goals/hang-noop.clp
-                - test-scenario/goals/talk.clp
-            - name: plans
-              files:
-                - test-scenario/plans/talk-plan.clp
-                # - test-scenario/plans/talk-plan-temporal.clp
+                - pddl-init.clp
+            # - name: plans
+            #   files:
+            #     - test-scenario/plans/talk-plan.clp
+            #     # - test-scenario/plans/talk-plan-temporal.clp
             - name: action-selection
               files:
                 - action-selection/sequential.clp
@@ -136,18 +140,15 @@ clips_executive:
             - name: action-execution
               files:
                 - skills-actions.clp
-                - test-scenario/print-action.clp
+                # - test-scenario/print-action.clp
                 # - lock-actions.clp
-            - name: psys2-planner
-              files:
-                - pddl-init.clp
             - name: execution-monitoring
               files:
                 - execmon/stalled-sequential-plan.clp
                 - execmon/stalled-action.clp
                 - execmon/temporal-missed-dispatch.clp
                 - execmon/temporal-over-duration.clp
-                - test-scenario/execution-monitoring.clp
+                # - test-scenario/execution-monitoring.clp
 
         # Map plan actions to skill strings, used by skill action execution
         action-mapping:
@@ -189,41 +190,50 @@ clips_executive:
         #     # path.
         #     name-id:
         #      objecttype: /wm/differentobjects
-
         # Interface _types_ mentioned in the following list will be pre-loaded,
         # i.e., the fact templates will be created in stage2, before
         # user-specified code is loaded. That avoid the necessity of splitting
         # interface opening and processing in user code.
         # blackboard-preload: ["Position3DInterface"]
-
         # Values in the parameters subtree will be added to the "/config" tree
         # in the world model facts. Everything up until and including /parameters/
         # in the configuration path is removed.
-
         # Example: /clips-executive/specs/test/parameters/home-pos ->
         # /config/home-pos
+      test-pddl:
         parameters:
           coordination:
             mutex:
               renew-interval: 5
               max-age-sec: 15
 
-      test-pddl:
-        domain: test-scenario-pddl/test-domain.clp
-        worldmodel: test-scenario-pddl/worldmodel-facts.clp
-        goal-reasoner: test-scenario-pddl/goal-reasoner.clp
-        goal-expander: test-scenario-pddl/goal-expander-pddl.clp
-        action-selection: test-scenario-pddl/action-selection.clp
-        action-execution:
-          - "skills-actions.clp"
-          - "test-scenario-pddl/print-action.clp"
-        execution-monitoring: test-scenario-pddl/execution-monitoring.clp
-        state-estimation: test-scenario-pddl/state-estimation.clp
-
-        # Map plan actions to skill strings.
+        init:
+          stage-1:
+            - name: plansys2
+            - name: clips_pddl_parser
+            - name: skill_execution
+          stage-3:
+            - name: psys2-planner
+              file: pddl.clp
+            - name: domain
+              file: test-scenario-pddl/test-domain.clp
+            - name: worldmodel
+              file: test-scenario-pddl/worldmodel-facts.clp
+            - name: goal-reasoner
+              file: test-scenario-pddl/goal-reasoner.clp
+            - name: goal-expander
+              file: test-scenario-pddl/goal-expander-pddl.clp
+            - name: action-selection
+              file: test-scenario-pddl/action-selection.clp
+            - name: action-execution
+              files:
+                - test-scenario-pddl/print-action.clp
+                - skills-actions.clp
+            - name: execution-monitoring
+              file: test-scenario-pddl/execution-monitoring.clp
+            - name: state-estimation
+              file: test-scenario-pddl/state-estimation.clp
+          # Map plan actions to skill strings.
         action-mapping:
-          say: say{text=?(text)s, wait=true}
           say-hello: say{text="Hello ?(name)y", wait=true}
-          say-hello-again: say{text="Hello again ?(name)y", wait=true}
           say-goodbye: say{text="Good bye", wait=true}
-          say-cleanup: say{text="Cleaning up", wait=true}

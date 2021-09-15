@@ -60,7 +60,7 @@ private:
 
   std::shared_ptr<cx::CLIPSEnvManagerClient> env_manager_client_;
   std::vector<std::string> clips_dirs{};
-  std::string clips_executive_share_dir;
+  std::string clips_executive_share_dir_;
   bool cfg_assert_time_each_cycle_;
   std::shared_ptr<cx::ActionSkillMapping> action_skill_mapping_;
 };
