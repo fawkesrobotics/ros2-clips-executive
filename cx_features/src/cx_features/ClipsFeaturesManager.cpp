@@ -20,7 +20,8 @@ namespace cx {
 
 ClipsFeaturesManager::ClipsFeaturesManager()
     : rclcpp_lifecycle::LifecycleNode("clips_features_manager"),
-      env_manager_client_{std::make_shared<cx::CLIPSEnvManagerClient>()},
+      env_manager_client_{std::make_shared<cx::CLIPSEnvManagerClient>(
+          "clips_manager_client_fm")},
       pg_loader_("cx_core", "cx::ClipsFeature"), default_ids_{},
       default_types_{} {
 
@@ -43,12 +44,6 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   auto node = shared_from_this();
-
-  feature_init_context_service_ =
-      create_service<cx_msgs::srv::ClipsFeatureContext>(
-          "clips_features_manager/init_feature_context",
-          std::bind(&ClipsFeaturesManager::feature_init_context_callback, this,
-                    _1, _2, _3));
 
   feature_destroy_context_service_ =
       create_service<cx_msgs::srv::ClipsFeatureContext>(
@@ -108,6 +103,17 @@ CallbackReturn
 ClipsFeaturesManager::on_activate(const rclcpp_lifecycle::State &state) {
 
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
+  // Add ff-request feature, as it is implemented in features manager
+  for (auto &envd : clips_env_manager_node_->envs_) {
+    std::lock_guard<std::recursive_mutex> guard(
+        *(envd.second.env.get_mutex_instance()));
+    envd.second.env->add_function(
+        "ff-feature-request",
+        sigc::slot<CLIPS::Value, std::string>(sigc::bind<0>(
+            sigc::mem_fun(*this, &ClipsFeaturesManager::clips_request_feature),
+            envd.first)));
+  }
+
   RCLCPP_INFO(get_logger(), "Activated [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
@@ -121,32 +127,80 @@ ClipsFeaturesManager::on_deactivate(const rclcpp_lifecycle::State &state) {
   return CallbackReturn::SUCCESS;
 }
 
-void ClipsFeaturesManager::feature_init_context_callback(
-    const std::shared_ptr<rmw_request_id_t> request_header,
-    const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Request> request,
-    const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Response>
-        response) {
+CLIPS::Value
+ClipsFeaturesManager::clips_request_feature(const std::string &env_name,
+                                            const std::string &feature_name) {
+  bool rv = true;
 
-  const std::string &env_name = request->env_name;
-  const std::string &feature_name = request->feature_name;
+  RCLCPP_INFO(get_logger(), "Environment %s requests feature %s",
+              env_name.c_str(), feature_name.c_str());
+  // Check if ENV exists
+  if (clips_env_manager_node_->envs_.find(env_name) ==
+      clips_env_manager_node_->envs_.end()) {
+    RCLCPP_WARN(get_logger(),
+                "Feature %s request from non-existent environment %s",
+                feature_name.c_str(), env_name.c_str());
+    return CLIPS::Value("FALSE", CLIPS::TYPE_SYMBOL);
+  }
+  // Check if the feature is available
+  if (clips_env_manager_node_->features_set.find(feature_name) ==
+      clips_env_manager_node_->features_set.end()) {
+    RCLCPP_WARN(get_logger(), "Environment %s requested unavailable feature %s",
+                env_name.c_str(), feature_name.c_str());
+    return CLIPS::Value("FALSE", CLIPS::TYPE_SYMBOL);
+  }
+
+  CLIPSEnvManagerNode::ClipsEnvData &envd =
+      clips_env_manager_node_->envs_[env_name];
+  // Check if features was already requested
+  if (std::binary_search(envd.req_feat.begin(), envd.req_feat.end(),
+                         feature_name)) {
+    RCLCPP_WARN(get_logger(), "Environment %s requested feature %s *again*",
+                env_name.c_str(), feature_name.c_str());
+    return CLIPS::Value("TRUE", CLIPS::TYPE_SYMBOL);
+  }
+  feature_init_context(env_name, feature_name);
+  envd.req_feat.push_back(feature_name);
+  envd.req_feat.sort();
+
+  // deffacts to sruvive reset
+  std::string deffacts = "(deffacts ff-features-loaded";
+
+  for (const auto &feat : envd.req_feat) {
+    deffacts += " (ff-feature-loaded " + feat + ")";
+  }
+
+  deffacts += ")";
+
+  envd.env->assert_fact_f("(ff-feature-loaded %s)", feature_name.c_str());
+
+  if (!envd.env->build(deffacts)) {
+    RCLCPP_WARN(get_logger(),
+                "Failed to build deffacts ff-features-loaded for %s",
+                env_name.c_str());
+    rv = FALSE;
+  }
+
+  return CLIPS::Value(rv ? "TRUE" : "FALSE", CLIPS::TYPE_SYMBOL);
+}
+
+void ClipsFeaturesManager::feature_init_context(
+    const std::string &env_name, const std::string &feature_name) {
 
   LockSharedPtr<CLIPS::Environment> &clips =
       clips_env_manager_node_->envs_[env_name].env;
+  RCLCPP_WARN(get_logger(), "Lock FM");
+  std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+  RCLCPP_WARN(get_logger(), "Locked FM");
 
   if (features_.find(feature_name) != features_.end()) {
     bool success = features_[feature_name]->clips_context_init(env_name, clips);
     if (!success) {
-      response->error =
-          "Error by context initialisation: feature " + feature_name;
+      RCLCPP_ERROR(get_logger(), "Error by context initialisation: feature %s",
+                   feature_name.c_str());
     }
-
-    response->success = success;
-    return;
-
   } else {
     RCLCPP_ERROR(get_logger(), "%s is not registered!", feature_name.c_str());
-    response->error = feature_name + " has not been registered!";
-    response->success = false;
   }
 }
 

@@ -48,11 +48,11 @@ public:
   // CallbackReturn on_shutdown(const rclcpp_lifecycle::State &state);
   // CallbackReturn on_error(const rclcpp_lifecycle::State &state);
 
-  void feature_init_context_callback(
-      const std::shared_ptr<rmw_request_id_t> request_header,
-      const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Request> request,
-      const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Response>
-          response);
+  void feature_init_context(const std::string &env_name,
+                            const std::string &feature_name);
+                            
+  CLIPS::Value clips_request_feature(const std::string &env_name,
+                                     const std::string &feature_name);
 
   void feature_destroy_context_callback(
       const std::shared_ptr<rmw_request_id_t> request_header,
@@ -70,9 +70,6 @@ private:
   void addGeneralFeatures();
 
 private:
-  // Services
-  rclcpp::Service<cx_msgs::srv::ClipsFeatureContext>::SharedPtr
-      feature_init_context_service_;
   rclcpp::Service<cx_msgs::srv::ClipsFeatureContext>::SharedPtr
       feature_destroy_context_service_;
 

@@ -16,7 +16,7 @@ int main(int argc, const char **argv) {
 
   rclcpp::init(argc, argv);
 
-  rclcpp::executors::MultiThreadedExecutor exe(rclcpp::ExecutorOptions(), 3);
+  rclcpp::executors::SingleThreadedExecutor exe;
 
   auto clips_env_manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
   auto clips_features_manager_node =
@@ -29,6 +29,12 @@ int main(int argc, const char **argv) {
 
   clips_features_manager_node->pre_configure(clips_env_manager_node);
   clips_executive_node->pre_configure(clips_env_manager_node);
+
+  clips_env_manager_node->trigger_transition(
+      lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
+  clips_env_manager_node->trigger_transition(
+      lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);
+  RCLCPP_INFO(rclcpp::get_logger("CX_NODE"), "Triggered transition!");
 
   exe.spin();
 

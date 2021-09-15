@@ -69,7 +69,7 @@ bool LifecycleNodesManager::changeNodeState(const std::string &lc_node_name,
   }
   // TEST PURPOSE
   nodes_to_manage_[lc_node_name]->get_node_state();
-  RCLCPP_DEBUG(get_logger(), "After CHANGE NODE STATE for %s ", lc_node_name.c_str());
+  RCLCPP_WARN(get_logger(), "After CHANGE NODE STATE for %s ", lc_node_name.c_str());
   return true;
 }
 
