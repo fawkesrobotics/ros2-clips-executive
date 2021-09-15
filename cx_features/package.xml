@@ -15,9 +15,12 @@
   <depend>cx_msgs</depend>
   <depend>cx_utils</depend>
   <depend>cx_blackboard</depend>
+  <depend>cx_skill_execution</depend>
+  <depend>ClipsPddlParser</depend>
   <depend>PkgConfig</depend>
   <depend>clipsmm</depend>
   <depend>pluginlib</depend>
+  <depend>yaml-cpp</depend>
   <depend>rosbag2_cpp</depend>
   <depend>plansys2_problem_expert</depend>
   <depend>plansys2_domain_expert</depend>

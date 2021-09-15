@@ -145,7 +145,8 @@ void Plansys2Feature::planWithPlansys2(const std::string &env_name,
                                        const std::string &goal,
                                        const std::string &plan_id) {
   const std::string log_name = std::move("PSYS2CLIPS|" + env_name);
-  RCLCPP_INFO(rclcpp::get_logger(log_name), "planWithPlansys2 called! id: %s", plan_id.c_str());
+  RCLCPP_INFO(rclcpp::get_logger(log_name), "planWithPlansys2 called! id: %s",
+              plan_id.c_str());
   if (envs_.find(env_name) == envs_.end()) {
     RCLCPP_ERROR(rclcpp::get_logger(log_name),
                  "Environment %s has not been registered "
@@ -154,24 +155,11 @@ void Plansys2Feature::planWithPlansys2(const std::string &env_name,
     return;
   }
 
-  cx::LockSharedPtr<CLIPS::Environment> clips = envs_[env_name];
-  clips.scopedLock();
-  if (!problem_client_->setGoal(plansys2::Goal(goal))) {
-    RCLCPP_ERROR(rclcpp::get_logger(log_name),
-                 "Couldn't set goal '%s' with id %s for problem expert",
-                 goal.c_str(), goal_id.c_str());
-    return;
-  }
-  // clips->assert_fact_f("(pddl-plan-feedback (status RUNNING) (plan-id %s))",
-  //                      plan_id.c_str());
-
-  // RCLCPP_INFO(rclcpp::get_logger(log_name),
-  //             "(pddl-plan-feedback (status RUNNING) (plan-id %s))",
-  //             plan_id.c_str());
-
-  std::thread{std::bind(&Plansys2Feature::call_planner, this, _1, _2, _3, _4),
-              env_name, goal_id, goal, plan_id}
-      .detach();
+  // std::thread{std::bind(&Plansys2Feature::call_planner, this, _1, _2, _3,
+  // _4),
+  //             env_name, goal_id, goal, plan_id}
+  //     .join();
+  call_planner(env_name, goal_id, goal, plan_id);
 }
 
 void Plansys2Feature::call_planner(const std::string &env_name,
@@ -179,7 +167,13 @@ void Plansys2Feature::call_planner(const std::string &env_name,
                                    const std::string &goal,
                                    const std::string &plan_id) {
   const std::string log_name = std::move("PSYS2CLIPS|" + env_name);
-  RCLCPP_INFO(rclcpp::get_logger(log_name), "id: %s", plan_id.c_str());
+
+  if (!problem_client_->setGoal(plansys2::Goal(goal))) {
+    RCLCPP_ERROR(rclcpp::get_logger(log_name),
+                 "Couldn't set goal '%s' with id %s for problem expert",
+                 goal.c_str(), goal_id.c_str());
+    return;
+  }
   cx::LockSharedPtr<CLIPS::Environment> clips = envs_[env_name];
   auto domain = domain_client_->getDomain();
   auto problem = problem_client_->getProblem();
@@ -188,8 +182,12 @@ void Plansys2Feature::call_planner(const std::string &env_name,
                "Calling plan for goal '%s' with id %s", goal.c_str(),
                goal_id.c_str());
   auto plan = planner_client_->getPlan(domain, problem);
+  
+  RCLCPP_WARN(rclcpp::get_logger(log_name), "Trying to lock mutex plan value!");
 
-  clips.scopedLock();
+  std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+  RCLCPP_WARN(rclcpp::get_logger(log_name), "Locked if for has_value");
+
   if (!plan.has_value()) {
     RCLCPP_ERROR(rclcpp::get_logger(log_name),
                  "Could not find plan to reach goal '%s' with id %s",

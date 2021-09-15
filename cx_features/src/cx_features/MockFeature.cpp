@@ -23,7 +23,7 @@ bool MockFeature::clips_context_init(const std::string &env_name,
               "Initialising context for feature %s",
               clips_feature_name.c_str());
 
-  clips.scopedLock();
+  std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
   clips->unwatch("all");
   clips->watch("all");
   clips->reset();

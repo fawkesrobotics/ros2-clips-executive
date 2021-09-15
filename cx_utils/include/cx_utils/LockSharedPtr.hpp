@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <mutex>
-#include <shared_mutex>
 #include <utility>
 
 #include "rclcpp/rclcpp.hpp"
@@ -21,13 +20,15 @@ public:
   LockSharedPtr<T> &operator=(const LockSharedPtr<T> &other);
   // LockSharedPtr<T> &operator=(T ptr);
   std::shared_ptr<T> operator->() const;
+  void init_mutex();
   operator bool() const;
+  std::recursive_mutex* get_mutex_instance();
+  std::shared_ptr<T> get_obj();
   // Called from instances to lock the mutex for the current scope
-  void scopedLock();
 
 private:
   std::shared_ptr<T> obj;
-  mutable std::shared_mutex objmutex;
+  mutable std::shared_ptr<std::recursive_mutex> objmutex;
   static int numbers;
 };
 
@@ -54,18 +55,16 @@ LockSharedPtr<T>::LockSharedPtr(std::shared_ptr<T> &&ptr)
 template <class T>
 LockSharedPtr<T>::LockSharedPtr(const LockSharedPtr<T> &other) {
   LockSharedPtr::numbers++;
-
-  std::scoped_lock<std::shared_mutex> guard(other.objmutex);
   this->obj = other.obj;
+  this->objmutex = other.objmutex;
   RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "copied C");
 }
 
 // Move Constructor
 template <class T> LockSharedPtr<T>::LockSharedPtr(LockSharedPtr<T> &&other) {
   LockSharedPtr::numbers++;
-
-  std::scoped_lock<std::shared_mutex> guard(other.objmutex);
   obj = std::move(other.obj);
+  objmutex = std::move(other.objmutex);
   RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "moved C");
 }
 
@@ -74,9 +73,8 @@ template <class T>
 LockSharedPtr<T> &LockSharedPtr<T>::operator=(LockSharedPtr<T> &&other) {
   LockSharedPtr::numbers++;
   if (this != &other) {
-    std::scoped_lock<std::shared_mutex, std::shared_mutex> guard(
-        objmutex, other.objmutex);
     obj = std::move(other.obj);
+    objmutex = std::move(other.objmutex);
     RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "moved Assig");
   }
   return *this;
@@ -87,9 +85,8 @@ template <class T>
 LockSharedPtr<T> &LockSharedPtr<T>::operator=(const LockSharedPtr<T> &other) {
   LockSharedPtr::numbers++;
   if (this != &other) {
-    std::scoped_lock<std::shared_mutex, std::shared_mutex> guard(
-        objmutex, other.objmutex);
     obj = other.obj;
+    objmutex = other.objmutex;
     RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "copied Assig");
   }
   return *this;
@@ -103,12 +100,22 @@ LockSharedPtr<T> &LockSharedPtr<T>::operator=(const LockSharedPtr<T> &other) {
 template <class T> std::shared_ptr<T> LockSharedPtr<T>::operator->() const {
   return obj;
 }
-template <class T> void LockSharedPtr<T>::scopedLock() {
-  std::scoped_lock<std::shared_mutex> guard(objmutex);
-}
 
 template <class T> LockSharedPtr<T>::operator bool() const {
   return (obj != nullptr);
+}
+
+template <class T>
+std::recursive_mutex* LockSharedPtr<T>::get_mutex_instance() {
+  return objmutex.get();
+}
+
+template <class T> std::shared_ptr<T> LockSharedPtr<T>::get_obj() {
+  return obj;
+}
+
+template <class T> void LockSharedPtr<T>::init_mutex() {
+  objmutex = std::make_shared<std::recursive_mutex>();
 }
 
 template <class T> int LockSharedPtr<T>::numbers = 0;
