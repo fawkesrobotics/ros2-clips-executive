@@ -36,6 +36,11 @@ class CLIPSEnvManagerNode : public rclcpp_lifecycle::LifecycleNode {
   friend ClipsExecutive;
 
 public:
+  typedef struct {
+    LockSharedPtr<CLIPS::Environment> env;
+    std::list<std::string> req_feat;
+  } ClipsEnvData;
+
   CLIPSEnvManagerNode();
   // ~CLIPSEnvManagerNode();
   using CallbackReturn =
@@ -111,10 +116,6 @@ private:
   rclcpp::Service<cx_msgs::srv::ClipsRemoveFeatures>::SharedPtr
       remove_features_service_;
 
-  // Service Clients
-  rclcpp::Client<cx_msgs::srv::ClipsFeatureContext>::SharedPtr
-      init_feature_context_client;
-
   rclcpp::Client<cx_msgs::srv::ClipsFeatureContext>::SharedPtr
       destroy_feature_context_client;
 
@@ -124,11 +125,6 @@ private:
 
 private:
   std::string clips_dir_;
-
-  typedef struct {
-    LockSharedPtr<CLIPS::Environment> env;
-    std::list<std::string> req_feat;
-  } ClipsEnvData;
 
   std::map<std::string, ClipsEnvData> envs_;
   std::set<std::string> features_set;

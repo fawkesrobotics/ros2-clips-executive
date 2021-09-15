@@ -13,7 +13,7 @@
 TEST(clips_manager, create_clips_env) {
   auto testing_node = rclcpp::Node::make_shared("testing_node");
   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
-  auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>();
+  auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
 
   const std::string env_name = "executive";
   const std::string log_name = "(clips-executive)";

@@ -7,6 +7,8 @@
 
 #include "rclcpp/rclcpp.hpp"
 
+#include "cx_utils/NodeThread.hpp"
+
 #include "cx_msgs/srv/add_clips_features.hpp"
 #include "cx_msgs/srv/clips_remove_features.hpp"
 #include "cx_msgs/srv/create_clips_env.hpp"
@@ -16,7 +18,7 @@ namespace cx {
 
 class CLIPSEnvManagerClient {
 public:
-  CLIPSEnvManagerClient();
+  CLIPSEnvManagerClient(const std::string& node_name);
   // ~CLIPSEnvManagerClient();
 
   bool createNewClipsEnvironment(const std::string &env_name,
@@ -28,6 +30,7 @@ public:
 
 private:
   rclcpp::Node::SharedPtr node_;
+  std::unique_ptr<cx::NodeThread> thread_;
 
   rclcpp::Client<cx_msgs::srv::AddClipsFeatures>::SharedPtr
       add_clips_features_client_;
@@ -38,6 +41,10 @@ private:
   rclcpp::Client<cx_msgs::srv::ClipsRemoveFeatures>::SharedPtr
       remove_features_client_;
   // destroy_env_client_;
+  /*Establish callback group as it calls the
+   * clips node manager service and waits for a result*/
+
+  rclcpp::CallbackGroup::SharedPtr callback_group_;
 };
 
 } // namespace cx
