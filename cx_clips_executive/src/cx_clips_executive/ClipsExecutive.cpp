@@ -24,10 +24,10 @@ ClipsExecutive::ClipsExecutive()
     : rclcpp_lifecycle::LifecycleNode("clips_executive") {
 
   RCLCPP_INFO(get_logger(), "Initialising [%s]...", get_name());
-
+  cfg_assert_time_each_cycle_ = true;
   declare_parameter("clips-dirs", clips_dirs);
   declare_parameter("spec", "");
-  declare_parameter<bool>("assert-time-each-loop", false);
+  declare_parameter<bool>("assert-time-each-loop", cfg_assert_time_each_cycle_);
 }
 
 // ClipsExecutive::~ClipsExecutive() {}
@@ -89,6 +89,8 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
                  "Couldnt get parameter /clips_executive/spec, aborting...");
     return CallbackReturn::FAILURE;
   }
+
+  get_parameter("assert-time-each-loop", cfg_assert_time_each_cycle_);
 
   std::string action_mapping_cfgpath = "specs." + cfg_spec + ".action-mapping";
 

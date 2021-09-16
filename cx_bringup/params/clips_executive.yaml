@@ -40,7 +40,7 @@ clips_executive:
 
     # Agent name. On startup the clips-agent will try to resolve a file named
     # <agent name>.clp. It must be in the CLIPS path directories.
-    spec: test-pddl
+    spec: test-skill
 
     specs:
       test:
@@ -233,6 +233,32 @@ clips_executive:
               file: test-scenario-pddl/execution-monitoring.clp
             - name: state-estimation
               file: test-scenario-pddl/state-estimation.clp
+          # Map plan actions to skill strings.
+        action-mapping:
+          say-hello: say{text="Hello ?(name)y", wait=true}
+          say-goodbye: say{text="Good bye", wait=true}
+
+      test-skill:
+        parameters:
+          coordination:
+            mutex:
+              renew-interval: 5
+              max-age-sec: 15
+
+        init:
+          stage-1:
+            - name: plansys2
+            - name: clips_pddl_parser
+            - name: skill_execution
+          stage-3:
+            - name: psys2-planner
+              file: pddl.clp
+            - name: action-execution
+              files:
+                - test-scenario-pddl/print-action.clp
+                - skills-actions.clp
+            - name: fixed-execution
+              file: test-scenario-skill/fixed-sequence.clp
           # Map plan actions to skill strings.
         action-mapping:
           say-hello: say{text="Hello ?(name)y", wait=true}

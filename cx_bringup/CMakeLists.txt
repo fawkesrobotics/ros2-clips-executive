@@ -20,6 +20,7 @@ find_package(plansys2_lifecycle_manager REQUIRED)
 find_package(cx_features REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_clips_executive REQUIRED)
+find_package(cx_example_skill_nodes REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 
@@ -33,9 +34,10 @@ set(dependencies
   cx_features
   cx_clips
   cx_clips_executive
+  cx_example_skill_nodes
   PkgConfig
 )
-set(dependencie2
+set(dependencies_psys2
   ament_cmake
   rclcpp
   plansys2_domain_expert
@@ -56,7 +58,7 @@ add_executable(psys2_node_
 add_executable(cx_node
   src/cx_node.cpp
 )
-ament_target_dependencies(psys2_node_ ${dependencie2})
+ament_target_dependencies(psys2_node_ ${dependencies_psys2})
 target_compile_definitions(psys2_node_ PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 ament_target_dependencies(cx_node ${dependencies})

@@ -1,28 +1,19 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>cx_bringup</name>
+  <name>cx_example_skill_nodes</name>
   <version>0.0.0</version>
-  <description>Central CX bringup scrips and parameters for nodes</description>
+  <description>TODO: Package description</description>
   <maintainer email="doychev@kbsg.rwth-aachen.de">userin4o</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <build_depend>launch_ros</build_depend>
-
   <depend>rclcpp</depend>
-  <depend>plansys2_domain_expert</depend>
-  <depend>plansys2_problem_expert</depend>
-  <depend>plansys2_planner</depend>
-  <depend>plansys2_lifecycle_manager</depend>
-  <depend>cx_features</depend>
-  <depend>cx_clips</depend>
-  <depend>cx_clips_executive</depend>
-  <depend>cx_example_skill_nodes</depend>
-  <depend>PkgConfig</depend>
-
-  <exec_depend>launch_ros</exec_depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>lifecycle_msgs</depend>
+  <depend>cx_skill_execution</depend>
+  <depend>cx_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
