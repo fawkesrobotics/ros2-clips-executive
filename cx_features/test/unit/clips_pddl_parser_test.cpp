@@ -20,7 +20,8 @@
 #include "cx_features/ClipsFeaturesManager.hpp"
 
 #include "gtest/gtest.h"
-TEST(cx_with_psys2, clips_generate_plan) {
+
+TEST(clips_pddl_parser_test, clips_generate_plan) {
   auto test_node = rclcpp::Node::make_shared("test_node");
   // PSYS2
   auto domain_node = std::make_shared<plansys2::DomainExpertNode>();
@@ -36,15 +37,15 @@ TEST(cx_with_psys2, clips_generate_plan) {
   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
   auto clips_executive_node = std::make_shared<cx::ClipsExecutive>();
 
-  std::vector<std::string> allFeatures = {"plansys2", "clips_pddl_parser"};
+  std::vector<std::string> allFeatures = {"clips_pddl_parser", "plansys2"};
   features_manager->set_parameter(
       rclcpp::Parameter("clips_features", allFeatures));
   features_manager->declare_parameter("plansys2.plugin");
-  features_manager->set_parameter(
-      rclcpp::Parameter("plansys2.plugin", "cx::Plansys2Feature"));
   features_manager->declare_parameter("clips_pddl_parser.plugin");
   features_manager->set_parameter(rclcpp::Parameter(
       "clips_pddl_parser.plugin", "cx::ClipsPddlParserFeature"));
+  features_manager->set_parameter(
+      rclcpp::Parameter("plansys2.plugin", "cx::Plansys2Feature"));
 
   features_manager->declare_parameter("spec");
   clips_executive_node->set_parameter(rclcpp::Parameter("spec", "test"));
@@ -72,7 +73,7 @@ TEST(cx_with_psys2, clips_generate_plan) {
   bool finish = false;
   std::thread t([&]() {
     while (!finish) {
-      exe.spin_some();
+      exe.spin();
     }
   });
 
@@ -123,41 +124,16 @@ TEST(cx_with_psys2, clips_generate_plan) {
   const std::string log_name = "(clips-executive)";
   RCLCPP_INFO(test_node->get_logger(), "TEST-NODE-START");
 
+  auto pddl_file = std::move(pkgpath + "/pddl/domain.pddl");
+  RCLCPP_INFO(test_node->get_logger(), "Pddl Dir: %s", pddl_file.c_str());
   auto clips = clips_env_manager_node->getEnvironmentByName(env_name);
 
-  // clips->evaluate("(psys2-add-domain-instance \"leia\" \"robot\")");
-  // clips->evaluate("(psys2-add-domain-instance \"francisco\" \"person\")");
-  // clips->evaluate("(psys2-add-domain-instance \"message1\" \"message\")");
-  // clips->evaluate("(psys2-add-domain-instance \"bedroom\" \"room\")");
-  // clips->evaluate("(psys2-add-domain-instance \"kitchen\" \"room\")");
-  // clips->evaluate("(psys2-add-domain-instance \"corridor\" \"room\")");
+//   std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+  //   clips->evaluate("(parse-pddl-domain \"" + pddl_file + "\")");
 
-  // clips->evaluate(
-  //     "(psys2-add-domain-predicate \"(robot_at\" \"leia kitchen)\")");
-  // clips->evaluate(
-  //     "(psys2-add-domain-predicate \"(person_at\" \"francisco bedroom)\")");
-
-  //   clips->evaluate("(parse-pddl-domain \"" + simple + "\")");
-  //   std::lock_guard<std::recursive_mutex>
-  //   guard(*(clips.get_mutex_instance()));
-  clips->assert_fact("(domain-object (name leia) (type robot))");
-  clips->assert_fact("(domain-object (name reia) (type robot))");
-  clips->assert_fact("(domain-object (name francisco) (type person))");
-  clips->assert_fact("(domain-object (name message1) (type message))");
-  clips->assert_fact("(domain-object (name message2) (type message))");
-  clips->assert_fact("(domain-object (name bedroom) (type room))");
-  clips->assert_fact("(domain-object (name kitchen) (type room))");
-  clips->assert_fact("(domain-object (name corridor) (type room))");
-
-  clips->assert_fact(
-      "(domain-fact (name robot_at) (param-values leia kitchen))");
-  clips->assert_fact(
-      "(domain-fact (name person_at) (param-values francisco bedroom))");
-  clips->evaluate("(pddl-request-plan \"TEST-PSYS\" \"(and (robot_talk leia "
-                  "message1 francisco))\")");
-
+  clips->evaluate("(path-load \"parser.clp\")");
   clips->run();
-  // clips->evaluate("(psys2-clear-knowledge)");
+  //   clips->evaluate("(psys2-clear-knowledge)");
 
   finish = true;
   t.join();
@@ -166,5 +142,5 @@ TEST(cx_with_psys2, clips_generate_plan) {
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   rclcpp::init(argc, argv);
-//   return RUN_ALL_TESTS();
+  return RUN_ALL_TESTS();
 }

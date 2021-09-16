@@ -20,7 +20,7 @@
 // TEST(test_mock_feature, test_context_init) {
 //   auto testing_node = rclcpp::Node::make_shared("testing_node");
 //   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
-//   auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>();
+//   auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
 //   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
 
 //   std::vector<std::string> allFeatures = {"mock_feature"};
@@ -134,7 +134,7 @@
 TEST(test_mock_feature, test_bb_feature) {
   auto testing_node = rclcpp::Node::make_shared("testing_node");
   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
-  auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>();
+  auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
   auto bb_node = std::make_shared<cx::Blackboard>();
   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
 
