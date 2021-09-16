@@ -20,7 +20,7 @@
 	(slot id (type INTEGER))
 	(slot goal-id (type SYMBOL))
 	(slot plan-id (type SYMBOL))
-	(slot skiller (type STRING) (default "Skiller"))
+	(slot skiller (type STRING) (default ""))
 	(slot action-name (type SYMBOL))
 	(multislot param-names)
 	(multislot param-values)
