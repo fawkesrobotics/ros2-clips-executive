@@ -68,7 +68,7 @@ SkillExecution::on_activate(const rclcpp_lifecycle::State &state) {
 CallbackReturn
 SkillExecution::on_deactivate(const rclcpp_lifecycle::State &state) {
   executioner_info_.state = SkillExecutionerInformation::READY;
-  executioner_info_pub_->on_deactivate();
+  // executioner_info_pub_->on_deactivate();
   execution_heartbeat_ = nullptr;
   return CallbackReturn::SUCCESS;
 }
@@ -89,6 +89,7 @@ void SkillExecution::skill_board_cb(
   case SkillExecutionMsg::FINISH:
     break;
   case SkillExecutionMsg::REQUEST:
+    RCLCPP_WARN(get_logger(), "New Req");
     if (get_current_state().id() ==
             lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE &&
         !commited_to_skill_ && action_name_ == msg->action) {
@@ -104,6 +105,7 @@ void SkillExecution::skill_board_cb(
       mapped_action_ = msg->mapped_action;
       // Transition to active state, so the implemented function can be executed
       trigger_transition(lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);
+      commited_to_skill_ = false;
     }
     break;
   case SkillExecutionMsg::REJECT:

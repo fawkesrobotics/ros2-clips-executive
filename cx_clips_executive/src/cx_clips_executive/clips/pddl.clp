@@ -63,7 +63,7 @@
 )
 
 (defrule pddl-call
-  ; ?g <- (goal (id ?goal-id))
+  ?g <- (goal (id ?goal-id))
   ?p <-(pddl-plan 
           (status NOT-STARTED) 
           (goal-id ?goal-id) 
@@ -79,7 +79,7 @@
 
 (defrule pddl-check-if-planner-failed
   "Check whether the planner finished but has not found a plan."
-  ; ?g <- (goal (id ?goal-id))
+  ?g <- (goal (id ?goal-id))
   ?pf <- (pddl-plan-feedback (status PLAN-FAILED) (plan-id ?plan-id))
   ?p <- (pddl-plan 
           ; (goal-id ?goal-id) 
@@ -87,7 +87,7 @@
         )
   =>
   ; (printout error "Planning failed for goal " ?goal-id crlf)
-  ; (modify ?g (mode FINISHED) (outcome FAILED) (message "Planning failed") (error PLANNING-FAILED))
+  (modify ?g (mode FINISHED) (outcome FAILED) (message "Planning failed") (error PLANNING-FAILED))
   (retract ?pf)
   (retract ?p)
   (psys2-clear-knowledge)
@@ -95,7 +95,7 @@
 
 (defrule pddl-expand-goal
   "expand the goal after generated plan"
-  ; ?g <- (goal (id ?goal-id) (mode SELECTED))
+  ?g <- (goal (id ?goal-id) (mode SELECTED))
   ?pf <- (pddl-plan-feedback (status PLANNED) (plan-id ?plan-id))
   ?p <- (pddl-plan
           (goal-id ?goal-id)
@@ -103,7 +103,7 @@
         )
   =>
   (printout t "Fetched a new plan!" crlf)
-  ; (modify ?g (mode EXPANDED))
+  (modify ?g (mode EXPANDED))
   (retract ?pf)
   (retract ?p)
   (psys2-clear-knowledge)

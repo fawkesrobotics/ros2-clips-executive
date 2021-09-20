@@ -118,6 +118,7 @@ void SkillExecutionFeature::request_skill_execution(
 
   // If there is currently running skill, which is unlikely to happen
   if (skill_master_map_.find(robot_namespace) != skill_master_map_.end()) {
+    RCLCPP_WARN(node_->get_logger(), "Previous skill running!");
     // Abort skill execution in the same namespace
     auto curr_skill_m = skill_master_map_[robot_namespace].skill_master;
     curr_skill_m->cancel_execution();

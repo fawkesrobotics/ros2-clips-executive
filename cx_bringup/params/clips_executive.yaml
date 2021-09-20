@@ -40,7 +40,7 @@ clips_executive:
 
     # Agent name. On startup the clips-agent will try to resolve a file named
     # <agent name>.clp. It must be in the CLIPS path directories.
-    spec: test-skill
+    spec: test-nav2
 
     specs:
       test:
@@ -233,6 +233,46 @@ clips_executive:
               file: test-scenario-pddl/execution-monitoring.clp
             - name: state-estimation
               file: test-scenario-pddl/state-estimation.clp
+          # Map plan actions to skill strings.
+        action-mapping:
+          say-hello: say{text="Hello ?(name)y", wait=true}
+          say-goodbye: say{text="Good bye", wait=true}
+
+      test-nav2:
+        parameters:
+          coordination:
+            mutex:
+              renew-interval: 5
+              max-age-sec: 15
+
+        init:
+          stage-1:
+            - name: plansys2
+            - name: clips_pddl_parser
+            - name: skill_execution
+          stage-3:
+            - name: psys2-planner
+              file: pddl.clp
+            - name: domain
+              file: test-scenario-nav2/test-domain.clp
+            - name: worldmodel
+              file: test-scenario-nav2/worldmodel-facts.clp
+            - name: goal-reasoner
+              file: test-scenario-nav2/goal-reasoner.clp
+            # - name: goal-expander
+            #   file: test-scenario-nav2/goal-expander-pddl.clp
+            - name: action-selection
+              file: test-scenario-nav2/action-selection.clp
+            - name: action-execution
+              files:
+                - test-scenario-nav2/print-action.clp
+                - skills-actions.clp
+            - name: fixed-execution
+              file: test-scenario-nav2/fixed-sequence.clp
+            # - name: execution-monitoring
+            #   file: test-scenario-nav2/execution-monitoring.clp
+            # - name: state-estimation
+            #   file: test-scenario-nav2/state-estimation.clp
           # Map plan actions to skill strings.
         action-mapping:
           say-hello: say{text="Hello ?(name)y", wait=true}

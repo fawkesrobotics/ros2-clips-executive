@@ -1,3 +1,6 @@
+#ifndef CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP
+#define CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP
+
 #include <chrono>
 #include <fstream>
 #include <iostream>
@@ -44,3 +47,4 @@ public:
   int cycles_;
 };
 } // namespace cx
+#endif // !CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP

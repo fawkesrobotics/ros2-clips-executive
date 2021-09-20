@@ -17,6 +17,8 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(cx_skill_execution REQUIRED)
 find_package(cx_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav2_msgs REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -25,10 +27,13 @@ set(dependencies
   lifecycle_msgs
   cx_msgs
   cx_skill_execution
+  nav2_msgs 
+  geometry_msgs
 )
 
 set(SOURCES
   src/cx_example_skill_nodes/DummyMoveSkill.cpp
+  src/cx_example_skill_nodes/MoveSkillNav2.cpp
 )
 
 include_directories(include)

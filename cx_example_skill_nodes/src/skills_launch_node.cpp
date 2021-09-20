@@ -6,14 +6,14 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
-#include "cx_example_skill_nodes/DummyMoveSkill.hpp"
+#include "cx_example_skill_nodes/MoveSkillNav2.hpp"
 
 using namespace std::chrono_literals;
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
   auto node =
-      std::make_shared<cx::DummyMoveSkill>("dummy_move_skill", "move", 1s);
+      std::make_shared<cx::MoveSkillNav2>("nav2_move_node", "move", 500ms);
 
   node->trigger_transition(
       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
