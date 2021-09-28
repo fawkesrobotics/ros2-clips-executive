@@ -28,6 +28,10 @@ clips_executive:
     # This is particularly useful to kick an SkillGUI which is holding
     # the lock just due to an oversight.
     steal-skiller-control: true
+    
+    # Sets the frequency, in which the clips agenda is being refresh 
+    # inside the CX (in HZ)
+    refresh-rate: 1
 
     # If set to true, goals will be cleaned automatically when they
     # reach the RETRACTED state. Disabling be useful for debugging.

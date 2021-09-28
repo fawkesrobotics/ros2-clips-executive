@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <chrono>
 
 #include <yaml-cpp/yaml.h>
 
@@ -62,6 +63,8 @@ private:
   std::vector<std::string> clips_dirs{};
   std::string clips_executive_share_dir_;
   bool cfg_assert_time_each_cycle_;
+  int refresh_rate_;
+  std::chrono::nanoseconds publish_rate_;
   std::shared_ptr<cx::ActionSkillMapping> action_skill_mapping_;
 };
 } // namespace cx

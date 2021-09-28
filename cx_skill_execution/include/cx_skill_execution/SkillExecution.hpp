@@ -1,5 +1,5 @@
 /*
-  Classes implmenting a ceratin action should
+  Classes implmenting a certain action should
   inherit from the class and implement their
   individual behaviour.
 */

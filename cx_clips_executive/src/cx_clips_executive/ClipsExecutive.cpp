@@ -21,13 +21,14 @@ using namespace std::chrono_literals;
 namespace cx {
 
 ClipsExecutive::ClipsExecutive()
-    : rclcpp_lifecycle::LifecycleNode("clips_executive") {
+    : rclcpp_lifecycle::LifecycleNode("clips_executive"), refresh_rate_{10} {
 
   RCLCPP_INFO(get_logger(), "Initialising [%s]...", get_name());
   cfg_assert_time_each_cycle_ = true;
-  declare_parameter("clips-dirs", clips_dirs);
-  declare_parameter("spec", "");
+  declare_parameter<std::vector<std::string>>("clips-dirs", clips_dirs);
+  declare_parameter<std::string>("spec", "");
   declare_parameter<bool>("assert-time-each-loop", cfg_assert_time_each_cycle_);
+  declare_parameter<int>("refresh-rate", refresh_rate_);
 }
 
 // ClipsExecutive::~ClipsExecutive() {}
@@ -78,7 +79,7 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
     }
     RCLCPP_INFO(get_logger(), "CLIPS_DIR: %s", clips_dirs[i].c_str());
   }
-
+  // Default Clips files directory
   clips_dirs.insert(clips_dirs.begin(), clips_executive_share_dir_ + "/clips/");
   clips_dirs.insert(clips_dirs.begin(), cx_features_dir + "/clips/");
 
@@ -91,6 +92,16 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   }
 
   get_parameter("assert-time-each-loop", cfg_assert_time_each_cycle_);
+  get_parameter("refresh-rate", refresh_rate_);
+  double rate = 1.0 / refresh_rate_;
+  // Sets the time between each clips agenda refresh in ns
+  publish_rate_ =
+      std::chrono::duration_cast<std::chrono::steady_clock::duration>(
+          std::chrono::duration<double>(rate));
+  RCLCPP_INFO(
+      get_logger(), "Publishing rate set to: %ldns",
+      std::chrono::duration_cast<std::chrono::nanoseconds>(publish_rate_)
+          .count());
 
   std::string action_mapping_cfgpath = "specs." + cfg_spec + ".action-mapping";
 
@@ -132,8 +143,8 @@ CallbackReturn
 ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
   clips_agenda_refresh_pub_->on_activate();
-  // Create Clips Executive environment
-  // Busy waiting as the function is async
+  // Creating the Clips Executive environment in configure works async  --> busy
+  // waiting to assure creation
   auto start_time = now();
   auto req_time = (now() - start_time).seconds();
   while (clips_env_manager_node_->envs_.find("executive") ==
@@ -148,10 +159,8 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   clips_ = clips_env_manager_node_->envs_["executive"].env;
   // TODO: REMOVE LATER!
   clips_->watch("all");
-  RCLCPP_INFO(get_logger(), "After create");
 
   std::lock_guard<std::recursive_mutex> guard(*(clips_.get_mutex_instance()));
-  RCLCPP_WARN(get_logger(), "Lock CX");
 
   std::string cx_bringup_dir;
   std::string cx_features_dir;
@@ -170,8 +179,6 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   }
 
   clips_->evaluate("(ff-feature-request \"config_feature\")");
-
-  RCLCPP_INFO(get_logger(), "After clips lock from CX");
 
   clips_->add_function(
       "map-action-skill",
@@ -214,9 +221,8 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   }
   RCLCPP_INFO(get_logger(), "CLIPS Executive was inistialised!");
 
-  agenda_refresh_timer_ = create_wall_timer(100ms, [this]() {
+  agenda_refresh_timer_ = create_wall_timer(publish_rate_, [this]() {
     if ((*(clips_.get_mutex_instance())).try_lock()) {
-      RCLCPP_WARN(get_logger(), "Can lock the mutex");
       std::lock_guard<std::recursive_mutex> guard(
           *(clips_.get_mutex_instance()));
 
