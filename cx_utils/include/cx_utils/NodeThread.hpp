@@ -26,13 +26,6 @@ protected:
   rclcpp::node_interfaces::NodeBaseInterface::SharedPtr node_;
 };
 
-// NodeThread::NodeThread()
-// {
-// }
-
-// NodeThread::~NodeThread()
-// {
-// }
 } // namespace cx
 
 #endif // !CX_UTILS__NODETHREAD_HPP_

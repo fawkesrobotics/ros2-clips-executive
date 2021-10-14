@@ -1,3 +1,23 @@
+/***************************************************************************
+ *  MoveSkillNav2.cpp
+ *
+ *  Created: 20 September 2021
+ *  Copyright  2021  Ivaylo Doychev
+ ****************************************************************************/
+
+/*  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  Read the full text in the LICENSE.GPL file in the doc directory.
+ */
+
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
@@ -70,7 +90,6 @@ MoveSkillNav2::MoveSkillNav2(const std::string &id,
   wp.pose.position.x = -2.0;
   wp.pose.position.y = -0.4;
   waypoints_map_["wp_final"] = wp;
-
 }
 
 using CallbackReturn =
@@ -81,45 +100,50 @@ MoveSkillNav2::on_activate(const rclcpp_lifecycle::State &state) {
   std::cerr << "MoveSkillNav2::on_activate" << std::endl;
   send_feedback(0.0, "Move starting");
 
-  navigation_action_client_ =
+  navigation_to_pose_client_ =
       rclcpp_action::create_client<nav2_msgs::action::NavigateToPose>(
           shared_from_this(), "navigate_to_pose");
 
-  bool is_action_server_ready = false;
-  RCLCPP_INFO(get_logger(), "Waiting for navigation action server...");
+  while (navigation_to_pose_client_->wait_for_action_server(
+      std::chrono::seconds(4))) {
 
-  do {
-    is_action_server_ready = navigation_action_client_->wait_for_action_server(
-        std::chrono::seconds(5));
-  } while (!is_action_server_ready);
+    if (!rclcpp::ok()) {
+      RCLCPP_ERROR(get_logger(), "Timed out waiting for server availability");
+      return CallbackReturn::FAILURE;
+    }
+
+    RCLCPP_INFO(get_logger(), "Waiting for navigation action server...");
+  }
 
   RCLCPP_INFO(get_logger(), "Navigation action server ready");
 
   auto wp_to_navigate =
-      action_parameters_[3]; // The goal wp is in the 3rd argument
+      action_parameters_[2]; // The goal wp is in the 2nd argument
   RCLCPP_INFO(get_logger(), "Start navigation to [%s]", wp_to_navigate.c_str());
 
   goal_pos_ = waypoints_map_[wp_to_navigate];
   navigation_goal_.pose = goal_pos_;
 
-  dist_to_move = getDistance(goal_pos_.pose, current_pos_);
+  move_distance_ =
+      sqrt((goal_pos_.pose.position.x - current_pos_.position.x) *
+               (goal_pos_.pose.position.x - current_pos_.position.x) +
+           (goal_pos_.pose.position.y - current_pos_.position.y) *
+               (goal_pos_.pose.position.y - current_pos_.position.y));
 
   auto send_goal_options = rclcpp_action::Client<
       nav2_msgs::action::NavigateToPose>::SendGoalOptions();
 
   send_goal_options.feedback_callback = [this](NavGoalHandle::SharedPtr,
                                                NavFeedback feedback) {
-    send_feedback(
-        std::min(1.0, std::max(0.0, 1.0 - (feedback->distance_remaining /
-                                           dist_to_move))),
-        "Move running");
+    send_feedback(1.0 - (feedback->distance_remaining / move_distance_),
+                  "Move running");
   };
 
   send_goal_options.result_callback = [this](auto) {
     finish_execution(true, 1.0, "Move completed");
   };
 
-  future_navigation_goal_handle_ = navigation_action_client_->async_send_goal(
+  future_navigation_goal_handle_ = navigation_to_pose_client_->async_send_goal(
       navigation_goal_, send_goal_options);
 
   return SkillExecution::on_activate(state);
@@ -130,14 +154,6 @@ void MoveSkillNav2::perform_execution() {
   for (const auto &param : action_parameters_) {
     RCLCPP_INFO_STREAM(get_logger(), "\t[" << param << "]");
   }
-}
-
-double MoveSkillNav2::getDistance(const geometry_msgs::msg::Pose &pos1,
-                                  const geometry_msgs::msg::Pose &pos2) {
-  return sqrt((pos1.position.x - pos2.position.x) *
-                  (pos1.position.x - pos2.position.x) +
-              (pos1.position.y - pos2.position.y) *
-                  (pos1.position.y - pos2.position.y));
 }
 
 } // namespace cx

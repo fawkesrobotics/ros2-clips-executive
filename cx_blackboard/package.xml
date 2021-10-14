@@ -3,9 +3,12 @@
 <package format="3">
   <name>cx_blackboard</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="doychev@kbsg.rwth-aachen.de">userin4o</maintainer>
-  <license>TODO: License declaration</license>
+
+  <description>Fawkes blackboard mechanism implemented on the side of ROS</description>
+
+  <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
+  
+  <license>GPLv2+ license</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

@@ -3,6 +3,7 @@
 ;
 ;  Created: Thu 09 Nov 2017 16:33:45 CET
 ;  Copyright  2017  Till Hofmann <hofmann@kbsg.rwth-aachen.de>
+;							2021  Ivaylo Doychev
 ;  Licensed under GPLv2+ license, cf. LICENSE file in the doc directory.
 ;---------------------------------------------------------------------------
 

@@ -1,3 +1,35 @@
+/***************************************************************************
+ *  SkillExecutionMaster.cpp
+ *
+ *  Created: 16 September 2021
+ *  Copyright  2021  Ivaylo Doychev
+ ****************************************************************************/
+
+/*  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  Read the full text in the LICENSE.GPL file in the doc directory.
+ */
+
+/*
+  Inspired by:
+  Plansys2, Intelligent Robotics Lab
+  https://github.com/IntelligentRoboticsLabs/ros2_planning_system/blob/master/plansys2_executor/src/plansys2_executor/ActionExecutorClient.cpp
+*/
+
+/*
+  Inspired by:
+  Plansys2, Intelligent Robotics Lab
+  https://github.com/IntelligentRoboticsLabs/ros2_planning_system/blob/master/plansys2_executor/src/plansys2_executor/ActionExecutor.cpp
+*/
+
 #include <memory>
 #include <string>
 
@@ -47,6 +79,7 @@ SkillExecutionMaster::SkillExecutionMaster(const std::string &node_name,
 
 void SkillExecutionMaster::skill_board_cb(
     const cx_msgs::msg::SkillExecution::SharedPtr msg) {
+
   // Check the type of the published message
   /*
     Important types for the execution master:
@@ -54,6 +87,7 @@ void SkillExecutionMaster::skill_board_cb(
     2. FEEDBACK - action execution feedback from executioner
     3. FINISH - sent from executioner after the succesful/failed execution
   */
+
   switch (msg->type) {
   case SkillExecutionMsg::REQUEST:
   case SkillExecutionMsg::CONFIRM:
@@ -68,7 +102,6 @@ void SkillExecutionMaster::skill_board_cb(
       state_ = RUNNING;
       exec_info_.status = SkillActionExecinfo::S_RUNNING;
       exec_info_.string_status = "S_RUNNING";
-      // waiting_timer_ = nullptr;
       exec_start_ = now();
       exec_info_.start_stamp = exec_start_;
       current_state_time_ = now();
@@ -80,9 +113,9 @@ void SkillExecutionMaster::skill_board_cb(
         msg->action != action_name_ || msg->node_id != executioner_id_) {
       return;
     }
-    // feedback_ = msg->status;
-    // progress_ = msg->progress;
-    // current_state_time_ = now();
+    feedback_ = msg->status;
+    progress_ = msg->progress;
+    current_state_time_ = now();
     break;
   case SkillExecutionMsg::FINISH:
     if (msg->action_parameters == action_parameters_ &&
@@ -100,7 +133,7 @@ void SkillExecutionMaster::skill_board_cb(
         exec_info_.error_msg = msg->success ? "" : msg->status;
       }
       feedback_ = msg->status;
-      // progress_ = msg->progress;
+      progress_ = msg->progress;
 
       current_state_time_ = now();
 
@@ -153,6 +186,7 @@ void SkillExecutionMaster::cancel_execution() {
 
 std::vector<std::string>
 SkillExecutionMaster::extract_parameters(const std::string &action_params) {
+  RCLCPP_INFO(get_logger(), "THE PARAMS!! %s", action_params.c_str());
   std::vector<std::string> params_vec;
   size_t start_pos = 0, end_pos = 0;
   while (end_pos != std::string::npos) {

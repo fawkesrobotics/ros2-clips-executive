@@ -17,12 +17,6 @@ NodeThread::NodeThread(
 
 }
 
-NodeThread::NodeThread(
-    rclcpp::executors::SingleThreadedExecutor::SharedPtr executor)
-    : executor_(executor) {
-  thread_ = std::make_unique<std::thread>([&]() { executor_->spin(); });
-}
-
 NodeThread::~NodeThread() {
   executor_->cancel();
   thread_->join();

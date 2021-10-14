@@ -55,9 +55,9 @@ TEST(cx_with_psys2, clips_generate_plan) {
       ament_index_cpp::get_package_share_directory("cx_clips_executive");
 
   domain_node->set_parameter(
-      {"model_file", pkgpath + "/pddl/domain_simple.pddl"});
+      {"model_file", pkgpath + "/pddl/domain.pddl"});
   problem_node->set_parameter(
-      {"model_file", pkgpath + "/pddl/domain_simple.pddl"});
+      {"model_file", pkgpath + "/pddl/domain.pddl"});
 
   rclcpp::executors::SingleThreadedExecutor exe;
 
@@ -125,39 +125,7 @@ TEST(cx_with_psys2, clips_generate_plan) {
 
   auto clips = clips_env_manager_node->getEnvironmentByName(env_name);
 
-  // clips->evaluate("(psys2-add-domain-instance \"leia\" \"robot\")");
-  // clips->evaluate("(psys2-add-domain-instance \"francisco\" \"person\")");
-  // clips->evaluate("(psys2-add-domain-instance \"message1\" \"message\")");
-  // clips->evaluate("(psys2-add-domain-instance \"bedroom\" \"room\")");
-  // clips->evaluate("(psys2-add-domain-instance \"kitchen\" \"room\")");
-  // clips->evaluate("(psys2-add-domain-instance \"corridor\" \"room\")");
-
-  // clips->evaluate(
-  //     "(psys2-add-domain-predicate \"(robot_at\" \"leia kitchen)\")");
-  // clips->evaluate(
-  //     "(psys2-add-domain-predicate \"(person_at\" \"francisco bedroom)\")");
-
-  //   clips->evaluate("(parse-pddl-domain \"" + simple + "\")");
-  //   std::lock_guard<std::recursive_mutex>
-  //   guard(*(clips.get_mutex_instance()));
-  clips->assert_fact("(domain-object (name leia) (type robot))");
-  clips->assert_fact("(domain-object (name reia) (type robot))");
-  clips->assert_fact("(domain-object (name francisco) (type person))");
-  clips->assert_fact("(domain-object (name message1) (type message))");
-  clips->assert_fact("(domain-object (name message2) (type message))");
-  clips->assert_fact("(domain-object (name bedroom) (type room))");
-  clips->assert_fact("(domain-object (name kitchen) (type room))");
-  clips->assert_fact("(domain-object (name corridor) (type room))");
-
-  clips->assert_fact(
-      "(domain-fact (name robot_at) (param-values leia kitchen))");
-  clips->assert_fact(
-      "(domain-fact (name person_at) (param-values francisco bedroom))");
-  clips->evaluate("(pddl-request-plan \"TEST-PSYS\" \"(and (robot_talk leia "
-                  "message1 francisco))\")");
-
   clips->run();
-  // clips->evaluate("(psys2-clear-knowledge)");
 
   finish = true;
   t.join();

@@ -3,9 +3,11 @@
 <package format="3">
   <name>cx_features</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="doychev@kbsg.rwth-aachen.de">userin4o</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Consists of all features that provide functionality to CLIPS and an implemented manager unit</description>
+    
+  <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
+  
+  <license>GPLv2+ license</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

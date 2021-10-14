@@ -4,6 +4,7 @@
 ;
 ;  Created: Wed Sep 20 15:47:23 2017
 ;  Copyright  2017  Tim Niemueller [www.niemueller.de]
+;							2021  Ivaylo Doychev
 ;  Licensed under GPLv2+ license, cf. LICENSE file
 ;---------------------------------------------------------------------------
 

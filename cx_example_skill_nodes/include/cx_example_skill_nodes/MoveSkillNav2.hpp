@@ -1,3 +1,23 @@
+/***************************************************************************
+ *  MoveSkillNav2.hpp
+ *
+ *  Created: 20 September 2021
+ *  Copyright  2021  Ivaylo Doychev
+ ****************************************************************************/
+
+/*  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  Read the full text in the LICENSE.GPL file in the doc directory.
+ */
+
 #ifndef CX_EXAMPLE_SKILL_NODES__MOVESKILLNAV2_HPP
 #define CX_EXAMPLE_SKILL_NODES__MOVESKILLNAV2_HPP
 
@@ -47,16 +67,10 @@ public:
   void perform_execution() override;
 
 private:
-  double getDistance(const geometry_msgs::msg::Pose &pos1,
-                     const geometry_msgs::msg::Pose &pos2);
-  void current_pos_callback(
-      const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);
-
-private:
   std::map<std::string, geometry_msgs::msg::PoseStamped> waypoints_map_;
 
   rclcpp_action::Client<nav2_msgs::action::NavigateToPose>::SharedPtr
-      navigation_action_client_;
+      navigation_to_pose_client_;
   std::shared_future<NavGoalHandle::SharedPtr> future_navigation_goal_handle_;
   NavGoalHandle::SharedPtr navigation_goal_handle_;
 
@@ -64,7 +78,7 @@ private:
   geometry_msgs::msg::PoseStamped goal_pos_;
   nav2_msgs::action::NavigateToPose::Goal navigation_goal_;
 
-  double dist_to_move;
+  double move_distance_;
 };
 } // namespace cx
 

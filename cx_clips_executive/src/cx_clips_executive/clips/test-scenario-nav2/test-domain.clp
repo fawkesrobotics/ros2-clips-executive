@@ -43,25 +43,3 @@
   )
   (assert (domain-facts-loaded))
 )
-
-; (defrule test-domain-set-domain-fact-said-hello
-;   (plan-action (action-name move) (param-values "robotino1" "wp_init" "wp1") (state SENSED-EFFECTS-WAIT))
-; =>
-;   (assert (domain-fact (name robot_at) (param-values robotino1 wp1)))
-; )
-; (defrule test-domain-set-domain-fact-said-hello
-;   (plan-action (action-name move) (param-values "robotino1" "wp1" "wp_init") (state SENSED-EFFECTS-WAIT))
-; =>
-;   (assert (domain-fact (name robot_at) (param-values robotino1 wp_init)))
-; )
-; (defrule test-domain-set-domain-fact-said-hello
-;   (plan-action (action-name say-hello) (param-values peggy) (state SENSED-EFFECTS-WAIT))
-; =>
-;   (assert (domain-fact (name said) (param-values peggy hello)))
-; )
-
-; (defrule test-domain-set-domain-fact-said-goodbye
-;   (plan-action (action-name say-goodbye) (param-values PEGGY GOODBYE) (state SENSED-EFFECTS-WAIT))
-; =>
-;   (assert (domain-fact (name said) (param-values PEGGY GOODBYE)))
-; )

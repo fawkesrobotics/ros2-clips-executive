@@ -12,7 +12,7 @@ clips_executive:
       # If CLIPS debugging is enabled, certain rules and facts can be excluded
       # from watching, e.g. if they are showing up at too high frequencies or
       # are not of interest.
-      unwatch-facts: ["time", "time2"]
+      unwatch-facts: ["time"]
       unwatch-rules: ["time-retract"]
 
     # automatically pre-require redefine-warning feature? Enabling
@@ -63,7 +63,7 @@ clips_executive:
           # model have not been loaded, yet.
           # Use this to request features and load files related to such
           # features or performing other initialization duties.
-          # In this stage, elements are assumed to reference Fawkes CLIPS
+          # In this stage, elements are assumed to reference ROS CLIPS
           # features by default, i.e., an error is reported if a requested
           # feature is not available  at the time of initialization.
           # Features will be requested and only after all have been loaded
@@ -81,11 +81,6 @@ clips_executive:
             #   feature-request: false
             #   files: ["pddl-init.clp"]
             # - name: navgraph
-            # - name: robmem-wait
-            #   feature-request: false
-            #   files: ["BATCH|robmem-wait-init.clp"]
-            #   wait-for: robmem-initialized
-            # - name: robot_memory
 
           # stage-2 is domain-independent CX initialization
           # It contains a set of fixed items loaded. Custom extensions may
@@ -118,7 +113,6 @@ clips_executive:
             # - name: state-estimation
             #   file: test-scenario/state-estimation.clp
             - name: worldmodel
-              # files: [wm-robmem-sync.clp, test-scenario/worldmodel-facts.clp]
               files: [test-scenario/worldmodel-facts.clp]
             # - name: coordination
             #   file: coordination-mutex.clp

@@ -1,3 +1,23 @@
+/***************************************************************************
+ *  DummyMoveSkill.hpp
+ *
+ *  Created: 16 September 2021
+ *  Copyright  2021  Ivaylo Doychev
+ ****************************************************************************/
+
+/*  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  Read the full text in the LICENSE.GPL file in the doc directory.
+ */
+
 #ifndef CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP
 #define CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP
 
@@ -28,13 +48,6 @@ class DummyMoveSkill : public cx::SkillExecution {
       rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
 public:
-  // using Ptr = std::shared_ptr<DummyMoveSkill>;
-  // static Ptr make_shared(const std::string &node_name,
-  //                        const std::string &action,
-  //                        const std::chrono::nanoseconds &rate) {
-  //   return std::make_shared<DummyMoveSkill>(node_name, action, rate);
-  // }
-
   DummyMoveSkill(const std::string &id, const std::string &action_name,
                  const std::chrono::nanoseconds &rate);
 
@@ -43,8 +56,6 @@ public:
   void perform_execution() override;
 
   int counter_;
-  int executions_;
-  int cycles_;
 };
 } // namespace cx
 #endif // !CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP

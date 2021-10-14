@@ -3,9 +3,11 @@
 <package format="3">
   <name>cx_bringup</name>
   <version>0.0.0</version>
-  <description>Central CX bringup scrips and parameters for nodes</description>
-  <maintainer email="doychev@kbsg.rwth-aachen.de">userin4o</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Central CX bringup scripts and parameters for nodes</description>
+    
+  <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
+  
+  <license>GPLv2+ license</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

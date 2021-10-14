@@ -2,10 +2,6 @@ set(TEST_LAUNCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test_launch_files)
 set(PDDL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/pddl)
 set(CLIPS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/clips)
 
-ament_add_gtest(test_mock_feature test_mock_feature.cpp)
-ament_target_dependencies(test_mock_feature ${dependencies})
-target_link_libraries(test_mock_feature ${PROJECT_NAME})
-
 install(DIRECTORY
   ${PDDL_DIR}
   ${CLIPS_DIR}

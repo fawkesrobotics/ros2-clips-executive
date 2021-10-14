@@ -4,6 +4,7 @@
 ;
 ;  Created: Thu Dec 20 12:06:02 2012 (Train from Freiburg to Aachen)
 ;  Copyright  2012  Tim Niemueller [www.niemueller.de]
+;							2021  Ivaylo Doychev
 ;  Licensed under GPLv2+ license, cf. LICENSE file
 ;---------------------------------------------------------------------------
 
@@ -66,7 +67,12 @@
 	(bind ?action_params "") 
 	(foreach ?param-value ?param-values
 		(printout t "Param-value:" ?param-value crlf)
-		(bind ?action_params (str-cat ?action_params " " ?param-value))
+
+		(if (eq ?action_params "")
+			then 
+			(bind ?action_params (str-cat ?action_params ?param-value))
+		else
+		  (bind ?action_params (str-cat ?action_params " " ?param-value)))
 	)
 	(bind ?id (sym-cat ?action-name "_" (gensym*)))
 	(printout logwarn "Calling mapped skill '" ?sks "'" crlf)

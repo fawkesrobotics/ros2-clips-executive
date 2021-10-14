@@ -1,3 +1,23 @@
+/***************************************************************************
+ *  test_skill_master.hpp
+ *
+ *  Created: 16 September 2021
+ *  Copyright  2021  Ivaylo Doychev
+ ****************************************************************************/
+
+/*  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  Read the full text in the LICENSE.GPL file in the doc directory.
+ */
+
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include <fstream>
 #include <iostream>
@@ -76,18 +96,15 @@ TEST(skill_master_test, skill_master) {
   auto move_action_node =
       std::make_shared<MoveAction>("move_action", "move", 1s);
   auto move_action_master = std::make_shared<cx::SkillExecutionMaster>(
-      "master_node", "skill-id-1", "move", "",
-      "r2d2 steering_wheels_zone assembly_zone");
+      "master_node", "skill-id-1", "move", "", "tb3 shelf cap_station");
 
   for (const auto &param : move_action_master->get_action_params()) {
     RCLCPP_WARN(test_node->get_logger(), "Test param: %s", param.c_str());
   }
   ASSERT_EQ(move_action_master->get_action_name(), "move");
   ASSERT_EQ(move_action_master->get_action_params().size(), 3u);
-  ASSERT_EQ(move_action_master->get_action_params()[0], "r2d2");
-  ASSERT_EQ(move_action_master->get_action_params()[2], "assembly_zone");
-
-  // move_action_node->set_parameter({"action_name", "move"});
+  ASSERT_EQ(move_action_master->get_action_params()[0], "tb3");
+  ASSERT_EQ(move_action_master->get_action_params()[2], "cap_station");
 
   rclcpp::executors::MultiThreadedExecutor exe(rclcpp::ExecutorOptions(), 8);
 
@@ -131,13 +148,10 @@ TEST(skill_master_test, skill_master) {
       rate.sleep();
     }
   }
-  RCLCPP_WARN(test_node->get_logger(), "Out of first loop");
 
   ASSERT_EQ(move_action_node->get_current_state().id(),
             lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE);
 
-  // ASSERT_EQ(move_action_node->get_internal_status().state,
-  //           plansys2_msgs::msg::ActionPerformerStatus::READY);
   ASSERT_TRUE(action_execution_msgs.empty());
 
   {
@@ -148,7 +162,6 @@ TEST(skill_master_test, skill_master) {
       rate.sleep();
     }
   }
-  RCLCPP_WARN(test_node->get_logger(), "Out of second loop");
 
   ASSERT_EQ(move_action_node->get_current_state().id(),
             lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE);
@@ -197,8 +210,6 @@ TEST(skill_master_test, skill_master) {
   ASSERT_EQ(move_action_master->get_exec_info().status,
             cx_msgs::msg::SkillActionExecinfo::S_FINAL);
 
-  RCLCPP_WARN(test_node->get_logger(), "Hell yeah");
-
   finish = true;
   t.join();
 }
@@ -209,18 +220,15 @@ TEST(skill_master_test, skill_master_cancelation) {
   auto move_action_node =
       std::make_shared<MoveAction>("move_action", "move", 1s);
   auto move_action_master = std::make_shared<cx::SkillExecutionMaster>(
-      "master_node", "skill-id-1", "move", "",
-      "r2d2 steering_wheels_zone assembly_zone");
+      "master_node", "skill-id-1", "move", "", "tb3 shelf cap_station");
 
   for (const auto &param : move_action_master->get_action_params()) {
     RCLCPP_WARN(test_node->get_logger(), "Test param: %s", param.c_str());
   }
   ASSERT_EQ(move_action_master->get_action_name(), "move");
   ASSERT_EQ(move_action_master->get_action_params().size(), 3u);
-  ASSERT_EQ(move_action_master->get_action_params()[0], "r2d2");
-  ASSERT_EQ(move_action_master->get_action_params()[2], "assembly_zone");
-
-  // move_action_node->set_parameter({"action_name", "move"});
+  ASSERT_EQ(move_action_master->get_action_params()[0], "tb3");
+  ASSERT_EQ(move_action_master->get_action_params()[2], "cap_station");
 
   rclcpp::executors::MultiThreadedExecutor exe(rclcpp::ExecutorOptions(), 8);
 
@@ -264,13 +272,9 @@ TEST(skill_master_test, skill_master_cancelation) {
       rate.sleep();
     }
   }
-  RCLCPP_WARN(test_node->get_logger(), "Out of first loop");
 
   ASSERT_EQ(move_action_node->get_current_state().id(),
             lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE);
-
-  // ASSERT_EQ(move_action_node->get_internal_status().state,
-  //           plansys2_msgs::msg::ActionPerformerStatus::READY);
   ASSERT_TRUE(action_execution_msgs.empty());
 
   {
@@ -281,7 +285,6 @@ TEST(skill_master_test, skill_master_cancelation) {
       rate.sleep();
     }
   }
-  RCLCPP_WARN(test_node->get_logger(), "Out of second loop");
 
   ASSERT_EQ(move_action_node->get_current_state().id(),
             lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE);
@@ -307,13 +310,9 @@ TEST(skill_master_test, skill_master_cancelation) {
       rate.sleep();
     }
   }
-  RCLCPP_WARN(test_node->get_logger(), "Out of third loop");
 
   ASSERT_EQ(move_action_master->get_exec_status(),
             cx::SkillExecutionMaster::ExecState::CANCELLED);
-  // ASSERT_EQ(move_action_node->get_internal_status().state,
-  //           plansys2_msgs::msg::ActionPerformerStatus::READY);
-
   ASSERT_EQ(action_execution_msgs[action_execution_msgs.size() - 2].type,
             cx_msgs::msg::SkillExecution::CANCEL);
   ASSERT_EQ(action_execution_msgs[action_execution_msgs.size() - 1].type,
@@ -323,8 +322,6 @@ TEST(skill_master_test, skill_master_cancelation) {
             cx::SkillExecutionMaster::ExecState::CANCELLED);
   ASSERT_EQ(move_action_master->get_exec_info().status,
             cx_msgs::msg::SkillActionExecinfo::S_FAILED);
-
-  RCLCPP_WARN(test_node->get_logger(), "Hell yeah");
 
   finish = true;
   t.join();

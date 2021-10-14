@@ -2,7 +2,6 @@
 
 (define (domain move_trutlebot3)
 
-  ;remove requirements that are not needed
   (:requirements :strips :fluents :typing :adl)
 
   (:types

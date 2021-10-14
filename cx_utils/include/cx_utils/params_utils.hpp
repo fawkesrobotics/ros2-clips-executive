@@ -3,8 +3,6 @@
 
 namespace cx {
 
-//  !BASED ON NAVIGATION2 UTILS
-
 /// Declares ROS2 parameter and sets it to a given value
 template <typename NodeT>
 void declare_parameter_if_not_declared(

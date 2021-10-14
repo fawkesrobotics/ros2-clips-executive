@@ -56,9 +56,9 @@ TEST(clips_pddl_parser_test, clips_generate_plan) {
       ament_index_cpp::get_package_share_directory("cx_clips_executive");
 
   domain_node->set_parameter(
-      {"model_file", pkgpath + "/pddl/domain_simple.pddl"});
+      {"model_file", pkgpath + "/pddl/domain.pddl"});
   problem_node->set_parameter(
-      {"model_file", pkgpath + "/pddl/domain_simple.pddl"});
+      {"model_file", pkgpath + "/pddl/domain.pddl"});
 
   rclcpp::executors::SingleThreadedExecutor exe;
 
@@ -128,12 +128,8 @@ TEST(clips_pddl_parser_test, clips_generate_plan) {
   RCLCPP_INFO(test_node->get_logger(), "Pddl Dir: %s", pddl_file.c_str());
   auto clips = clips_env_manager_node->getEnvironmentByName(env_name);
 
-//   std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
-  //   clips->evaluate("(parse-pddl-domain \"" + pddl_file + "\")");
-
   clips->evaluate("(path-load \"parser.clp\")");
   clips->run();
-  //   clips->evaluate("(psys2-clear-knowledge)");
 
   finish = true;
   t.join();
