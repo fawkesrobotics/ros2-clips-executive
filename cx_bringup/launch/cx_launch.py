@@ -11,6 +11,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     bringup_dir = get_package_share_directory('cx_bringup')
+    cx_dir = get_package_share_directory('cx_clips_executive')
 
     namespace = LaunchConfiguration('namespace')
     cx_params_file = LaunchConfiguration('cx_params_file')
@@ -28,7 +29,7 @@ def generate_launch_description():
 
     declare_model_file_cmd = DeclareLaunchArgument(
         'model_file',
-        default_value='/home/userin4o/galactic_ws/src/ros2-clips-executive/cx_clips_executive/src/cx_clips_executive/clips/test-scenario-pddl/domain.pddl',
+        default_value=os.path.join(cx_dir + "/clips/test-scenario-nav2/domain.pddl"),
         description='PDDL Model file')
 
     declare_log_level_ = DeclareLaunchArgument(

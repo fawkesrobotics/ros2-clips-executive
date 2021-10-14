@@ -263,21 +263,21 @@ clips_executive:
               file: test-scenario-nav2/worldmodel-facts.clp
             - name: goal-reasoner
               file: test-scenario-nav2/goal-reasoner.clp
-            # - name: goal-expander
-            #   file: test-scenario-nav2/goal-expander-pddl.clp
+            - name: goal-expander
+              file: test-scenario-nav2/goal-expander-pddl.clp
             - name: action-selection
               file: test-scenario-nav2/action-selection.clp
             - name: action-execution
               files:
                 - test-scenario-nav2/print-action.clp
                 - skills-actions.clp
-            - name: fixed-execution
-              file: test-scenario-nav2/fixed-sequence.clp
-            # - name: execution-monitoring
-            #   file: test-scenario-nav2/execution-monitoring.clp
-            # - name: state-estimation
-            #   file: test-scenario-nav2/state-estimation.clp
-          # Map plan actions to skill strings.
+            # - name: fixed-execution
+            #   file: test-scenario-nav2/fixed-sequence.clp
+            - name: execution-monitoring
+              file: test-scenario-nav2/execution-monitoring.clp
+            - name: state-estimation
+              file: test-scenario-nav2/state-estimation.clp
+
         action-mapping:
           say-hello: say{text="Hello ?(name)y", wait=true}
           say-goodbye: say{text="Good bye", wait=true}

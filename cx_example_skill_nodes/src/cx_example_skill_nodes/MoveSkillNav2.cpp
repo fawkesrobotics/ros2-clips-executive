@@ -34,8 +34,8 @@ MoveSkillNav2::MoveSkillNav2(const std::string &id,
   geometry_msgs::msg::PoseStamped wp;
   wp.header.frame_id = "map";
   wp.header.stamp = now();
-  wp.pose.position.x = 0.0;
-  wp.pose.position.y = -2.0;
+  wp.pose.position.x = 1.76;
+  wp.pose.position.y = 0.68;
   wp.pose.position.z = 0.0;
   wp.pose.orientation.x = 0.0;
   wp.pose.orientation.y = 0.0;
@@ -43,30 +43,34 @@ MoveSkillNav2::MoveSkillNav2(const std::string &id,
   wp.pose.orientation.w = 1.0;
   waypoints_map_["wp1"] = wp;
 
-  wp.pose.position.x = 1.8;
-  wp.pose.position.y = 0.0;
+  wp.pose.position.x = -1.58;
+  wp.pose.position.y = 1.41;
   waypoints_map_["wp2"] = wp;
 
-  wp.pose.position.x = 0.0;
-  wp.pose.position.y = 2.0;
+  wp.pose.position.x = 1.07;
+  wp.pose.position.y = -1.72;
   waypoints_map_["wp3"] = wp;
 
-  wp.pose.position.x = -0.5;
-  wp.pose.position.y = -0.5;
+  wp.pose.position.x = 0.63;
+  wp.pose.position.y = 1.74;
   waypoints_map_["wp4"] = wp;
+
+  wp.pose.position.x = 0.63;
+  wp.pose.position.y = 1.74;
+  waypoints_map_["wp5"] = wp;
+
+  wp.pose.position.x = -2.57;
+  wp.pose.position.y = 0.02;
+  waypoints_map_["wp6"] = wp;
 
   wp.pose.position.x = -2.0;
   wp.pose.position.y = -0.4;
   waypoints_map_["wp_init"] = wp;
 
-  pos_sub_ = create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
-      "/amcl_pose", 10,
-      std::bind(&MoveSkillNav2::current_pos_callback, this, _1));
-}
+  wp.pose.position.x = -2.0;
+  wp.pose.position.y = -0.4;
+  waypoints_map_["wp_final"] = wp;
 
-void MoveSkillNav2::current_pos_callback(
-    const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg) {
-  current_pos_ = msg->pose.pose;
 }
 
 using CallbackReturn =
@@ -85,8 +89,6 @@ MoveSkillNav2::on_activate(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "Waiting for navigation action server...");
 
   do {
-    // RCLCPP_INFO(get_logger(), "Waiting for navigation action server...");
-
     is_action_server_ready = navigation_action_client_->wait_for_action_server(
         std::chrono::seconds(5));
   } while (!is_action_server_ready);
@@ -94,7 +96,7 @@ MoveSkillNav2::on_activate(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "Navigation action server ready");
 
   auto wp_to_navigate =
-      action_parameters_[3]; // The goal is in the 3rd argument of the action
+      action_parameters_[3]; // The goal wp is in the 3rd argument
   RCLCPP_INFO(get_logger(), "Start navigation to [%s]", wp_to_navigate.c_str());
 
   goal_pos_ = waypoints_map_[wp_to_navigate];

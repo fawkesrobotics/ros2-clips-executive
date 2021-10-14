@@ -38,12 +38,6 @@ class MoveSkillNav2 : public cx::SkillExecution {
       const std::shared_ptr<const nav2_msgs::action::NavigateToPose::Feedback>;
 
 public:
-  // using Ptr = std::shared_ptr<MoveSkillNav2>;
-  // static Ptr make_shared(const std::string &node_name,
-  //                        const std::string &action,
-  //                        const std::chrono::nanoseconds &rate) {
-  //   return std::make_shared<MoveSkillNav2>(node_name, action, rate);
-  // }
 
   MoveSkillNav2(const std::string &id, const std::string &action_name,
                 const std::chrono::nanoseconds &rate);
@@ -66,8 +60,6 @@ private:
   std::shared_future<NavGoalHandle::SharedPtr> future_navigation_goal_handle_;
   NavGoalHandle::SharedPtr navigation_goal_handle_;
 
-  rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr
-      pos_sub_;
   geometry_msgs::msg::Pose current_pos_;
   geometry_msgs::msg::PoseStamped goal_pos_;
   nav2_msgs::action::NavigateToPose::Goal navigation_goal_;

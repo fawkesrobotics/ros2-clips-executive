@@ -41,14 +41,7 @@ int main(int argc, char ** argv)
   exe.add_node(domain_node->get_node_base_interface());
   exe.add_node(problem_node->get_node_base_interface());
   exe.add_node(planner_node->get_node_base_interface());
-
-  // std::shared_future<void> script = std::async(
-  //   std::launch::async,
-  //   std::bind(plansys2::startup_script, manager_nodes));
-  // exe.spin_until_future_complete(script);
-
-  RCLCPP_INFO(rclcpp::get_logger("PSYS2_NODE"), "COMPLETESSS");
-
+  
   exe.spin();
 
   rclcpp::shutdown();

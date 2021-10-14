@@ -39,7 +39,6 @@
     TRUE
     (psys2-add-domain-instance ?d:name ?d:type)
   )
-  (printout t "Before predicate addition!" crlf)
   (do-for-all-facts ((?f domain-fact))
     TRUE
     (bind ?pred (str-cat "(" ?f:name)) 

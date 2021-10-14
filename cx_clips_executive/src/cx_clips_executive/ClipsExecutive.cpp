@@ -121,9 +121,7 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   }
 
   if (action_mapping.begin() == action_mapping.end()) {
-    RCLCPP_ERROR(get_logger(), "Couldnt get parameter %s, aborting...",
-                 action_mapping_cfgpath.c_str());
-    return CallbackReturn::FAILURE;
+    RCLCPP_WARN(get_logger(), "No action mapping provided!");
   }
   // Print all actions mappings
   for (const auto &action : action_mapping) {
