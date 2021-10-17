@@ -96,7 +96,7 @@ TEST(skill_master_test, skill_master) {
   auto move_action_node =
       std::make_shared<MoveAction>("move_action", "move", 1s);
   auto move_action_master = std::make_shared<cx::SkillExecutionMaster>(
-      "master_node", "skill-id-1", "move", "", "tb3 shelf cap_station");
+      "master_node", "skill-id-1", "move", "", "tb3 shelf cap_station", "");
 
   for (const auto &param : move_action_master->get_action_params()) {
     RCLCPP_WARN(test_node->get_logger(), "Test param: %s", param.c_str());
@@ -220,7 +220,7 @@ TEST(skill_master_test, skill_master_cancelation) {
   auto move_action_node =
       std::make_shared<MoveAction>("move_action", "move", 1s);
   auto move_action_master = std::make_shared<cx::SkillExecutionMaster>(
-      "master_node", "skill-id-1", "move", "", "tb3 shelf cap_station");
+      "master_node", "skill-id-1", "move", "", "tb3 shelf cap_station", "");
 
   for (const auto &param : move_action_master->get_action_params()) {
     RCLCPP_WARN(test_node->get_logger(), "Test param: %s", param.c_str());

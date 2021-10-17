@@ -5,7 +5,7 @@
 )
 
 (defglobal
-	?*GOAL-MAX-TRIES* = 3
+	?*GOAL-MAX-TRIES* = 2
 )
 
 ; #  Goal Creation

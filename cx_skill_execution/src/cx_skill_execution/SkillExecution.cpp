@@ -52,10 +52,12 @@ SkillExecution::SkillExecution(const std::string &node_name,
                                const rclcpp::NodeOptions &options,
                                const std::string &namespace_)
     : rclcpp_lifecycle::LifecycleNode(node_name, namespace_, options),
-      action_name_(action_name), exec_rate_(exec_rate) {
+      action_name_(action_name), exec_rate_(exec_rate), agent_id_("") {
 
   RCLCPP_INFO(get_logger(), "Initialising executioner %s for skill %s",
               node_name.c_str(), action_name.c_str());
+
+  declare_parameter("agent_id", "");
   executioner_info_.state = SkillExecutionerInformation::INIT;
   executioner_info_.action_name = action_name;
   executioner_info_.node_name = get_name();
@@ -67,6 +69,7 @@ using std::placeholders::_1;
 
 CallbackReturn
 SkillExecution::on_configure(const rclcpp_lifecycle::State &state) {
+  get_parameter("agent_id", agent_id_);
 
   executioner_info_pub_ = create_publisher<SkillExecutionerInformation>(
       "/skill_executioner_status", rclcpp::QoS(100).reliable());
@@ -125,7 +128,8 @@ void SkillExecution::skill_board_cb(
   case SkillExecutionMsg::REQUEST:
     if (get_current_state().id() ==
             lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE &&
-        !commited_to_skill_ && action_name_ == msg->action) {
+        !commited_to_skill_ && action_name_ == msg->action &&
+        agent_id_ == msg->agent_id) {
       commited_to_skill_ = true;
       send_response(msg);
     }
@@ -133,7 +137,8 @@ void SkillExecution::skill_board_cb(
   case SkillExecutionMsg::CONFIRM:
     if (get_current_state().id() ==
             lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE &&
-        msg->node_id == get_name() && commited_to_skill_) {
+        msg->node_id == get_name() && commited_to_skill_ &&
+        msg->agent_id == agent_id_) {
       action_parameters_ = msg->action_parameters;
       mapped_action_ = msg->mapped_action;
       // Transition to active state, so the implemented function can be executed
@@ -142,14 +147,14 @@ void SkillExecution::skill_board_cb(
     }
     break;
   case SkillExecutionMsg::REJECT:
-    if (msg->node_id == get_name()) {
+    if (msg->node_id == get_name() && msg->agent_id == agent_id_) {
       commited_to_skill_ = false;
     }
     break;
   case SkillExecutionMsg::CANCEL:
     if (get_current_state().id() ==
             lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE &&
-        msg->node_id == get_name()) {
+        msg->node_id == get_name() && msg->agent_id == agent_id_) {
       finish_execution(false, 0.0,
                        /*expected from the exec master*/ "CANCELLED");
     }
@@ -178,6 +183,7 @@ void SkillExecution::send_feedback(float progress, const std::string &status) {
   msg.mapped_action = mapped_action_;
   msg.progress = progress;
   msg.status = status;
+  msg.agent_id = agent_id_;
 
   skill_board_pub->publish(msg);
 }
@@ -198,6 +204,7 @@ void SkillExecution::finish_execution(bool success, float progress,
   msg.progress = progress;
   msg.status = status;
   msg.success = success;
+  msg.agent_id = agent_id_;
 
   skill_board_pub->publish(msg);
 }

@@ -11,6 +11,7 @@ string node_id
 
 string action
 string[] action_parameters
+string agent_id
 # needed for fawkes skiller or config mapped action
 string mapped_action
 

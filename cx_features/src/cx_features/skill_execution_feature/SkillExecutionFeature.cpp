@@ -96,12 +96,13 @@ void SkillExecutionFeature::clips_read_skills(const std::string &env_name) {
   cx::LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name];
   std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
   for (auto &sm : skill_master_map_) {
-    // auto curr_skill_m = sm.skill_master;
+    sm.second.skill_master->check_idle_time();
     auto exec_info = sm.second.skill_master->get_exec_info();
     clips->assert_fact_f(
-        "(skill-feedback (skill-id %s) (skiller \"%s\") (status %s) (error "
+        "(skill-feedback (skill-id %s) (agent-id \"%s\") (status %s) (error "
         "\"%s\"))",
-        exec_info.skill_id.c_str(), /*robot's namespace/skiller*/ "",
+        exec_info.skill_id.c_str(),
+        exec_info.agent_id.c_str() /*agent_id/skiller*/,
         exec_info.string_status.c_str(), exec_info.error_msg.c_str());
 
     if (exec_info.status == cx_msgs::msg::SkillActionExecinfo::S_FINAL ||
@@ -115,7 +116,7 @@ void SkillExecutionFeature::request_skill_execution(
     const std::string &env_name, const std::string &skill_id,
     const std::string &action_name, const std::string &action_params,
     const std::string &mapped_action,
-    const std::string &robot_namespace /*must give running ros2 namespace*/) {
+    const std::string &agent_id /*specific agent, defaults to ""*/) {
 
   if (envs_.find(env_name) == envs_.end()) {
     RCLCPP_ERROR(node_->get_logger(),
@@ -125,23 +126,24 @@ void SkillExecutionFeature::request_skill_execution(
     return;
   }
   RCLCPP_INFO(node_->get_logger(),
-              "Requesting skill (%s, %s) with mapped_action %s for robot %s",
+              "Requesting skill (%s, %s) with mapped_action %s for agent %s",
               action_name.c_str(), action_params.c_str(), mapped_action.c_str(),
-              robot_namespace.c_str());
+              agent_id.c_str());
   // make new skill execution master
   auto skill_master = std::make_shared<cx::SkillExecutionMaster>(
-      /*name the master as the given id*/ skill_id, skill_id, action_name,
-      mapped_action, action_params, robot_namespace);
+      /*name the master as the provided skill id*/ skill_id, skill_id,
+      action_name, mapped_action, action_params, agent_id);
 
   auto skill_master_st = SkillMasterSt();
   skill_master_st.skill_master = skill_master;
 
   // If there is currently running skill, which is unlikely to happen
-  if (skill_master_map_.find(robot_namespace) != skill_master_map_.end()) {
+  if (skill_master_map_.find(agent_id) != skill_master_map_.end()) {
     RCLCPP_WARN(node_->get_logger(), "Previous skill running!");
-    // Abort skill execution in the same namespace
-    auto curr_skill_m = skill_master_map_[robot_namespace].skill_master;
+    // Abort skill execution for the same agent id
+    auto curr_skill_m = skill_master_map_[agent_id].skill_master;
     curr_skill_m->cancel_execution();
+
     // Wait for the cancelation status or max timeout
     auto start_time = node_->now();
     auto req_time = (node_->now() - start_time).seconds();
@@ -150,31 +152,26 @@ void SkillExecutionFeature::request_skill_execution(
     while (curr_skill_m->get_exec_status() ==
            SkillExecutionMaster::ExecState::RUNNING) {
       req_time = (node_->now() - start_time).seconds();
-      if (req_time > 3.0) {
-        // clips->assert_fact_f();
+      if (req_time > 3.0)
         break;
-      }
     }
-    RCLCPP_ERROR(node_->get_logger(), "Previous skill cancelled!");
+    RCLCPP_WARN(node_->get_logger(), "Previous skill cancelled!");
   }
 
   RCLCPP_INFO(node_->get_logger(),
-              "Requesting skill (%s, %s) with mapped_action %s for robot %s",
+              "Requesting skill (%s, %s) with mapped_action %s for agent %s",
               action_name.c_str(), action_params.c_str(), mapped_action.c_str(),
-              robot_namespace.c_str());
+              agent_id.c_str());
   // Spin exec node in executor
   skill_master_st.skill_master_exec_node =
       std::make_shared<cx::NodeThread>(skill_master->get_node_base_interface());
 
-  RCLCPP_WARN(node_->get_logger(), "Requesting skill exec");
   skill_master->request_skill_execution();
-  RCLCPP_WARN(node_->get_logger(), "Requested skill exec");
-
-  skill_master_map_[robot_namespace] = skill_master_st;
+  skill_master_map_[agent_id] = skill_master_st;
 }
 
 void SkillExecutionFeature::cancel_skill(const std::string &env_name,
-                                         const std::string &robot_namespace) {
+                                         const std::string &agent_id) {
   if (envs_.find(env_name) == envs_.end()) {
     RCLCPP_ERROR(node_->get_logger(),
                  "Environment %s has not been registered "
@@ -182,8 +179,8 @@ void SkillExecutionFeature::cancel_skill(const std::string &env_name,
                  env_name.c_str());
     return;
   }
-  if (skill_master_map_.find(robot_namespace) != skill_master_map_.end()) {
-    skill_master_map_[robot_namespace].skill_master->cancel_execution();
+  if (skill_master_map_.find(agent_id) != skill_master_map_.end()) {
+    skill_master_map_[agent_id].skill_master->cancel_execution();
     cx::LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name];
     std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
     // clips->assert_fact_f();
@@ -192,7 +189,6 @@ void SkillExecutionFeature::cancel_skill(const std::string &env_name,
                  "Requested skill can't be cancelled, as it is not Present!");
   }
 }
-
 } // namespace cx
 
 PLUGINLIB_EXPORT_CLASS(cx::SkillExecutionFeature, cx::ClipsFeature)

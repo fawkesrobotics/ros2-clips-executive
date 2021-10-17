@@ -47,16 +47,14 @@ using namespace std::chrono_literals;
 using SkillExecutionMsg = cx_msgs::msg::SkillExecution;
 using SkillActionExecinfo = cx_msgs::msg::SkillActionExecinfo;
 
-SkillExecutionMaster::SkillExecutionMaster(const std::string &node_name,
-                                           const std::string &skill_id,
-                                           const std::string &action_name,
-                                           const std::string &mapped_action,
-                                           const std::string &action_parameters,
-                                           const std::string &namespace_,
-                                           const rclcpp::NodeOptions &options)
+SkillExecutionMaster::SkillExecutionMaster(
+    const std::string &node_name, const std::string &skill_id,
+    const std::string &action_name, const std::string &mapped_action,
+    const std::string &action_parameters, const std::string &agent_id,
+    const std::string &namespace_, const rclcpp::NodeOptions &options)
     : rclcpp::Node(node_name, namespace_, options), skill_id_(skill_id),
       action_name_(action_name), mapped_action_(mapped_action),
-      string_action_parameters_(action_parameters) {
+      string_action_parameters_(action_parameters), agent_id_(agent_id) {
 
   skill_board_pub = create_publisher<SkillExecutionMsg>(
       "/skill_board", rclcpp::QoS(100).reliable());
@@ -67,6 +65,7 @@ SkillExecutionMaster::SkillExecutionMaster(const std::string &node_name,
   action_parameters_ = extract_parameters(action_parameters);
   state_ = IDLE;
   current_state_time_ = now();
+  // Relevant for skill exec feature
   exec_info_.status_stamp = current_state_time_;
   exec_info_.start_stamp = current_state_time_;
   exec_info_.status = SkillActionExecinfo::S_IDLE;
@@ -75,6 +74,7 @@ SkillExecutionMaster::SkillExecutionMaster(const std::string &node_name,
   exec_info_.action = action_name;
   exec_info_.action_parameters = action_parameters_;
   exec_info_.mapped_action = mapped_action;
+  exec_info_.agent_id = agent_id_;
 }
 
 void SkillExecutionMaster::skill_board_cb(
@@ -96,7 +96,7 @@ void SkillExecutionMaster::skill_board_cb(
     break;
   case SkillExecutionMsg::RESPONSE:
     if (msg->action_parameters == action_parameters_ &&
-        msg->action == action_name_) {
+        msg->action == action_name_ && msg->agent_id == agent_id_) {
       confirm_executioner(msg->node_id);
       executioner_id_ = msg->node_id;
       state_ = RUNNING;
@@ -110,7 +110,8 @@ void SkillExecutionMaster::skill_board_cb(
     break;
   case SkillExecutionMsg::FEEDBACK:
     if (state_ != RUNNING || msg->action_parameters != action_parameters_ ||
-        msg->action != action_name_ || msg->node_id != executioner_id_) {
+        msg->action != action_name_ || msg->node_id != executioner_id_ ||
+        msg->agent_id != agent_id_) {
       return;
     }
     feedback_ = msg->status;
@@ -119,7 +120,8 @@ void SkillExecutionMaster::skill_board_cb(
     break;
   case SkillExecutionMsg::FINISH:
     if (msg->action_parameters == action_parameters_ &&
-        msg->action == action_name_ && msg->node_id == executioner_id_) {
+        msg->action == action_name_ && msg->node_id == executioner_id_ &&
+        msg->agent_id == agent_id_) {
       if (msg->status == "CANCELLED") {
         state_ = CANCELLED;
         exec_info_.status = SkillActionExecinfo::S_FAILED;
@@ -156,6 +158,7 @@ void SkillExecutionMaster::request_skill_execution() {
   msg.action = action_name_;
   msg.action_parameters = action_parameters_;
   msg.mapped_action = mapped_action_;
+  msg.agent_id = agent_id_;
 
   skill_board_pub->publish(msg);
   RCLCPP_WARN(get_logger(), "Sent execution request for action %s!",
@@ -163,13 +166,12 @@ void SkillExecutionMaster::request_skill_execution() {
 }
 
 void SkillExecutionMaster::confirm_executioner(const std::string &node_id) {
-  RCLCPP_WARN(get_logger(), "Confirm executioner!");
-
   SkillExecutionMsg msg;
   msg.type = SkillExecutionMsg::CONFIRM;
   msg.node_id = node_id;
   msg.action = action_name_;
   msg.action_parameters = action_parameters_;
+  msg.agent_id = agent_id_;
 
   skill_board_pub->publish(msg);
 }
@@ -180,13 +182,25 @@ void SkillExecutionMaster::cancel_execution() {
   msg.node_id = executioner_id_;
   msg.action = action_name_;
   msg.action_parameters = action_parameters_;
+  msg.agent_id = agent_id_;
 
   skill_board_pub->publish(msg);
 }
 
+void SkillExecutionMaster::check_idle_time() {
+  if (state_ == IDLE && (now() - current_state_time_).seconds() > 4.0) {
+    state_ = FAILURE;
+    exec_info_.status = SkillActionExecinfo::S_FAILED;
+    exec_info_.string_status = "S_FAILED";
+    exec_info_.error_msg =
+        "Timed out (4s) waiting for response from execution node for agent " +
+        agent_id_ + " and skill (" + action_name_ + " " +
+        string_action_parameters_ + ")";
+  }
+}
+
 std::vector<std::string>
 SkillExecutionMaster::extract_parameters(const std::string &action_params) {
-  RCLCPP_INFO(get_logger(), "THE PARAMS!! %s", action_params.c_str());
   std::vector<std::string> params_vec;
   size_t start_pos = 0, end_pos = 0;
   while (end_pos != std::string::npos) {

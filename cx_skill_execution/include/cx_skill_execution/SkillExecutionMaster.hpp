@@ -45,11 +45,14 @@ public:
   SkillExecutionMaster(
       const std::string &node_name, const std::string &skill_id,
       const std::string &action_name, const std::string &action_parameters,
-      const std::string &mapped_action, const std::string &namespace_ = "",
+      const std::string &mapped_action, const std::string &agent_id,
+      const std::string &namespace_ = "",
       const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
 
   void request_skill_execution();
   void cancel_execution();
+  void check_idle_time();
+
   ExecState get_exec_status() const;
 
   cx_msgs::msg::SkillActionExecinfo get_exec_info() const {
@@ -73,6 +76,7 @@ protected:
   const std::string action_mapping_;
   const std::string mapped_action_;
   const std::string string_action_parameters_;
+  const std::string agent_id_;
   std::vector<std::string> action_parameters_;
   std::string executioner_id_;
 

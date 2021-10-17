@@ -209,9 +209,7 @@ void ClipsFeaturesManager::feature_init_context(
 
   LockSharedPtr<CLIPS::Environment> &clips =
       clips_env_manager_node_->envs_[env_name].env;
-  RCLCPP_WARN(get_logger(), "Lock FM");
   std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
-  RCLCPP_WARN(get_logger(), "Locked FM");
 
   if (features_.find(feature_name) != features_.end()) {
     bool success = features_[feature_name]->clips_context_init(env_name, clips);

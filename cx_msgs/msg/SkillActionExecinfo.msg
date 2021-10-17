@@ -9,6 +9,7 @@ int8 status
 string action
 string[] action_parameters
 string mapped_action
+string agent_id
 
 string skill_id
 string string_status

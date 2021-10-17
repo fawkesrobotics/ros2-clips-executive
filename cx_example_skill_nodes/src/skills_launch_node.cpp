@@ -15,6 +15,7 @@ int main(int argc, char **argv) {
   auto node =
       std::make_shared<cx::MoveSkillNav2>("nav2_move_node", "move", 500ms);
 
+  node->set_parameter(rclcpp::Parameter("agent_id", ""));
   node->trigger_transition(
       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 

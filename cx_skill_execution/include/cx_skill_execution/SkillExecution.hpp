@@ -74,6 +74,7 @@ protected:
   std::string mapped_action_;
   const std::chrono::nanoseconds exec_rate_;
   bool commited_to_skill_;
+  std::string agent_id_;
 
   rclcpp_lifecycle::LifecyclePublisher<cx_msgs::msg::SkillExecution>::SharedPtr
       skill_board_pub;

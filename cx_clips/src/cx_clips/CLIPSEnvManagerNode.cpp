@@ -59,8 +59,8 @@ public:
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
         // LATER DEBUG
-        RCLCPP_INFO(this->logger_, component_ ? "CLIPS", "%s",
-                    buffer_.c_str() : component_);
+        RCLCPP_DEBUG(this->logger_, component_ ? "CLIPS", "%s",
+                     buffer_.c_str() : component_);
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
                  strcmp(logical_name, WWARNING) == 0) {
@@ -408,6 +408,7 @@ CLIPSEnvManagerNode::getEnvironmentByName(const std::string &env_name) {
                  "CLIPS environment '%s' does not exists--> Should "
                  "be signaled! (e.g. as exception)",
                  env_name.c_str());
+    throw std::runtime_error("Wrong access to environment: " + env_name);
   }
 }
 

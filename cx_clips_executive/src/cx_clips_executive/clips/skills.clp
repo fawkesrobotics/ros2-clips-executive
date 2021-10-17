@@ -25,7 +25,7 @@
   (slot error-msg (type STRING))
   (slot skill-string (type STRING))
 	(multislot start-time (type INTEGER) (cardinality 2 2) (default (create$ 0 0)))
-	(slot skiller (type STRING) (default ""))
+	(slot agent-id (type STRING) (default ""))
 )
 
 (deftemplate skill-feedback
@@ -33,7 +33,7 @@
 	(slot skill-id (type SYMBOL))
   (slot status (type SYMBOL) (allowed-values S_IDLE S_RUNNING S_FINAL S_FAILED))
   (slot error (type STRING))
-	(slot skiller (type STRING) (default ""))
+	(slot agent-id (type STRING) (default ""))
 )
 
 ; (deftemplate skiller-control
@@ -45,12 +45,12 @@
 
 (assert (ff-feature-loaded skill_execution))
 
-(deffunction skill-call (?action-name ?param-names ?param-values $?opt-skiller)
-	(bind ?skiller "")
-	; (if (> (length$ ?opt-skiller) 0) then (bind ?skiller (nth$ 1 ?opt-skiller)))
-	; (if (> (length$ ?opt-skiller) 1)
+(deffunction skill-call (?action-name ?param-names ?param-values $?opt-agent-id)
+	(bind ?agent-id "")
+	; (if (> (length$ ?opt-agent-id) 0) then (bind ?agent-id (nth$ 1 ?opt-agent-id)))
+	; (if (> (length$ ?opt-agent-id) 1)
 	;  then
-	; 	(printout warn "skill-call: ignore unexpected params " (rest$ ?opt-skiller) crlf)
+	; 	(printout warn "skill-call: ignore unexpected params " (rest$ ?opt-agent-id) crlf)
 	; )
 	; rely on a function provided from the outside providing
 	; a more sophisticated mapping.
@@ -76,11 +76,11 @@
 	)
 	(bind ?id (sym-cat ?action-name "_" (gensym*)))
 	(printout logwarn "Calling mapped skill '" ?sks "'" crlf)
-	(printout logwarn "Calling skill '" ?action-name ?action_params"'" crlf)
+	(printout logwarn "Calling skill '" ?action-name " " ?action_params"'" crlf)
 
-	(call-skill-execution ?id ?action-name ?action_params ?sks ?skiller)
+	(call-skill-execution ?id ?action-name ?action_params ?sks ?agent-id)
 	(assert (skill (id ?id) (name (sym-cat ?action-name)) (parameters ?action_params) 
-						(skill-string ?sks) (skiller ?skiller) (status S_IDLE)
+						(skill-string ?sks) (agent-id ?agent-id) (status S_IDLE)
 						(start-time (now))))
 	(return ?id)
 )
@@ -93,10 +93,10 @@
 )
 
 (defrule skill-status-update
-  ?sf <- (skill-feedback (skill-id ?skill-id) (skiller ?skiller) (status ?new-status)
+  ?sf <- (skill-feedback (skill-id ?skill-id) (agent-id ?agent-id) (status ?new-status)
                            (error ?error-msg))
   ?s <- (skill (name ?n) (id ?skill-id) (status ?old-status&~?new-status&~S_FINAL&~S_FAILED)
-                (skiller ?skiller))
+                (agent-id ?agent-id))
   =>
   (printout t "Skill " ?n " is " ?new-status", was: " ?old-status crlf)
   (retract ?sf)
@@ -104,8 +104,8 @@
 )
 
 (defrule skill-status-update-nochange
-	?sf <- (skill-feedback (skill-id ?skill-id) (skiller ?skiller) (status ?new-status))
-  (skill (name ?n) (id ?skill-id) (status ?new-status) (skiller ?skiller)
+	?sf <- (skill-feedback (skill-id ?skill-id) (agent-id ?agent-id) (status ?new-status))
+  (skill (name ?n) (id ?skill-id) (status ?new-status) (agent-id ?agent-id)
   =>
   (retract ?su)
 )

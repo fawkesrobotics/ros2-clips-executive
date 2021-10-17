@@ -115,6 +115,11 @@ MoveSkillNav2::on_activate(const rclcpp_lifecycle::State &state) {
     RCLCPP_INFO(get_logger(), "Waiting for navigation action server...");
   }
 
+  if (!navigation_to_pose_client_->action_server_is_ready()) {
+    finish_execution(false, 0.0, "Action server unavailable!");
+    return CallbackReturn::FAILURE;
+  }
+
   RCLCPP_INFO(get_logger(), "Navigation action server ready");
 
   auto wp_to_navigate =

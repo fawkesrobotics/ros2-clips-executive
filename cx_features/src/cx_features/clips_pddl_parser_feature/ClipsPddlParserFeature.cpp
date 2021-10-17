@@ -51,7 +51,6 @@ bool ClipsPddlParserFeature::clips_context_init(
               clips_feature_name.c_str());
 
   envs_[env_name] = clips;
-  RCLCPP_WARN(rclcpp::get_logger(clips_feature_name), "Trying to lock mutex");
   pddl_parser = std::make_unique<clips_pddl_parser::ClipsPddlParser>(
       envs_[env_name].get_obj().get(), *(envs_[env_name].get_mutex_instance()),
       false);
