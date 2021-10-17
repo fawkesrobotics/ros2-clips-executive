@@ -100,10 +100,9 @@ void ConfigFeature::clips_config_load(const std::string &env_name,
     RCLCPP_WARN(rclcpp::get_logger(name), "Path is: %s", path.c_str());
 
     YAML::Node config = YAML::LoadFile(path);
-    RCLCPP_WARN(rclcpp::get_logger(name), "Lock CF");
     std::lock_guard<std::recursive_mutex> guard(
         *(envs_[env_name].get_mutex_instance()));
-    RCLCPP_WARN(rclcpp::get_logger(name), "Locked CF");
+
     iterateThroughYamlRecuresively(config[cfg_main_node], name, cfg_prefix,
                                    env_name);
 
@@ -158,9 +157,20 @@ void ConfigFeature::iterateThroughYamlRecuresively(
         //             "(confval (path \"%s\") (type %s) (value %s))",
         //             path.c_str(), type.c_str(),
         //             item.second.as<std::string>().c_str());
-        envs_[env_name]->assert_fact_f(
-            "(confval (path \"%s\") (type %s) (value %s))", path.c_str(),
-            type.c_str(), item.second.as<std::string>().c_str());
+        if (item.second.as<std::string>() == "true" ||
+            item.second.as<std::string>() == "false") {
+
+          std::string val = std::move(item.second.as<std::string>());
+          std::transform(val.begin(), val.end(), val.begin(), ::toupper);
+          envs_[env_name]->assert_fact_f(
+              "(confval (path \"%s\") (type %s) (value %s))", path.c_str(),
+              type.c_str(), val.c_str());
+        } else {
+
+          envs_[env_name]->assert_fact_f(
+              "(confval (path \"%s\") (type %s) (value %s))", path.c_str(),
+              type.c_str(), item.second.as<std::string>().c_str());
+        }
       }
       break;
     }
