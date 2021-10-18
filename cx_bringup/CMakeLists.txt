@@ -20,7 +20,6 @@ find_package(plansys2_lifecycle_manager REQUIRED)
 find_package(cx_features REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_clips_executive REQUIRED)
-find_package(cx_example_skill_nodes REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 
@@ -34,7 +33,6 @@ set(dependencies
   cx_features
   cx_clips
   cx_clips_executive
-  cx_example_skill_nodes
   PkgConfig
 )
 set(dependencies_psys2

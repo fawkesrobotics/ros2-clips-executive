@@ -66,7 +66,6 @@ if(BUILD_TESTING)
   find_package(plansys2_domain_expert REQUIRED)
   find_package(plansys2_planner REQUIRED)
   find_package(pluginlib REQUIRED)
-  find_package(cx_features REQUIRED)
   add_subdirectory(test)
 endif()
 
