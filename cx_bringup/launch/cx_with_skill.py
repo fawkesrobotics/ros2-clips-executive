@@ -29,7 +29,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(os.path.join(
             bringup_dir,
             'launch',
-            'cx_launch.py')),
+            'cx_launch_with_plansys2.py')),
     )
 
     ld = LaunchDescription()

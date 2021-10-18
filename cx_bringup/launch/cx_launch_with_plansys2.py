@@ -20,7 +20,8 @@ def generate_launch_description():
     clips_executive_params_file = LaunchConfiguration(
         'clips_executive_params_file')
 
-    lc_nodes = ["clips_features_manager", "clips_executive"]
+    lc_nodes = ["domain_expert", "problem_expert",
+                "planner", "clips_features_manager", "clips_executive"]
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1')
@@ -51,6 +52,18 @@ def generate_launch_description():
             bringup_dir, 'params', 'clips_executive.yaml'),
         description='Path to Clips Executive params file')
 
+    plansys2_node_cmd = Node(
+        package='cx_bringup',
+        executable='plansys_node',
+        output='screen',
+        namespace=namespace,
+        parameters=[
+            {
+                'model_file': model_file,
+            },
+            cx_params_file
+        ])
+
     cx_node = Node(
         package='cx_bringup',
         executable='cx_node',
@@ -62,6 +75,7 @@ def generate_launch_description():
             clips_executive_params_file
         ],
         arguments=['--ros-args', '--log-level', log_level]
+        # arguments=[('--ros-args --log-level debug')]
     )
 
     cx_lifecycle_manager = Node(
@@ -85,6 +99,7 @@ def generate_launch_description():
     ld.add_action(declare_clips_executive_params_file)
     ld.add_action(declare_model_file_cmd)
 
+    ld.add_action(plansys2_node_cmd)
     ld.add_action(cx_node)
     ld.add_action(cx_lifecycle_manager)
 

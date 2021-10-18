@@ -51,15 +51,15 @@ set(dependencies_psys2
 pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
 
 
-add_executable(psys2_node_
-  src/psys2_launch.cpp
+add_executable(plansys_node
+  src/plansys2_node.cpp
 )
 
 add_executable(cx_node
   src/cx_node.cpp
 )
-ament_target_dependencies(psys2_node_ ${dependencies_psys2})
-target_compile_definitions(psys2_node_ PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
+ament_target_dependencies(plansys_node ${dependencies_psys2})
+target_compile_definitions(plansys_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 ament_target_dependencies(cx_node ${dependencies})
 target_compile_definitions(cx_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
@@ -74,7 +74,7 @@ endif()
 install(DIRECTORY launch params DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
-  psys2_node_
+  plansys_node
   cx_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
