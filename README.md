@@ -49,9 +49,14 @@ Note: you may need to source the ROS2 ws beforehand!
 
 ### Install ROS2 CX
 #### Prerequisites:
-- [CLIPS](http://www.clipsrules.net/Downloads.html)
 - [clipsmm](https://github.com/timn/clipsmm)
 - [clips_pddl_parser](https://github.com/fawkesrobotics/clips_pddl_parser)
+
+To pull the corresponding repos, you can use the [vcstool](https://github.com/dirk-thomas/vcstool) and run:
+```
+vcs import < dependency.repos
+```
+They will be installed inside the CX WS by running the `colcon build` command underneath.
 
 Then run:
 ```

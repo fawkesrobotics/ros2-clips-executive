@@ -1,0 +1,9 @@
+repositories:
+  clipsmm:
+    type: git
+    url: https://github.com/timn/clipsmm
+    version: master
+  clips_pddl_parser:
+    type: git
+    url: https://github.com/fawkesrobotics/clips_pddl_parser
+    version: main
