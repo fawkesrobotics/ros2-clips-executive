@@ -16,10 +16,10 @@ def generate_launch_description():
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED', '1')
 
-    dummy_move_node = Node(
+    nav2_move_skill_node = Node(
         package='cx_example_skill_nodes',
         executable='skills_launch_node',
-        name='dummy_move_skill',
+        name='move_skill_node',
         output='screen',
         emulate_tty=True,
         parameters=[]
@@ -36,7 +36,7 @@ def generate_launch_description():
 
     ld.add_action(stdout_linebuf_envvar)
 
-    ld.add_action(dummy_move_node)
+    ld.add_action(nav2_move_skill_node)
     ld.add_action(cx_bringup)
 
     return ld

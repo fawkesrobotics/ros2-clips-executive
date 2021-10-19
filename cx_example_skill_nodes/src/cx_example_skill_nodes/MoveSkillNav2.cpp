@@ -104,20 +104,21 @@ MoveSkillNav2::on_activate(const rclcpp_lifecycle::State &state) {
       rclcpp_action::create_client<nav2_msgs::action::NavigateToPose>(
           shared_from_this(), "navigate_to_pose");
 
-  while (navigation_to_pose_client_->wait_for_action_server(
-      std::chrono::seconds(4))) {
+  bool server_ready = false;
+  while (!server_ready) {
+    RCLCPP_INFO(get_logger(), "Waiting for navigation action server...");
+
+    server_ready = navigation_to_pose_client_->wait_for_action_server(
+        std::chrono::seconds(5));
 
     if (!rclcpp::ok()) {
       RCLCPP_ERROR(get_logger(), "Timed out waiting for server availability");
       return CallbackReturn::FAILURE;
     }
-
-    RCLCPP_INFO(get_logger(), "Waiting for navigation action server...");
-  }
-
-  if (!navigation_to_pose_client_->action_server_is_ready()) {
-    finish_execution(false, 0.0, "Action server unavailable!");
-    return CallbackReturn::FAILURE;
+    if (!navigation_to_pose_client_->action_server_is_ready()) {
+      finish_execution(false, 0.0, "Action server unavailable!");
+      return CallbackReturn::FAILURE;
+    }
   }
 
   RCLCPP_INFO(get_logger(), "Navigation action server ready");
