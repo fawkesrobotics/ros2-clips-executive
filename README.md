@@ -1,5 +1,5 @@
 # ROS2 Clips-Executive
----
+
 The ROS2 CLIPS Executive (**CX**) is the integration of the Fawkes CLIPS Executive into ROS2 ([Fawkes CX](https://ojs.aaai.org/index.php/ICAPS/article/view/3544/3412)). This project pursues to provide a robust, reliable, and configurable CLIPS-based high-level task executioner for Robotics Systems implementing the ideas of Goal-Reasoning ([GR](https://ojs.aaai.org//index.php/aimagazine/article/view/2800)). The CX supports separation of concerns and covers most high-level execution tasks, such as:
 
 1. Goal Management and Refinement: The central entities inside the CX are goals. They describe the objectives to achieve or conditions to maintain, e.g., to bring a certain object from point A to point B. The CX utilizes GR with the goal refinement mechanism in the form of goal lifecycles. This way, each goal goes through a predefined set of goal modes during its lifespan. This makes the program flow explicit and allows constant goal monitoring, observation of agent status and actions, as well as tracking and reacting to
@@ -19,7 +19,7 @@ The implemented packages provide tools to:
 - Configure the CX and an example bringup mechanism (CX Bringup)
 
 ## Build
----
+
 ### Install ROS2
 Install ROS 2 via the [install instructions](https://docs.ros.org/en/galactic/Installation.html) for desired distribution. 
 
@@ -36,6 +36,8 @@ Then run:
 mkdir -p ~/plansys2_ws/src
 cd ~/plansys2_ws/src
 git clone https://github.com/IntelligentRoboticsLabs/ros2_planning_system.git
+# To pull the dependency repos, you can use the [vcstool](https://github.com/dirk-thomas/vcstool) and run:
+vcs import < dependency_repos.repos
 
 # Optional
 git clone https://github.com/IntelligentRoboticsLabs/plansys2_tfd_plan_solver.git
@@ -50,28 +52,26 @@ Note: you may need to source the ROS2 ws beforehand!
 ### Install ROS2 CX
 #### Prerequisites:
 - [clipsmm](https://github.com/timn/clipsmm)
+- [pddl_parser](https://github.com/fawkesrobotics/pddl_parser)
 - [clips_pddl_parser](https://github.com/fawkesrobotics/clips_pddl_parser)
 
-To pull the corresponding repos, you can use the [vcstool](https://github.com/dirk-thomas/vcstool) and run:
-```
-vcs import < dependency.repos
-```
-They will be installed inside the CX WS by running the `colcon build` command underneath.
-
-Then run:
+Run:
 ```
 mkdir -p ~/cx_ws/src
 cd ~/cx_ws/src
 git clone https://github.com/fawkesrobotics/ros2-clips-executive 
+# To pull the dependency repos, you can use the [vcstool](https://github.com/dirk-thomas/vcstool) and run:
+vcs import < dependency.repos
+
 cd ~/cx_ws
-# You may need to source the Plansys2 WS
-# source ~/plansys2_ws/install/local_setup.bash 
+# You need to source the Plansys2 WS
+source ~/plansys2_ws/install/local_setup.bash 
 rosdep install -y -r -q --from-paths src --ignore-src --rosdistro <ros2-distro>
 colcon build --packages-ignore cx_example_skill_nodes --symlink-install
 
 # If you want the example skill nodes package the `nav2_msgs` package is required 
 ```
-Note: you may need to source the ROS2 ws beforehand!
+Note: you may need to source the ROS2 WS beforehand!
 
 Note2: Remember to always source the ROS2 WS, Plansys2 WS and the CX WS afterwards!
 
