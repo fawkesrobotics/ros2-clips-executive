@@ -1,0 +1,6 @@
+bool writing false
+string i_type
+string i_id
+string i_owner
+---
+bool success
