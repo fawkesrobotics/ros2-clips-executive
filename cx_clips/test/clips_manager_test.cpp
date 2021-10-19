@@ -33,7 +33,8 @@
 TEST(clips_manager, create_clips_env) {
   auto testing_node = rclcpp::Node::make_shared("testing_node");
   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
-  auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
+  auto manager_client =
+      std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
 
   const std::string env_name = "executive";
   const std::string log_name = "(clips-executive)";
@@ -48,7 +49,7 @@ TEST(clips_manager, create_clips_env) {
   bool finish_exec = false;
   std::thread t([&]() {
     while (!finish_exec) {
-      exe.spin_some();
+      exe.spin();
     }
   });
 
@@ -76,6 +77,7 @@ TEST(clips_manager, create_clips_env) {
 
   RCLCPP_INFO(testing_node->get_logger(), "TESTING-NODE-BEGIN");
 
+  // All functions work async!
   ASSERT_TRUE(manager_client->addFeatures(features));
 
   ASSERT_TRUE(manager_client->createNewClipsEnvironment(env_name, log_name));
@@ -85,6 +87,7 @@ TEST(clips_manager, create_clips_env) {
   ASSERT_TRUE(manager_client->assertCanRemoveClipsFeatures(features));
 
   ASSERT_TRUE(manager_client->removeClipsFeatures(features));
+
 
   RCLCPP_INFO(testing_node->get_logger(), "TESTING-NODE-END");
 

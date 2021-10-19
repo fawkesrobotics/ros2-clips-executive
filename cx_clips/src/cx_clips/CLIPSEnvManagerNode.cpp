@@ -254,7 +254,6 @@ void CLIPSEnvManagerNode::create_env_callback(
 
       clips->evaluate("(path-add \"" + clips_dir_ + "\")");
       response->success = true;
-      RCLCPP_WARN(get_logger(), "Created env cb finish");
     } else {
       RCLCPP_ERROR(get_logger(), "Failed to initialise CLIPS environment '%s'",
                    request->env_name.c_str());
@@ -330,8 +329,7 @@ void CLIPSEnvManagerNode::add_clips_features_callback(
     RCLCPP_INFO(get_logger(), "Adding feature '%s'", feat.c_str());
 
     features_set.insert(feat);
-
-    RCLCPP_INFO(get_logger(), "asserting...");
+    
     // assert feature availability to all registered CLIPS Envs
     for (auto &env : envs_) {
       std::lock_guard<std::recursive_mutex> guard(
@@ -340,7 +338,6 @@ void CLIPSEnvManagerNode::add_clips_features_callback(
       env.second.env->assert_fact_f("(ff-feature %s)", feat.c_str());
     }
   }
-  RCLCPP_INFO(get_logger(), "before succ'");
   response->success = success;
 }
 
@@ -363,9 +360,8 @@ void CLIPSEnvManagerNode::assert_can_remove_features_callback(
             "throw exception later",
             feat.c_str(), env.first.c_str());
         response->success = false;
-        response->error = "Minimal feature " + feat +
-                          " can't be removed - env " + env.first +
-                          " depends on it!";
+        response->error = "Feature " + feat + " can't be removed - env " +
+                          env.first + " depends on it!";
         return;
       }
     }
@@ -460,8 +456,6 @@ CLIPSEnvManagerNode::new_env(const std::string &log_component_name) {
 void CLIPSEnvManagerNode::assert_features(
     LockSharedPtr<CLIPS::Environment> &clips, bool immediate_assert) {
 
-  RCLCPP_WARN(get_logger(), "Asserting features!");
-
   // deffact so it survives a reset
   std::string deffacts = "(deffacts ff-features-available";
 
@@ -476,7 +470,7 @@ void CLIPSEnvManagerNode::assert_features(
   if (!clips->build(deffacts)) {
     RCLCPP_WARN(get_logger(), "Failed to build deffacts ff-features-available");
   }
-  RCLCPP_WARN(get_logger(), "Asserted features!");
+  RCLCPP_INFO(get_logger(), "Asserted features!");
 }
 
 void CLIPSEnvManagerNode::guarded_load(const std::string &env_name,

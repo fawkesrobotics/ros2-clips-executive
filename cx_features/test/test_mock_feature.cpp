@@ -131,111 +131,111 @@
 //   t.join();
 // }
 
-TEST(test_mock_feature, test_bb_feature) {
-  auto testing_node = rclcpp::Node::make_shared("testing_node");
-  auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
-  auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
-  auto bb_node = std::make_shared<cx::Blackboard>();
-  auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
+// TEST(test_mock_feature, test_bb_feature) {
+//   auto testing_node = rclcpp::Node::make_shared("testing_node");
+//   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
+//   auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
+//   auto bb_node = std::make_shared<cx::Blackboard>();
+//   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
 
-  features_manager->pre_configure(manager_node);
+//   features_manager->pre_configure(manager_node);
 
-  std::vector<std::string> flist;
+//   std::vector<std::string> flist;
 
-  const std::string env_name = "executive";
-  const std::string log_name = "(clips-executive)";
-  // std::string pkgPath =
-  // ament_index_cpp::get_package_share_directory("cx_clips");
+//   const std::string env_name = "executive";
+//   const std::string log_name = "(clips-executive)";
+//   // std::string pkgPath =
+//   // ament_index_cpp::get_package_share_directory("cx_clips");
 
-  rclcpp::executors::MultiThreadedExecutor exe(rclcpp::ExecutorOptions(), 3);
+//   rclcpp::executors::MultiThreadedExecutor exe(rclcpp::ExecutorOptions(), 3);
 
-  exe.add_node(manager_node->get_node_base_interface());
-  exe.add_node(bb_node->get_node_base_interface());
-  exe.add_node(features_manager->get_node_base_interface());
+//   exe.add_node(manager_node->get_node_base_interface());
+//   exe.add_node(bb_node->get_node_base_interface());
+//   exe.add_node(features_manager->get_node_base_interface());
 
-  bool finish_exec = false;
-  std::thread t([&]() {
-    while (!finish_exec) {
-      exe.spin();
-    }
-  });
+//   bool finish_exec = false;
+//   std::thread t([&]() {
+//     while (!finish_exec) {
+//       exe.spin();
+//     }
+//   });
 
-  using lc_tr = lifecycle_msgs::msg::Transition;
+//   using lc_tr = lifecycle_msgs::msg::Transition;
 
-  manager_node->trigger_transition(lc_tr::TRANSITION_CONFIGURE);
-  bb_node->trigger_transition(lc_tr::TRANSITION_CONFIGURE);
-  features_manager->trigger_transition(lc_tr::TRANSITION_CONFIGURE);
+//   manager_node->trigger_transition(lc_tr::TRANSITION_CONFIGURE);
+//   bb_node->trigger_transition(lc_tr::TRANSITION_CONFIGURE);
+//   features_manager->trigger_transition(lc_tr::TRANSITION_CONFIGURE);
 
-  {
-    rclcpp::Rate rate(10);
-    auto start_time = testing_node->now();
-    while ((testing_node->now() - start_time).seconds() < 0.5) {
-      rate.sleep();
-    }
-  }
-  // populate the vector with feature names for the req
-  for (auto feat : features_manager->features_) {
-    const std::string &feat_name = feat.second->getFeatureName();
-    flist.push_back(feat_name);
-  }
+//   {
+//     rclcpp::Rate rate(10);
+//     auto start_time = testing_node->now();
+//     while ((testing_node->now() - start_time).seconds() < 0.5) {
+//       rate.sleep();
+//     }
+//   }
+//   // populate the vector with feature names for the req
+//   for (auto feat : features_manager->features_) {
+//     const std::string &feat_name = feat.second->getFeatureName();
+//     flist.push_back(feat_name);
+//   }
 
-  manager_node->trigger_transition(lc_tr::TRANSITION_ACTIVATE);
-  bb_node->trigger_transition(lc_tr::TRANSITION_ACTIVATE);
-  features_manager->trigger_transition(lc_tr::TRANSITION_ACTIVATE);
+//   manager_node->trigger_transition(lc_tr::TRANSITION_ACTIVATE);
+//   bb_node->trigger_transition(lc_tr::TRANSITION_ACTIVATE);
+//   features_manager->trigger_transition(lc_tr::TRANSITION_ACTIVATE);
 
-  {
-    rclcpp::Rate rate(10);
-    auto start_time = testing_node->now();
-    while ((testing_node->now() - start_time).seconds() < 0.5) {
-      rate.sleep();
-    }
-  }
+//   {
+//     rclcpp::Rate rate(10);
+//     auto start_time = testing_node->now();
+//     while ((testing_node->now() - start_time).seconds() < 0.5) {
+//       rate.sleep();
+//     }
+//   }
 
-  RCLCPP_INFO(testing_node->get_logger(), "TEST-NODE-START");
+//   RCLCPP_INFO(testing_node->get_logger(), "TEST-NODE-START");
 
-  // auto created_env = manager_node->getEnvironmentByName(env_name);
-  try {
+//   // auto created_env = manager_node->getEnvironmentByName(env_name);
+//   try {
 
-    ASSERT_TRUE(manager_client->createNewClipsEnvironment(env_name, log_name));
+//     ASSERT_TRUE(manager_client->createNewClipsEnvironment(env_name, log_name));
 
-    auto created_env = manager_node->getEnvironmentByName(env_name);
-    auto bb_feature = features_manager->features_["blackboard_feature"];
+//     auto created_env = manager_node->getEnvironmentByName(env_name);
+//     auto bb_feature = features_manager->features_["blackboard_feature"];
 
-    RCLCPP_INFO(testing_node->get_logger(), "Before Features Addition!");
+//     RCLCPP_INFO(testing_node->get_logger(), "Before Features Addition!");
 
-    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
-        ->evaluate("(ff-feature-request \"redefine_warning_feature\")");
-    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
-        ->evaluate("(ff-feature-request \"config_feature\")");
-    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
-        ->evaluate("(ff-feature-request \"blackboard_feature\")");
-    features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
-        ->evaluate("(config-load \"/clips_executive\")");
+//     features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
+//         ->evaluate("(ff-feature-request \"redefine_warning_feature\")");
+//     features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
+//         ->evaluate("(ff-feature-request \"config_feature\")");
+//     features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
+//         ->evaluate("(ff-feature-request \"blackboard_feature\")");
+//     features_manager->clips_env_manager_node_->getEnvironmentByName(env_name)
+//         ->evaluate("(config-load \"/clips_executive\")");
 
-    created_env->evaluate(
-        "(blackboard-open-reading \"PddlGenInterface\" \"pddl_gen\")");
+//     created_env->evaluate(
+//         "(blackboard-open-reading \"PddlGenInterface\" \"pddl_gen\")");
 
-    created_env->evaluate(
-        "(blackboard-create-msg \"PddlGenInterface::pddl_gen\" "
-        "\"GenerateMessage\")");
+//     created_env->evaluate(
+//         "(blackboard-create-msg \"PddlGenInterface::pddl_gen\" "
+//         "\"GenerateMessage\")");
 
-    ASSERT_FALSE(manager_client->assertCanRemoveClipsFeatures(flist));
-    ASSERT_TRUE(manager_client->destroyClipsEnvironment(env_name));
-    ASSERT_TRUE(manager_client->assertCanRemoveClipsFeatures(flist));
-    ASSERT_TRUE(manager_client->removeClipsFeatures(flist));
+//     ASSERT_FALSE(manager_client->assertCanRemoveClipsFeatures(flist));
+//     ASSERT_TRUE(manager_client->destroyClipsEnvironment(env_name));
+//     ASSERT_TRUE(manager_client->assertCanRemoveClipsFeatures(flist));
+//     ASSERT_TRUE(manager_client->removeClipsFeatures(flist));
 
-  } catch (const std::exception &e) {
-    std::cerr << e.what() << '\n';
-  }
+//   } catch (const std::exception &e) {
+//     std::cerr << e.what() << '\n';
+//   }
 
-  RCLCPP_INFO(testing_node->get_logger(), "TEST-NODE-END");
+//   RCLCPP_INFO(testing_node->get_logger(), "TEST-NODE-END");
 
-  finish_exec = true;
-  t.join();
-}
+//   finish_exec = true;
+//   t.join();
+// }
 
-int main(int argc, char **argv) {
-  // testing::InitGoogleTest(&argc, argv);
-  // rclcpp::init(argc, argv);
-  // return RUN_ALL_TESTS();
-}
+// int main(int argc, char **argv) {
+//   // testing::InitGoogleTest(&argc, argv);
+//   // rclcpp::init(argc, argv);
+//   // return RUN_ALL_TESTS();
+// }

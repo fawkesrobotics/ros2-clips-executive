@@ -1,7 +1,7 @@
 
 clips_features_manager:
   ros__parameters:
-    clips_features: ["mock_feature", "plansys2", "clips_pddl_parser", "skill_execution"]
+    clips_features: ["plansys2", "clips_pddl_parser", "skill_execution"]
 
     mock_feature:
       plugin: "cx::MockFeature"

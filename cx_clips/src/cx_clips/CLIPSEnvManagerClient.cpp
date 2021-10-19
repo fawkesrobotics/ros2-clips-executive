@@ -58,6 +58,7 @@ CLIPSEnvManagerClient::CLIPSEnvManagerClient(const std::string &node_name) {
 }
 // CLIPSEnvManagerClient::~CLIPSEnvManagerClient() {}
 
+//! Works Async
 bool CLIPSEnvManagerClient::createNewClipsEnvironment(
     const std::string &env_name, const std::string &log_name) {
 
@@ -79,13 +80,19 @@ bool CLIPSEnvManagerClient::createNewClipsEnvironment(
 
   using ServiceResponseFuture =
       rclcpp::Client<cx_msgs::srv::CreateClipsEnv>::SharedFuture;
-  auto response_received_callback = [this](ServiceResponseFuture future) {
-    RCLCPP_INFO(node_->get_logger(), "[inner service] callback executed");
+  auto response_received_callback = [this,
+                                     &env_name](ServiceResponseFuture future) {
+    if (!future.get()->success) {
+
+      RCLCPP_WARN(node_->get_logger(), "Couldn't create env! Error: %s",
+                  future.get()->error.c_str());
+    }
   };
 
   auto future_res =
       create_env_client_->async_send_request(req, response_received_callback);
   return true;
+
   // auto status = future_res.wait_for(3s);
 
   // if (status == std::future_status::ready) {
@@ -97,7 +104,8 @@ bool CLIPSEnvManagerClient::createNewClipsEnvironment(
   //     return false;
   //   }
   // } else {
-  //   RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for response!",
+  //   RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for
+  //   response!",
   //                create_env_client_->get_service_name());
   //   return false;
   // }
@@ -105,7 +113,8 @@ bool CLIPSEnvManagerClient::createNewClipsEnvironment(
   // // HARD CODED 20 S -> maybe add as param!
   // if (rclcpp::spin_until_future_complete(node_, future_res, 10s) !=
   //     rclcpp::FutureReturnCode::SUCCESS) {
-  //   RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for response!",
+  //   RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for
+  //   response!",
   //                create_env_client_->get_service_name());
   //   return false;
   // }
@@ -119,6 +128,7 @@ bool CLIPSEnvManagerClient::createNewClipsEnvironment(
   // }
 }
 
+//! Works Async
 bool CLIPSEnvManagerClient::destroyClipsEnvironment(
     const std::string &env_name) {
 
@@ -137,25 +147,39 @@ bool CLIPSEnvManagerClient::destroyClipsEnvironment(
   auto req = std::make_shared<cx_msgs::srv::DestroyClipsEnv::Request>();
   req->env_name = env_name;
 
-  auto future_res = destroy_env_client_->async_send_request(req);
+  using ServiceResponseFuture =
+      rclcpp::Client<cx_msgs::srv::DestroyClipsEnv>::SharedFuture;
+  auto response_received_callback = [this,
+                                     &env_name](ServiceResponseFuture future) {
+    RCLCPP_INFO(node_->get_logger(), "Destroyed env %s async!",
+                env_name.c_str());
+  };
 
-  // HARD CODED 20 S -> maybe add as param!
-  if (rclcpp::spin_until_future_complete(node_, future_res, 20s) !=
-      rclcpp::FutureReturnCode::SUCCESS) {
-    RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for response!",
-                 destroy_env_client_->get_service_name());
-    return false;
-  }
+  auto future_res =
+      destroy_env_client_->async_send_request(req, response_received_callback);
+  return true;
 
-  if (future_res.get()->success) {
-    return true;
-  } else {
-    RCLCPP_ERROR(node_->get_logger(), "ERROR --- %s",
-                 future_res.get()->error.c_str());
-    return false;
-  }
+  // auto future_res = destroy_env_client_->async_send_request(req);
+
+  // // HARD CODED 20 S -> maybe add as param!
+  // if (rclcpp::spin_until_future_complete(node_, future_res, 20s) !=
+  //     rclcpp::FutureReturnCode::SUCCESS) {
+  //   RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for
+  //   response!",
+  //                destroy_env_client_->get_service_name());
+  //   return false;
+  // }
+
+  // if (future_res.get()->success) {
+  //   return true;
+  // } else {
+  //   RCLCPP_ERROR(node_->get_logger(), "ERROR --- %s",
+  //                future_res.get()->error.c_str());
+  //   return false;
+  // }
 }
 
+//! Works Async
 bool CLIPSEnvManagerClient::addFeatures(
     const std::vector<std::string> &features) {
   RCLCPP_WARN(node_->get_logger(), "%s: Adding corresponding fts!",
@@ -178,7 +202,16 @@ bool CLIPSEnvManagerClient::addFeatures(
   using ServiceResponseFuture =
       rclcpp::Client<cx_msgs::srv::AddClipsFeatures>::SharedFuture;
   auto response_received_callback = [this](ServiceResponseFuture future) {
-    RCLCPP_INFO(node_->get_logger(), "Got result: YES");
+    if (future.get()->success) {
+      RCLCPP_INFO(node_->get_logger(), "Features added sucessfully!");
+    } else {
+      RCLCPP_WARN(node_->get_logger(),
+                  "Following features couldn't get added:");
+      std::vector<std::string> feats = future.get()->failed_features;
+      for (auto &feat : feats) {
+        RCLCPP_WARN(node_->get_logger(), "%s", feat.c_str());
+      }
+    }
   };
 
   auto future_res = add_clips_features_client_->async_send_request(
@@ -187,6 +220,7 @@ bool CLIPSEnvManagerClient::addFeatures(
   return true;
 }
 
+//! Works Async
 bool CLIPSEnvManagerClient::assertCanRemoveClipsFeatures(
     const std::vector<std::string> &features) {
 
@@ -204,24 +238,43 @@ bool CLIPSEnvManagerClient::assertCanRemoveClipsFeatures(
   auto req = std::make_shared<cx_msgs::srv::ClipsRemoveFeatures::Request>();
   req->features = features;
 
-  auto future_res = assert_can_remove_features_client_->async_send_request(req);
+  using ServiceResponseFuture =
+      rclcpp::Client<cx_msgs::srv::ClipsRemoveFeatures>::SharedFuture;
+  auto response_received_callback = [this](ServiceResponseFuture future) {
+    if (future.get()->success) {
+      RCLCPP_INFO(node_->get_logger(),
+                  "All requested features can be removed!");
+    } else {
+      RCLCPP_WARN(node_->get_logger(),
+                  "Not all requested features can be removed! Error: %s",
+                  future.get()->error.c_str());
+    }
+  };
 
-  // HARD CODED 20 S -> maybe add as param!
-  if (rclcpp::spin_until_future_complete(node_, future_res, 15s) !=
-      rclcpp::FutureReturnCode::SUCCESS) {
-    RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for response!",
-                 assert_can_remove_features_client_->get_service_name());
-    return false;
-  }
+  auto future_res = assert_can_remove_features_client_->async_send_request(
+      req, response_received_callback);
 
-  if (future_res.get()->success) {
-    RCLCPP_INFO(node_->get_logger(), "All requested features can be removed!");
-    return true;
-  }
+  return true;
+  // auto future_res =
+  // assert_can_remove_features_client_->async_send_request(req);
 
-  return false;
+  // if (rclcpp::spin_until_future_complete(node_, future_res, 5s) !=
+  //     rclcpp::FutureReturnCode::SUCCESS) {
+  //   RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for
+  //   response!",
+  //                assert_can_remove_features_client_->get_service_name());
+  //   return false;
+  // }
+
+  // if (future_res.get()->success) {
+  //   RCLCPP_INFO(node_->get_logger(), "All requested features can be
+  //   removed!"); return true;
+  // }
+
+  // return false;
 }
 
+//! Works Async
 bool CLIPSEnvManagerClient::removeClipsFeatures(
     const std::vector<std::string> &features) {
 
@@ -239,17 +292,30 @@ bool CLIPSEnvManagerClient::removeClipsFeatures(
   auto req = std::make_shared<cx_msgs::srv::ClipsRemoveFeatures::Request>();
   req->features = features;
 
-  auto future_res = remove_features_client_->async_send_request(req);
+  using ServiceResponseFuture =
+      rclcpp::Client<cx_msgs::srv::ClipsRemoveFeatures>::SharedFuture;
+  auto response_received_callback = [this](ServiceResponseFuture future) {
+    if (future.get()->success) {
+      RCLCPP_INFO(node_->get_logger(), "All requested features were removed!");
+    } else {
+      RCLCPP_WARN(node_->get_logger(),
+                  "Couldn't remove all requested features!");
+    }
+  };
 
-  // HARD CODED 20 S -> maybe add as param!
-  if (rclcpp::spin_until_future_complete(node_, future_res, 15s) !=
-      rclcpp::FutureReturnCode::SUCCESS) {
-    RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for response!",
-                 remove_features_client_->get_service_name());
-    return false;
-  }
+  auto future_res = remove_features_client_->async_send_request(
+      req, response_received_callback);
 
-  RCLCPP_INFO(node_->get_logger(), "All requested features were removed!");
+  // auto future_res = remove_features_client_->async_send_request(req);
+
+  // if (rclcpp::spin_until_future_complete(node_, future_res, 15s) !=
+  //     rclcpp::FutureReturnCode::SUCCESS) {
+  //   RCLCPP_ERROR(node_->get_logger(), "%s: timed out waiting for
+  //   response!",
+  //                remove_features_client_->get_service_name());
+  //   return false;
+  // }
+
   return true;
 }
 
