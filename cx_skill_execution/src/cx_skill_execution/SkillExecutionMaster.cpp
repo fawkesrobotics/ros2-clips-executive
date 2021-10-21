@@ -171,6 +171,7 @@ void SkillExecutionMaster::confirm_executioner(const std::string &node_id) {
   msg.node_id = node_id;
   msg.action = action_name_;
   msg.action_parameters = action_parameters_;
+  msg.mapped_action = mapped_action_;
   msg.agent_id = agent_id_;
 
   skill_board_pub->publish(msg);
