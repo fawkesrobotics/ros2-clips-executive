@@ -9,7 +9,7 @@
 
 (defglobal
   ?*CONFIG_PREFIX* = "/clips_executive"
-  ?*AGENT_PREFIX* = "/fawkes/agent"
+  ; ?*AGENT_PREFIX* = "/agent"
 	?*INIT-STAGES* = (create$ STAGE-1 STAGE-2 STAGE-3)
 	?*CX-STAGE2-FILES* = (create$ "plan.clp" "goal.clp" "domain.clp"
 	                              "worldmodel.clp" "cx-identity.clp" "wm-domain-sync.clp"

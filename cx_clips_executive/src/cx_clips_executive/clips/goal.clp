@@ -213,7 +213,7 @@
 )
 
 (defrule goal-retract
-	(confval (path "/clips-executive/automatic-goal-retraction") (type BOOL) (value TRUE))
+	(confval (path "/clips_executive/automatic-goal-retraction") (type BOOL) (value TRUE))
 	?g <- (goal (id ?id) (mode RETRACTED) (parent ?parent) (acquired-resources))
 	; we can retract if there is no parent goal, or the parent goal is a
 	; MAINTAIN goal, i.e., it is never RETRACTED itself.
@@ -225,7 +225,7 @@
 )
 
 (defrule goal-cleanup-plans
-	(confval (path "/clips-executive/automatic-goal-retraction") (type BOOL) (value TRUE))
+	(confval (path "/clips_executive/automatic-goal-retraction") (type BOOL) (value TRUE))
 	?g <- (goal (id ?id) (mode RETRACTED))
 	(exists (plan (goal-id ?id)))
 	=>

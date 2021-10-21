@@ -194,8 +194,8 @@
 
 (defrule wm-sync-config-remap-fact-id-prefix
 	(executive-init)
-	(confval (path "/clips-executive/spec") (type STRING) (value ?spec))
-  ?cf <- (confval (path ?path&:(eq (str-cat "/clips-executive/specs/" ?spec "/wm-remap/facts/id-prefix") ?path))
+	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
+  ?cf <- (confval (path ?path&:(eq (str-cat "/clips_executive/specs/" ?spec "/wm-remap/facts/id-prefix") ?path))
 									(type STRING) (is-list TRUE) (list-value $?id-prefixes))
 	=>
 	(retract ?cf)
@@ -204,20 +204,20 @@
 
 (defrule wm-sync-config-remap-fact-name-id
 	(executive-init)
-	(confval (path "/clips-executive/spec") (type STRING) (value ?spec))
-  ?cf <- (confval (path ?path&:(str-prefix (str-cat "/clips-executive/specs/" ?spec "/wm-remap/facts/name-id/") ?path))
+	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
+  ?cf <- (confval (path ?path&:(str-prefix (str-cat "/clips_executive/specs/" ?spec "/wm-remap/facts/name-id/") ?path))
 									(type STRING) (value ?key-path) (is-list FALSE))
 	=>
 	(retract ?cf)
-  (bind ?prefix (str-cat "/clips-executive/specs/" ?spec "/wm-remap/facts/name-id/"))
+  (bind ?prefix (str-cat "/clips_executive/specs/" ?spec "/wm-remap/facts/name-id/"))
   (bind ?name (sym-cat (sub-string (+ (str-length ?prefix) 1) (str-length ?path) ?path)))
 	(assert (wm-sync-remap-fact (domain-fact-name ?name) (wm-fact-key-path (wm-id-to-key ?key-path))))
 )
 
 (defrule wm-sync-config-remap-object-id-prefix
 	(executive-init)
-	(confval (path "/clips-executive/spec") (type STRING) (value ?spec))
-  ?cf <- (confval (path ?path&:(eq (str-cat "/clips-executive/specs/" ?spec "/wm-remap/objects/id-prefix") ?path))
+	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
+  ?cf <- (confval (path ?path&:(eq (str-cat "/clips_executive/specs/" ?spec "/wm-remap/objects/id-prefix") ?path))
 									(type STRING) (is-list TRUE) (list-value $?id-prefixes))
 	=>
 	(retract ?cf)
@@ -226,12 +226,12 @@
 
 (defrule wm-sync-config-remap-object-name-id
 	(executive-init)
-	(confval (path "/clips-executive/spec") (type STRING) (value ?spec))
-  ?cf <- (confval (path ?path&:(str-prefix (str-cat "/clips-executive/specs/" ?spec "/wm-remap/objects/name-id/") ?path))
+	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
+  ?cf <- (confval (path ?path&:(str-prefix (str-cat "/clips_executive/specs/" ?spec "/wm-remap/objects/name-id/") ?path))
 									(type STRING) (value ?id) (is-list FALSE))
 	=>
 	(retract ?cf)
-  (bind ?prefix (str-cat "/clips-executive/specs/" ?spec "/wm-remap/objects/name-id/"))
+  (bind ?prefix (str-cat "/clips_executive/specs/" ?spec "/wm-remap/objects/name-id/"))
   (bind ?type (sym-cat (sub-string (+ (str-length ?prefix) 1) (str-length ?path) ?path)))
 	(assert (wm-sync-remap-object-type (domain-object-type ?type) (wm-fact-key (wm-id-to-key ?id))))
 )

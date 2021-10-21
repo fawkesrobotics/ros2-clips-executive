@@ -16,7 +16,6 @@
   ?*PRIORITY-TIME-RETRACT*    = -10000
 )
 
-; This assumes Fawkes-style time, i.e. sec and usec
 
 (deffunction time-diff (?t1 ?t2)
   (bind ?sec  (- (nth$ 1 ?t1) (nth$ 1 ?t2)))

@@ -575,6 +575,7 @@ void CLIPSEnvManagerNode::call_feature_context_destroy(
 CLIPS::Values CLIPSEnvManagerNode::clips_now() {
   CLIPS::Values rv;
   rv.push_back(get_clock()->now().seconds());
+  rv.push_back(get_clock()->now().nanoseconds());
   return rv;
 }
 

@@ -25,11 +25,11 @@
 )
 
 (defrule skill-action-init
-	(confval (path "/clips-executive/spec") (type STRING) (value ?spec))
-	(confval (path ?p&:(eq (str-index (str-cat "/clips-executive/specs/" ?spec "/action-mapping/") ?p) 1))
+	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
+	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/specs/" ?spec "/action-mapping/") ?p) 1))
 	         (type STRING) (value ?s))
 	=>
-	(bind ?prefix (str-cat "/clips-executive/specs/" ?spec "/action-mapping/"))
+	(bind ?prefix (str-cat "/clips_executive/specs/" ?spec "/action-mapping/"))
 	(bind ?name (sym-cat (sub-string (+ (str-length ?prefix) 1) (str-length ?p) ?p)))
 	(assert (skill-action-mapping (name ?name) (map-string ?s)))
 )

@@ -218,7 +218,6 @@
   names and param values."
   (?parent-id ?param-names ?param-values ?grounding-id)
 
-  ;(bind ?grounding-id nil)
   (do-for-all-facts ((?formula pddl-formula)) (eq ?parent-id ?formula:part-of)
     ;if no grounding fact created yet, create one
     (if (eq ?grounding-id nil) then
@@ -249,9 +248,20 @@
                      (param-names $?param-names) (param-values $?param-values)
                      (precondition nil))
   (domain-operator (name ?operator-id) (param-names $?op-param-names&:(= (length$ ?param-names) (length$ ?op-param-names))))
+	(pddl-formula (part-of ?operator-id))
   =>
   (bind ?grounding (ground-pddl-formula ?operator-id ?param-names ?param-values nil))
   (modify ?p (precondition ?grounding))
+)
+
+(defrule domain-retract-grounding-for-plan-action-if-precondition-mismatch
+  "Sometimes it is practical to switch the params of a plan-action.
+  Remove grounding to trigger the grounding process again in such a case."
+  ?g <- (pddl-grounding (param-values $?param-values) (id ?grounding))
+  ?a <- (plan-action (precondition ?grounding) (param-values ~$?param-values))
+  =>
+  (retract ?g)
+  (modify ?a (precondition nil))
 )
 
 (defrule domain-check-if-action-precondition-is-satisfied
@@ -266,21 +276,22 @@
   (printout t "Action " ?id " is executable based on " ?formula-id crlf)
 )
 
-(defrule domain-check-if-action-precondition-is-unsatisfied
-  "Check if all referenced precondition formulas are not satisfied,
-  if yes make the action not executable."
-  (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
-  ?p <- (plan-action (executable TRUE) (id ?id) (precondition ?grounding-id))
-  (not (grounded-pddl-formula (is-satisfied TRUE) (id ?formula-id) (grounding ?grounding-id)))
-  (pddl-grounding (id ?grounding-id))
-  =>
-  (modify ?p (executable FALSE))
-  (printout t "Action " ?id " is no longer executable" crlf)
-)
+; (defrule domain-check-if-action-precondition-is-unsatisfied
+;   "Check if all referenced precondition formulas are not satisfied,
+;   if yes make the action not executable."
+;   (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
+;   ?p <- (plan-action (executable TRUE) (id ?id) (precondition ?grounding-id))
+;   (not (grounded-pddl-formula (is-satisfied TRUE) (id ?formula-id) (grounding ?grounding-id)))
+;   (pddl-grounding (id ?grounding-id))
+;   =>
+;   (modify ?p (executable FALSE))
+;   (printout t "Action " ?id " is no longer executable" crlf)
+; )
 
 (defrule domain-check-if-atomic-formula-is-satisfied
+  "An atomic formula is satisfied when its associated predicate is satisfied."
   (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
-  
+
   (pddl-grounding (id ?grounding-id))
   (pddl-formula (id ?parent-base) (type atom))
   ?parent <- (grounded-pddl-formula (id ?id)
@@ -291,10 +302,30 @@
   (and (pddl-predicate (part-of ?parent-base) (id ?child-base))
         (grounded-pddl-predicate (predicate-id ?child-base)
                                 (grounding ?grounding-id)
+                                (is-satisfied TRUE))
+  )
+  =>
+  (modify ?parent (is-satisfied TRUE))
+)
+
+(defrule domain-check-if-atomic-formula-is-unsatisfied
+  "An atomic formula is unsatisfied when its associated predicate is unsatisfied."
+  (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
+
+  (pddl-grounding (id ?grounding-id))
+  (pddl-formula (id ?parent-base) (type atom))
+  ?parent <- (grounded-pddl-formula (id ?id)
+                                    (formula-id ?parent-base)
+                                    (is-satisfied TRUE)
+                                    (grounding ?grounding-id))
+
+  (and (pddl-predicate (part-of ?parent-base) (id ?child-base))
+        (grounded-pddl-predicate (predicate-id ?child-base)
+                                (grounding ?grounding-id)
                                 (is-satisfied FALSE))
   )
-  => 
-  (modify ?parent (is-satisfied TRUE))
+  =>
+  (modify ?parent (is-satisfied FALSE))
 )
 
 
@@ -347,7 +378,7 @@
                                     (is-satisfied FALSE)
                                     (grounding ?grounding-id))
  ; the formula is satisfied when there is no unsatisifed child
-  (not 
+  (not
     (and
       (pddl-formula (part-of ?parent-base) (id ?child-base))
       (grounded-pddl-formula (formula-id ?child-base)
@@ -713,7 +744,7 @@
   also a sensed effect of the operator, then remove the precondition on the
   effect. This means that part of the exogenous action may already have
   occurred before the action is selected."
-  
+
   (domain-operator (name ?op) (exogenous TRUE))
   (domain-predicate (name ?pred) (sensed TRUE) (value-predicate FALSE))
   (domain-effect (part-of ?op)
@@ -1020,11 +1051,8 @@
 
 (defrule domain-check-super-type-exists
   "Make sure that a super-type of any type in the domain actually exists."
-  (printout error "At start" crlf)
   (domain-object-type (name ?type) (super-type ?super-type&~object))
-  (printout error "domain-check-super-type-exists '" ?type crlf)
   (not (domain-object-type (name ?super-type)))
-  (printout error "After not" crlf)
 =>
   (assert (domain-error (error-type super-type-does-not-exist)
     (error-msg (str-cat "Super-type " ?super-type

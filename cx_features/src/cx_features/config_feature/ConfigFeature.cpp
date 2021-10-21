@@ -36,7 +36,6 @@ std::string ConfigFeature::getFeatureName() const { return clips_feature_name; }
 
 void ConfigFeature::initialise(const std::string &feature_name) {
   clips_feature_name = feature_name;
-  // clips_config_load("clips-executive", "/clips-executive");
 }
 
 bool ConfigFeature::clips_context_init(
