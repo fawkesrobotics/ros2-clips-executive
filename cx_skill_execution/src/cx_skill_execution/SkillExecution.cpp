@@ -200,7 +200,7 @@ void SkillExecution::finish_execution(bool success, float progress,
   msg.node_id = get_name();
   msg.action = action_name_;
   msg.action_parameters = action_parameters_;
-  msg.mapped_action + mapped_action_;
+  msg.mapped_action = mapped_action_;
   msg.progress = progress;
   msg.status = status;
   msg.success = success;
