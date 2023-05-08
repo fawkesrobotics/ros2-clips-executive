@@ -79,7 +79,7 @@ private:
   std::string warn_filter_;
 };
 
-static int redefine_warning_router_query(void *env, char *logical_name) {
+static int redefine_warning_router_query(void *env, const char *logical_name) {
   if (strcmp(logical_name, WDIALOG) == 0)
     return TRUE;
   if (strcmp(logical_name, WWARNING) == 0)
@@ -87,8 +87,8 @@ static int redefine_warning_router_query(void *env, char *logical_name) {
   return FALSE;
 }
 
-static int redefine_warning_router_print(void *env, char *logical_name,
-                                         char *str) {
+static int redefine_warning_router_print(void *env, const char *logical_name,
+                                         const char *str) {
   void *rc = GetEnvironmentRouterContext(env);
   CLIPSRedefineWarningLogger *logger =
       static_cast<CLIPSRedefineWarningLogger *>(rc);
