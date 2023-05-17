@@ -94,7 +94,7 @@ void SkillExecutionFeature::clips_read_skills(const std::string &env_name) {
     return;
   }
   cx::LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name];
-  std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+  std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
   for (auto &sm : skill_master_map_) {
     sm.second.skill_master->check_idle_time();
     auto exec_info = sm.second.skill_master->get_exec_info();
@@ -182,7 +182,7 @@ void SkillExecutionFeature::cancel_skill(const std::string &env_name,
   if (skill_master_map_.find(agent_id) != skill_master_map_.end()) {
     skill_master_map_[agent_id].skill_master->cancel_execution();
     cx::LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name];
-    std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+    //std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     // clips->assert_fact_f();
   } else {
     RCLCPP_ERROR(node_->get_logger(),

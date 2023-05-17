@@ -178,7 +178,7 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   // TODO: REMOVE LATER!
   clips_->watch("all");
 
-  std::lock_guard<std::recursive_mutex> guard(*(clips_.get_mutex_instance()));
+  std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
 
   std::string cx_bringup_dir;
   std::string cx_features_dir;
@@ -241,8 +241,7 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
 
   agenda_refresh_timer_ = create_wall_timer(publish_rate_, [this]() {
     if ((*(clips_.get_mutex_instance())).try_lock()) {
-      std::lock_guard<std::recursive_mutex> guard(
-          *(clips_.get_mutex_instance()));
+      std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
 
       if (cfg_assert_time_each_cycle_) {
         clips_->assert_fact("(time (now))");

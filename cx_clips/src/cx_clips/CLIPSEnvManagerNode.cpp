@@ -333,8 +333,7 @@ void CLIPSEnvManagerNode::add_clips_features_callback(
     
     // assert feature availability to all registered CLIPS Envs
     for (auto &env : envs_) {
-      std::lock_guard<std::recursive_mutex> guard(
-          *(env.second.env.get_mutex_instance()));
+      std::lock_guard<std::mutex> guard(*(env.second.env.get_mutex_instance()));
       assert_features(env.second.env, false);
       env.second.env->assert_fact_f("(ff-feature %s)", feat.c_str());
     }

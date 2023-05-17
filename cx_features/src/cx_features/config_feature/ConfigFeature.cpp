@@ -100,8 +100,8 @@ void ConfigFeature::clips_config_load(const std::string &env_name,
     RCLCPP_WARN(rclcpp::get_logger(name), "Path is: %s", path.c_str());
 
     YAML::Node config = YAML::LoadFile(path);
-    std::lock_guard<std::recursive_mutex> guard(
-        *(envs_[env_name].get_mutex_instance()));
+    // std::lock_guard<std::mutex>
+    // guard(*(envs_[env_name].get_mutex_instance()));
 
     iterateThroughYamlRecuresively(config[cfg_main_node], name, cfg_prefix,
                                    env_name);

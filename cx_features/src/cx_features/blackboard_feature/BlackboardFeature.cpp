@@ -407,8 +407,7 @@ void BlackboardFeature::clips_blackboard_open_interface(
     } else {
       RCLCPP_INFO(rclcpp::get_logger(log_name), "Added interface %s for %s",
                   uid.c_str(), writing ? "writing" : "reading");
-      std::lock_guard<std::recursive_mutex> guard(
-          *(clips.get_mutex_instance()));
+      std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
       clips->assert_fact_f(
           "(blackboard-interface (id \"%s\") (type \"%s\") (uid "
           "\"%s\") (writing %s))",
@@ -436,7 +435,7 @@ void BlackboardFeature::clips_blackboard_open_interface(
                                             /*ceate interface in map*/ true);
     if (!i_created)
       return;
-    std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+    std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     clips->assert_fact_f("(blackboard-interface (id \"%s\") (type \"%s\") (uid "
                          "\"%s\") (writing %s))",
                          i_id.c_str(), i_type.c_str(), uid.c_str(),
@@ -460,8 +459,7 @@ void BlackboardFeature::clips_blackboard_enable_time_read(
                                 "  =>\n"
                                 "  (blackboard-read)\n"
                                 ")";
-  std::lock_guard<std::recursive_mutex> guard(
-      *(envs_[env_name].get_mutex_instance()));
+  std::lock_guard<std::mutex> guard(*(envs_[env_name].get_mutex_instance()));
   envs_[env_name]->build(bb_read_defrule);
 }
 
@@ -500,8 +498,7 @@ void BlackboardFeature::clips_blackboard_read(const std::string &env_name) {
                  env_name.c_str());
     return;
   }
-  std::lock_guard<std::recursive_mutex> guard(
-      *(envs_[env_name].get_mutex_instance()));
+  std::lock_guard<std::mutex> guard(*(envs_[env_name].get_mutex_instance()));
   // CLIPS::Environment &env = **(envs_[env_name]);
 
   // for (auto &iface_map : interfaces_[env_name].reading) {
@@ -537,8 +534,7 @@ BlackboardFeature::clips_blackboard_create_msg(const std::string &env_name,
                  env_name.c_str());
     // return CLIPS::Value(new std::shared_ptr<Message>());
   }
-  std::lock_guard<std::recursive_mutex> guard(
-      *(envs_[env_name].get_mutex_instance()));
+  std::lock_guard<std::mutex> guard(*(envs_[env_name].get_mutex_instance()));
 
   std::regex delimiter{"::"};
   std::string i_type, i_id;

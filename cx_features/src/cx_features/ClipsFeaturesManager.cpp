@@ -125,8 +125,7 @@ ClipsFeaturesManager::on_activate(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
   // Add ff-request feature, as it is implemented in features manager
   for (auto &envd : clips_env_manager_node_->envs_) {
-    std::lock_guard<std::recursive_mutex> guard(
-        *(envd.second.env.get_mutex_instance()));
+    //std::lock_guard<std::mutex> guard(*(envd.second.env.get_mutex_instance()));
     envd.second.env->add_function(
         "ff-feature-request",
         sigc::slot<CLIPS::Value, std::string>(sigc::bind<0>(
@@ -209,7 +208,7 @@ void ClipsFeaturesManager::feature_init_context(
 
   LockSharedPtr<CLIPS::Environment> &clips =
       clips_env_manager_node_->envs_[env_name].env;
-  std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+  //std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
 
   if (features_.find(feature_name) != features_.end()) {
     bool success = features_[feature_name]->clips_context_init(env_name, clips);

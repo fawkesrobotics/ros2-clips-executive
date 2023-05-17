@@ -202,7 +202,7 @@ void Plansys2Feature::call_planner(const std::string &env_name,
                "Calling plan for goal '%s' with id %s", goal.c_str(),
                goal_id.c_str());
   auto plan = planner_client_->getPlan(domain, problem);
-  std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+  // std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
 
   if (!plan.has_value()) {
     RCLCPP_ERROR(rclcpp::get_logger(log_name),
