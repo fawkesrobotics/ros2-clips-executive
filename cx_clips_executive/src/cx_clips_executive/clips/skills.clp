@@ -24,7 +24,7 @@
   (slot status (type SYMBOL) (allowed-values S_IDLE S_RUNNING S_FINAL S_FAILED))
   (slot error-msg (type STRING))
   (slot skill-string (type STRING))
-	(multislot start-time (type INTEGER) (cardinality 2 2) (default (create$ 0 0)))
+	(slot start-time (type FLOAT))
 	(slot agent-id (type STRING) (default ""))
 )
 
@@ -105,15 +105,15 @@
 
 (defrule skill-status-update-nochange
 	?sf <- (skill-feedback (skill-id ?skill-id) (agent-id ?agent-id) (status ?new-status))
-  (skill (name ?n) (id ?skill-id) (status ?new-status) (agent-id ?agent-id)
+  (skill (name ?n) (id ?skill-id) (status ?new-status) (agent-id ?agent-id))
   =>
-  (retract ?su)
+  (retract ?sf)
 )
 
 (defrule skill-start-timeout
-	(time $?now)
-  ?sf <- (skill (name ?n) (status S_IDLE)
-	(start-time $?st&:(timeout ?now ?st ?*SKILL-INIT-TIMEOUT-SEC*)))
+	(time ?now)
+  	?sf <- (skill (name ?n) (status S_IDLE)
+	(start-time ?st&:(timeout ?now ?st ?*SKILL-INIT-TIMEOUT-SEC*)))
   =>
 	(printout warn "Timeout starting skill " ?n " (" ?*SKILL-INIT-TIMEOUT-SEC* " sec): assuming failure" crlf)
 	(modify ?sf (status S_FAILED) (error-msg "Start timeout"))

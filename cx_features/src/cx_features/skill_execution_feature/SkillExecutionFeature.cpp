@@ -94,7 +94,6 @@ void SkillExecutionFeature::clips_read_skills(const std::string &env_name) {
     return;
   }
   cx::LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name];
-  std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
   for (auto &sm : skill_master_map_) {
     sm.second.skill_master->check_idle_time();
     auto exec_info = sm.second.skill_master->get_exec_info();

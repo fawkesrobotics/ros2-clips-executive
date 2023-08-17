@@ -19,17 +19,12 @@
 ; This assumes Fawkes-style time, i.e. sec and usec
 
 (deffunction time-diff (?t1 ?t2)
-  (bind ?sec  (- (nth$ 1 ?t1) (nth$ 1 ?t2)))
-  (bind ?usec (- (nth$ 2 ?t1) (nth$ 2 ?t2)))
-  (if (< ?usec 0)
-      then (bind ?sec (- ?sec 1)) (bind ?usec (+ 1000000 ?usec)))
-  ;(printout t "time-diff called: " ?t1 " - " ?t2 " = " (create$ ?sec ?usec) crlf)
-  (return (create$ ?sec ?usec))
+  (return (- ?t1 ?t2))
 )
 
 (deffunction time-diff-sec (?t1 ?t2)
   (bind ?td (time-diff ?t1 ?t2))
-  (return (+ (float (nth$ 1 ?td)) (/ (float (nth$ 2 ?td)) 1000000.)))
+  (return ?td)
 )
 
 (deffunction timeout (?now ?time ?timeout)
@@ -38,8 +33,7 @@
 
 (deffunction time> (?t1 ?t2)
 	(bind ?rv FALSE)
-	(if (> (nth$ 1 ?t1) (nth$ 1 ?t2)) then (bind ?rv TRUE))
-	(if (and (= (nth$ 1 ?t1) (nth$ 1 ?t2)) (> (nth$ 2 ?t1) (nth$ 2 ?t2))) then (bind ?rv TRUE))
+  (if (> ?t1 ?t2) then (bind ?rv TRUE))
 	(return ?rv)
 )
 
@@ -67,7 +61,7 @@
 ; never need it yourself.
 (deftemplate timer
   (slot name)
-  (multislot time (type INTEGER) (cardinality 2 2) (default-dynamic (now)))
+  (slot time (type FLOAT))
   (slot seq (type INTEGER) (default 1))
 )
 

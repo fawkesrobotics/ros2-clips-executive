@@ -115,7 +115,7 @@ private:
   void guarded_load(const std::string &env_name, const std::string &filename);
   CLIPS::Value clips_request_feature(const std::string &env_name,
                                      const std::string &feature_name);
-  CLIPS::Values clips_now();
+  float clips_now();
   CLIPS::Values clips_now_systime();
 
   // Function for service clients
