@@ -44,7 +44,7 @@ clips_executive:
 
     # Agent name. On startup the clips-agent will try to resolve a file named
     # <agent name>.clp. It must be in the CLIPS path directories.
-    spec: simple-agent
+    spec: demo
 
     specs:
       simple-agent:
@@ -329,3 +329,44 @@ clips_executive:
         action-mapping:
           say-hello: say{text="Hello ?(name)y", wait=true}
           say-goodbye: say{text="Good bye", wait=true}
+
+      demo:
+        parameters:
+          coordination:
+            mutex:
+              renew-interval: 5
+              max-age-sec: 15
+
+        init:
+          stage-1:
+            - name: plansys2
+            - name: clips_pddl_parser
+            - name: skill_execution
+          stage-3:
+            - name: psys2-planner
+              file: pddl.clp
+            - name: domain
+              file: demo-scenario/domain.clp
+            - name: worldmodel
+              file: demo-scenario/worldmodel-facts.clp
+            - name: goal-reasoner
+              file: demo-scenario/goal-reasoner.clp
+            - name: goal-expander
+              file: demo-scenario/goal-expander-pddl.clp
+            - name: action-selection
+              file: demo-scenario/action-selection.clp
+            - name: action-execution
+              files:
+                - demo-scenario/print-action.clp
+                - skills-actions.clp
+            - name: execution-monitoring
+              file: demo-scenario/execution-monitoring.clp
+            - name: state-estimation
+              file: demo-scenario/state-estimation.clp
+          # Map plan actions to skill strings.
+        action-mapping:
+          say-hello: say{text="Hello ?(name)y", wait=true}
+          say-goodbye: say{text="Good bye", wait=true}
+          navigate: navigate{}
+          sample_rock: sample_rock{}
+          sample_soil: sample_soil{}
