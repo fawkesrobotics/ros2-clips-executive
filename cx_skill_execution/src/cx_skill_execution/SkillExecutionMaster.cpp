@@ -128,7 +128,7 @@ void SkillExecutionMaster::skill_board_cb(
         exec_info_.string_status = "S_FAILED";
         exec_info_.error_msg = msg->status;
       } else {
-        state_ = msg->success ? SUCESS : FAILURE;
+        state_ = msg->success ? SUCCESS : FAILURE;
         exec_info_.status = msg->success ? SkillActionExecinfo::S_FINAL
                                          : SkillActionExecinfo::S_FAILED;
         exec_info_.string_status = msg->success ? "S_FINAL" : "S_FAILED";

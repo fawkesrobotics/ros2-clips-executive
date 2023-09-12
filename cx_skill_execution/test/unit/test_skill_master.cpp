@@ -189,7 +189,7 @@ TEST(skill_master_test, skill_master) {
   RCLCPP_WARN(test_node->get_logger(), "Out of third loop");
 
   ASSERT_EQ(move_action_master->get_exec_status(),
-            cx::SkillExecutionMaster::ExecState::SUCESS);
+            cx::SkillExecutionMaster::ExecState::SUCCESS);
   // ASSERT_EQ(move_action_node->get_internal_status().state,
   //           plansys2_msgs::msg::ActionPerformerStatus::READY);
 
@@ -206,7 +206,7 @@ TEST(skill_master_test, skill_master) {
             cx_msgs::msg::SkillExecution::FINISH);
 
   ASSERT_EQ(move_action_master->get_exec_status(),
-            cx::SkillExecutionMaster::ExecState::SUCESS);
+            cx::SkillExecutionMaster::ExecState::SUCCESS);
   ASSERT_EQ(move_action_master->get_exec_info().status,
             cx_msgs::msg::SkillActionExecinfo::S_FINAL);
 

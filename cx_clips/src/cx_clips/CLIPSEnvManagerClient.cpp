@@ -203,7 +203,7 @@ bool CLIPSEnvManagerClient::addFeatures(
       rclcpp::Client<cx_msgs::srv::AddClipsFeatures>::SharedFuture;
   auto response_received_callback = [this](ServiceResponseFuture future) {
     if (future.get()->success) {
-      RCLCPP_INFO(node_->get_logger(), "Features added sucessfully!");
+      RCLCPP_INFO(node_->get_logger(), "Features added successfully!");
     } else {
       RCLCPP_WARN(node_->get_logger(),
                   "Following features couldn't get added:");

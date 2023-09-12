@@ -41,7 +41,7 @@ namespace cx {
 class SkillExecutionMaster : public rclcpp::Node {
 
 public:
-  enum ExecState { IDLE, RUNNING, CANCELLED, SUCESS, FAILURE };
+  enum ExecState { IDLE, RUNNING, CANCELLED, SUCCESS, FAILURE };
   SkillExecutionMaster(
       const std::string &node_name, const std::string &skill_id,
       const std::string &action_name, const std::string &action_parameters,
