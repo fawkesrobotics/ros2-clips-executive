@@ -85,8 +85,7 @@ bool Plansys2Feature::clips_context_init(
   return true;
 }
 
-bool Plansys2Feature::clips_context_destroyed(
-    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
+bool Plansys2Feature::clips_context_destroyed(const std::string &env_name) {
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Destroying clips context!");

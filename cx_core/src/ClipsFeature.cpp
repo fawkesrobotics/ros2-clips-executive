@@ -28,8 +28,12 @@ ClipsFeature::ClipsFeature() {}
 // Empty Destructor as delcared virtual
 ClipsFeature::~ClipsFeature() {}
 
+// todo: remove this file and implementation as it does nothing and is not
+// necessary
 std::string ClipsFeature::getFeatureName() const { return clips_feature_name; }
 
-void ClipsFeature::initialise(const std::string &feature_name) {}
+void ClipsFeature::initialise(const std::string &feature_name) {
+  (void)feature_name;
+}
 
 } // namespace cx

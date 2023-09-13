@@ -69,6 +69,7 @@ using std::placeholders::_1;
 
 CallbackReturn
 SkillExecution::on_configure(const rclcpp_lifecycle::State &state) {
+  (void)state;
   get_parameter("agent_id", agent_id_);
 
   executioner_info_pub_ = create_publisher<SkillExecutionerInformation>(
@@ -93,7 +94,7 @@ SkillExecution::on_configure(const rclcpp_lifecycle::State &state) {
 
 CallbackReturn
 SkillExecution::on_activate(const rclcpp_lifecycle::State &state) {
-
+  (void)state;
   executioner_info_.state = SkillExecutionerInformation::RUNNING;
   execution_heartbeat_ = create_wall_timer(
       exec_rate_, std::bind(&SkillExecution::perform_execution, this));
@@ -103,6 +104,7 @@ SkillExecution::on_activate(const rclcpp_lifecycle::State &state) {
 }
 CallbackReturn
 SkillExecution::on_deactivate(const rclcpp_lifecycle::State &state) {
+  (void)state;
   executioner_info_.state = SkillExecutionerInformation::READY;
   execution_heartbeat_ = nullptr;
   return CallbackReturn::SUCCESS;

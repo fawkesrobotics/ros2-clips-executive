@@ -76,7 +76,7 @@ bool SkillExecutionFeature::clips_context_init(
 }
 
 bool SkillExecutionFeature::clips_context_destroyed(
-    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
+    const std::string &env_name) {
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Destroying clips context!");
@@ -180,9 +180,9 @@ void SkillExecutionFeature::cancel_skill(const std::string &env_name,
   }
   if (skill_master_map_.find(agent_id) != skill_master_map_.end()) {
     skill_master_map_[agent_id].skill_master->cancel_execution();
-    cx::LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name];
-    //std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-    // clips->assert_fact_f();
+    // cx::LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name];
+    //  std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
+    //   clips->assert_fact_f();
   } else {
     RCLCPP_ERROR(node_->get_logger(),
                  "Requested skill can't be cancelled, as it is not Present!");

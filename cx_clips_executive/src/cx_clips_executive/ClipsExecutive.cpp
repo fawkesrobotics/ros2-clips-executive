@@ -62,6 +62,7 @@ using CallbackReturn =
 
 CallbackReturn
 ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   env_manager_client_ =
@@ -159,6 +160,7 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
 
 CallbackReturn
 ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
   clips_agenda_refresh_pub_->on_activate();
   // Creating the Clips Executive environment in configure works async  --> busy
@@ -258,6 +260,7 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
 
 CallbackReturn
 ClipsExecutive::on_deactivate(const rclcpp_lifecycle::State &state) {
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "[%s] Deactivating...", get_name());
   clips_agenda_refresh_pub_->on_deactivate();
   clips_->assert_fact("(executive-finalize)");

@@ -31,15 +31,14 @@ bool MockFeature::clips_context_init(const std::string &env_name,
   clips->run(-1);
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Initialised the context!");
+              "Initialised the context for env %s!", env_name.c_str());
   return true;
 }
 
-bool MockFeature::clips_context_destroyed(
-    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
+bool MockFeature::clips_context_destroyed(const std::string &env_name) {
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Destroying clips context!");
+              "Destroying clips context for env %s!", env_name.c_str());
   return true;
 }
 } // namespace cx

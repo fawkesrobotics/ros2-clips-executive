@@ -60,7 +60,7 @@ using CallbackReturn =
 
 CallbackReturn
 ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
-
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   auto node = shared_from_this();
@@ -121,11 +121,12 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
 
 CallbackReturn
 ClipsFeaturesManager::on_activate(const rclcpp_lifecycle::State &state) {
-
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
   // Add ff-request feature, as it is implemented in features manager
   for (auto &envd : clips_env_manager_node_->envs_) {
-    //std::lock_guard<std::mutex> guard(*(envd.second.env.get_mutex_instance()));
+    // std::lock_guard<std::mutex>
+    // guard(*(envd.second.env.get_mutex_instance()));
     envd.second.env->add_function(
         "ff-feature-request",
         sigc::slot<CLIPS::Value, std::string>(sigc::bind<0>(
@@ -139,8 +140,7 @@ ClipsFeaturesManager::on_activate(const rclcpp_lifecycle::State &state) {
 
 CallbackReturn
 ClipsFeaturesManager::on_deactivate(const rclcpp_lifecycle::State &state) {
-  RCLCPP_INFO(get_logger(), "[%s] Deactivating...", get_name());
-
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "[%s] Deactivated!", get_name());
 
   return CallbackReturn::SUCCESS;
@@ -208,7 +208,7 @@ void ClipsFeaturesManager::feature_init_context(
 
   LockSharedPtr<CLIPS::Environment> &clips =
       clips_env_manager_node_->envs_[env_name].env;
-  //std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
+  // std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
 
   if (features_.find(feature_name) != features_.end()) {
     bool success = features_[feature_name]->clips_context_init(env_name, clips);
@@ -226,18 +226,14 @@ void ClipsFeaturesManager::feature_destroy_context_callback(
     const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Request> request,
     const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Response>
         response) {
-
+  (void)request_header; // ignoring request id
   const std::string &env_name = request->env_name;
   const std::string &feature_name = request->feature_name;
   RCLCPP_INFO(get_logger(), "IN DESTROY CONTEXT CALLBACK FOR FEATURE %s",
               feature_name.c_str());
 
-  LockSharedPtr<CLIPS::Environment> &clips =
-      clips_env_manager_node_->envs_[env_name].env;
-
   if (features_.find(feature_name) != features_.end()) {
-    bool success =
-        features_[feature_name]->clips_context_destroyed(env_name, clips);
+    bool success = features_[feature_name]->clips_context_destroyed(env_name);
     if (!success) {
       response->error = "Error by context destruction: feature " + feature_name;
     }

@@ -80,6 +80,8 @@ private:
 };
 
 static int redefine_warning_router_query(void *env, const char *logical_name) {
+  (void)env; // ignoring the environment because all environments support the
+             // same set of logical names
   if (strcmp(logical_name, WDIALOG) == 0)
     return TRUE;
   if (strcmp(logical_name, WWARNING) == 0)
@@ -114,6 +116,11 @@ static int redefine_warning_router_print(void *env, const char *logical_name,
 }
 
 static int redefine_warning_router_exit(void *env, int exit_code) {
+  void *rc = GetEnvironmentRouterContext(env);
+  CLIPSRedefineWarningLogger *logger =
+      static_cast<CLIPSRedefineWarningLogger *>(rc);
+  logger->log(
+      ("Exiting router with exit code " + std::to_string(exit_code)).c_str());
   return TRUE;
 }
 
@@ -146,11 +153,13 @@ bool RedefineWarningFeature::clips_context_init(
                           /* getc */ NULL,
                           /* ungetc */ NULL, redefine_warning_router_exit, cl);
   clips->watch("compilations");
+
+  envs_[env_name] = clips;
   return true;
 }
 
 bool RedefineWarningFeature::clips_context_destroyed(
-    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
+    const std::string &env_name) {
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Destroying clips context for feature %s!",
@@ -159,6 +168,8 @@ bool RedefineWarningFeature::clips_context_destroyed(
   std::string name = "RWCLIPS|" + env_name;
 
   CLIPSRedefineWarningLogger *logger = NULL;
+
+  auto clips = envs_[env_name];
 
   struct routerData *rd = RouterData(clips->cobj());
   struct router *r = rd->ListOfRouters;

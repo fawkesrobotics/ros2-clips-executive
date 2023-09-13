@@ -41,16 +41,14 @@ public:
 
   bool clips_context_init(const std::string &env_name,
                           LockSharedPtr<CLIPS::Environment> &clips) override;
-  bool
-  clips_context_destroyed(const std::string &env_name,
-                          LockSharedPtr<CLIPS::Environment> &clips) override;
+  bool clips_context_destroyed(const std::string &env_name) override;
 
   std::string getFeatureName() const;
 
 private:
   std::map<std::string, LockSharedPtr<CLIPS::Environment>> envs_;
   std::mutex mm;
-  CLIPS::Environment* maintained_env_;
+  CLIPS::Environment *maintained_env_;
   std::unique_ptr<clips_pddl_parser::ClipsPddlParser> pddl_parser;
 
 private:
