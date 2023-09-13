@@ -151,8 +151,14 @@ bool CLIPSEnvManagerClient::destroyClipsEnvironment(
       rclcpp::Client<cx_msgs::srv::DestroyClipsEnv>::SharedFuture;
   auto response_received_callback = [this,
                                      &env_name](ServiceResponseFuture future) {
-    RCLCPP_INFO(node_->get_logger(), "Destroyed env %s async!",
-                env_name.c_str());
+    if (future.get()->success) {
+      RCLCPP_INFO(node_->get_logger(), "Destroyed env %s async!",
+                  env_name.c_str());
+    } else {
+      RCLCPP_WARN(node_->get_logger(),
+                  "Couldn't destroy env %s async! Error: %s", env_name.c_str(),
+                  future.get()->error.c_str());
+    }
   };
 
   auto future_res =
