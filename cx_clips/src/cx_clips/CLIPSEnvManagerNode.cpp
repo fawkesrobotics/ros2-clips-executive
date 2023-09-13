@@ -58,24 +58,23 @@ public:
       if (strcmp(logical_name, "debug") == 0 ||
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
-        // LATER DEBUG
-        RCLCPP_DEBUG(this->logger_, component_ ? "CLIPS", "%s",
-                     buffer_.c_str() : component_);
+        RCLCPP_DEBUG(this->logger_, (component_ ? "CLIPS" : component_), "%s",
+                     buffer_.c_str());
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
                  strcmp(logical_name, WWARNING) == 0) {
-        RCLCPP_WARN(this->logger_, component_ ? "CLIPS", "%s",
-                    buffer_.c_str() : component_);
+        RCLCPP_WARN(this->logger_, (component_ ? "CLIPS" : component_), "%s",
+                    buffer_.c_str());
       } else if (strcmp(logical_name, "error") == 0 ||
                  strcmp(logical_name, "logerror") == 0 ||
                  strcmp(logical_name, WERROR) == 0) {
-        RCLCPP_ERROR(this->logger_, component_ ? "CLIPS", "%s",
-                     buffer_.c_str() : component_);
+        RCLCPP_ERROR(this->logger_, (component_ ? "CLIPS" : component_), "%s",
+                     buffer_.c_str());
       } else if (strcmp(logical_name, WDIALOG) == 0) {
         // ignored
       } else {
-        RCLCPP_INFO(this->logger_, component_ ? "CLIPS", "%s",
-                    buffer_.c_str() : component_);
+        RCLCPP_INFO(this->logger_, (component_ ? "CLIPS" : component_), "%s",
+                    buffer_.c_str());
       }
 
       buffer_.clear();
@@ -330,7 +329,7 @@ void CLIPSEnvManagerNode::add_clips_features_callback(
     RCLCPP_INFO(get_logger(), "Adding feature '%s'", feat.c_str());
 
     features_set.insert(feat);
-    
+
     // assert feature availability to all registered CLIPS Envs
     for (auto &env : envs_) {
       std::lock_guard<std::mutex> guard(*(env.second.env.get_mutex_instance()));
