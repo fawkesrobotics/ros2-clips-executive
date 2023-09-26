@@ -58,23 +58,31 @@ public:
       if (strcmp(logical_name, "debug") == 0 ||
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
-        RCLCPP_DEBUG(this->logger_, (component_ ? "CLIPS" : component_), "%s",
-                     buffer_.c_str());
+        RCLCPP_DEBUG(this->logger_,
+                     (component_ ? ((std::string)component_ + buffer_)
+                                 : ("CLIPS " + buffer_).c_str())
+                         .c_str());
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
                  strcmp(logical_name, WWARNING) == 0) {
-        RCLCPP_WARN(this->logger_, (component_ ? "CLIPS" : component_), "%s",
-                    buffer_.c_str());
+        RCLCPP_WARN(this->logger_,
+                    (component_ ? ((std::string)component_ + buffer_)
+                                : ("CLIPS " + buffer_).c_str())
+                        .c_str());
       } else if (strcmp(logical_name, "error") == 0 ||
                  strcmp(logical_name, "logerror") == 0 ||
                  strcmp(logical_name, WERROR) == 0) {
-        RCLCPP_ERROR(this->logger_, (component_ ? "CLIPS" : component_), "%s",
-                     buffer_.c_str());
+        RCLCPP_ERROR(this->logger_,
+                     (component_ ? ((std::string)component_ + buffer_)
+                                 : ("CLIPS " + buffer_).c_str())
+                         .c_str());
       } else if (strcmp(logical_name, WDIALOG) == 0) {
         // ignored
       } else {
-        RCLCPP_INFO(this->logger_, (component_ ? "CLIPS" : component_), "%s",
-                    buffer_.c_str());
+        RCLCPP_INFO(this->logger_,
+                    (component_ ? ((std::string)component_ + buffer_)
+                                : ("CLIPS " + buffer_).c_str())
+                        .c_str());
       }
 
       buffer_.clear();
