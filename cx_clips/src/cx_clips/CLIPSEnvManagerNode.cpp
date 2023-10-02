@@ -21,6 +21,8 @@
 #include <chrono>
 #include <map>
 #include <memory>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <utility>
 
@@ -84,8 +86,12 @@ public:
                                 : ("CLIPS " + buffer_).c_str())
                         .c_str());
       }
-
+      // log any output to a dedicated clips log file
+      clips_logger_->info((component_ ? ((std::string)component_ + buffer_)
+                                      : ("CLIPS " + buffer_).c_str())
+                              .c_str());
       buffer_.clear();
+
     } else {
       buffer_ += str;
     }
@@ -94,6 +100,14 @@ public:
 private:
   char *component_ = strdup("clips_default_log_component");
   const rclcpp::Logger logger_ = rclcpp::get_logger(std::string(component_));
+  std::shared_ptr<spdlog::logger> clips_logger_ = spdlog::basic_logger_st(
+      (component_ ? (std::string)component_ : "CLIPS"),
+      (rclcpp::get_logging_directory().string() + "/" +
+       std::to_string(std::chrono::duration_cast<std::chrono::seconds>(
+                          std::chrono::system_clock::now().time_since_epoch())
+                          .count()) +
+       "_" + (component_ ? (std::string)component_ : "clips") + ".log"));
+
   std::string buffer_;
 };
 

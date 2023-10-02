@@ -152,8 +152,7 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   action_skill_mapping_ =
       std::make_shared<cx::ActionSkillMapping>(action_mapping);
 
-  env_manager_client_->createNewClipsEnvironment("executive",
-                                                 "CLIPS (executive)");
+  env_manager_client_->createNewClipsEnvironment("executive", "executive");
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
