@@ -210,7 +210,7 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
   int sequenceIndex = 0;
 
   for (const auto &item2 : input_node) {
-    if (*item2) {
+    if (item2) {
       if (item2.IsScalar()) {
         // Direct sequence of the form ["1", "2", ...]
         list_values = list_values + " " + "\"" + item2.as<std::string>() + "\"";
