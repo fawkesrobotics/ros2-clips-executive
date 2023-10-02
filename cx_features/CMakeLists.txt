@@ -121,11 +121,17 @@ install(TARGETS
 )
 
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
-  find_package(ament_cmake_gtest REQUIRED)
-  find_package(cx_clips_executive REQUIRED)
-  add_subdirectory(test)
+  find_package(ament_lint_auto)
+
+  if(ament_lint_auto_FOUND)
+    ament_lint_auto_find_test_dependencies()
+    find_package(ament_cmake_gtest)
+    find_package(cx_clips_executive REQUIRED)
+
+    if(ament_cmake_gtest)
+      add_subdirectory(test)
+    endif()
+  endif()
 endif()
 
 ament_export_include_directories(include)

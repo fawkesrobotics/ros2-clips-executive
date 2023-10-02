@@ -20,6 +20,7 @@ find_package(lifecycle_msgs REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(cx_core REQUIRED)
+find_package(spdlog REQUIRED)
 
 # find_package(cx_features REQUIRED)
 set(dependencies
@@ -32,6 +33,7 @@ set(dependencies
   cx_msgs
   cx_utils
   cx_core
+  spdlog
 
   # cx_features
 )
@@ -48,7 +50,7 @@ pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
 
 add_library(${PROJECT_NAME} SHARED ${CLIPS_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
-target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
+target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM spdlog::spdlog)
 
 add_executable(clips_node src/clips_node.cpp)
 
@@ -57,11 +59,16 @@ target_link_libraries(clips_node ${PROJECT_NAME})
 target_link_libraries(clips_node PkgConfig::CLIPSMM)
 
 if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  ament_lint_auto_find_test_dependencies()
+  find_package(ament_lint_auto)
 
-  find_package(ament_cmake_gtest REQUIRED)
-  add_subdirectory(test)
+  if(ament_lint_auto_FOUND)
+    ament_lint_auto_find_test_dependencies()
+    find_package(ament_cmake_gtest)
+
+    if(ament_cmake_gtest)
+      add_subdirectory(test)
+    endif()
+  endif()
 endif()
 
 install(
