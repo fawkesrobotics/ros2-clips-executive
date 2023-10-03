@@ -19,6 +19,7 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
+find_package(cx_clips REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -26,6 +27,7 @@ set(dependencies
   rclcpp_action
   rclcpp_lifecycle
   lifecycle_msgs
+  cx_clips
   cx_msgs
   cx_utils
 )
@@ -35,10 +37,14 @@ set(CLIPS_EXECUTIVE_SOURCES
   src/cx_skill_execution/SkillExecutionMaster.cpp
 )
 
+pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
+
 include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED ${CLIPS_EXECUTIVE_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
+
+target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
 
 install(
   DIRECTORY include/

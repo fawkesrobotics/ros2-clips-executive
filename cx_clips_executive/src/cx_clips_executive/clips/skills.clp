@@ -84,13 +84,6 @@
 						(start-time (now))))
 	(return ?id)
 )
-; Read skill-feedback coming from the skill-execution
-(defrule skill-read-information
-	(declare (salience ?*SALIENCE-HIGH*))
-	(time $?)
-	=>
-	(call-skill-read)
-)
 
 (defrule skill-status-update
   ?sf <- (skill-feedback (skill-id ?skill-id) (agent-id ?agent-id) (status ?new-status)
