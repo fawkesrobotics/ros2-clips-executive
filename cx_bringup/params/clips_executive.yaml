@@ -44,9 +44,37 @@ clips_executive:
 
     # Agent name. On startup the clips-agent will try to resolve a file named
     # <agent name>.clp. It must be in the CLIPS path directories.
-    spec: test-nav2
+    spec: simple-agent
 
     specs:
+      simple-agent:
+        parameters:
+          coordination:
+            mutex:
+              renew-interval: 5
+              max-age-sec: 15
+
+        init:
+          stage-1:
+            - name: clips_pddl_parser
+            - name: skill_execution
+          stage-3:
+            - name: domain
+              file: simple-agent/domain.clp
+            - name: goal-reasoner
+              file: simple-agent/goal-reasoner.clp
+            - name: fixed-sequence
+              file: simple-agent/fixed-sequence.clp
+            - name: action-selection
+              file: simple-agent/action-selection.clp
+            - name: action-execution
+              files:
+                - simple-agent/print-action.clp
+                - skills-actions.clp
+          # Map plan actions to skill strings.
+        action-mapping:
+          gowait: skill{}
+
       test:
         # The following configures CX initialization.
         # Initialization is organized in three stages:
