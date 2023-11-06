@@ -13,6 +13,12 @@ clips_features_manager:
       plugin: "cx::SkillExecutionFeature"
     clips_protobuf:
       plugin: "cx::ClipsProtobufFeature"
+      feature_parameters: ["protobuf-path"]
+      protobuf-path:
+        # This path assumes relativeness to the workspace
+        value: "src/ros2-clips-executive/cx_bringup/launch/proto"
+        type: "string"
+
 
 cx_clips:
   ros__parameters:

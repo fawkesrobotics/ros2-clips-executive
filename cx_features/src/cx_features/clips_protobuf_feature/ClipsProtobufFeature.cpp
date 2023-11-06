@@ -51,14 +51,17 @@ bool ClipsProtobufFeature::clips_context_init(
               clips_feature_name.c_str());
 
   envs_[env_name] = clips;
-
-  std::vector<std::string> path = {"path1", "path2", "path3"};
+  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+              "Loading protobuf files from: %s",
+              parameters["protobuf-path"].as_string().c_str());
+  std::vector<std::string> path = {parameters["protobuf-path"].as_string()};
   protobuf_communicator =
       std::make_unique<protobuf_clips::ClipsProtobufCommunicator>(
           envs_[env_name].get_obj().get(),
-          *(envs_[env_name].get_mutex_instance()));
+          *(envs_[env_name].get_mutex_instance()), path);
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name), "Initialised context!");
+
   return true;
 }
 
