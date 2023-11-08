@@ -58,6 +58,7 @@ clips_executive:
           stage-1:
             - name: clips_pddl_parser
             - name: skill_execution
+            - name: clips_protobuf
           stage-3:
             - name: domain
               file: simple-agent/domain.clp
