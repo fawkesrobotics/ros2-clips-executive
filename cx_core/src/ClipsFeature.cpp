@@ -37,3 +37,4 @@ void ClipsFeature::initialise(const std::string &feature_name) {
 }
 
 } // namespace cx
+

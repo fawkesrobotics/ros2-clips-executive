@@ -11,3 +11,7 @@ repositories:
     type: git
     url: https://github.com/fawkesrobotics/pddl_parser
     version: main
+  clips-protobuf:
+    type: git
+    url: https://github.com/fawkesrobotics/clips-protobuf
+    version: dswoboda/ros2-cx-adaptions
