@@ -58,8 +58,7 @@ bool ConfigFeature::clips_context_init(
   return true;
 }
 
-bool ConfigFeature::clips_context_destroyed(
-    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
+bool ConfigFeature::clips_context_destroyed(const std::string &env_name) {
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Destroying clips context for feature %s!",
@@ -100,8 +99,8 @@ void ConfigFeature::clips_config_load(const std::string &env_name,
     RCLCPP_WARN(rclcpp::get_logger(name), "Path is: %s", path.c_str());
 
     YAML::Node config = YAML::LoadFile(path);
-    std::lock_guard<std::recursive_mutex> guard(
-        *(envs_[env_name].get_mutex_instance()));
+    // std::lock_guard<std::mutex>
+    // guard(*(envs_[env_name].get_mutex_instance()));
 
     iterateThroughYamlRecuresively(config[cfg_main_node], name, cfg_prefix,
                                    env_name);
@@ -211,7 +210,7 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
   int sequenceIndex = 0;
 
   for (const auto &item2 : input_node) {
-    if (*item2) {
+    if (item2) {
       if (item2.IsScalar()) {
         // Direct sequence of the form ["1", "2", ...]
         list_values = list_values + " " + "\"" + item2.as<std::string>() + "\"";

@@ -39,7 +39,9 @@ using namespace std::placeholders;
 namespace cx {
 
 ClipsFeaturesManager::ClipsFeaturesManager()
-    : rclcpp_lifecycle::LifecycleNode("clips_features_manager"),
+    : rclcpp_lifecycle::LifecycleNode(
+          "clips_features_manager",
+          rclcpp::NodeOptions().allow_undeclared_parameters(true)),
       env_manager_client_{std::make_shared<cx::CLIPSEnvManagerClient>(
           "clips_manager_client_fm")},
       pg_loader_("cx_core", "cx::ClipsFeature"), default_ids_{},
@@ -60,7 +62,7 @@ using CallbackReturn =
 
 CallbackReturn
 ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
-
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   auto node = shared_from_this();
@@ -83,19 +85,79 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
     for (size_t i = 0; i < features_types_.size(); i++) {
       try {
         const std::string feat_name = features_ids_[i];
+
+        /////////////////////////////
+        // declare the parameters define in the list for each feature
+        std::map<std::string, rclcpp::Parameter> feature_param_map{};
+        declare_parameter(feat_name + ".feature_parameters",
+                          std::vector<std::string>());
+        std::vector<std::string> feature_parameters =
+            get_parameter(feat_name + ".feature_parameters").as_string_array();
+
+        for (const std::string &feat_param : feature_parameters) {
+          // declare the parameter
+          declare_parameter(feat_name + "." + feat_param + ".type", "");
+          std::string param_type =
+              get_parameter(feat_name + "." + feat_param + ".type").as_string();
+
+          if (param_type == "string") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_STRING);
+          }
+          if (param_type == "integer") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_INTEGER);
+          }
+          if (param_type == "double") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_DOUBLE);
+          }
+          if (param_type == "bool") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_BOOL);
+          }
+          if (param_type == "byte-array") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_BOOL_ARRAY);
+          }
+          if (param_type == "string-array") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_STRING_ARRAY);
+          }
+          if (param_type == "integer-array") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_INTEGER_ARRAY);
+          }
+          if (param_type == "double-array") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_DOUBLE_ARRAY);
+          }
+          if (param_type == "bool-array") {
+            declare_parameter(feat_name + "." + feat_param + ".value",
+                              rclcpp::PARAMETER_BOOL_ARRAY);
+          }
+          feature_param_map[feat_param] =
+              get_parameter(feat_name + "." + feat_param + ".value");
+        }
+
+        /////////////////////////////
+
         features_types_[i] = cx::get_plugin_type_param(node, feat_name);
 
         cx::ClipsFeature::Ptr feature =
             pg_loader_.createUniqueInstance(features_types_[i]);
 
         // Call the feature initialisation
-        feature->initialise(feat_name);
+        if (feature_parameters.size() > 0) {
+          feature->initialise(feat_name, feature_param_map);
+        } else {
+          feature->initialise(feat_name);
+        }
 
         RCLCPP_INFO(get_logger(), "Created feature : %s of type %s",
                     feat_name.c_str(), features_types_[i].c_str());
         // Insert loaded feature to the features map
         features_.insert({feat_name, feature});
-
       } catch (const pluginlib::PluginlibException &ex) {
         RCLCPP_FATAL(get_logger(), "Failed to load feature. Exception: %s",
                      ex.what());
@@ -121,12 +183,12 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
 
 CallbackReturn
 ClipsFeaturesManager::on_activate(const rclcpp_lifecycle::State &state) {
-
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
   // Add ff-request feature, as it is implemented in features manager
   for (auto &envd : clips_env_manager_node_->envs_) {
-    std::lock_guard<std::recursive_mutex> guard(
-        *(envd.second.env.get_mutex_instance()));
+    // std::lock_guard<std::mutex>
+    // guard(*(envd.second.env.get_mutex_instance()));
     envd.second.env->add_function(
         "ff-feature-request",
         sigc::slot<CLIPS::Value, std::string>(sigc::bind<0>(
@@ -140,8 +202,7 @@ ClipsFeaturesManager::on_activate(const rclcpp_lifecycle::State &state) {
 
 CallbackReturn
 ClipsFeaturesManager::on_deactivate(const rclcpp_lifecycle::State &state) {
-  RCLCPP_INFO(get_logger(), "[%s] Deactivating...", get_name());
-
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "[%s] Deactivated!", get_name());
 
   return CallbackReturn::SUCCESS;
@@ -209,7 +270,7 @@ void ClipsFeaturesManager::feature_init_context(
 
   LockSharedPtr<CLIPS::Environment> &clips =
       clips_env_manager_node_->envs_[env_name].env;
-  std::lock_guard<std::recursive_mutex> guard(*(clips.get_mutex_instance()));
+  // std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
 
   if (features_.find(feature_name) != features_.end()) {
     bool success = features_[feature_name]->clips_context_init(env_name, clips);
@@ -227,18 +288,14 @@ void ClipsFeaturesManager::feature_destroy_context_callback(
     const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Request> request,
     const std::shared_ptr<cx_msgs::srv::ClipsFeatureContext::Response>
         response) {
-
+  (void)request_header; // ignoring request id
   const std::string &env_name = request->env_name;
   const std::string &feature_name = request->feature_name;
   RCLCPP_INFO(get_logger(), "IN DESTROY CONTEXT CALLBACK FOR FEATURE %s",
               feature_name.c_str());
 
-  LockSharedPtr<CLIPS::Environment> &clips =
-      clips_env_manager_node_->envs_[env_name].env;
-
   if (features_.find(feature_name) != features_.end()) {
-    bool success =
-        features_[feature_name]->clips_context_destroyed(env_name, clips);
+    bool success = features_[feature_name]->clips_context_destroyed(env_name);
     if (!success) {
       response->error = "Error by context destruction: feature " + feature_name;
     }

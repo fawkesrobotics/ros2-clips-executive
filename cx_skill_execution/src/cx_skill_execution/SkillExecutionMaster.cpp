@@ -51,10 +51,12 @@ SkillExecutionMaster::SkillExecutionMaster(
     const std::string &node_name, const std::string &skill_id,
     const std::string &action_name, const std::string &mapped_action,
     const std::string &action_parameters, const std::string &agent_id,
-    const std::string &namespace_, const rclcpp::NodeOptions &options)
+    cx::LockSharedPtr<CLIPS::Environment> &clips, const std::string &namespace_,
+    const rclcpp::NodeOptions &options)
     : rclcpp::Node(node_name, namespace_, options), skill_id_(skill_id),
       action_name_(action_name), mapped_action_(mapped_action),
-      string_action_parameters_(action_parameters), agent_id_(agent_id) {
+      string_action_parameters_(action_parameters), agent_id_(agent_id),
+      clips_(clips) {
 
   skill_board_pub = create_publisher<SkillExecutionMsg>(
       "/skill_board", rclcpp::QoS(100).reliable());
@@ -128,7 +130,7 @@ void SkillExecutionMaster::skill_board_cb(
         exec_info_.string_status = "S_FAILED";
         exec_info_.error_msg = msg->status;
       } else {
-        state_ = msg->success ? SUCESS : FAILURE;
+        state_ = msg->success ? SUCCESS : FAILURE;
         exec_info_.status = msg->success ? SkillActionExecinfo::S_FINAL
                                          : SkillActionExecinfo::S_FAILED;
         exec_info_.string_status = msg->success ? "S_FINAL" : "S_FAILED";
@@ -149,6 +151,16 @@ void SkillExecutionMaster::skill_board_cb(
         msg->type, action_name_.c_str(), string_action_parameters_.c_str());
     break;
   }
+
+  // update the clips environment
+
+  std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
+  clips_->assert_fact_f(
+      "(skill-feedback (skill-id %s) (agent-id \"%s\") (status %s) (error "
+      "\"%s\"))",
+      exec_info_.skill_id.c_str(),
+      exec_info_.agent_id.c_str() /*agent_id/skiller*/,
+      exec_info_.string_status.c_str(), exec_info_.error_msg.c_str());
 }
 
 void SkillExecutionMaster::request_skill_execution() {

@@ -12,9 +12,9 @@
 	(executive-init)
 	=>
   (do-for-all-facts ((?cf-spec confval) (?cf confval))
-    (and (eq ?cf-spec:path "/clips-executive/spec")
-         (str-prefix (str-cat "/clips-executive/specs/" ?cf-spec:value "/parameters/") ?cf:path))
-    (bind ?prefix (str-cat "/clips-executive/specs/" ?cf-spec:value "/parameters/"))
+    (and (eq ?cf-spec:path "/clips_executive/spec")
+         (str-prefix (str-cat "/clips_executive/specs/" ?cf-spec:value "/parameters/") ?cf:path))
+    (bind ?prefix (str-cat "/clips_executive/specs/" ?cf-spec:value "/parameters/"))
     (bind ?name (sub-string (str-length ?prefix) (str-length ?cf:path) ?cf:path))
     (bind ?id (str-cat "/config" ?name))
     (assert (wm-fact (id ?id) (type ?cf:type) (value ?cf:value) (is-list ?cf:is-list)

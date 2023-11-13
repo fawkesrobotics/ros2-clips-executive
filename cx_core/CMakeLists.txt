@@ -16,7 +16,6 @@ find_package(PkgConfig REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(cx_msgs REQUIRED)
 
-
 set(dependencies
   ament_cmake
   PkgConfig
@@ -25,12 +24,12 @@ set(dependencies
 )
 
 set(CX_CORE_SOURCES
-   src/ClipsFeature.cpp
+  src/ClipsFeature.cpp
 )
 
 include_directories(include)
 
-#import clipsmm via pkg-config
+# import clipsmm via pkg-config
 pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
 
 add_library(${PROJECT_NAME} SHARED ${CX_CORE_SOURCES})
@@ -51,12 +50,13 @@ install(TARGETS
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
+
   # the following line skips the linter which checks for copyrights
   # uncomment the line when a copyright and license is not present in all source files
-  #set(ament_cmake_copyright_FOUND TRUE)
+  # set(ament_cmake_copyright_FOUND TRUE)
   # the following line skips cpplint (only works in a git repo)
   # uncomment the line when this package is not in a git repo
-  #set(ament_cmake_cpplint_FOUND TRUE)
+  # set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
 

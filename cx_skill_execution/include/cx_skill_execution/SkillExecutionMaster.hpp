@@ -35,17 +35,20 @@
 #include "cx_msgs/msg/skill_action_execinfo.hpp"
 #include "cx_msgs/msg/skill_execution.hpp"
 #include "cx_msgs/msg/skill_executioner_information.hpp"
+#include "cx_utils/LockSharedPtr.hpp"
+#include <clipsmm.h>
 
 namespace cx {
 
 class SkillExecutionMaster : public rclcpp::Node {
 
 public:
-  enum ExecState { IDLE, RUNNING, CANCELLED, SUCESS, FAILURE };
+  enum ExecState { IDLE, RUNNING, CANCELLED, SUCCESS, FAILURE };
   SkillExecutionMaster(
       const std::string &node_name, const std::string &skill_id,
       const std::string &action_name, const std::string &action_parameters,
       const std::string &mapped_action, const std::string &agent_id,
+      cx::LockSharedPtr<CLIPS::Environment> &clips,
       const std::string &namespace_ = "",
       const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
 
@@ -80,6 +83,7 @@ protected:
   std::vector<std::string> action_parameters_;
   std::string executioner_id_;
 
+  cx::LockSharedPtr<CLIPS::Environment> &clips_;
   ExecState state_;
   cx_msgs::msg::SkillActionExecinfo exec_info_{};
   std::string feedback_{};

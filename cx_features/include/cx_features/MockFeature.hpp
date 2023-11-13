@@ -17,9 +17,7 @@ public:
 
   bool clips_context_init(const std::string &env_name,
                           LockSharedPtr<CLIPS::Environment> &clips) override;
-  bool
-  clips_context_destroyed(const std::string &env_name,
-                          LockSharedPtr<CLIPS::Environment> &clips) override;
+  bool clips_context_destroyed(const std::string &env_name) override;
 
   std::string getFeatureName() const;
 

@@ -16,7 +16,7 @@
 ;   ?p <- (domain-predicate (name robot_at) (sensed FALSE))
 ; =>
 ;   (modify ?p (sensed TRUE))
-)
+;)
 
 (defrule load-initial-facts
   (executive-init)

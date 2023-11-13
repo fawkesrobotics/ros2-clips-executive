@@ -38,6 +38,7 @@ using CallbackReturn =
     rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
 CallbackReturn Blackboard::on_configure(const rclcpp_lifecycle::State &state) {
+  (void)state;
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   imngr_ = std::make_unique<cx::InterfaceManager>();
@@ -50,13 +51,12 @@ CallbackReturn Blackboard::on_configure(const rclcpp_lifecycle::State &state) {
   return CallbackReturn::SUCCESS;
 }
 CallbackReturn Blackboard::on_activate(const rclcpp_lifecycle::State &state) {
-  RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
+  (void)state;
   RCLCPP_INFO(get_logger(), "Activated [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
 CallbackReturn Blackboard::on_deactivate(const rclcpp_lifecycle::State &state) {
-
-  RCLCPP_INFO(get_logger(), "Deactivating [%s]...  ", get_name());
+  (void)state;
   RCLCPP_INFO(get_logger(), "Deactivated [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
@@ -65,6 +65,8 @@ void Blackboard::open_interface_callback(
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<cx_msgs::srv::OpenInterface::Request> request,
     const std::shared_ptr<cx_msgs::srv::OpenInterface::Response> response) {
+  (void)
+      request_header; // Unused variable due to order of requests being ignored
 
   RCLCPP_INFO(get_logger(), "Entering");
   std::string &i_type = request->i_type;

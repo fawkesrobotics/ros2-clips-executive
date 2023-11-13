@@ -110,12 +110,11 @@ private:
   new_env(const std::string &log_component_name);
   void assert_features(LockSharedPtr<CLIPS::Environment> &clips,
                        bool immediate_assert);
-  void add_functions(const std::string &env_name,
-                     LockSharedPtr<CLIPS::Environment> &clips);
+  void add_functions(const std::string &env_name);
   void guarded_load(const std::string &env_name, const std::string &filename);
   CLIPS::Value clips_request_feature(const std::string &env_name,
                                      const std::string &feature_name);
-  CLIPS::Values clips_now();
+  float clips_now();
   CLIPS::Values clips_now_systime();
 
   // Function for service clients

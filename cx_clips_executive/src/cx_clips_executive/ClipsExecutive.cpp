@@ -62,6 +62,7 @@ using CallbackReturn =
 
 CallbackReturn
 ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   env_manager_client_ =
@@ -151,14 +152,14 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   action_skill_mapping_ =
       std::make_shared<cx::ActionSkillMapping>(action_mapping);
 
-  env_manager_client_->createNewClipsEnvironment("executive",
-                                                 "CLIPS (executive)");
+  env_manager_client_->createNewClipsEnvironment("executive", "executive");
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
   return CallbackReturn::SUCCESS;
 }
 
 CallbackReturn
 ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
   clips_agenda_refresh_pub_->on_activate();
   // Creating the Clips Executive environment in configure works async  --> busy
@@ -175,10 +176,12 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
     }
   }
   clips_ = clips_env_manager_node_->envs_["executive"].env;
+
+  clips_->reset();
   // TODO: REMOVE LATER!
   clips_->watch("all");
 
-  std::lock_guard<std::recursive_mutex> guard(*(clips_.get_mutex_instance()));
+  std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
 
   std::string cx_bringup_dir;
   std::string cx_features_dir;
@@ -240,18 +243,15 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   RCLCPP_INFO(get_logger(), "CLIPS Executive was inistialised!");
 
   agenda_refresh_timer_ = create_wall_timer(publish_rate_, [this]() {
-    if ((*(clips_.get_mutex_instance())).try_lock()) {
-      std::lock_guard<std::recursive_mutex> guard(
-          *(clips_.get_mutex_instance()));
+    std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
 
-      if (cfg_assert_time_each_cycle_) {
-        clips_->assert_fact("(time (now))");
-      }
-
-      clips_->refresh_agenda();
-      clips_->run();
-      clips_agenda_refresh_pub_->publish(std_msgs::msg::Empty());
+    if (cfg_assert_time_each_cycle_) {
+      clips_->assert_fact("(time (now))");
     }
+
+    clips_->refresh_agenda();
+    clips_->run();
+    clips_agenda_refresh_pub_->publish(std_msgs::msg::Empty());
   });
   RCLCPP_INFO(get_logger(), "Activated [%s]!", get_name());
   return CallbackReturn::SUCCESS;
@@ -259,7 +259,7 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
 
 CallbackReturn
 ClipsExecutive::on_deactivate(const rclcpp_lifecycle::State &state) {
-
+  (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "[%s] Deactivating...", get_name());
   clips_agenda_refresh_pub_->on_deactivate();
   clips_->assert_fact("(executive-finalize)");

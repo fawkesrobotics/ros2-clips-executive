@@ -60,7 +60,7 @@ bool ClipsPddlParserFeature::clips_context_init(
 }
 
 bool ClipsPddlParserFeature::clips_context_destroyed(
-    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
+    const std::string &env_name) {
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Destroying clips context!");
