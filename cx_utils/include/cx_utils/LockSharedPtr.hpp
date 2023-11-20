@@ -42,13 +42,13 @@ public:
   std::shared_ptr<T> operator->() const;
   void init_mutex();
   operator bool() const;
-  std::recursive_mutex* get_mutex_instance();
+  std::mutex *get_mutex_instance();
   std::shared_ptr<T> get_obj();
   // Called from instances to lock the mutex for the current scope
 
 private:
   std::shared_ptr<T> obj;
-  mutable std::shared_ptr<std::recursive_mutex> objmutex;
+  mutable std::shared_ptr<std::mutex> objmutex;
   static int numbers;
 };
 
@@ -126,8 +126,9 @@ template <class T> LockSharedPtr<T>::operator bool() const {
 }
 
 template <class T>
-std::recursive_mutex* LockSharedPtr<T>::get_mutex_instance() {
-  return objmutex.get();
+std::mutex* LockSharedPtr<T>::get_mutex_instance() {
+  auto mutex = objmutex.get();
+  return mutex;
 }
 
 template <class T> std::shared_ptr<T> LockSharedPtr<T>::get_obj() {
@@ -135,7 +136,7 @@ template <class T> std::shared_ptr<T> LockSharedPtr<T>::get_obj() {
 }
 
 template <class T> void LockSharedPtr<T>::init_mutex() {
-  objmutex = std::make_shared<std::recursive_mutex>();
+  objmutex = std::make_shared<std::mutex>();
 }
 
 template <class T> int LockSharedPtr<T>::numbers = 0;

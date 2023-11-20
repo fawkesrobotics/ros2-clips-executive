@@ -41,9 +41,7 @@ public:
   // Provides feature functionality to CLIPS.
   virtual bool clips_context_init(const std::string &env_name,
                                   LockSharedPtr<CLIPS::Environment> &clips) = 0;
-  virtual bool
-  clips_context_destroyed(const std::string &env_name,
-                          LockSharedPtr<CLIPS::Environment> &clips) = 0;
+  virtual bool clips_context_destroyed(const std::string &env_name) = 0;
   std::string getFeatureName() const;
 
 protected:

@@ -115,7 +115,7 @@ void InterfaceNode<InterfaceServiceType, InterfaceMessageType>::
         const std::shared_ptr<typename InterfaceServiceType::Request> request,
         const std::shared_ptr<typename InterfaceServiceType::Response>
             response) {
-
+  (void)request_header;
   RCLCPP_INFO(get_logger(), "Write in interface callback");
   auto interface_pointer =
       std::make_shared<InterfaceMessageType>(request->interface);
@@ -136,6 +136,8 @@ void InterfaceNode<InterfaceServiceType, InterfaceMessageType>::
         const std::shared_ptr<typename InterfaceServiceType::Request> request,
         const std::shared_ptr<typename InterfaceServiceType::Response>
             response) {
+  (void)request_header;
+  (void)request;
   RCLCPP_INFO(get_logger(), "Reading from interface");
   response->interface = *interface_->interface_data_ptr_;
   response->success = true;

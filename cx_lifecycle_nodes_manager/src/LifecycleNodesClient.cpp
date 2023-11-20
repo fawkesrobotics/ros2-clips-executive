@@ -117,10 +117,11 @@ uint8_t LifecycleNodesClient::get_node_state(seconds timeout) {
     return lifecycle_msgs::msg::State::PRIMARY_STATE_UNKNOWN;
   }
 
+  auto res = future_res.get();
+
   RCLCPP_INFO(node_->get_logger(), "Node %s current state: %s.",
-              managed_node_name_.c_str(),
-              future_res.get()->current_state.label.c_str());
-  return future_res.get()->current_state.id;
+              managed_node_name_.c_str(), res->current_state.label.c_str());
+  return res->current_state.id;
 }
 
 bool LifecycleNodesClient::change_node_state(std::uint8_t transition,

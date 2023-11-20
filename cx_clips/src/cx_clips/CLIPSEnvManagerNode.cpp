@@ -21,6 +21,8 @@
 #include <chrono>
 #include <map>
 #include <memory>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <utility>
 
@@ -58,27 +60,39 @@ public:
       if (strcmp(logical_name, "debug") == 0 ||
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
-        // LATER DEBUG
-        RCLCPP_DEBUG(this->logger_, component_ ? "CLIPS", "%s",
-                     buffer_.c_str() : component_);
+        RCLCPP_DEBUG(this->logger_,
+                     (component_ ? ((std::string)component_ + " " + buffer_)
+                                 : ("CLIPS " + buffer_).c_str())
+                         .c_str());
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
                  strcmp(logical_name, WWARNING) == 0) {
-        RCLCPP_WARN(this->logger_, component_ ? "CLIPS", "%s",
-                    buffer_.c_str() : component_);
+        RCLCPP_WARN(this->logger_,
+                    (component_ ? ((std::string)component_ + " " + buffer_)
+                                : ("CLIPS " + buffer_).c_str())
+                        .c_str());
       } else if (strcmp(logical_name, "error") == 0 ||
                  strcmp(logical_name, "logerror") == 0 ||
                  strcmp(logical_name, WERROR) == 0) {
-        RCLCPP_ERROR(this->logger_, component_ ? "CLIPS", "%s",
-                     buffer_.c_str() : component_);
+        RCLCPP_ERROR(this->logger_,
+                     (component_ ? ((std::string)component_ + " " + buffer_)
+                                 : ("CLIPS " + buffer_).c_str())
+                         .c_str());
       } else if (strcmp(logical_name, WDIALOG) == 0) {
         // ignored
       } else {
-        RCLCPP_INFO(this->logger_, component_ ? "CLIPS", "%s",
-                    buffer_.c_str() : component_);
+        RCLCPP_INFO(this->logger_,
+                    (component_ ? ((std::string)component_ + " " + buffer_)
+                                : ("CLIPS " + buffer_).c_str())
+                        .c_str());
       }
-
+      // log any output to a dedicated clips log file
+      clips_logger_->info((component_
+                               ? ((std::string)component_ + " " + buffer_)
+                               : ("CLIPS " + buffer_).c_str())
+                              .c_str());
       buffer_.clear();
+
     } else {
       buffer_ += str;
     }
@@ -87,6 +101,14 @@ public:
 private:
   char *component_ = strdup("clips_default_log_component");
   const rclcpp::Logger logger_ = rclcpp::get_logger(std::string(component_));
+  std::shared_ptr<spdlog::logger> clips_logger_ = spdlog::basic_logger_st(
+      (component_ ? (std::string)component_ : "CLIPS"),
+      (rclcpp::get_logging_directory().string() + "/" +
+       std::to_string(std::chrono::duration_cast<std::chrono::seconds>(
+                          std::chrono::system_clock::now().time_since_epoch())
+                          .count()) +
+       "_" + (component_ ? (std::string)component_ : "clips") + ".log"));
+
   std::string buffer_;
 };
 
@@ -101,7 +123,9 @@ public:
   CLIPSLogger logger;
 };
 
-static int log_router_query(void *env, char *logical_name) {
+static int log_router_query(void *env, const char *logical_name) {
+  (void)env; // static cast to avoid warning as we provide same routing to all
+             // envs
   if (strcmp(logical_name, "l") == 0)
     return TRUE;
   if (strcmp(logical_name, "info") == 0)
@@ -135,14 +159,20 @@ static int log_router_query(void *env, char *logical_name) {
   return FALSE;
 }
 
-static int log_router_print(void *env, char *logical_name, char *str) {
+static int log_router_print(void *env, const char *logical_name,
+                            const char *str) {
   void *rc = GetEnvironmentRouterContext(env);
   CLIPSLogger *logger = static_cast<CLIPSLogger *>(rc);
   logger->log(logical_name, str);
   return TRUE;
 }
 
-static int log_router_exit(void *env, int exit_code) { return TRUE; }
+static int log_router_exit(void *env, int exit_code) {
+  // no particular handling of a closed router necessary
+  (void)env;
+  (void)exit_code;
+  return TRUE;
+}
 
 using namespace std::placeholders;
 
@@ -215,7 +245,8 @@ CLIPSEnvManagerNode::on_configure(const rclcpp_lifecycle::State &) {
 
 CallbackReturn
 CLIPSEnvManagerNode::on_activate(const rclcpp_lifecycle::State &state) {
-  RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
+  // no action on activate for now
+  (void)state;
   RCLCPP_INFO(get_logger(), "Activated [%s]...", get_name());
   return CallbackReturn::SUCCESS;
 }
@@ -224,6 +255,7 @@ void CLIPSEnvManagerNode::create_env_callback(
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<cx_msgs::srv::CreateClipsEnv::Request> request,
     const std::shared_ptr<cx_msgs::srv::CreateClipsEnv::Response> response) {
+  (void)request_header; // the request header is not used in this callback
 
   if (envs_.find(request->env_name) != envs_.end()) {
     RCLCPP_ERROR(get_logger(),
@@ -232,7 +264,6 @@ void CLIPSEnvManagerNode::create_env_callback(
                  request->env_name.c_str());
     response->success = FALSE;
     response->error = "Enviroment " + request->env_name + " already exists!";
-
   } else {
     LockSharedPtr<CLIPS::Environment> clips =
         std::move(new_env(request->log_name));
@@ -243,7 +274,7 @@ void CLIPSEnvManagerNode::create_env_callback(
       envs_[env_name].env = clips;
 
       // add generic functions
-      add_functions(env_name, clips);
+      add_functions(env_name);
 
       // assert all available features
       assert_features(clips, true);
@@ -268,6 +299,7 @@ void CLIPSEnvManagerNode::destroy_env_callback(
     const std::shared_ptr<cx_msgs::srv::DestroyClipsEnv::Request> request,
     const std::shared_ptr<cx_msgs::srv::DestroyClipsEnv::Response> response) {
 
+  (void)request_header; // the request header is not used in this callback
   const std::string &env_name = request->env_name;
 
   RCLCPP_WARN(get_logger(), "Deleting '%s' --- Clips Environment...",
@@ -312,6 +344,7 @@ void CLIPSEnvManagerNode::add_clips_features_callback(
     const std::shared_ptr<cx_msgs::srv::AddClipsFeatures::Request> request,
     const std::shared_ptr<cx_msgs::srv::AddClipsFeatures::Response> response) {
 
+  (void)request_header; // the request header is not used in this callback
   bool success = true;
 
   for (const auto &feat : request->features) {
@@ -329,11 +362,10 @@ void CLIPSEnvManagerNode::add_clips_features_callback(
     RCLCPP_INFO(get_logger(), "Adding feature '%s'", feat.c_str());
 
     features_set.insert(feat);
-    
+
     // assert feature availability to all registered CLIPS Envs
     for (auto &env : envs_) {
-      std::lock_guard<std::recursive_mutex> guard(
-          *(env.second.env.get_mutex_instance()));
+      std::lock_guard<std::mutex> guard(*(env.second.env.get_mutex_instance()));
       assert_features(env.second.env, false);
       env.second.env->assert_fact_f("(ff-feature %s)", feat.c_str());
     }
@@ -348,6 +380,7 @@ void CLIPSEnvManagerNode::assert_can_remove_features_callback(
     const std::shared_ptr<cx_msgs::srv::ClipsRemoveFeatures::Response>
         response) {
 
+  (void)request_header; // the request header is not used in this callback
   for (const auto &feat : request->features) {
 
     for (const auto &env : envs_) {
@@ -376,6 +409,7 @@ void CLIPSEnvManagerNode::remove_features_callback(
     const std::shared_ptr<cx_msgs::srv::ClipsRemoveFeatures::Response>
         response) {
 
+  (void)request_header; // the request header is not used in this callback
   for (const auto &feat : request->features) {
     features_set.erase(feat);
   }
@@ -505,15 +539,13 @@ void CLIPSEnvManagerNode::guarded_load(const std::string &env_name,
   }
 }
 
-void CLIPSEnvManagerNode::add_functions(
-    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
-
-  clips->add_function("now", sigc::slot<CLIPS::Values>(sigc::mem_fun(
-                                 *this, &CLIPSEnvManagerNode::clips_now)));
-  clips->add_function("now-systime",
-                      sigc::slot<CLIPS::Values>(sigc::mem_fun(
-                          *this, &CLIPSEnvManagerNode::clips_now_systime)));
-  // TODO IMPLEMENT MORE!
+void CLIPSEnvManagerNode::add_functions(const std::string &env_name) {
+  getEnvironmentByName(env_name)->add_function(
+      "now",
+      sigc::slot<float>(sigc::mem_fun(*this, &CLIPSEnvManagerNode::clips_now)));
+  getEnvironmentByName(env_name)->add_function(
+      "now-systime", sigc::slot<CLIPS::Values>(sigc::mem_fun(
+                         *this, &CLIPSEnvManagerNode::clips_now_systime)));
 }
 
 void CLIPSEnvManagerNode::call_feature_context_destroy(
@@ -572,11 +604,7 @@ void CLIPSEnvManagerNode::call_feature_context_destroy(
   // }
 }
 
-CLIPS::Values CLIPSEnvManagerNode::clips_now() {
-  CLIPS::Values rv;
-  rv.push_back(get_clock()->now().seconds());
-  return rv;
-}
+float CLIPSEnvManagerNode::clips_now() { return get_clock()->now().seconds(); }
 
 CLIPS::Values CLIPSEnvManagerNode::clips_now_systime() {
   CLIPS::Values rv;
