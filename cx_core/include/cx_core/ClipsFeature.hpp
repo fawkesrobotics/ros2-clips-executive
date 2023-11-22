@@ -38,6 +38,8 @@ public:
   using Ptr = std::shared_ptr<cx::ClipsFeature>;
 
   virtual void initialise(const std::string &feature_name);
+  virtual void initialise(const std::string &feature_name,
+                          std::map<std::string, rclcpp::Parameter> &parameters);
   // Provides feature functionality to CLIPS.
   virtual bool clips_context_init(const std::string &env_name,
                                   LockSharedPtr<CLIPS::Environment> &clips) = 0;
@@ -46,6 +48,7 @@ public:
 
 protected:
   std::string clips_feature_name;
+  std::map<std::string, rclcpp::Parameter> parameters;
 };
 
 } // namespace cx

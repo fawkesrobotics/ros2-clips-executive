@@ -19,4 +19,9 @@
       <description>Clips Feature providing pddl file parsing to the Clips Environment</description>
     </class>
   </library>
+  <library path="clips_protobuf_feature">
+    <class type="cx::ClipsProtobufFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing Protobuf-based communication</description>
+    </class>
+  </library>
 </class_libraries>

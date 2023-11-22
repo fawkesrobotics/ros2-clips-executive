@@ -35,6 +35,12 @@ std::string ClipsFeature::getFeatureName() const { return clips_feature_name; }
 void ClipsFeature::initialise(const std::string &feature_name) {
   (void)feature_name;
 }
+void ClipsFeature::initialise(
+    const std::string &feature_name,
+    std::map<std::string, rclcpp::Parameter> &parameter_args) {
+  parameters = parameter_args;
+  initialise(feature_name);
+}
 
 } // namespace cx
 
