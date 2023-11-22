@@ -16,7 +16,7 @@ clips_features_manager:
       feature_parameters: ["protobuf-path"]
       protobuf-path:
         # This path assumes relativeness to the workspace
-        value: "src/ros2-clips-executive/cx_bringup/launch/proto"
+        value: "src/ros2-clips-executive/cx_bringup/proto"
         type: "string"
 
 

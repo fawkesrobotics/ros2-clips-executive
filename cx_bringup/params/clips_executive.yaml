@@ -58,6 +58,7 @@ clips_executive:
           stage-1:
             - name: clips_pddl_parser
             - name: skill_execution
+            - name: clips_protobuf
           stage-3:
             - name: domain
               file: simple-agent/domain.clp
@@ -71,9 +72,28 @@ clips_executive:
               files:
                 - simple-agent/print-action.clp
                 - skills-actions.clp
+            - name: refbox-comm
+              file: simple-agent/refbox-comm-init.clp
           # Map plan actions to skill strings.
         action-mapping:
           gowait: skill{}
+
+        parameters:
+          simtest:
+            enabled: false
+            testbed: FULL  # defined in simtest.clp
+          rcll:
+            peer-address: 172.26.255.255
+            peer-recv-port: 4444
+            peer-send-port: 4445
+            cyan-recv-port: 4441
+            magenta-recv-port: 4442
+            cyan-send-port: 4446
+            magenta-send-port: 4447
+
+            team-name: Carologistics
+            crypto-key: randomkey
+            cipher: "aes-128-cbc"
 
       test:
         # The following configures CX initialization.
