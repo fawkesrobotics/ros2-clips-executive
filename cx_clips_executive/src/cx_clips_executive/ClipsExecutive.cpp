@@ -131,8 +131,7 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   try {
     YAML::Node config = YAML::LoadFile(
         std::move(cx_bringup_dir + "/params/clips_executive.yaml"));
-    iterateThroughYamlRecuresively(config["clips_executive"], "action-mapping",
-                                   "", cfg_spec, action_mapping);
+    action_mapping = get_action_mapping(config);
 
   } catch (const std::exception &e) {
     RCLCPP_INFO(get_logger(), "Error loading clips_executive config file!");
@@ -338,50 +337,80 @@ std::string ClipsExecutive::clips_map_skill(std::string action_name,
   return rv;
 }
 
-void ClipsExecutive::iterateThroughYamlRecuresively(
-    const YAML::Node &current_level_node, const std::string &node_to_search,
-    const std::string &parent_node_name, const std::string &cfg_prefix,
-    std::map<std::string, std::string> &output_map) {
-  for (const auto &item : current_level_node) {
-    switch (item.second.Type()) {
+// Search recursively from the given yaml node to a node, where the node[target_key] element exists
+YAML::Node  ClipsExecutive::get_node_from_key(const YAML::Node& node, const std::string& target_key) {
+    if (!node) {
+        return YAML::Node(YAML::NodeType::Undefined);
+    }
 
-    case YAML::NodeType::Undefined: {
-      RCLCPP_ERROR(get_logger(), "Undefined YAML KEY");
-      break;
-    }
-    case YAML::NodeType::Null: {
-      RCLCPP_ERROR(get_logger(), "NULL YAML KEY");
-      break;
-    }
-    case YAML::NodeType::Scalar: {
-      // skip
-      break;
-    }
-    case YAML::NodeType::Sequence: {
-      // skip
-      break;
-    }
-    // If it is a MapNode
-    case YAML::NodeType::Map: {
-      if (item.first.as<std::string>() == node_to_search &&
-          parent_node_name == cfg_prefix) {
+    if (node.Type() == YAML::NodeType::Map) {
+        for (const auto& entry : node) {
+            const std::string& key = entry.first.as<std::string>();
 
-        for (const auto &map_values : current_level_node[item.first]) {
-          output_map.insert({map_values.first.as<std::string>(),
-                             map_values.second.as<std::string>()});
-          RCLCPP_INFO(get_logger(), "Key %s <------> Value: %s",
-                      map_values.first.as<std::string>().c_str(),
-                      output_map[map_values.first.as<std::string>()].c_str());
+            if (key == target_key) {
+                return node;
+            }
+
+            // Recursively call for nested nodes
+            auto result = get_node_from_key(entry.second, target_key);
+            if (result.Type() != YAML::NodeType::Undefined) {
+                return result;
+            }
         }
-      } else {
-        iterateThroughYamlRecuresively(
-            current_level_node[item.first], node_to_search,
-            item.first.as<std::string>(), cfg_prefix, output_map);
-      }
-      break;
+    } else if (node.Type() == YAML::NodeType::Sequence) {
+        // Iterate through sequence elements
+        for (std::size_t i = 0; i < node.size(); ++i) {
+            // Recursively call for each element in the sequence
+            auto result = get_node_from_key(node[i], target_key);
+            if (result.Type() != YAML::NodeType::Undefined) {
+                return result;
+            }
+        }
     }
-    }
-  }
+    return YAML::Node(YAML::NodeType::Undefined);
 }
+
+
+std::map<std::string, std::string> ClipsExecutive::get_action_mapping(const YAML::Node& starting_node) {
+    std::map<std::string, std::string> output_map;
+
+    auto spec_node = get_node_from_key(starting_node["clips_executive"], "spec");
+
+    if (!spec_node.IsNull()) {
+        std::string spec_val;
+
+        spec_val = spec_node["spec"].as<std::string>();
+
+        auto specs_node = spec_node["specs"][spec_val];
+
+        auto mapping_node = get_node_from_key(specs_node, "action-mapping");
+
+        for (const auto& entry : mapping_node["action-mapping"]) {
+            std::string name = entry.first.as<std::string>();
+            std::string mapped_to;
+
+            try {
+                mapped_to = entry.second["mapped-to"].as<std::string>();
+            } catch (const YAML::Exception& e) {
+                RCLCPP_ERROR(get_logger(), "Error getting 'mapped-to' value of %s: %s",name.c_str(), e.what());
+                continue;
+            }
+
+            output_map[name] = mapped_to;
+        }
+
+        // Now the 'output_map' map contains the names and mapped-to values
+        for (const auto& pair : output_map) {
+            RCLCPP_INFO(get_logger(), "Action Mapping: Key %s <------> Value: %s",
+                        pair.first.c_str(), pair.second.c_str());
+        }
+    } else {
+        RCLCPP_ERROR(get_logger(), "Error getting 'spec' value for action mapping");
+    }
+
+    return output_map;
+}
+
+
 
 } // namespace cx

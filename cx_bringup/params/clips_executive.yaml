@@ -28,8 +28,8 @@ clips_executive:
     # This is particularly useful to kick an SkillGUI which is holding
     # the lock just due to an oversight.
     steal-skiller-control: true
-    
-    # Sets the frequency, in which the clips agenda is being refresh 
+
+    # Sets the frequency, in which the clips agenda is being refresh
     # inside the CX (in HZ)
     refresh-rate: 1
 
@@ -81,7 +81,9 @@ clips_executive:
                 - simple-agent/ros-comm-init.clp
           # Map plan actions to skill strings.
         action-mapping:
-          gowait: skill{}
+          gowait:
+            mapped-to: say{text="Good bye", wait=true}
+            executor: fawkes_skiller
 
         parameters:
           simtest:
