@@ -19,13 +19,14 @@
 	; It is guaranteed to be unique, also for the case when executin the
 	; exact same skill a second time.
 	(slot id (type SYMBOL))
-  (slot name (type SYMBOL))
-  (slot parameters (type SYMBOL))
-  (slot status (type SYMBOL) (allowed-values S_IDLE S_RUNNING S_FINAL S_FAILED))
-  (slot error-msg (type STRING))
-  (slot skill-string (type STRING))
+	(slot name (type SYMBOL))
+	(slot parameters (type SYMBOL))
+	(slot status (type SYMBOL) (allowed-values S_IDLE S_RUNNING S_FINAL S_FAILED))
+	(slot error-msg (type STRING))
+	(slot skill-string (type STRING))
 	(slot start-time (type FLOAT))
-	(slot agent-id (type STRING) (default ""))
+	(slot robot (type STRING) (default ""))
+	(slot executor (type STRING) (default ""))
 )
 
 (deftemplate skill-feedback
@@ -33,7 +34,8 @@
 	(slot skill-id (type SYMBOL))
   (slot status (type SYMBOL) (allowed-values S_IDLE S_RUNNING S_FINAL S_FAILED))
   (slot error (type STRING))
-	(slot agent-id (type STRING) (default ""))
+  (slot robot (type STRING) (default ""))
+  (slot executor (type STRING) (default ""))
 )
 
 ; (deftemplate skiller-control
@@ -45,12 +47,11 @@
 
 (assert (ff-feature-loaded skill_execution))
 
-(deffunction skill-call (?action-name ?param-names ?param-values $?opt-agent-id)
-	(bind ?agent-id "")
-	; (if (> (length$ ?opt-agent-id) 0) then (bind ?agent-id (nth$ 1 ?opt-agent-id)))
-	; (if (> (length$ ?opt-agent-id) 1)
+(deffunction skill-call (?action-name ?param-names ?param-values ?robot ?executor)
+	; (if (> (length$ ?opt-robot) 0) then (bind ?robot (nth$ 1 ?opt-robot)))
+	; (if (> (length$ ?opt-robot) 1)
 	;  then
-	; 	(printout warn "skill-call: ignore unexpected params " (rest$ ?opt-agent-id) crlf)
+	; 	(printout warn "skill-call: ignore unexpected params " (rest$ ?opt-robot) crlf)
 	; )
 	; rely on a function provided from the outside providing
 	; a more sophisticated mapping.
@@ -64,12 +65,12 @@
 	; 	(assert (skill (id ?id) (action-name (sym-cat ?action-name)) (status S_FAILED) (start-time (now))
 	; 	        (error-msg (str-cat "Failed to convert action '" ?action-name "' to skill string"))))
 	; else
-	(bind ?action_params "") 
+	(bind ?action_params "")
 	(foreach ?param-value ?param-values
 		(printout t "Param-value:" ?param-value crlf)
 
 		(if (eq ?action_params "")
-			then 
+			then
 			(bind ?action_params (str-cat ?action_params ?param-value))
 		else
 		  (bind ?action_params (str-cat ?action_params " " ?param-value)))
@@ -78,18 +79,18 @@
 	(printout logwarn "Calling mapped skill '" ?sks "'" crlf)
 	(printout logwarn "Calling skill '" ?action-name " " ?action_params"'" crlf)
 
-	(call-skill-execution ?id ?action-name ?action_params ?sks ?agent-id)
-	(assert (skill (id ?id) (name (sym-cat ?action-name)) (parameters ?action_params) 
-						(skill-string ?sks) (agent-id ?agent-id) (status S_IDLE)
+	(call-skill-execution ?id ?action-name ?action_params ?sks ?robot ?executor)
+	(assert (skill (id ?id) (name (sym-cat ?action-name)) (parameters ?action_params)
+						(skill-string ?sks) (robot ?robot) (executor ?executor) (status S_IDLE)
 						(start-time (now))))
 	(return ?id)
 )
 
 (defrule skill-status-update
-  ?sf <- (skill-feedback (skill-id ?skill-id) (agent-id ?agent-id) (status ?new-status)
+  ?sf <- (skill-feedback (skill-id ?skill-id) (robot ?robot) (status ?new-status)
                            (error ?error-msg))
   ?s <- (skill (name ?n) (id ?skill-id) (status ?old-status&~?new-status&~S_FINAL&~S_FAILED)
-                (agent-id ?agent-id))
+                (robot ?robot))
   =>
   (printout t "Skill " ?n " is " ?new-status", was: " ?old-status crlf)
   (retract ?sf)
@@ -97,8 +98,8 @@
 )
 
 (defrule skill-status-update-nochange
-	?sf <- (skill-feedback (skill-id ?skill-id) (agent-id ?agent-id) (status ?new-status))
-  (skill (name ?n) (id ?skill-id) (status ?new-status) (agent-id ?agent-id))
+	?sf <- (skill-feedback (skill-id ?skill-id) (robot ?robot) (status ?new-status))
+  (skill (name ?n) (id ?skill-id) (status ?new-status) (robot ?robot))
   =>
   (retract ?sf)
 )
