@@ -13,9 +13,9 @@ using namespace std::chrono_literals;
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
   auto node =
-      std::make_shared<cx::MoveSkillNav2>("nav2_move_node", "move", 500ms);
+      std::make_shared<cx::MoveSkillNav2>("nav2_move_node", 500ms);
 
-  node->set_parameter(rclcpp::Parameter("agent_id", ""));
+  node->set_parameter(rclcpp::Parameter("robot_id", ""));
   node->trigger_transition(
       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
