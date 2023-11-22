@@ -23,7 +23,6 @@
 #include <string>
 #include <utility>
 
-#include "cx_features/BlackboardFeature.hpp"
 #include "cx_features/ClipsFeaturesManager.hpp"
 #include "cx_features/MockFeature.hpp"
 #include "cx_features/RedefineWarningFeature.hpp"
@@ -317,12 +316,7 @@ void ClipsFeaturesManager::addGeneralFeatures() {
   configFeature->initialise("config_feature");
   RCLCPP_INFO(get_logger(), "Created feature config_feature");
 
-  // auto blackboardFeature = std::make_shared<cx::BlackboardFeature>();
-  // blackboardFeature->initialise("blackboard_feature");
-  // RCLCPP_INFO(get_logger(), "Created feature blackboard_feature");
-
   features_.insert({"redefine_warning_feature", redefineWarningFeature});
   features_.insert({"config_feature", configFeature});
-  // features_.insert({"blackboard_feature", blackboardFeature});
 }
 } // namespace cx
