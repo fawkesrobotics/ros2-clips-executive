@@ -59,6 +59,9 @@ clips_executive:
             - name: clips_pddl_parser
             - name: skill_execution
             - name: clips_protobuf
+            - name: ros_topic_publisher
+            - name: ros_topic_subscriber
+            - name: ros_service_requester
           stage-3:
             - name: domain
               file: simple-agent/domain.clp
@@ -73,7 +76,9 @@ clips_executive:
                 - simple-agent/print-action.clp
                 - skills-actions.clp
             - name: refbox-comm
-              file: simple-agent/refbox-comm-init.clp
+              files:
+                - simple-agent/refbox-comm-init.clp
+                - simple-agent/ros-comm-init.clp
           # Map plan actions to skill strings.
         action-mapping:
           gowait: skill{}

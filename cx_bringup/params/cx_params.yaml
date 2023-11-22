@@ -1,7 +1,7 @@
 
 clips_features_manager:
   ros__parameters:
-    clips_features: ["clips_pddl_parser", "skill_execution", "clips_protobuf"]
+    clips_features: ["clips_pddl_parser", "skill_execution", "clips_protobuf",  "ros_topic_publisher", "ros_topic_subscriber", "ros_service_requester"]
 
     mock_feature:
       plugin: "cx::MockFeature"
@@ -11,6 +11,12 @@ clips_features_manager:
       plugin: "cx::ClipsPddlParserFeature"
     skill_execution:
       plugin: "cx::SkillExecutionFeature"
+    ros_topic_publisher:
+      plugin: "cx::RosTopicPublisherFeature"
+    ros_topic_subscriber:
+      plugin: "cx::RosTopicSubscriberFeature"
+    ros_service_requester:
+      plugin: "cx::RosServiceRequesterFeature"
     clips_protobuf:
       plugin: "cx::ClipsProtobufFeature"
       feature_parameters: ["protobuf-path"]

@@ -53,7 +53,6 @@ set(dependencies
 set(CX_FEATURES_SOURCES
   src/cx_features/redefine_warning_feature/RedefineWarningFeature.cpp
   src/cx_features/config_feature/ConfigFeature.cpp
-  src/cx_features/blackboard_feature/BlackboardFeature.cpp
   src/cx_features/ClipsFeaturesManager.cpp
 )
 
@@ -86,6 +85,22 @@ add_library(skill_execution_feature SHARED src/cx_features/skill_execution_featu
 ament_target_dependencies(skill_execution_feature ${dependencies})
 target_link_libraries(skill_execution_feature PkgConfig::CLIPSMM)
 
+add_library(ros_service_requester_feature SHARED src/cx_features/ros_communication_feature/RosServiceRequesterFeature.cpp)
+ament_target_dependencies(ros_service_requester_feature ${dependencies})
+target_link_libraries(ros_service_requester_feature PkgConfig::CLIPSMM)
+
+add_library(ros_topic_publisher_feature SHARED src/cx_features/ros_communication_feature/RosTopicPublisherFeature.cpp)
+ament_target_dependencies(ros_topic_publisher_feature ${dependencies})
+target_link_libraries(ros_topic_publisher_feature PkgConfig::CLIPSMM)
+
+add_library(ros_topic_subscriber_feature SHARED src/cx_features/ros_communication_feature/RosTopicSubscriberFeature.cpp)
+ament_target_dependencies(ros_topic_subscriber_feature ${dependencies})
+target_link_libraries(ros_topic_subscriber_feature PkgConfig::CLIPSMM)
+
+add_library(blackboard_feature SHARED src/cx_features/blackboard_feature/BlackboardFeature.cpp)
+ament_target_dependencies(blackboard_feature ${dependencies})
+target_link_libraries(blackboard_feature PkgConfig::CLIPSMM)
+
 # END OF PLUGINS REGISTRATION
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
@@ -115,6 +130,10 @@ install(TARGETS
   mock_feature
   plansys2_feature
   skill_execution_feature
+  blackboard_feature
+  ros_service_requester_feature
+  ros_topic_subscriber_feature
+  ros_topic_publisher_feature
   clips_pddl_parser_feature
   clips_protobuf_feature
   ${PROJECT_NAME}
