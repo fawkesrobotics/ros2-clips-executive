@@ -47,6 +47,7 @@ ClipsExecutive::ClipsExecutive()
   cfg_assert_time_each_cycle_ = true;
   declare_parameter<std::vector<std::string>>("clips-dirs", clips_dirs);
   declare_parameter<std::string>("spec", "");
+  declare_parameter<std::string>("agent_dir", ament_index_cpp::get_package_share_directory("cx_bringup"));
   declare_parameter<bool>("assert-time-each-loop", cfg_assert_time_each_cycle_);
   declare_parameter<int>("refresh-rate", refresh_rate_);
 }
@@ -73,8 +74,7 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   std::string cx_bringup_dir;
   std::string cx_features_dir;
   try {
-    cx_bringup_dir =
-        std::move(ament_index_cpp::get_package_share_directory("cx_bringup"));
+    get_parameter("agent_dir",cx_bringup_dir);
     clips_executive_share_dir_ = std::move(
         ament_index_cpp::get_package_share_directory("cx_clips_executive"));
     cx_features_dir =
