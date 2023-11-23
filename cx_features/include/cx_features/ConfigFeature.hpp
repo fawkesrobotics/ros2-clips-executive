@@ -69,7 +69,7 @@ namespace cx {
 
 class ConfigFeature : public ClipsFeature {
 public:
-  ConfigFeature();
+  ConfigFeature(std::string agent_dir);
   ~ConfigFeature();
 
   void initialise(const std::string &feature_name) override;
@@ -97,6 +97,8 @@ private:
 
 private:
   std::map<std::string, LockSharedPtr<CLIPS::Environment>> envs_;
+
+  std::string agent_dir_;
 };
 
 } // namespace cx

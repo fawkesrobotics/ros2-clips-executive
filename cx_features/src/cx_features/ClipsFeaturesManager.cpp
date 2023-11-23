@@ -63,6 +63,7 @@ CallbackReturn
 ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
   (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
+  declare_parameter<std::string>("agent_dir", ament_index_cpp::get_package_share_directory("cx_bringup"));
 
   auto node = shared_from_this();
 
@@ -311,8 +312,9 @@ void ClipsFeaturesManager::addGeneralFeatures() {
   auto redefineWarningFeature = std::make_shared<cx::RedefineWarningFeature>();
   redefineWarningFeature->initialise("redefine_warning_feature");
   RCLCPP_INFO(get_logger(), "Created feature redefine_warning_feature");
-
-  auto configFeature = std::make_shared<cx::ConfigFeature>();
+  std::string agent_dir;
+  get_parameter("agent_dir", agent_dir);
+  auto configFeature = std::make_shared<cx::ConfigFeature>(agent_dir);
   configFeature->initialise("config_feature");
   RCLCPP_INFO(get_logger(), "Created feature config_feature");
 

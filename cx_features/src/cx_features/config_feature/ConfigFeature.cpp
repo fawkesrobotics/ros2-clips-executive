@@ -28,7 +28,7 @@
 #include "cx_features/ConfigFeature.hpp"
 
 namespace cx {
-ConfigFeature::ConfigFeature() {}
+ConfigFeature::ConfigFeature(std::string agent_dir) : agent_dir_(agent_dir) {}
 
 ConfigFeature::~ConfigFeature() {}
 
@@ -81,8 +81,7 @@ void ConfigFeature::clips_config_load(const std::string &env_name,
 
   std::string config_dir;
   try {
-    config_dir =
-        std::move(ament_index_cpp::get_package_share_directory("cx_bringup"));
+    config_dir = agent_dir_;
     RCLCPP_WARN(rclcpp::get_logger(name), "CFG is: %s", config_dir.c_str());
 
   } catch (const ament_index_cpp::PackageNotFoundError &e) {
