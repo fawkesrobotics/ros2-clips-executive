@@ -71,10 +71,11 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   clips_agenda_refresh_pub_ = create_publisher<std_msgs::msg::Empty>(
       "clips_executive/refresh_agenda", rclcpp::QoS(100).reliable());
 
-  std::string cx_bringup_dir;
+  std::string agent_dir;
   std::string cx_features_dir;
   try {
-    get_parameter("agent_dir",cx_bringup_dir);
+    get_parameter("agent_dir",agent_dir);
+    RCLCPP_INFO(get_logger(), "Load agent at [ %s ]", agent_dir.c_str());
     clips_executive_share_dir_ = std::move(
         ament_index_cpp::get_package_share_directory("cx_clips_executive"));
     cx_features_dir =
@@ -130,7 +131,7 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
 
   try {
     YAML::Node config = YAML::LoadFile(
-        std::move(cx_bringup_dir + "/params/clips_executive.yaml"));
+        std::move(agent_dir + "/params/clips_executive.yaml"));
     action_mapping = get_action_mapping(config);
 
   } catch (const std::exception &e) {
@@ -182,13 +183,15 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
 
   std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
 
-  std::string cx_bringup_dir;
-  std::string cx_features_dir;
+  std::string agent_dir;
+  get_parameter("agent_dir",agent_dir);
+  std::string cx_clips_executive_dir;
   try {
-    cx_bringup_dir =
-        std::move(ament_index_cpp::get_package_share_directory("cx_bringup"));
-    clips_->evaluate(std::string("(path-add-subst \"@CONFDIR@\" \"") +
-                     cx_bringup_dir + "\")");
+    cx_clips_executive_dir = ament_index_cpp::get_package_share_directory("cx_clips_executive");
+    clips_->evaluate(std::string("(path-add-subst \"@AGENT_DIR@\" \"") +
+                     agent_dir + "\")");
+    clips_->evaluate(std::string("(path-add-subst \"@CX_DIR@\" \"") +
+                     cx_clips_executive_dir + "\")");
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     return CallbackReturn::FAILURE;
