@@ -235,8 +235,8 @@ CLIPSEnvManagerNode::on_configure(const rclcpp_lifecycle::State &) {
                 _3));
 
   try {
-    clips_dir_ = std::move(
-        ament_index_cpp::get_package_share_directory("cx_clips") + "/clips/");
+    clips_dir_ =
+        ament_index_cpp::get_package_share_directory("cx_clips") + "/clips/";
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     return CallbackReturn::FAILURE;
@@ -275,7 +275,7 @@ void CLIPSEnvManagerNode::create_env_callback(
     response->error = "Enviroment " + request->env_name + " already exists!";
   } else {
     LockSharedPtr<CLIPS::Environment> clips =
-        std::move(new_env(request->log_name));
+        new_env(request->log_name);
 
     const std::string &env_name = request->env_name;
 
