@@ -46,7 +46,7 @@ ClipsFeaturesManager::ClipsFeaturesManager()
       pg_loader_("cx_core", "cx::ClipsFeature"), default_ids_{},
       default_types_{} {
 
-  declare_parameter("clips_features", default_ids_);
+  declare_parameter("clips_features_list", default_ids_);
 }
 
 ClipsFeaturesManager::~ClipsFeaturesManager() {}
@@ -77,7 +77,11 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
   addGeneralFeatures();
 
   // Load all registered features in the cx_params.yml file
-  get_parameter("clips_features", features_ids_);
+  get_parameter("clips_features_list", features_ids_);
+  RCLCPP_INFO(get_logger(), "Detect features:");
+  for (const auto &feat : features_ids_) {
+  RCLCPP_INFO(get_logger(), "Detected [ %s ]", feat.c_str());
+  }
 
   if (!features_ids_.empty()) {
     features_types_.resize(features_ids_.size());
@@ -89,60 +93,60 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
         /////////////////////////////
         // declare the parameters define in the list for each feature
         std::map<std::string, rclcpp::Parameter> feature_param_map{};
-        declare_parameter(feat_name + ".feature_parameters",
+        declare_parameter("clips_features." + feat_name + ".feature_parameters",
                           std::vector<std::string>());
         std::vector<std::string> feature_parameters =
-            get_parameter(feat_name + ".feature_parameters").as_string_array();
+            get_parameter("clips_features." + feat_name + ".feature_parameters").as_string_array();
 
         for (const std::string &feat_param : feature_parameters) {
           // declare the parameter
-          declare_parameter(feat_name + "." + feat_param + ".type", "");
+          declare_parameter("clips_features." + feat_name + "." + feat_param + ".type", "");
           std::string param_type =
-              get_parameter(feat_name + "." + feat_param + ".type").as_string();
+              get_parameter("clips_features." + feat_name + "." + feat_param + ".type").as_string();
 
           if (param_type == "string") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_STRING);
           }
           if (param_type == "integer") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_INTEGER);
           }
           if (param_type == "double") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_DOUBLE);
           }
           if (param_type == "bool") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_BOOL);
           }
           if (param_type == "byte-array") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_BOOL_ARRAY);
           }
           if (param_type == "string-array") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_STRING_ARRAY);
           }
           if (param_type == "integer-array") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_INTEGER_ARRAY);
           }
           if (param_type == "double-array") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_DOUBLE_ARRAY);
           }
           if (param_type == "bool-array") {
-            declare_parameter(feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
                               rclcpp::PARAMETER_BOOL_ARRAY);
           }
           feature_param_map[feat_param] =
-              get_parameter(feat_name + "." + feat_param + ".value");
+              get_parameter("clips_features." + feat_name + "." + feat_param + ".value");
         }
 
         /////////////////////////////
 
-        features_types_[i] = cx::get_plugin_type_param(node, feat_name);
+        features_types_[i] = cx::get_plugin_type_param(node, "clips_features." + feat_name);
 
         cx::ClipsFeature::Ptr feature =
             pg_loader_.createUniqueInstance(features_types_[i]);
@@ -175,7 +179,7 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
   }
   RCLCPP_INFO(get_logger(), "Sending features to Clips Environment Manager");
   // Send all available features to the env manager!
-  env_manager_client_->addFeatures(std::move(feature_names_vector_));
+  env_manager_client_->addFeatures(feature_names_vector_);
 
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
   return CallbackReturn::SUCCESS;
