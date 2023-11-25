@@ -81,7 +81,6 @@
 	(do-for-all-facts ((?c confval)) (str-prefix (str-cat "/clips_executive/init/")
 																							 ?c:path)
 		(bind ?path-elements (str-split ?c:path "/"))
-		(printout t ?path-elements crlf)
 		(bind ?idx (integer (eval (nth$ 3 ?path-elements))))
 		(if (not (member$ ?idx ?rv)) then	(bind ?rv (append$ ?rv ?idx)))
 	)
