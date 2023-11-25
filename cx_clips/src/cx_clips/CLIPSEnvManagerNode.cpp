@@ -56,7 +56,7 @@ public:
   }
 
   void log(const char *logical_name, const char *str) {
-    if (strcmp(str, "\n") == 0) {
+    if (strcmp(str, "\n") == 0 || strcmp(str, ".\n") == 0) {
       if (strcmp(logical_name, "debug") == 0 ||
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
