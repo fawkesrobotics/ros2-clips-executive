@@ -188,9 +188,6 @@ bool CLIPSEnvManagerClient::destroyClipsEnvironment(
 //! Works Async
 bool CLIPSEnvManagerClient::addFeatures(
     const std::vector<std::string> &features) {
-  RCLCPP_WARN(node_->get_logger(), "%s: Adding corresponding fts!",
-              add_clips_features_client_->get_service_name());
-
   while (!add_clips_features_client_->wait_for_service(5s)) {
     if (!rclcpp::ok()) {
       RCLCPP_ERROR(node_->get_logger(),
