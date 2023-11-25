@@ -81,11 +81,8 @@ void ConfigFeature::clips_config_load(const std::string &env_name,
   }
 
   const std::string cfg_main_node = cfg_prefix.substr(1, cfg_prefix.size() - 1);
-  RCLCPP_WARN(rclcpp::get_logger(name), "main node is %s", cfg_main_node.c_str());
 
   try {
-    RCLCPP_WARN(rclcpp::get_logger(name), "File is: %s", file.c_str());
-
     YAML::Node config = YAML::LoadFile(file);
     // std::lock_guard<std::mutex>
     // guard(*(envs_[env_name].get_mutex_instance()));
