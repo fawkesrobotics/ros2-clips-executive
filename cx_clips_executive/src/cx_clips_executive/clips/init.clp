@@ -65,20 +65,12 @@
 (defrule executive-enable-debug
   (declare (salience ?*SALIENCE-INIT*))
   (executive-init)
-  (confval (path "/clips_executive/debug/enable") (type BOOL) (value TRUE))
   =>
-  (printout t "CLIPS debugging enabled, watching facts and rules" crlf)
-  ;(dribble-on "trace.txt")
-	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/debug/level") (eq ?c:type UINT))
-		(printout debug "Setting debug level to " ?c:value " (was " ?*DEBUG* ")" crlf)
-		(debug-set-level ?c:value)
-	)
-
-	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/debug/unwatch-facts")
+	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/unwatch-facts")
 																	 (eq ?c:type STRING) ?c:is-list)
 	 (cx-debug-unwatch-facts ?c:list-value)
   )
-	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/debug/unwatch-rules")
+	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/unwatch-rules")
 																	 (eq ?c:type STRING) ?c:is-list)
 	 (cx-debug-unwatch-rules ?c:list-value)
   )

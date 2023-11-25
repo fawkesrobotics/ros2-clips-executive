@@ -7,18 +7,6 @@
 ;  Licensed under GPLv2+ license, cf. LICENSE file
 ;---------------------------------------------------------------------------
 
-(defglobal
-  ?*DEBUG* = 2  ;debug levels: 0 ~ none, 1 ~ minimal, 2 ~ more, 3 ~ maximum
-)
-
-(deffunction debug-set-level (?level)
-  (bind ?*DEBUG* ?level)
-)
-
-(deffunction debug (?level)
-  (return (<= ?level ?*DEBUG*))
-)
-
 (deffunction append$ (?list $?items)
   (insert$ ?list (+ (length$ ?list) 1) ?items)
 )
