@@ -195,9 +195,6 @@ CLIPSEnvManagerNode::CLIPSEnvManagerNode()
    * clips feature manager service and waits for a result*/
   callback_group_ =
       create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
-
-  declare_parameter("clips_dirs", clips_dir_);
-  declare_parameter("retract_early", FALSE);
 }
 
 using CallbackReturn =
