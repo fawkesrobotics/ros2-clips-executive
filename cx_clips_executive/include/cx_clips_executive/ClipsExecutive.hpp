@@ -82,6 +82,9 @@ private:
   std::shared_ptr<cx::CLIPSEnvManagerClient> env_manager_client_;
   std::vector<std::string> clips_dirs{};
   std::string clips_executive_share_dir_;
+  std::string agent_dir_;
+  std::string clips_executive_config_;
+  std::string clips_features_manager_config_;
   bool cfg_assert_time_each_cycle_;
   int refresh_rate_;
   std::chrono::nanoseconds publish_rate_;

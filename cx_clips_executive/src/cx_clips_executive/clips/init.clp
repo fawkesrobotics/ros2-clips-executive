@@ -8,17 +8,12 @@
 ;---------------------------------------------------------------------------
 
 (defglobal
-  ?*CONFIG_PREFIX* = "/clips_executive"
-  ?*AGENT_PREFIX* = "/fawkes/agent"
-	?*INIT-STAGES* = (create$ STAGE-1 STAGE-2 STAGE-3)
-	?*CX-STAGE2-FILES* = (create$ "plan.clp" "goal.clp" "domain.clp"
-	                              "worldmodel.clp" "cx-identity.clp" "wm-domain-sync.clp"
-	                              "wm-config.clp" "BATCH|skills.clp")
-	?*CX-USER-INIT-OFFSET* = 10
+  ?*CX-STAGE2-FILES* = (create$ "plan.clp" "goal.clp" "domain.clp"
+                              "worldmodel.clp" "cx-identity.clp" "wm-domain-sync.clp"
+                              "wm-config.clp" "BATCH|skills.clp")
 )
 
 (deftemplate executive-init-request
-	(slot stage (type SYMBOL))
 	(slot name (type SYMBOL))
 	(slot order (type INTEGER))
 	(slot feature (type SYMBOL) (allowed-values FALSE TRUE))
@@ -39,13 +34,13 @@
   (declare (salience ?*SALIENCE-INIT*))
   (executive-init)
   =>
-  (config-load ?*CONFIG_PREFIX*)
-  ; (config-load ?*AGENT_PREFIX*)
+  (config-load ?*CX_CONFIG* "/clips_executive")
+  (config-load ?*FEATURES_CONFIG* "/clips_features_manager")
 )
 
 (deffunction cx-debug-unwatch-facts ($?templates)
 	(bind ?deftemplates (get-deftemplate-list))
-	(printout debug "Unwatching fact templates " ?templates crlf) 
+	(printout debug "Unwatching fact templates " ?templates crlf)
 	(foreach ?v ?templates
 		(bind ?v-sym (sym-cat ?v))
 		(if (member$ ?v-sym ?deftemplates)
@@ -57,7 +52,7 @@
 
 (deffunction cx-debug-unwatch-rules ($?rules)
 	(bind ?defrules (get-defrule-list))
-	(printout debug "Unwatching rules " ?rules crlf) 
+	(printout debug "Unwatching rules " ?rules crlf)
 	(foreach ?v ?rules
 		(bind ?v-sym (sym-cat ?v))
 		(if (member$ ?v-sym ?defrules)
@@ -71,11 +66,8 @@
   (declare (salience ?*SALIENCE-INIT*))
   (executive-init)
   (confval (path "/clips_executive/debug/enable") (type BOOL) (value TRUE))
-  (confval (path "/clips_executive/spec") (type STRING) (value ?spec))
   =>
   (printout t "CLIPS debugging enabled, watching facts and rules" crlf)
-  (watch facts)
-  (watch rules)
   ;(dribble-on "trace.txt")
 	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/debug/level") (eq ?c:type UINT))
 		(printout debug "Setting debug level to " ?c:value " (was " ?*DEBUG* ")" crlf)
@@ -92,22 +84,40 @@
   )
 )
 
-(deffunction cx-init-indexes (?spec ?stage)
+(deffunction cx-init-indexes ()
 	(bind ?rv (create$))
-	(do-for-all-facts ((?c confval)) (str-prefix (str-cat "/clips_executive/specs/" ?spec "/init/" ?stage "/")
+	(do-for-all-facts ((?c confval)) (str-prefix (str-cat "/clips_executive/init/")
 																							 ?c:path)
 		(bind ?path-elements (str-split ?c:path "/"))
-		(bind ?idx (integer (eval (nth$ 6 ?path-elements))))
+		(printout t ?path-elements crlf)
+		(bind ?idx (integer (eval (nth$ 3 ?path-elements))))
 		(if (not (member$ ?idx ?rv)) then	(bind ?rv (append$ ?rv ?idx)))
 	)
 	(return (sort > ?rv))
 )
 
-(deffunction cx-assert-init-requests (?spec ?stage ?feature-default)
-	(bind ?cfg-stage (str-cat (lowcase ?stage)))
-	(bind ?cfgpfx (str-cat "/clips_executive/specs/" ?spec "/init/" ?cfg-stage "/"))
-	(foreach ?i (cx-init-indexes ?spec ?cfg-stage)
-		(bind ?feature ?feature-default)
+(deffunction cx-assert-feature-requests ()
+	(bind ?cfgpfx (str-cat "/clips_features_manager/clips_features_list"))
+	(bind ?state PENDING)
+	(bind ?wait-for nil)
+	(bind ?request-num 0)
+	(if (not (do-for-fact ((?c confval)) (eq ?c:path ?cfgpfx)
+		(foreach ?name ?c:list-value
+			(assert (executive-init-request (state PENDING)
+					(order ?request-num)
+					(name (sym-cat ?name)) (feature TRUE)))
+			(bind ?request-num (+ ?request-num 1))
+		)))
+	then
+		(printout warn "No features were loaded" cflf)
+	)
+	(return ?request-num)
+)
+
+(deffunction cx-assert-init-requests (?offset)
+	(bind ?cfgpfx (str-cat "/clips_executive/init/"))
+	(foreach ?i (cx-init-indexes)
+		(bind ?feature FALSE)
 		(bind ?name "MISSING")
 		(bind ?files (create$))
 		(bind ?error-msgs (create$))
@@ -116,7 +126,7 @@
 		(if (not (any-factp ((?c confval)) (eq (str-cat ?cfgpfx ?i "/name") ?c:path)))
 		 then
 			(bind ?state ERROR)
-			(bind ?error-msgs (append$ ?error-msgs (str-cat ?stage " entry " ?i " is missing name entry")))
+			(bind ?error-msgs (append$ ?error-msgs (str-cat " entry " ?i " is missing name entry")))
 		 else
 			(do-for-fact ((?c confval)) (eq (str-cat ?cfgpfx ?i "/name") ?c:path)
 				(bind ?name ?c:value)
@@ -140,7 +150,7 @@
 			)
 		)
 		(assert (executive-init-request (state ?state) (error-msgs ?error-msgs)
-																		(stage ?stage) (order (+ ?i-index ?*CX-USER-INIT-OFFSET*))
+																		(order (+ ?i-index ?offset))
 																		(name (sym-cat ?name)) (feature ?feature)
 																		(files ?files) (wait-for ?wait-for)))
 	)
@@ -149,28 +159,24 @@
 (defrule executive-init-start
   (declare (salience ?*SALIENCE-INIT-LATE*))
 	(executive-init)
-  (confval (path "/clips_executive/spec") (type STRING) (value ?spec))
 	=>
+	(bind ?offset (cx-assert-feature-requests))
 	; (assert (executive-init-request (state PENDING)	(stage STAGE-1) (order 0)
 	; 																(name blackboard) (feature TRUE) (files "BATCH|blackboard-init.clp")))
-	(cx-assert-init-requests ?spec STAGE-1 TRUE)
-	(assert (executive-init-request (state PENDING)	(stage STAGE-2) (order 0)
-																	(name cx-files) (feature FALSE) (files ?*CX-STAGE2-FILES*)))
-	(cx-assert-init-requests ?spec STAGE-2 FALSE)
-	(cx-assert-init-requests ?spec STAGE-3 FALSE)
-	(assert (executive-init-stage STAGE-1))
+	(assert (executive-init-request (state PENDING) (order ?offset) (name cx-files) (feature FALSE) (files ?*CX-STAGE2-FILES*)))
+	(cx-assert-init-requests (+ ?offset 1))
 )
 
 (defrule executive-init-failed
   (declare (salience ?*SALIENCE-INIT*))
 	(executive-init)
-	(executive-init-request (state ERROR) (stage ?stage) (order ?i) (error-msgs $?error-msgs))
-	?sf <- (executive-init-stage ?stage)
+	(executive-init-request (state ERROR) (order ?i) (error-msgs $?error-msgs))
+	?sf <- (executive-init-stage)
 	=>
 	(printout error crlf)
 	(printout error "***********************************************************" crlf)
 	(printout error crlf)
-	(printout error ?stage " request " ?i " failed: " ?error-msgs crlf)
+	(printout error " request " ?i " failed: " ?error-msgs crlf)
 	(printout error crlf)
 	(printout error "***********************************************************" crlf)
 	(printout error crlf)
@@ -180,58 +186,53 @@
 
 (defrule executive-init-stage-request-feature
 	(executive-init)
-	(executive-init-stage ?stage)
-	?ir <- (executive-init-request (state PENDING) (stage ?stage) (order ?order)
+	?ir <- (executive-init-request (state PENDING) (order ?order)
 																 (name ?name) (feature TRUE))
-	(not (executive-init-request (state ~COMPLETED) (stage ?stage) (order ?order2&:(< ?order2 ?order))))
+	(not (executive-init-request (state ~COMPLETED) (order ?order2&:(< ?order2 ?order))))
 	(ff-feature ?name)
 	=>
-	(printout t "Init " ?stage ": requesting feature " ?name crlf)
+	(printout t "Init: requesting feature " ?name crlf)
 	(ff-feature-request (str-cat ?name))
 	(modify ?ir (state FEATURE-REQUESTED))
 )
 
 (defrule executive-init-stage-request-no-feature
 	(executive-init)
-	(executive-init-stage ?stage)
-	?ir <- (executive-init-request (state PENDING) (stage ?stage) (order ?order)
+	?ir <- (executive-init-request (state PENDING) (order ?order)
 																 (name ?name) (feature FALSE))
-	(not (executive-init-request (state ~COMPLETED) (stage ?stage) (order ?order2&:(< ?order2 ?order))))
+	(not (executive-init-request (state ~COMPLETED) (order ?order2&:(< ?order2 ?order))))
 	=>
 	(modify ?ir (state FEATURE-DONE))
 )
 
 (defrule executive-init-stage-request-feature-unavailable
 	(executive-init)
-	(executive-init-stage ?stage)
-	?ir <- (executive-init-request (state PENDING) (stage ?stage) (order ?order)
+	?ir <- (executive-init-request (state PENDING) (order ?order)
 																 (name ?name) (feature TRUE))
-	(not (executive-init-request (state ~COMPLETED) (stage ?stage) (order ?order2&:(< ?order2 ?order))))
+	(not (executive-init-request (state ~COMPLETED) (order ?order2&:(< ?order2 ?order))))
 	;(not (ff-feature ?name))
 	=>
-	(printout error "Init " ?stage ": feature " ?name " is not available" crlf)
+	(printout error "Init: feature " ?name " is not available" crlf)
 	(modify ?ir (state ERROR) (error-msgs (str-cat "Feature " ?name " is not available")))
 )
 
 (defrule executive-init-stage-request-feature-fulfilled
 	(executive-init)
-	(executive-init-stage ?stage)
-	?ir <- (executive-init-request (state FEATURE-REQUESTED) (stage ?stage) (name ?name))
+	?ir <- (executive-init-request (state FEATURE-REQUESTED) (name ?name))
 	(ff-feature-loaded ?name)
 	=>
-	(printout debug "Init " ?stage ": feature request for " ?name " has been fulfilled" crlf)
+	(printout debug "Init: feature request for " ?name " has been fulfilled" crlf)
 	(modify ?ir (state FEATURE-DONE))
 )
 
 (defrule executive-init-stage-request-files
 	(executive-init)
-	(executive-init-stage ?stage)
-	?ir <- (executive-init-request (state FEATURE-DONE) (stage ?stage) (name ?name)
+	?ir <- (executive-init-request (state FEATURE-DONE) (name ?name)
 																 (files $?files) (wait-for ?wait-for))
 	=>
 	(if (> (length$ ?files) 0)
 	 then
-		(printout t "Init " ?stage ": loading files for " ?name " " ?files crlf)
+		(printout t "Init: loading files for " ?name " " ?files crlf)
 		(foreach ?f ?files
 			(bind ?pipepos (str-index "|" ?f))
 			(bind ?file-op "LOAD")
@@ -251,27 +252,25 @@
 	then
 		(modify ?ir (state COMPLETED))
 	else
-		(printout t "Init " ?stage ": waiting for signal " ?wait-for " by " ?name crlf)
+		(printout t "Init: waiting for signal " ?wait-for " by " ?name crlf)
 		(modify ?ir (state WAIT-FOR))
 	)
 )
 
 (defrule executive-init-stage-wait-for-ok
 	(executive-init)
-	(executive-init-stage ?stage)
-	?ir <- (executive-init-request (state WAIT-FOR) (stage ?stage) (name ?name)
+	?ir <- (executive-init-request (state WAIT-FOR) (name ?name)
 																 (wait-for ?wait-for))
 	?ws <- (executive-init-signal (id ?wait-for) (ok TRUE))
 	=>
 	(retract ?ws)
-	(printout info "Init " ?stage ": signal " ?wait-for " by " ?name " received" crlf)
+	(printout info "Init: signal " ?wait-for " by " ?name " received" crlf)
 	(modify ?ir (state COMPLETED))
 )
 
 (defrule executive-init-stage-wait-for-fail
 	(executive-init)
-	(executive-init-stage ?stage)
-	?ir <- (executive-init-request (state WAIT-FOR) (stage ?stage) (name ?name)
+	?ir <- (executive-init-request (state WAIT-FOR) (name ?name)
 																 (wait-for ?wait-for))
 	?ws <- (executive-init-signal (id ?wait-for) (ok FALSE) (error-msg ?error-msg))
 	=>
@@ -281,18 +280,9 @@
 
 (defrule executive-init-stage-finished
 	(executive-init)
-	?sf <- (executive-init-stage ?stage)
-	(not (executive-init-request (state ~COMPLETED) (stage ?stage)))
+	?sf <- (executive-init-stage)
+	(not (executive-init-request (state ~COMPLETED)))
 	=>
 	(retract ?sf)
-	(bind ?stage-idx (member$ ?stage ?*INIT-STAGES*))
-	(if (< ?stage-idx (length$ ?*INIT-STAGES*))
-	 then
-		(bind ?next-stage (nth$ (+ ?stage-idx 1) ?*INIT-STAGES*))
-		(printout t "Init " ?stage ": finished, advancing to " ?next-stage crlf)
-		(assert (executive-init-stage ?next-stage))
-	 else
-	 (printout t "Initialization completed" crlf)
-	 (assert (executive-initialized))
-	)
+	(assert (executive-initialized))
 )

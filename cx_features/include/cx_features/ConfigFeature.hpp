@@ -82,6 +82,7 @@ public:
 
 private:
   void clips_config_load(const std::string &env_name,
+                         const std::string &file,
                          const std::string &cfg_prefix);
 
   std::string getScalarType(const YAML::Node &input_node);

@@ -45,11 +45,6 @@ ClipsExecutive::ClipsExecutive()
 
   RCLCPP_INFO(get_logger(), "Initialising [%s]...", get_name());
   cfg_assert_time_each_cycle_ = true;
-  declare_parameter<std::vector<std::string>>("clips-dirs", clips_dirs);
-  declare_parameter<std::string>("spec", "");
-  declare_parameter<std::string>("agent_dir", ament_index_cpp::get_package_share_directory("cx_bringup"));
-  declare_parameter<bool>("assert-time-each-loop", cfg_assert_time_each_cycle_);
-  declare_parameter<int>("refresh-rate", refresh_rate_);
 }
 
 // ClipsExecutive::~ClipsExecutive() {}
@@ -70,16 +65,18 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
       std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client_cx");
   clips_agenda_refresh_pub_ = create_publisher<std_msgs::msg::Empty>(
       "clips_executive/refresh_agenda", rclcpp::QoS(100).reliable());
-
-  std::string agent_dir;
-  std::string cx_features_dir;
+  declare_parameter<std::string>("agent_dir", ament_index_cpp::get_package_share_directory("cx_bringup"));
+  declare_parameter<bool>("assert_time_each_loop", cfg_assert_time_each_cycle_);
+  declare_parameter<int>("refresh_rate", refresh_rate_);
   try {
-    get_parameter("agent_dir",agent_dir);
-    RCLCPP_INFO(get_logger(), "Load agent at [ %s ]", agent_dir.c_str());
+  get_parameter("agent_dir",agent_dir_);
+  declare_parameter("clips_executive_config", agent_dir_ + "/params/clips_executive.yaml");
+    get_parameter("clips_executive_config", clips_executive_config_);
+    declare_parameter("clips_features_manager_config", clips_executive_config_);
+    get_parameter("clips_features_manager_config", clips_features_manager_config_);
+    RCLCPP_INFO(get_logger(), "Load agent at [ %s ] with cx config [ %s ] and features config [%s]", agent_dir_.c_str(),clips_executive_config_.c_str(), clips_features_manager_config_.c_str());
     clips_executive_share_dir_ = std::move(
         ament_index_cpp::get_package_share_directory("cx_clips_executive"));
-    cx_features_dir =
-        std::move(ament_index_cpp::get_package_share_directory("cx_features"));
   } catch (const std::exception &e) {
     RCLCPP_ERROR(
         get_logger(),
@@ -88,12 +85,6 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
     return CallbackReturn::FAILURE;
   }
 
-  if (!(get_parameter("clips-dirs", clips_dirs))) {
-    RCLCPP_ERROR(
-        get_logger(),
-        "Couldnt get parameter /clips_executive/clips-dirs, aborting...");
-    return CallbackReturn::FAILURE;
-  }
 
   for (size_t i = 0; i < clips_dirs.size(); ++i) {
     if (clips_dirs[i][clips_dirs[i].size() - 1] != '/') {
@@ -103,18 +94,10 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   }
   // Default Clips files directory
   clips_dirs.insert(clips_dirs.begin(), clips_executive_share_dir_ + "/clips/");
-  clips_dirs.insert(clips_dirs.begin(), cx_features_dir + "/clips/");
+  clips_dirs.insert(clips_dirs.begin(), agent_dir_ + "/clips/");
 
-  std::string cfg_spec;
-  get_parameter("spec", cfg_spec);
-  if (cfg_spec == "") {
-    RCLCPP_ERROR(get_logger(),
-                 "Couldnt get parameter /clips_executive/spec, aborting...");
-    return CallbackReturn::FAILURE;
-  }
-
-  get_parameter("assert-time-each-loop", cfg_assert_time_each_cycle_);
-  get_parameter("refresh-rate", refresh_rate_);
+  get_parameter("assert_time_each_loop", cfg_assert_time_each_cycle_);
+  get_parameter("refresh_rate", refresh_rate_);
   double rate = 1.0 / refresh_rate_;
   // Sets the time between each clips agenda refresh in ns
   publish_rate_ =
@@ -125,13 +108,12 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
       std::chrono::duration_cast<std::chrono::nanoseconds>(publish_rate_)
           .count());
 
-  std::string action_mapping_cfgpath = "specs." + cfg_spec + ".action-mapping";
+  std::string action_mapping_cfgpath = "action_mapping";
 
   std::map<std::string, std::string> action_mapping{};
 
   try {
-    YAML::Node config = YAML::LoadFile(
-        std::move(agent_dir + "/params/clips_executive.yaml"));
+    YAML::Node config = YAML::LoadFile(clips_executive_config_);
     action_mapping = get_action_mapping(config);
 
   } catch (const std::exception &e) {
@@ -183,15 +165,15 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
 
   std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
 
-  std::string agent_dir;
-  get_parameter("agent_dir",agent_dir);
   std::string cx_clips_executive_dir;
   try {
     cx_clips_executive_dir = ament_index_cpp::get_package_share_directory("cx_clips_executive");
     clips_->evaluate(std::string("(path-add-subst \"@AGENT_DIR@\" \"") +
-                     agent_dir + "\")");
+                     agent_dir_ + "\")");
     clips_->evaluate(std::string("(path-add-subst \"@CX_DIR@\" \"") +
                      cx_clips_executive_dir + "\")");
+    clips_->evaluate("(build \"(defglobal ?*CX_CONFIG* = " + clips_executive_config_ + ")\")");
+    clips_->evaluate("(build \"(defglobal ?*FEATURES_CONFIG* = " + clips_features_manager_config_ + ")\")");
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     return CallbackReturn::FAILURE;
@@ -377,25 +359,17 @@ YAML::Node  ClipsExecutive::get_node_from_key(const YAML::Node& node, const std:
 std::map<std::string, std::string> ClipsExecutive::get_action_mapping(const YAML::Node& starting_node) {
     std::map<std::string, std::string> output_map;
 
-    auto spec_node = get_node_from_key(starting_node["clips_executive"], "spec");
+    try {
+        auto mapping_node = get_node_from_key(starting_node, "action_mapping");
 
-    if (!spec_node.IsNull()) {
-        std::string spec_val;
-
-        spec_val = spec_node["spec"].as<std::string>();
-
-        auto specs_node = spec_node["specs"][spec_val];
-
-        auto mapping_node = get_node_from_key(specs_node, "action-mapping");
-
-        for (const auto& entry : mapping_node["action-mapping"]) {
+        for (const auto& entry : mapping_node["action_mapping"]) {
             std::string name = entry.first.as<std::string>();
             std::string mapped_to;
 
             try {
-                mapped_to = entry.second["mapped-to"].as<std::string>();
+                mapped_to = entry.second["mapped_to"].as<std::string>();
             } catch (const YAML::Exception& e) {
-                RCLCPP_ERROR(get_logger(), "Error getting 'mapped-to' value of %s: %s",name.c_str(), e.what());
+                RCLCPP_ERROR(get_logger(), "Error getting 'mapped_to' value of %s: %s",name.c_str(), e.what());
                 continue;
             }
 
@@ -407,11 +381,12 @@ std::map<std::string, std::string> ClipsExecutive::get_action_mapping(const YAML
             RCLCPP_INFO(get_logger(), "Action Mapping: Key %s <------> Value: %s",
                         pair.first.c_str(), pair.second.c_str());
         }
-    } else {
-        RCLCPP_ERROR(get_logger(), "Error getting 'spec' value for action mapping");
-    }
 
-    return output_map;
+        return output_map;
+    } catch (const YAML::Exception& e) {
+        RCLCPP_WARN(get_logger(), "No action mapping found");
+        return output_map;
+    }
 }
 
 

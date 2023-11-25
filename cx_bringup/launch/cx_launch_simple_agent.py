@@ -58,8 +58,10 @@ def generate_launch_description():
         emulate_tty=True,
         namespace=namespace,
         parameters=[
-            cx_params_file,
-            clips_executive_params_file
+           {"clips_executive_config": clips_executive_params_file},
+           {"clips_features_manager_config": cx_params_file},
+           cx_params_file,
+           clips_executive_params_file
         ],
         arguments=['--ros-args', '--log-level', log_level]
         # arguments=[('--ros-args --log-level debug')]
