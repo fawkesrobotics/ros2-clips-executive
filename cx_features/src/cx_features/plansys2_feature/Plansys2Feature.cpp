@@ -97,7 +97,7 @@ bool Plansys2Feature::clips_context_destroyed(const std::string &env_name) {
 void Plansys2Feature::addProblemInstance(const std::string &env_name,
                                          const std::string &name,
                                          const std::string &type) {
-  const std::string log_name = std::move("PSYS2CLIPS|" + env_name);
+  const std::string log_name = "PSYS2CLIPS|" + env_name;
 
   if (envs_.find(env_name) == envs_.end()) {
     RCLCPP_ERROR(rclcpp::get_logger(log_name),
@@ -123,7 +123,7 @@ void Plansys2Feature::addProblemInstance(const std::string &env_name,
 
 void Plansys2Feature::addProblemPredicate(const std::string &env_name,
                                           const std::string &pred) {
-  const std::string log_name = std::move("PSYS2CLIPS|" + env_name);
+  const std::string log_name = "PSYS2CLIPS|" + env_name;
   if (envs_.find(env_name) == envs_.end()) {
     RCLCPP_ERROR(rclcpp::get_logger(log_name),
                  "Environment %s has not been registered "
@@ -146,7 +146,7 @@ void Plansys2Feature::addProblemPredicate(const std::string &env_name,
 }
 
 void Plansys2Feature::clearProblemExpertKnowledge(const std::string &env_name) {
-  const std::string log_name = std::move("PSYS2CLIPS|" + env_name);
+  const std::string log_name = "PSYS2CLIPS|" + env_name;
   RCLCPP_INFO(rclcpp::get_logger(log_name),
               "Clearing problem expert knowledge!");
   if (envs_.find(env_name) == envs_.end()) {
@@ -163,7 +163,7 @@ void Plansys2Feature::planWithPlansys2(const std::string &env_name,
                                        const std::string &goal_id,
                                        const std::string &goal,
                                        const std::string &plan_id) {
-  const std::string log_name = std::move("PSYS2CLIPS|" + env_name);
+  const std::string log_name = "PSYS2CLIPS|" + env_name;
   RCLCPP_INFO(rclcpp::get_logger(log_name), "planWithPlansys2 called! id: %s",
               plan_id.c_str());
   if (envs_.find(env_name) == envs_.end()) {
@@ -185,7 +185,7 @@ void Plansys2Feature::call_planner(const std::string &env_name,
                                    const std::string &goal_id,
                                    const std::string &goal,
                                    const std::string &plan_id) {
-  const std::string log_name = std::move("PSYS2CLIPS|" + env_name);
+  const std::string log_name = "PSYS2CLIPS|" + env_name;
 
   if (!problem_client_->setGoal(plansys2::Goal(goal))) {
     RCLCPP_ERROR(rclcpp::get_logger(log_name),
