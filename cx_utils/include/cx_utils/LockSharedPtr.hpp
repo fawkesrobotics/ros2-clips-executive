@@ -54,13 +54,13 @@ private:
 
 template <class T> LockSharedPtr<T>::LockSharedPtr() {
   // obj = std::make_shared<T>();
-  RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "Constructor NO param");
+  RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "Constructor NO param");
 
   LockSharedPtr::numbers++;
 }
 
 template <class T> LockSharedPtr<T>::~LockSharedPtr() {
-  RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "Destroying %i",
+  RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "Destroying %i",
               LockSharedPtr::numbers);
   LockSharedPtr::numbers--;
 }
@@ -68,7 +68,7 @@ template <class T> LockSharedPtr<T>::~LockSharedPtr() {
 template <class T>
 LockSharedPtr<T>::LockSharedPtr(std::shared_ptr<T> &&ptr)
     : obj(std::move(ptr)) {
-  RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "Constructor with param");
+  RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "Constructor with param");
 }
 
 // COPY CONSTRUCTOR
@@ -77,7 +77,7 @@ LockSharedPtr<T>::LockSharedPtr(const LockSharedPtr<T> &other) {
   LockSharedPtr::numbers++;
   this->obj = other.obj;
   this->objmutex = other.objmutex;
-  RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "copied C");
+  RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "copied C");
 }
 
 // Move Constructor
@@ -85,7 +85,7 @@ template <class T> LockSharedPtr<T>::LockSharedPtr(LockSharedPtr<T> &&other) {
   LockSharedPtr::numbers++;
   obj = std::move(other.obj);
   objmutex = std::move(other.objmutex);
-  RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "moved C");
+  RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "moved C");
 }
 
 // Move assigment
@@ -95,7 +95,7 @@ LockSharedPtr<T> &LockSharedPtr<T>::operator=(LockSharedPtr<T> &&other) {
   if (this != &other) {
     obj = std::move(other.obj);
     objmutex = std::move(other.objmutex);
-    RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "moved Assig");
+    RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "moved Assig");
   }
   return *this;
 }
@@ -107,7 +107,7 @@ LockSharedPtr<T> &LockSharedPtr<T>::operator=(const LockSharedPtr<T> &other) {
   if (this != &other) {
     obj = other.obj;
     objmutex = other.objmutex;
-    RCLCPP_INFO(rclcpp::get_logger("SharedPtrC"), "copied Assig");
+    RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "copied Assig");
   }
   return *this;
 }
