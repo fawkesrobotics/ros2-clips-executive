@@ -2,7 +2,7 @@
 # %TAG ! tag:fawkesrobotics.org,cfg/
 clips_manager:
   ros__parameters:
-    # logs clips activities in a file at t
+    # logs clips activities in a file at the location of ros logs.
     log_clips_to_file: true
     # CLIPS events to log.
     watch: [rules, facts, activations]
@@ -44,7 +44,7 @@ clips_executive:
         files:
           - simple-agent/refbox-comm-init.clp
           - simple-agent/ros-comm-init.clp
-      # Map plan actions to skill strings.
+    # Map plan actions to skill strings.
     action_mapping:
       gowait:
         mapped_to: say{text="Good bye", wait=true}
