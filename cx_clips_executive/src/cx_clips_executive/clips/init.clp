@@ -62,7 +62,7 @@
 	)
 )
 
-(defrule executive-enable-debug
+(defrule executive-configurable-unwatch
   (declare (salience ?*SALIENCE-INIT*))
   (executive-init)
   =>
