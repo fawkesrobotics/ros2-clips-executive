@@ -13,7 +13,7 @@ def generate_launch_description():
     cx_dir = get_package_share_directory('cx_clips_executive')
 
     namespace = LaunchConfiguration('namespace')
-    cx_params_file = LaunchConfiguration('cx_params_file')
+    clips_features_manager_file = LaunchConfiguration('cx_params_file')
     log_level = LaunchConfiguration('log_level')
     model_file = LaunchConfiguration('model_file')
 
@@ -40,15 +40,15 @@ def generate_launch_description():
         'namespace', default_value='',
         description='Default namespace')
 
-    declare_cx_params_file = DeclareLaunchArgument(
-        'cx_params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'cx_params.yaml'),
-        description='Path to the ROS2 cx_params.yaml file')
+    declare_clips_features_manager_file = DeclareLaunchArgument(
+        'clips_features_manager_file',
+        default_value=os.path.join(bringup_dir, 'params', 'clips_features_manager.yaml'),
+        description='Path to the ROS2 clips_features_manager.yaml file')
 
     declare_clips_executive_params_file = DeclareLaunchArgument(
         'clips_executive_params_file',
         default_value=os.path.join(
-            bringup_dir, 'params', 'clips_executive.yaml'),
+            bringup_dir, 'params', 'smple_agent.yaml'),
         description='Path to Clips Executive params file')
 
     cx_node = Node(
@@ -59,8 +59,8 @@ def generate_launch_description():
         namespace=namespace,
         parameters=[
            {"clips_executive_config": clips_executive_params_file},
-           {"clips_features_manager_config": cx_params_file},
-           cx_params_file,
+           {"clips_features_manager_config": clips_features_manager_file},
+           clips_features_manager_file,
            clips_executive_params_file
         ],
         arguments=['--ros-args', '--log-level', log_level]
@@ -93,7 +93,7 @@ def generate_launch_description():
     ld.add_action(declare_log_level_)
 
     ld.add_action(declare_namespace_)
-    ld.add_action(declare_cx_params_file)
+    ld.add_action(declare_clips_features_manager_file)
     ld.add_action(declare_clips_executive_params_file)
     ld.add_action(declare_model_file_cmd)
 
