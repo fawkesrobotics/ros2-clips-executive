@@ -16,7 +16,7 @@
 (deftemplate skill
 	; Unique ID, meaningful only in the realm of this skill executor
 	; and for components that interface with it.
-	; It is guaranteed to be unique, also for the case when executin the
+	; It is guaranteed to be unique, also for the case when executing the
 	; exact same skill a second time.
 	(slot id (type SYMBOL))
 	(slot name (type SYMBOL))
@@ -31,43 +31,21 @@
 
 (deftemplate skill-feedback
 ; Populated by the Skill Execution Feature
-	(slot skill-id (type SYMBOL))
+  (slot skill-id (type SYMBOL))
   (slot status (type SYMBOL) (allowed-values S_IDLE S_RUNNING S_FINAL S_FAILED))
   (slot error (type STRING))
   (slot robot (type STRING) (default ""))
   (slot executor (type STRING) (default ""))
 )
 
-; (deftemplate skiller-control
-; 	(slot skiller (type STRING) (default ""))
-; 	(slot acquired (type SYMBOL) (allowed-values FALSE TRUE))
-; 	(slot acquiring (type SYMBOL) (allowed-values FALSE TRUE))
-;   (multislot last-try (type INTEGER) (cardinality 2 2) (default (create$ 0 0)))
-; )
 
 (assert (ff-feature-loaded skill_execution))
 
 (deffunction skill-call (?action-name ?param-names ?param-values ?robot ?executor)
-	; (if (> (length$ ?opt-robot) 0) then (bind ?robot (nth$ 1 ?opt-robot)))
-	; (if (> (length$ ?opt-robot) 1)
-	;  then
-	; 	(printout warn "skill-call: ignore unexpected params " (rest$ ?opt-robot) crlf)
-	; )
-	; rely on a function provided from the outside providing
-	; a more sophisticated mapping.
 	(bind ?sks (map-action-skill ?action-name ?param-names ?param-values))
-	(printout logwarn "sks='" ?sks "'" crlf)
 
-	; (bind ?id UNKNOWN)
-	; (if ( and (eq ?sks "") (using fawkes))
-	; 		then
-	; 	(bind ?id (sym-cat ?action-name (gensym*)))
-	; 	(assert (skill (id ?id) (action-name (sym-cat ?action-name)) (status S_FAILED) (start-time (now))
-	; 	        (error-msg (str-cat "Failed to convert action '" ?action-name "' to skill string"))))
-	; else
 	(bind ?action_params "")
 	(foreach ?param-value ?param-values
-		(printout t "Param-value:" ?param-value crlf)
 
 		(if (eq ?action_params "")
 			then
@@ -76,8 +54,8 @@
 		  (bind ?action_params (str-cat ?action_params " " ?param-value)))
 	)
 	(bind ?id (sym-cat ?action-name "_" (gensym*)))
-	(printout logwarn "Calling mapped skill '" ?sks "'" crlf)
-	(printout logwarn "Calling skill '" ?action-name " " ?action_params"'" crlf)
+	(printout t "Calling mapped skill '" ?sks "'" crlf)
+	(printout t "of action '" ?action-name " " ?action_params"'" crlf)
 
 	(call-skill-execution ?id ?action-name ?action_params ?sks ?robot ?executor)
 	(assert (skill (id ?id) (name (sym-cat ?action-name)) (parameters ?action_params)
