@@ -90,7 +90,6 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
       try {
         const std::string feat_name = features_ids_[i];
 
-        /////////////////////////////
         // declare the parameters define in the list for each feature
         std::map<std::string, rclcpp::Parameter> feature_param_map{};
         declare_parameter("clips_features." + feat_name + ".feature_parameters",
@@ -144,7 +143,6 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
               get_parameter("clips_features." + feat_name + "." + feat_param + ".value");
         }
 
-        /////////////////////////////
 
         features_types_[i] = cx::get_plugin_type_param(node, "clips_features." + feat_name);
 
