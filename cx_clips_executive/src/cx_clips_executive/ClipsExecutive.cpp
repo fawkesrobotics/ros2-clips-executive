@@ -69,8 +69,8 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   declare_parameter<bool>("assert_time_each_loop", cfg_assert_time_each_cycle_);
   declare_parameter<int>("refresh_rate", refresh_rate_);
   try {
-  get_parameter("agent_dir",agent_dir_);
-  declare_parameter("clips_executive_config", agent_dir_ + "/params/clips_executive.yaml");
+    get_parameter("agent_dir",agent_dir_);
+    declare_parameter("clips_executive_config", agent_dir_ + "/params/clips_executive.yaml");
     get_parameter("clips_executive_config", clips_executive_config_);
     declare_parameter("clips_features_manager_config", clips_executive_config_);
     get_parameter("clips_features_manager_config", clips_features_manager_config_);
