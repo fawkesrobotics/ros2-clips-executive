@@ -75,7 +75,14 @@ public:
   }
 
   void log(const char *logical_name, const char *str) {
-    if (strcmp(str, "\n") == 0) {
+    size_t i = 0;
+    while(str[i]) {
+          i++;
+    }
+    if (str[i-1] == '\n') {
+      if(i > 1) {
+          buffer_ += str;
+      }
       if (strcmp(logical_name, "debug") == 0 ||
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
