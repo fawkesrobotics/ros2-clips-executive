@@ -162,8 +162,6 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   clips_ = clips_env_manager_node_->envs_["executive"].env;
 
   clips_->reset();
-  clips_->watch("facts");
-  clips_->watch("rules");
 
   std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
 
