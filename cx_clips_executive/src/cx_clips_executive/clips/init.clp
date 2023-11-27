@@ -7,12 +7,6 @@
 ;  Licensed under GPLv2+ license, cf. LICENSE file
 ;---------------------------------------------------------------------------
 
-(defglobal
-  ?*CX-STAGE2-FILES* = (create$ "plan.clp" "goal.clp" "domain.clp"
-                              "worldmodel.clp" "cx-identity.clp" "wm-domain-sync.clp"
-                              "wm-config.clp" "BATCH|skills.clp")
-)
-
 (deftemplate executive-init-request
 	(slot name (type SYMBOL))
 	(slot order (type INTEGER))
@@ -152,10 +146,7 @@
 	(executive-init)
 	=>
 	(bind ?offset (cx-assert-feature-requests))
-	; (assert (executive-init-request (state PENDING)	(stage STAGE-1) (order 0)
-	; 																(name blackboard) (feature TRUE) (files "BATCH|blackboard-init.clp")))
-	(assert (executive-init-request (state PENDING) (order ?offset) (name cx-files) (feature FALSE) (files ?*CX-STAGE2-FILES*)))
-	(cx-assert-init-requests (+ ?offset 1))
+	(cx-assert-init-requests ?offset)
 )
 
 (defrule executive-init-failed

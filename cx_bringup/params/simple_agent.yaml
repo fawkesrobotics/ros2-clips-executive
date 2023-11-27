@@ -28,6 +28,15 @@ clips_executive:
     automatic_goal_retraction: true
 
     init:
+      - name: clips-executive
+        files:
+          - plan.clp
+          - goal.clp
+          - domain.clp
+          - skills.clp
+          - worldmodel.clp
+          - wm-config.clp
+          - wm-domain-sync.clp
       - name: domain
         file: simple-agent/domain.clp
       - name: goal-reasoner
