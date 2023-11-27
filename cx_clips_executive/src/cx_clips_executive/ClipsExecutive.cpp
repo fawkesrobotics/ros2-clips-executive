@@ -74,7 +74,9 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
     get_parameter("clips_executive_config", clips_executive_config_);
     declare_parameter("clips_features_manager_config", clips_executive_config_);
     get_parameter("clips_features_manager_config", clips_features_manager_config_);
-    RCLCPP_INFO(get_logger(), "Load agent at [ %s ] with cx config [ %s ] and features config [%s]", agent_dir_.c_str(),clips_executive_config_.c_str(), clips_features_manager_config_.c_str());
+    RCLCPP_INFO(get_logger(), "Load agent at [ %s ]", agent_dir_.c_str());
+    RCLCPP_INFO(get_logger(), "with cx config [ %s ]", clips_executive_config_.c_str());
+    RCLCPP_INFO(get_logger(), "and features config [%s]", clips_features_manager_config_.c_str());
     clips_executive_share_dir_ = std::move(
         ament_index_cpp::get_package_share_directory("cx_clips_executive"));
   } catch (const std::exception &e) {
