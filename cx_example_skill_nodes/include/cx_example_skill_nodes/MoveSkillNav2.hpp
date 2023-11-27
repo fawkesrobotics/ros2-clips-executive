@@ -37,7 +37,7 @@
 
 #include "cx_skill_execution/SkillExecution.hpp"
 
-#include "cx_msgs/msg/skill_action_execinfo.hpp"
+#include "cx_msgs/msg/skill_action_exec_info.hpp"
 #include "cx_msgs/msg/skill_execution.hpp"
 
 #include "geometry_msgs/msg/pose.hpp"
@@ -59,7 +59,7 @@ class MoveSkillNav2 : public cx::SkillExecution {
 
 public:
 
-  MoveSkillNav2(const std::string &id, const std::string &action_name,
+  MoveSkillNav2(const std::string &id,
                 const std::chrono::nanoseconds &rate);
 
   CallbackReturn on_activate(const rclcpp_lifecycle::State &state);

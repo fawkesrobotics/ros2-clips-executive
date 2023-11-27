@@ -40,14 +40,13 @@
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
 #include "cx_msgs/msg/skill_execution.hpp"
-#include "cx_msgs/msg/skill_executioner_information.hpp"
 
 namespace cx {
 
 class SkillExecution : public rclcpp_lifecycle::LifecycleNode {
 
 public:
-  SkillExecution(const std::string &node_name, const std::string &action_name,
+  SkillExecution(const std::string &node_name,
                  const std::chrono::nanoseconds &pub_rate,
                  const rclcpp::NodeOptions &options = rclcpp::NodeOptions(),
                  const std::string &namespace_ = "");
@@ -69,24 +68,19 @@ protected:
   void finish_execution(bool success, float progress,
                         const std::string &status);
 
-  const std::string action_name_;
+  std::string action_name_;
   std::vector<std::string> action_parameters_;
   std::string mapped_action_;
   const std::chrono::nanoseconds exec_rate_;
   bool commited_to_skill_;
-  std::string agent_id_;
+  std::string robot_id_;
+  std::string executor_id_;
 
   rclcpp_lifecycle::LifecyclePublisher<cx_msgs::msg::SkillExecution>::SharedPtr
       skill_board_pub;
   rclcpp::Subscription<cx_msgs::msg::SkillExecution>::SharedPtr skill_board_sub;
   // Creates wall timer for the implemented working function
   rclcpp::TimerBase::SharedPtr execution_heartbeat_;
-
-  rclcpp_lifecycle::LifecyclePublisher<
-      cx_msgs::msg::SkillExecutionerInformation>::SharedPtr
-      executioner_info_pub_;
-  cx_msgs::msg::SkillExecutionerInformation executioner_info_;
-  rclcpp::TimerBase::SharedPtr executioner_info_heartbeat_;
 };
 } // namespace cx
 

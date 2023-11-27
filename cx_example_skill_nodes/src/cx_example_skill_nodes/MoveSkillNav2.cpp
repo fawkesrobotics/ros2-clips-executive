@@ -28,7 +28,7 @@
 
 #include "cx_skill_execution/SkillExecution.hpp"
 
-#include "cx_msgs/msg/skill_action_execinfo.hpp"
+#include "cx_msgs/msg/skill_action_exec_info.hpp"
 #include "cx_msgs/msg/skill_execution.hpp"
 
 #include "geometry_msgs/msg/pose.hpp"
@@ -48,9 +48,8 @@ using NavFeedback =
     const std::shared_ptr<const nav2_msgs::action::NavigateToPose::Feedback>;
 
 MoveSkillNav2::MoveSkillNav2(const std::string &id,
-                             const std::string &action_name,
                              const std::chrono::nanoseconds &rate)
-    : SkillExecution(id, action_name, rate) {
+    : SkillExecution(id, rate) {
   geometry_msgs::msg::PoseStamped wp;
   wp.header.frame_id = "map";
   wp.header.stamp = now();
@@ -156,7 +155,7 @@ MoveSkillNav2::on_activate(const rclcpp_lifecycle::State &state) {
 }
 
 void MoveSkillNav2::perform_execution() {
-  RCLCPP_INFO_STREAM(get_logger(), "Executing [" << action_name_ << "]");
+  RCLCPP_INFO_STREAM(get_logger(), "Executing NoveSkillNav2");
   for (const auto &param : action_parameters_) {
     RCLCPP_INFO_STREAM(get_logger(), "\t[" << param << "]");
   }

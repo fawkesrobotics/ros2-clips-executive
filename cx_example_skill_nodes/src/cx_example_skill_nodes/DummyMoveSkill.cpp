@@ -31,9 +31,8 @@ namespace cx {
 using namespace std::chrono_literals;
 
 DummyMoveSkill::DummyMoveSkill(const std::string &id,
-                               const std::string &action_name,
                                const std::chrono::nanoseconds &rate)
-    : SkillExecution(id, action_name, rate) {}
+    : SkillExecution(id, rate) {}
 using CallbackReturn =
     rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
@@ -46,7 +45,7 @@ DummyMoveSkill::on_activate(const rclcpp_lifecycle::State &state) {
 }
 
 void DummyMoveSkill::perform_execution() {
-  RCLCPP_INFO_STREAM(get_logger(), "Executing [" << action_name_ << "]");
+  RCLCPP_INFO_STREAM(get_logger(), "Executing dummy move");
   for (const auto &param : action_parameters_) {
     RCLCPP_INFO_STREAM(get_logger(), "\t[" << param << "]");
   }

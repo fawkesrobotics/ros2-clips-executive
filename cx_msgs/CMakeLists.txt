@@ -16,9 +16,8 @@ set(MSGS
   "msg/PddlGenInterface.msg"
   "msg/PddlGenerateMessage.msg"
   "msg/PddlGenInterfaceMessages.msg"
-  "msg/SkillExecutionerInformation.msg"
   "msg/SkillExecution.msg"
-  "msg/SkillActionExecinfo.msg"
+  "msg/SkillActionExecInfo.msg"
 )
 
 set(SERVICES

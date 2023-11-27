@@ -35,7 +35,7 @@
 
 #include "cx_skill_execution/SkillExecution.hpp"
 
-#include "cx_msgs/msg/skill_action_execinfo.hpp"
+#include "cx_msgs/msg/skill_action_exec_info.hpp"
 #include "cx_msgs/msg/skill_execution.hpp"
 #include "lifecycle_msgs/msg/state.hpp"
 
@@ -48,7 +48,7 @@ class DummyMoveSkill : public cx::SkillExecution {
       rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
 public:
-  DummyMoveSkill(const std::string &id, const std::string &action_name,
+  DummyMoveSkill(const std::string &id,
                  const std::chrono::nanoseconds &rate);
 
   CallbackReturn on_activate(const rclcpp_lifecycle::State &state);
