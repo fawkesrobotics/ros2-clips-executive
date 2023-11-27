@@ -193,8 +193,8 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   clips_->evaluate("(ff-feature-request \"redefine_warning_feature\")");
 
   std::vector<std::string> files{
-      clips_executive_share_dir_ + "/clips/saliences.clp",
-      clips_executive_share_dir_ + "/clips/init.clp"};
+      clips_executive_share_dir_ + "/clips/core/saliences.clp",
+      clips_executive_share_dir_ + "/clips/core/init.clp"};
   for (const auto &f : files) {
     if (!clips_->batch_evaluate(f)) {
       RCLCPP_ERROR(get_logger(),

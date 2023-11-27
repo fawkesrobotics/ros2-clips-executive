@@ -28,31 +28,35 @@ clips_executive:
     automatic_goal_retraction: true
 
     init:
+      # Files are relative pathes to the share directory of the cx_clips_executive
+      # and the path specified through agent_dir
+      # These files are loaded from the cx_clips_executive package
       - name: clips-executive
         files:
-          - plan.clp
-          - goal.clp
-          - domain.clp
-          - skills.clp
-          - worldmodel.clp
-          - wm-config.clp
-          - wm-domain-sync.clp
+          - core/plan.clp
+          - core/goal.clp
+          - core/domain.clp
+          - core/skills.clp
+          - core/worldmodel.clp
+          - core/wm-config.clp
+          - core/wm-domain-sync.clp
+      # These files are from the cx_bringup package
       - name: domain
-        file: simple-agent/domain.clp
+        file: simple_agent/domain.clp
       - name: goal-reasoner
-        file: simple-agent/goal-reasoner.clp
+        file: simple_agent/goal-reasoner.clp
       - name: fixed-sequence
-        file: simple-agent/fixed-sequence.clp
+        file: simple_agent/fixed-sequence.clp
       - name: action-selection
-        file: simple-agent/action-selection.clp
+        file: simple_agent/action-selection.clp
       - name: action-execution
         files:
-          - simple-agent/print-action.clp
-          - skills-actions.clp
+          - simple_agent/print-action.clp
+          - core/skills-actions.clp
       - name: refbox-comm
         files:
-          - simple-agent/refbox-comm-init.clp
-          - simple-agent/ros-comm-init.clp
+          - simple_agent/refbox-comm-init.clp
+          - simple_agent/ros-comm-init.clp
     # Map plan actions to skill strings.
     action_mapping:
       gowait:

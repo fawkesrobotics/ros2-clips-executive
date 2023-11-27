@@ -74,7 +74,7 @@ install(
   DESTINATION include/
 )
 
-install(DIRECTORY src/${PROJECT_NAME}/clips DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY clips DESTINATION share/${PROJECT_NAME}/)
 
 install(TARGETS
   ${PROJECT_NAME}
