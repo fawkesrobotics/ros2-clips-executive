@@ -1,0 +1,180 @@
+/***************************************************************************
+ *  {{name_camel}}.cpp
+ *
+ *  Automatically Generated: {{ gen_date }}
+ ****************************************************************************/
+
+/*  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Library General Public License for more details.
+ *
+ *  Read the full text in the LICENSE.GPL file in the doc directory.
+ */
+
+#include <map>
+#include <memory>
+#include <string>
+
+#include "cx_core/ClipsFeature.hpp"
+#include "{{include_path_prefix}}/{{name_camel}}.hpp"
+#include "cx_utils/LockSharedPtr.hpp"
+
+// To export as plugin
+#include "pluginlib/class_list_macros.hpp"
+
+using std::placeholders::_1;
+
+namespace cx {
+
+{{name_camel}}::{{name_camel}}()
+    : Node("ros_topic_publisher_feature_node") {}
+{{name_camel}}::~{{name_camel}}() {}
+
+std::string {{name_camel}}::getFeatureName() const {
+  return clips_feature_name;
+}
+
+void {{name_camel}}::initialise(const std::string &feature_name) {
+  clips_feature_name = feature_name;
+
+  spin_thread_ =
+      std::thread([this]() { rclcpp::spin(this->get_node_base_interface()); });
+}
+
+bool {{name_camel}}::clips_context_destroyed(
+    const std::string &env_name) {
+
+  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+              "Destroying clips context!");
+  envs_.erase(env_name);
+
+  return true;
+}
+
+bool {{name_camel}}::clips_context_init(
+    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
+  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+              "Initialising context for feature %s",
+              clips_feature_name.c_str());
+
+  envs_[env_name] = clips;
+
+  clips->add_function(
+      "ros-{{publisher_name}}-set-field-publish",
+      sigc::slot<void, std::string, std::string, CLIPS::Value>(sigc::bind<0>(
+          sigc::mem_fun(*this, &{{name_camel}}::set_field_publish),
+          env_name)));
+  clips->add_function(
+      "ros-{{publisher_name}}-set-array-publish",
+      sigc::slot<void, std::string, std::string, CLIPS::Values>(sigc::bind<0>(
+          sigc::mem_fun(*this, &{{name_camel}}::set_array_publish),
+          env_name)));
+  clips->add_function(
+      "ros-{{publisher_name}}-create-message",
+      sigc::slot<void, std::string>(sigc::bind<0>(
+          sigc::mem_fun(*this, &{{name_camel}}::create_message),
+          env_name)));
+  clips->add_function(
+      "ros-{{publisher_name}}-create-publisher",
+      sigc::slot<void, std::string>(sigc::bind<0>(
+          sigc::mem_fun(*this, &{{name_camel}}::creater_publisher),
+          env_name)));
+  clips->add_function(
+      "ros-{{publisher_name}}-publish",
+      sigc::slot<void, std::string>(sigc::bind<0>(
+          sigc::mem_fun(*this, &{{name_camel}}::publish_to_topic),
+          env_name)));
+
+  return true;
+}
+
+void {{name_camel}}::create_message(const std::string &env_name,
+                                              const std::string &topic) {
+  messages_[env_name][topic] = std_msgs::msg::String();
+}
+
+void {{name_camel}}::set_field_publish(const std::string &env_name,
+                                                 const std::string &topic,
+                                                 const std::string &field,
+                                                 CLIPS::Value value) {
+
+
+{%- for slot in slots %}
+{%- if not slot.array %}
+  if (field == "{{ slot.name }}") {
+{%- if slot.clips_type == "STRING" %}
+    messages_[env_name][topic].{{ slot.name }} = value.as_string();
+{%- endif %}
+{%- if slot.clips_type == "INTEGER" %}
+    messages_[env_name][topic].{{ slot.name }} = value.as_integer();
+{%- endif %}
+{%- if slot.clips_type == "FLOAT" %}
+    messages_[env_name][topic].{{ slot.name }} = value.as_float();
+{%- endif %}
+{%- if slot.clips_type == "BOOLEAN" %}
+    messages_[env_name][service_name]->{{ slot.name }} = value.as_string().compare(std::string("TRUE")) ? true : false;
+{%- endif %}
+  }
+{%- endif -%}
+{%- endfor %}
+}
+
+void {{name_camel}}::set_array_publish(const std::string &env_name,
+                                                 const std::string &topic,
+                                                 const std::string &field,
+                                                 CLIPS::Values values) {
+
+{%- for slot in slots|selectattr("array") %}
+{%- if slot.array %}
+  if (field == "{{ slot.name }}") {
+  {%- if slot.clips_type == "STRING" %}
+    std::vector<{{slot.cpp_type}}> values_vector_{{slot.name}};
+    for (auto value : values) {
+      values_vector_{{slot.name}}.push_back(value.as_string());
+    }
+    messages_[env_name][topic].{{ slot.name }} = values_vector_{{slot.name}};
+  {%- endif %}
+  {%- if slot.clips_type == "INTEGER" %}
+    std::vector<{{slot.cpp_type}}> values_vector_{{slot.name}};
+    for (auto value : values) {
+      values_vector_{{slot.name}}.push_back(value.as_integer());
+    }
+    messages_[env_name][topic].{{ slot.name }} = values_vector_{{slot.name}};
+  {%- endif %}
+  {%- if slot.clips_type == "FLOAT" %}
+    std::vector<{{slot.cpp_type}}> values_vector_{{slot.name}};
+    for (auto value : values) {
+      values_vector_{{slot.name}}.push_back(value.as_float());
+    }
+    messages_[env_name][topic].{{ slot.name }} = values_vector_{{slot.name}};
+  {%- endif %}
+  }
+{%- endif %}
+{%- else %}
+  (void)topic;
+  (void)field;
+  (void)env_name;
+  (void)values;
+{%- endfor %}
+}
+
+void {{name_camel}}::publish_to_topic(const std::string &env_name,
+                                                const std::string &topic_name) {
+  publishers_[env_name][topic_name]->publish(messages_[env_name][topic_name]);
+}
+
+void {{name_camel}}::creater_publisher(
+    const std::string &env_name, const std::string &topic_name) {
+  rclcpp::Publisher<{{message_type}}>::SharedPtr publisher_;
+  publishers_[env_name][topic_name] =
+      this->create_publisher<{{message_type}}>(topic_name, 10);
+}
+
+} // namespace cx
+PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsFeature)
