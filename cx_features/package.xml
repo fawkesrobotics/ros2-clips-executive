@@ -16,7 +16,6 @@
   <depend>cx_core</depend>
   <depend>cx_msgs</depend>
   <depend>cx_utils</depend>
-  <depend>cx_blackboard</depend>
   <depend>cx_skill_execution</depend>
   <depend>ClipsPddlParser</depend>
   <depend>PkgConfig</depend>
