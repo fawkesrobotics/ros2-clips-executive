@@ -95,6 +95,22 @@ add_library(ros_topic_subscriber_feature SHARED src/cx_features/ros_communicatio
 ament_target_dependencies(ros_topic_subscriber_feature ${dependencies})
 target_link_libraries(ros_topic_subscriber_feature PkgConfig::CLIPSMM)
 
+add_library(navgraph_compute SHARED src/cx_features/ros_communication_feature/NavGraphCompute.cpp)
+ament_target_dependencies(navgraph_compute ${dependencies})
+target_link_libraries(navgraph_compute PkgConfig::CLIPSMM)
+
+add_library(navgraph_set_bounding_box SHARED src/cx_features/ros_communication_feature/NavGraphSetBoundingBox.cpp)
+ament_target_dependencies(navgraph_set_bounding_box ${dependencies})
+target_link_libraries(navgraph_set_bounding_box PkgConfig::CLIPSMM)
+
+add_library(navgraph_generate_waitzones SHARED src/cx_features/ros_communication_feature/NavGraphGenerateWaitzones.cpp)
+ament_target_dependencies(navgraph_generate_waitzones ${dependencies})
+target_link_libraries(navgraph_generate_waitzones PkgConfig::CLIPSMM)
+
+add_library(navgraph_update_station_by_tag SHARED src/cx_features/ros_communication_feature/NavGraphUpdateStationByTag.cpp)
+ament_target_dependencies(navgraph_update_station_by_tag ${dependencies})
+target_link_libraries(navgraph_update_station_by_tag PkgConfig::CLIPSMM)
+
 
 # END OF PLUGINS REGISTRATION
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
@@ -128,6 +144,10 @@ install(TARGETS
   ros_service_requester_feature
   ros_topic_subscriber_feature
   ros_topic_publisher_feature
+  navgraph_compute
+  navgraph_set_bounding_box
+  navgraph_generate_waitzones
+  navgraph_update_station_by_tag
   clips_pddl_parser_feature
   clips_protobuf_feature
   ${PROJECT_NAME}
