@@ -28,6 +28,10 @@ set(SERVICES
   "srv/ClipsRemoveFeatures.srv"
   "srv/PddlGenInterfaceSrv.srv"
   "srv/OpenInterface.srv"
+  "srv/NavGraphInterfaceCompute.srv"
+  "srv/NavGraphInterfaceGenerateWaitzones.srv"
+  "srv/NavGraphInterfaceSetBoundingBox.srv"
+  "srv/NavGraphInterfaceUpdateStationByTag.srv"
 )
 
 # set(ACTIONS
