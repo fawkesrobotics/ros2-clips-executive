@@ -27,17 +27,15 @@
 )
 
 (defrule skill-action-init-map-to
-	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
 	(domain-operator (name ?action))
-	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/specs/" ?spec "/action-mapping/" ?action "/mapped-to") ?p) 1))
+	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/action_mapping/" ?action "/mapped_to") ?p) 1))
 	         (type STRING) (value ?s))
 	=>
 	(assert (skill-action-mapping (name ?action) (map-string ?s)))
 )
 (defrule skill-action-set-mapping-executor
 	?sam <- (skill-action-mapping (name ?action) (executor ""))
-	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
-	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/specs/" ?spec "/action-mapping/" ?action "/executor") ?p) 1))
+	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/action_mapping/" ?action "/executor") ?p) 1))
 	         (type STRING) (value ?s))
 	=>
 	(if (neq ?s "") then
