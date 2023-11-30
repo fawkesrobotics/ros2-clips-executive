@@ -45,13 +45,13 @@ LifecycleNodesClient::LifecycleNodesClient(const std::string &node_name,
   callback_group_executor_.add_callback_group(callback_group_,
                                               node_->get_node_base_interface());
 
-  RCLCPP_INFO(node_->get_logger(), "Creating client for service %s/get_state",
+  RCLCPP_DEBUG(node_->get_logger(), "Creating client for service %s/get_state",
               managed_node_name.c_str());
   get_node_state_client_ = node_->create_client<lifecycle_msgs::srv::GetState>(
       managed_node_name + "/get_state", rmw_qos_profile_services_default,
       callback_group_);
 
-  RCLCPP_INFO(node_->get_logger(),
+  RCLCPP_DEBUG(node_->get_logger(),
               "Creating client for service %s/change_state",
               managed_node_name.c_str());
   change_node_state_client_ =
@@ -71,13 +71,13 @@ LifecycleNodesClient::LifecycleNodesClient(
   callback_group_executor_.add_callback_group(callback_group_,
                                               node_->get_node_base_interface());
 
-  RCLCPP_INFO(node_->get_logger(), "Creating client for service %s/get_state",
+  RCLCPP_DEBUG(node_->get_logger(), "Creating client for service %s/get_state",
               managed_node_name.c_str());
   get_node_state_client_ = node_->create_client<lifecycle_msgs::srv::GetState>(
       managed_node_name + "/get_state", rmw_qos_profile_services_default,
       callback_group_);
 
-  RCLCPP_INFO(node_->get_logger(),
+  RCLCPP_DEBUG(node_->get_logger(),
               "Creating client for service %s/change_state",
               managed_node_name.c_str());
   change_node_state_client_ =
@@ -87,11 +87,10 @@ LifecycleNodesClient::LifecycleNodesClient(
 }
 
 LifecycleNodesClient::~LifecycleNodesClient() {
-  RCLCPP_INFO(node_->get_logger(), "Destroying...");
+  RCLCPP_DEBUG(node_->get_logger(), "Destroying...");
 }
 
 uint8_t LifecycleNodesClient::get_node_state(seconds timeout) {
-  RCLCPP_INFO(node_->get_logger(), "In Get Node State");
   while (!get_node_state_client_->wait_for_service(2s)) {
     if (!rclcpp::ok()) {
 
@@ -103,7 +102,7 @@ uint8_t LifecycleNodesClient::get_node_state(seconds timeout) {
     RCLCPP_WARN(node_->get_logger(), "%s: still waiting for service...",
                 get_node_state_client_->get_service_name());
   }
-  RCLCPP_INFO(node_->get_logger(), "%s service client: sending async request",
+  RCLCPP_DEBUG(node_->get_logger(), "%s service client: sending async request",
               get_node_state_client_->get_service_name());
 
   auto req = std::make_shared<lifecycle_msgs::srv::GetState::Request>();
@@ -126,8 +125,6 @@ uint8_t LifecycleNodesClient::get_node_state(seconds timeout) {
 
 bool LifecycleNodesClient::change_node_state(std::uint8_t transition,
                                              seconds timeout) {
-  RCLCPP_INFO(node_->get_logger(), "In Change Node State");
-
   while (!change_node_state_client_->wait_for_service(2s)) {
     if (!rclcpp::ok()) {
 
@@ -140,7 +137,7 @@ bool LifecycleNodesClient::change_node_state(std::uint8_t transition,
                 change_node_state_client_->get_service_name());
   }
 
-  RCLCPP_INFO(node_->get_logger(), "%s service client: sending async request",
+  RCLCPP_DEBUG(node_->get_logger(), "%s service client: sending async request",
               change_node_state_client_->get_service_name());
 
   auto req = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
@@ -158,7 +155,7 @@ bool LifecycleNodesClient::change_node_state(std::uint8_t transition,
     return false;
   }
   if (future_res.get()->success) {
-    RCLCPP_INFO(node_->get_logger(), "%s Succesful transition to %d",
+    RCLCPP_DEBUG(node_->get_logger(), "%s Successful transition to %d",
                 managed_node_name_.c_str(), static_cast<int>(transition));
     return true;
   } else {

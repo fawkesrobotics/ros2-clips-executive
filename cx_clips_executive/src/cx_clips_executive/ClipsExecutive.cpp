@@ -45,10 +45,6 @@ ClipsExecutive::ClipsExecutive()
 
   RCLCPP_INFO(get_logger(), "Initialising [%s]...", get_name());
   cfg_assert_time_each_cycle_ = true;
-  declare_parameter<std::vector<std::string>>("clips-dirs", clips_dirs);
-  declare_parameter<std::string>("spec", "");
-  declare_parameter<bool>("assert-time-each-loop", cfg_assert_time_each_cycle_);
-  declare_parameter<int>("refresh-rate", refresh_rate_);
 }
 
 // ClipsExecutive::~ClipsExecutive() {}
@@ -69,16 +65,20 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
       std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client_cx");
   clips_agenda_refresh_pub_ = create_publisher<std_msgs::msg::Empty>(
       "clips_executive/refresh_agenda", rclcpp::QoS(100).reliable());
-
-  std::string cx_bringup_dir;
-  std::string cx_features_dir;
+  declare_parameter<std::string>("agent_dir", ament_index_cpp::get_package_share_directory("cx_bringup"));
+  declare_parameter<bool>("assert_time_each_loop", cfg_assert_time_each_cycle_);
+  declare_parameter<int>("refresh_rate", refresh_rate_);
   try {
-    cx_bringup_dir =
-        std::move(ament_index_cpp::get_package_share_directory("cx_bringup"));
+    get_parameter("agent_dir",agent_dir_);
+    declare_parameter("clips_executive_config", agent_dir_ + "/params/clips_executive.yaml");
+    get_parameter("clips_executive_config", clips_executive_config_);
+    declare_parameter("clips_features_manager_config", clips_executive_config_);
+    get_parameter("clips_features_manager_config", clips_features_manager_config_);
+    RCLCPP_INFO(get_logger(), "Load agent at [ %s ]", agent_dir_.c_str());
+    RCLCPP_INFO(get_logger(), "with cx config [ %s ]", clips_executive_config_.c_str());
+    RCLCPP_INFO(get_logger(), "and features config [%s]", clips_features_manager_config_.c_str());
     clips_executive_share_dir_ = std::move(
         ament_index_cpp::get_package_share_directory("cx_clips_executive"));
-    cx_features_dir =
-        std::move(ament_index_cpp::get_package_share_directory("cx_features"));
   } catch (const std::exception &e) {
     RCLCPP_ERROR(
         get_logger(),
@@ -87,12 +87,6 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
     return CallbackReturn::FAILURE;
   }
 
-  if (!(get_parameter("clips-dirs", clips_dirs))) {
-    RCLCPP_ERROR(
-        get_logger(),
-        "Couldnt get parameter /clips_executive/clips-dirs, aborting...");
-    return CallbackReturn::FAILURE;
-  }
 
   for (size_t i = 0; i < clips_dirs.size(); ++i) {
     if (clips_dirs[i][clips_dirs[i].size() - 1] != '/') {
@@ -102,18 +96,10 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
   }
   // Default Clips files directory
   clips_dirs.insert(clips_dirs.begin(), clips_executive_share_dir_ + "/clips/");
-  clips_dirs.insert(clips_dirs.begin(), cx_features_dir + "/clips/");
+  clips_dirs.insert(clips_dirs.begin(), agent_dir_ + "/clips/");
 
-  std::string cfg_spec;
-  get_parameter("spec", cfg_spec);
-  if (cfg_spec == "") {
-    RCLCPP_ERROR(get_logger(),
-                 "Couldnt get parameter /clips_executive/spec, aborting...");
-    return CallbackReturn::FAILURE;
-  }
-
-  get_parameter("assert-time-each-loop", cfg_assert_time_each_cycle_);
-  get_parameter("refresh-rate", refresh_rate_);
+  get_parameter("assert_time_each_loop", cfg_assert_time_each_cycle_);
+  get_parameter("refresh_rate", refresh_rate_);
   double rate = 1.0 / refresh_rate_;
   // Sets the time between each clips agenda refresh in ns
   publish_rate_ =
@@ -124,15 +110,13 @@ ClipsExecutive::on_configure(const rclcpp_lifecycle::State &state) {
       std::chrono::duration_cast<std::chrono::nanoseconds>(publish_rate_)
           .count());
 
-  std::string action_mapping_cfgpath = "specs." + cfg_spec + ".action-mapping";
+  std::string action_mapping_cfgpath = "action_mapping";
 
   std::map<std::string, std::string> action_mapping{};
 
   try {
-    YAML::Node config = YAML::LoadFile(
-        std::move(cx_bringup_dir + "/params/clips_executive.yaml"));
-    iterateThroughYamlRecuresively(config["clips_executive"], "action-mapping",
-                                   "", cfg_spec, action_mapping);
+    YAML::Node config = YAML::LoadFile(clips_executive_config_);
+    action_mapping = get_action_mapping(config);
 
   } catch (const std::exception &e) {
     RCLCPP_INFO(get_logger(), "Error loading clips_executive config file!");
@@ -178,18 +162,18 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   clips_ = clips_env_manager_node_->envs_["executive"].env;
 
   clips_->reset();
-  // TODO: REMOVE LATER!
-  clips_->watch("all");
 
   std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
 
-  std::string cx_bringup_dir;
-  std::string cx_features_dir;
+  std::string cx_clips_executive_dir;
   try {
-    cx_bringup_dir =
-        std::move(ament_index_cpp::get_package_share_directory("cx_bringup"));
-    clips_->evaluate(std::string("(path-add-subst \"@CONFDIR@\" \"") +
-                     cx_bringup_dir + "\")");
+    cx_clips_executive_dir = ament_index_cpp::get_package_share_directory("cx_clips_executive");
+    clips_->evaluate(std::string("(path-add-subst \"@AGENT_DIR@\" \"") +
+                     agent_dir_ + "\")");
+    clips_->evaluate(std::string("(path-add-subst \"@CX_DIR@\" \"") +
+                     cx_clips_executive_dir + "\")");
+    clips_->evaluate("(build \"(defglobal ?*CX_CONFIG* = " + clips_executive_config_ + ")\")");
+    clips_->evaluate("(build \"(defglobal ?*FEATURES_CONFIG* = " + clips_features_manager_config_ + ")\")");
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     return CallbackReturn::FAILURE;
@@ -209,8 +193,8 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
   clips_->evaluate("(ff-feature-request \"redefine_warning_feature\")");
 
   std::vector<std::string> files{
-      clips_executive_share_dir_ + "/clips/saliences.clp",
-      clips_executive_share_dir_ + "/clips/init.clp"};
+      clips_executive_share_dir_ + "/clips/core/saliences.clp",
+      clips_executive_share_dir_ + "/clips/core/init.clp"};
   for (const auto &f : files) {
     if (!clips_->batch_evaluate(f)) {
       RCLCPP_ERROR(get_logger(),
@@ -338,50 +322,73 @@ std::string ClipsExecutive::clips_map_skill(std::string action_name,
   return rv;
 }
 
-void ClipsExecutive::iterateThroughYamlRecuresively(
-    const YAML::Node &current_level_node, const std::string &node_to_search,
-    const std::string &parent_node_name, const std::string &cfg_prefix,
-    std::map<std::string, std::string> &output_map) {
-  for (const auto &item : current_level_node) {
-    switch (item.second.Type()) {
+// Search recursively from the given yaml node to a node, where the node[target_key] element exists
+YAML::Node  ClipsExecutive::get_node_from_key(const YAML::Node& node, const std::string& target_key) {
+    if (!node) {
+        return YAML::Node(YAML::NodeType::Undefined);
+    }
 
-    case YAML::NodeType::Undefined: {
-      RCLCPP_ERROR(get_logger(), "Undefined YAML KEY");
-      break;
-    }
-    case YAML::NodeType::Null: {
-      RCLCPP_ERROR(get_logger(), "NULL YAML KEY");
-      break;
-    }
-    case YAML::NodeType::Scalar: {
-      // skip
-      break;
-    }
-    case YAML::NodeType::Sequence: {
-      // skip
-      break;
-    }
-    // If it is a MapNode
-    case YAML::NodeType::Map: {
-      if (item.first.as<std::string>() == node_to_search &&
-          parent_node_name == cfg_prefix) {
+    if (node.Type() == YAML::NodeType::Map) {
+        for (const auto& entry : node) {
+            const std::string& key = entry.first.as<std::string>();
 
-        for (const auto &map_values : current_level_node[item.first]) {
-          output_map.insert({map_values.first.as<std::string>(),
-                             map_values.second.as<std::string>()});
-          RCLCPP_INFO(get_logger(), "Key %s <------> Value: %s",
-                      map_values.first.as<std::string>().c_str(),
-                      output_map[map_values.first.as<std::string>()].c_str());
+            if (key == target_key) {
+                return node;
+            }
+
+            // Recursively call for nested nodes
+            auto result = get_node_from_key(entry.second, target_key);
+            if (result.Type() != YAML::NodeType::Undefined) {
+                return result;
+            }
         }
-      } else {
-        iterateThroughYamlRecuresively(
-            current_level_node[item.first], node_to_search,
-            item.first.as<std::string>(), cfg_prefix, output_map);
-      }
-      break;
+    } else if (node.Type() == YAML::NodeType::Sequence) {
+        // Iterate through sequence elements
+        for (std::size_t i = 0; i < node.size(); ++i) {
+            // Recursively call for each element in the sequence
+            auto result = get_node_from_key(node[i], target_key);
+            if (result.Type() != YAML::NodeType::Undefined) {
+                return result;
+            }
+        }
     }
-    }
-  }
+    return YAML::Node(YAML::NodeType::Undefined);
 }
+
+
+std::map<std::string, std::string> ClipsExecutive::get_action_mapping(const YAML::Node& starting_node) {
+    std::map<std::string, std::string> output_map;
+
+    try {
+        auto mapping_node = get_node_from_key(starting_node, "action_mapping");
+
+        for (const auto& entry : mapping_node["action_mapping"]) {
+            std::string name = entry.first.as<std::string>();
+            std::string mapped_to;
+
+            try {
+                mapped_to = entry.second["mapped_to"].as<std::string>();
+            } catch (const YAML::Exception& e) {
+                RCLCPP_ERROR(get_logger(), "Error getting 'mapped_to' value of %s: %s",name.c_str(), e.what());
+                continue;
+            }
+
+            output_map[name] = mapped_to;
+        }
+
+        // Now the 'output_map' map contains the names and mapped-to values
+        for (const auto& pair : output_map) {
+            RCLCPP_INFO(get_logger(), "Action Mapping: Key %s <------> Value: %s",
+                        pair.first.c_str(), pair.second.c_str());
+        }
+
+        return output_map;
+    } catch (const YAML::Exception& e) {
+        RCLCPP_WARN(get_logger(), "No action mapping found");
+        return output_map;
+    }
+}
+
+
 
 } // namespace cx

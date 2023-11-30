@@ -69,7 +69,7 @@ namespace cx {
 
 class ConfigFeature : public ClipsFeature {
 public:
-  ConfigFeature();
+  ConfigFeature(std::string agent_dir);
   ~ConfigFeature();
 
   void initialise(const std::string &feature_name) override;
@@ -82,6 +82,7 @@ public:
 
 private:
   void clips_config_load(const std::string &env_name,
+                         const std::string &file,
                          const std::string &cfg_prefix);
 
   std::string getScalarType(const YAML::Node &input_node);
@@ -97,6 +98,8 @@ private:
 
 private:
   std::map<std::string, LockSharedPtr<CLIPS::Environment>> envs_;
+
+  std::string agent_dir_;
 };
 
 } // namespace cx

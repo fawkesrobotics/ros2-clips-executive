@@ -28,7 +28,7 @@
 #include "cx_features/ConfigFeature.hpp"
 
 namespace cx {
-ConfigFeature::ConfigFeature() {}
+ConfigFeature::ConfigFeature(std::string agent_dir) : agent_dir_(agent_dir) {}
 
 ConfigFeature::~ConfigFeature() {}
 
@@ -49,7 +49,7 @@ bool ConfigFeature::clips_context_init(
   clips->evaluate("(path-load \"ff-config.clp\")");
   clips->add_function(
       "config-load",
-      sigc::slot<void, std::string>(sigc::bind<0>(
+      sigc::slot<void, std::string, std::string>(sigc::bind<0>(
           sigc::mem_fun(*this, &ConfigFeature::clips_config_load), env_name)));
 
   clips->refresh_agenda();
@@ -68,6 +68,7 @@ bool ConfigFeature::clips_context_destroyed(const std::string &env_name) {
   return true;
 }
 void ConfigFeature::clips_config_load(const std::string &env_name,
+                                      const std::string &file,
                                       const std::string &cfg_prefix) {
   const std::string name = "ClipsConfig|" + env_name;
 
@@ -79,26 +80,10 @@ void ConfigFeature::clips_config_load(const std::string &env_name,
     return;
   }
 
-  std::string config_dir;
-  try {
-    config_dir =
-        std::move(ament_index_cpp::get_package_share_directory("cx_bringup"));
-    RCLCPP_WARN(rclcpp::get_logger(name), "CFG is: %s", config_dir.c_str());
-
-  } catch (const ament_index_cpp::PackageNotFoundError &e) {
-    RCLCPP_ERROR_STREAM(rclcpp::get_logger(name), e.what());
-    RCLCPP_WARN(rclcpp::get_logger(name), "Abroting config loading...");
-  }
-
-  const std::string path = config_dir + "/params" + cfg_prefix + ".yaml";
-  // The prefix is given as /... so strip the / to point to the main node name
-  // of the yaml file
   const std::string cfg_main_node = cfg_prefix.substr(1, cfg_prefix.size() - 1);
 
   try {
-    RCLCPP_WARN(rclcpp::get_logger(name), "Path is: %s", path.c_str());
-
-    YAML::Node config = YAML::LoadFile(path);
+    YAML::Node config = YAML::LoadFile(file);
     // std::lock_guard<std::mutex>
     // guard(*(envs_[env_name].get_mutex_instance()));
 
@@ -159,7 +144,7 @@ void ConfigFeature::iterateThroughYamlRecuresively(
         if (item.second.as<std::string>() == "true" ||
             item.second.as<std::string>() == "false") {
 
-          std::string val = std::move(item.second.as<std::string>());
+          std::string val = item.second.as<std::string>();
           std::transform(val.begin(), val.end(), val.begin(), ::toupper);
           envs_[env_name]->assert_fact_f(
               "(confval (path \"%s\") (type %s) (value %s))", path.c_str(),

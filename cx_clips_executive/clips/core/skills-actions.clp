@@ -22,17 +22,37 @@
 
 (deftemplate skill-action-mapping
 	(slot name (type SYMBOL) (default ?NONE))
+	(slot executor (type STRING) (default ""))
 	(slot map-string (type STRING))
 )
 
-(defrule skill-action-init
-	(confval (path "/clips-executive/spec") (type STRING) (value ?spec))
-	(confval (path ?p&:(eq (str-index (str-cat "/clips-executive/specs/" ?spec "/action-mapping/") ?p) 1))
+(defrule skill-action-init-map-to
+	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
+	(domain-operator (name ?action))
+	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/specs/" ?spec "/action-mapping/" ?action "/mapped-to") ?p) 1))
 	         (type STRING) (value ?s))
 	=>
-	(bind ?prefix (str-cat "/clips-executive/specs/" ?spec "/action-mapping/"))
-	(bind ?name (sym-cat (sub-string (+ (str-length ?prefix) 1) (str-length ?p) ?p)))
-	(assert (skill-action-mapping (name ?name) (map-string ?s)))
+	(assert (skill-action-mapping (name ?action) (map-string ?s)))
+)
+(defrule skill-action-set-mapping-executor
+	?sam <- (skill-action-mapping (name ?action) (executor ""))
+	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
+	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/specs/" ?spec "/action-mapping/" ?action "/executor") ?p) 1))
+	         (type STRING) (value ?s))
+	=>
+	(if (neq ?s "") then
+		(modify ?sam (name ?action) (executor ?s))
+	)
+)
+
+(defrule skill-action-set-action-executor
+	(declare (salience ?*SALIENCE-HIGH*))
+	?pa <- (plan-action (state FORMULATED)
+	                    (action-name ?action-name)
+	                    (executor ""))
+	(skill-action-mapping (name ?action-name) (executor ?exec&:(neq ?exec "")))
+	=>
+	(modify ?pa (executor ?exec))
 )
 
 (defrule skill-action-start

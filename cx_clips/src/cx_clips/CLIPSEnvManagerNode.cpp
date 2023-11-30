@@ -23,6 +23,7 @@
 #include <memory>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <string>
 #include <utility>
 
@@ -47,7 +48,25 @@ namespace cx {
 /// @cond INTERNALS
 class CLIPSLogger {
 public:
-  explicit CLIPSLogger(const char *component) : component_(strdup(component)) {}
+  explicit CLIPSLogger(const char *component, bool log_to_file) : component_(strdup(component)) {
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+
+    std::ostringstream oss;
+    oss << std::put_time(std::localtime(&now_time), "%Y-%m-%d-%H-%M-%S");
+
+    std::string formatted_time = oss.str();
+    if(log_to_file) {
+    clips_logger_= spdlog::basic_logger_st(
+      (component_ ? (std::string)component_ : "CLIPS"),
+      (rclcpp::get_logging_directory().string() + "/" +
+       (component_ ? (std::string)component_ : "clips") + "_" + formatted_time + ".log"));
+    } else {
+    // Disable the logger by setting the log level to a level that filters out all messages
+    clips_logger_ =  spdlog::stdout_color_mt("console");
+    clips_logger_->set_level(spdlog::level::off);
+    }
+  }
 
   ~CLIPSLogger() {
     if (component_) {
@@ -56,7 +75,14 @@ public:
   }
 
   void log(const char *logical_name, const char *str) {
-    if (strcmp(str, "\n") == 0) {
+    size_t i = 0;
+    while(str[i]) {
+          i++;
+    }
+    if (str[i-1] == '\n') {
+      if(i > 1) {
+          buffer_ += str;
+      }
       if (strcmp(logical_name, "debug") == 0 ||
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
@@ -101,21 +127,14 @@ public:
 private:
   char *component_ = strdup("clips_default_log_component");
   const rclcpp::Logger logger_ = rclcpp::get_logger(std::string(component_));
-  std::shared_ptr<spdlog::logger> clips_logger_ = spdlog::basic_logger_st(
-      (component_ ? (std::string)component_ : "CLIPS"),
-      (rclcpp::get_logging_directory().string() + "/" +
-       std::to_string(std::chrono::duration_cast<std::chrono::seconds>(
-                          std::chrono::system_clock::now().time_since_epoch())
-                          .count()) +
-       "_" + (component_ ? (std::string)component_ : "clips") + ".log"));
-
+  std::shared_ptr<spdlog::logger> clips_logger_;
   std::string buffer_;
 };
 
 class CLIPSContextMaintainer {
 public:
-  explicit CLIPSContextMaintainer(const char *log_component_name)
-      : logger(log_component_name) {}
+  explicit CLIPSContextMaintainer(const char *log_component_name, bool log_to_file)
+      : logger(log_component_name, log_to_file) {}
 
   ~CLIPSContextMaintainer() {}
 
@@ -183,9 +202,6 @@ CLIPSEnvManagerNode::CLIPSEnvManagerNode()
    * clips feature manager service and waits for a result*/
   callback_group_ =
       create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
-
-  declare_parameter("clips_dirs", clips_dir_);
-  declare_parameter("retract_early", FALSE);
 }
 
 using CallbackReturn =
@@ -226,8 +242,8 @@ CLIPSEnvManagerNode::on_configure(const rclcpp_lifecycle::State &) {
                 _3));
 
   try {
-    clips_dir_ = std::move(
-        ament_index_cpp::get_package_share_directory("cx_clips") + "/clips/");
+    clips_dir_ =
+        ament_index_cpp::get_package_share_directory("cx_clips") + "/clips/";
   } catch (const std::exception &e) {
     std::cerr << e.what() << '\n';
     return CallbackReturn::FAILURE;
@@ -266,7 +282,7 @@ void CLIPSEnvManagerNode::create_env_callback(
     response->error = "Enviroment " + request->env_name + " already exists!";
   } else {
     LockSharedPtr<CLIPS::Environment> clips =
-        std::move(new_env(request->log_name));
+        new_env(request->log_name);
 
     const std::string &env_name = request->env_name;
 
@@ -461,9 +477,18 @@ CLIPSEnvManagerNode::new_env(const std::string &log_component_name) {
     clips.init_mutex();
     // // silent clips by default
     clips->unwatch("all");
+    declare_parameter("log_clips_to_file", true);
+    declare_parameter("watch", std::vector<std::string>{"facts", "rules"});
+    std::vector<std::string> watch_info;
+    get_parameter("watch", watch_info);
+    for( const auto &w : watch_info) {
+        clips->watch(w);
+    }
+    bool log_to_file;
+    get_parameter("log_clips_to_file", log_to_file);
 
     CLIPSContextMaintainer *cm =
-        new CLIPSContextMaintainer(log_component_name.c_str());
+        new CLIPSContextMaintainer(log_component_name.c_str(), log_to_file);
 
     void *env = clips->cobj();
 

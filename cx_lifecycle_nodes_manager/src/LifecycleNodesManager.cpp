@@ -76,20 +76,20 @@ bool LifecycleNodesManager::startupScript() {
 
 bool LifecycleNodesManager::changeNodeState(const std::string &lc_node_name,
                                             std::uint8_t transition) {
-  RCLCPP_INFO(get_logger(), "Changing %s's state!", lc_node_name.c_str());
+  RCLCPP_DEBUG(get_logger(), "Changing state of %s", lc_node_name.c_str());
 
   if (!nodes_to_manage_[lc_node_name]->change_node_state(transition)
       // ||
       //     !(nodes_to_manage_[lc_node_name]->get_node_state() ==
       //       static_cast<uint8_t>(transition))
   ) {
-    RCLCPP_ERROR(get_logger(), "Changing the state for node: %s failed",
+    RCLCPP_ERROR(get_logger(), "Changing the state for %s failed",
                  lc_node_name.c_str());
     return false;
   }
   // TEST PURPOSE
   nodes_to_manage_[lc_node_name]->get_node_state();
-  RCLCPP_WARN(get_logger(), "After CHANGE NODE STATE for %s ", lc_node_name.c_str());
+  RCLCPP_DEBUG(get_logger(), "Changed state of %s ", lc_node_name.c_str());
   return true;
 }
 

@@ -24,11 +24,6 @@ bool MockFeature::clips_context_init(const std::string &env_name,
               clips_feature_name.c_str());
 
   std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-  clips->unwatch("all");
-  clips->watch("all");
-  clips->reset();
-  clips->assert_fact("(b (name " + clips_feature_name + "))");
-  clips->run(-1);
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Initialised the context for env %s!", env_name.c_str());

@@ -69,10 +69,10 @@ private:
   std::string clips_map_skill(std::string action_name,
                               CLIPS::Values param_names,
                               CLIPS::Values param_values);
-  void iterateThroughYamlRecuresively(
-      const YAML::Node &current_level_node, const std::string &node_to_search,
-      const std::string &parent_node_name, const std::string &cfg_prefix,
-      std::map<std::string, std::string> &output_map);
+
+  std::map<std::string, std::string> get_action_mapping(
+      const YAML::Node &starting_node);
+  YAML::Node get_node_from_key(const YAML::Node& node, const std::string& target_key);
 
 private:
   rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::Empty>::SharedPtr
@@ -82,6 +82,9 @@ private:
   std::shared_ptr<cx::CLIPSEnvManagerClient> env_manager_client_;
   std::vector<std::string> clips_dirs{};
   std::string clips_executive_share_dir_;
+  std::string agent_dir_;
+  std::string clips_executive_config_;
+  std::string clips_features_manager_config_;
   bool cfg_assert_time_each_cycle_;
   int refresh_rate_;
   std::chrono::nanoseconds publish_rate_;
