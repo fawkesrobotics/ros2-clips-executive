@@ -67,13 +67,13 @@ def generate_launch_description():
         # arguments=[('--ros-args --log-level debug')]
     )
 
-    nav2_move_skill_node = Node(
+    robot1_dummy_skill_node = Node(
         package='cx_example_skill_nodes',
-        executable='skills_launch_node',
-        name='skills_node',
+        executable='dummy_skill_node',
+        name='robot1_skill_node',
         output='screen',
         emulate_tty=True,
-        parameters=[]
+        parameters=[{"robot_id": "robot1"}]
     )
 
     cx_lifecycle_manager = Node(
@@ -97,7 +97,7 @@ def generate_launch_description():
     ld.add_action(declare_clips_executive_params_file)
     ld.add_action(declare_model_file_cmd)
 
-    ld.add_action(nav2_move_skill_node)
+    ld.add_action(robot1_dummy_skill_node)
     ld.add_action(cx_node)
     ld.add_action(cx_lifecycle_manager)
 

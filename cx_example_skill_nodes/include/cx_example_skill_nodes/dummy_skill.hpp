@@ -1,5 +1,5 @@
 /***************************************************************************
- *  DummyMoveSkill.cpp
+ *  DummySkill.hpp
  *
  *  Created: 16 September 2021
  *  Copyright  2021  Ivaylo Doychev
@@ -18,46 +18,44 @@
  *  Read the full text in the LICENSE.GPL file in the doc directory.
  */
 
+#ifndef CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP
+#define CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP
+
+#include <chrono>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <regex>
+#include <string>
+
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
-#include "cx_example_skill_nodes/DummyMoveSkill.hpp"
+#include "cx_skill_execution/SkillExecution.hpp"
 
+#include "cx_msgs/msg/skill_action_exec_info.hpp"
+#include "cx_msgs/msg/skill_execution.hpp"
 #include "lifecycle_msgs/msg/state.hpp"
 
 namespace cx {
-
 using namespace std::chrono_literals;
 
-DummyMoveSkill::DummyMoveSkill(const std::string &id,
-                               const std::chrono::nanoseconds &rate)
-    : SkillExecution(id, rate) {
-      executor_id_ = "dummy_skiller";
-    }
-using CallbackReturn =
-    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+class DummySkill : public cx::SkillExecution {
 
-CallbackReturn
-DummyMoveSkill::on_activate(const rclcpp_lifecycle::State &state) {
-  std::cerr << "DummyMoveSkill::on_activate" << std::endl;
-  counter_ = 0;
+  using CallbackReturn =
+      rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-  return SkillExecution::on_activate(state);
-}
+public:
+  DummySkill(const std::string &id,
+                 const std::chrono::nanoseconds &rate);
 
-void DummyMoveSkill::perform_execution() {
-  RCLCPP_INFO_STREAM(get_logger(), "Dummy Execution of ");
-  RCLCPP_INFO_STREAM(get_logger(), action_name_.c_str());
-  for (const auto &param : action_parameters_) {
-    RCLCPP_INFO_STREAM(get_logger(), "\t[" << param << "]");
-  }
+  CallbackReturn on_activate(const rclcpp_lifecycle::State &state);
 
-  if (counter_++ > 3) {
-    finish_execution(true, 1.0, "completed");
-  } else {
-    send_feedback(counter_ * 0.0, "running");
-  }
-}
+  void perform_execution() override;
 
+  int counter_;
+};
 } // namespace cx
+#endif // !CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP

@@ -32,8 +32,7 @@ set(dependencies
 )
 
 set(SOURCES
-  src/cx_example_skill_nodes/DummyMoveSkill.cpp
-  src/cx_example_skill_nodes/MoveSkillNav2.cpp
+  src/cx_example_skill_nodes/dummy_skill.cpp
 )
 
 include_directories(include)
@@ -41,9 +40,9 @@ include_directories(include)
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
-add_executable(skills_launch_node src/skills_launch_node.cpp)
-ament_target_dependencies(skills_launch_node ${dependencies})
-target_link_libraries(skills_launch_node ${PROJECT_NAME})
+add_executable(dummy_skill_node src/dummy_skill_launch_node.cpp)
+ament_target_dependencies(dummy_skill_node ${dependencies})
+target_link_libraries(dummy_skill_node ${PROJECT_NAME})
 
 install(
   DIRECTORY include/
@@ -57,7 +56,7 @@ endif()
 
 install(TARGETS
   ${PROJECT_NAME}
-  skills_launch_node
+  dummy_skill_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
