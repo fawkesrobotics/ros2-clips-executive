@@ -2,7 +2,7 @@
   (executive-init)
   (not (domain-loaded))
 =>
-  (parse-pddl-domain (path-resolve "simple-agent/domain.pddl"))
+  (parse-pddl-domain (path-resolve "simple_agent/domain.pddl"))
   (assert (domain-loaded))
 )
 
