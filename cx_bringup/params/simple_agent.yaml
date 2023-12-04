@@ -38,7 +38,6 @@ clips_executive:
           - core/domain.clp
           - core/skills.clp
           - core/worldmodel.clp
-          - core/wm-config.clp
           - core/wm-domain-sync.clp
       # These files are from the cx_bringup package
       - name: domain
