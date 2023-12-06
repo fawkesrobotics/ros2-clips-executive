@@ -27,6 +27,7 @@
 )
 
 (defrule skill-action-init-map-to
+	(declare (salience ?*SALIENCE-HIGH*))
 	(domain-operator (name ?action))
 	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/action_mapping/" ?action "/mapped_to") ?p) 1))
 	         (type STRING) (value ?s))
@@ -34,6 +35,7 @@
 	(assert (skill-action-mapping (name ?action) (map-string ?s)))
 )
 (defrule skill-action-set-mapping-executor
+	(declare (salience ?*SALIENCE-HIGH*))
 	?sam <- (skill-action-mapping (name ?action) (executor ""))
 	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/action_mapping/" ?action "/executor") ?p) 1))
 	         (type STRING) (value ?s))
