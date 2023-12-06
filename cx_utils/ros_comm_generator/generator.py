@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+from ament_index_python.packages import get_package_share_directory
+
 import argparse
 import re
 from jinja2 import Template
@@ -132,8 +135,10 @@ for line in lines:
 
 time_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+package_dir = get_package_share_directory('cx_utils')
+
 if args.subscriber:
-    with open('subscriber-source.jinja') as s, open('subscriber-header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
+    with open(package_dir+"/templates/"+'subscriber_source.jinja') as s, open(package_dir+"/templates/"+'subscriber_header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
         tmpl = Template(s.read())
         out = tmpl.render(name_camel = to_camel_case(args.name), message_type=args.message_type, subscriber_name = args.name, slots = fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix))
         source_file.write(out)
@@ -142,7 +147,7 @@ if args.subscriber:
         header_file.write(out)
 
 if args.publisher:
-    with open('publisher-source.jinja') as s, open('publisher-header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
+    with open(package_dir+"/templates/"+'publisher_source.jinja') as s, open(package_dir+"/templates/"+'publisher_header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
         tmpl = Template(s.read())
         out = tmpl.render(name_camel = to_camel_case(args.name), message_type=args.message_type, publisher_name = args.name, slots = fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix))
         source_file.write(out)
@@ -151,7 +156,7 @@ if args.publisher:
         header_file.write(out)
 
 if args.requester:
-    with open('requester-source.jinja') as s, open('requester-header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
+    with open(package_dir+"/templates/"+'requester_source.jinja') as s, open(package_dir+"/templates/"+'requester_header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
         tmpl = Template(s.read())
         out = tmpl.render(name_camel = to_camel_case(args.name), message_type=args.message_type, requester_name = args.name, slots = fields.values(), response_slots=response_fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix))
         source_file.write(out)

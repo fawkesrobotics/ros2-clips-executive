@@ -48,6 +48,12 @@ install(
   DIRECTORY ros_comm_generator/templates
   DESTINATION share/${PROJECT_NAME}
 )
+
+install(
+  FILES ros_comm_generator/generator.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
