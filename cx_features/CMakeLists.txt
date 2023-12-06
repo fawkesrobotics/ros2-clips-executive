@@ -20,7 +20,6 @@ find_package(cx_clips REQUIRED)
 find_package(cx_core REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
-find_package(cx_blackboard REQUIRED)
 find_package(cx_skill_execution REQUIRED)
 find_package(ClipsPddlParser REQUIRED)
 find_package(ClipsProtobuf REQUIRED)
@@ -42,7 +41,6 @@ set(dependencies
   ClipsPddlParser
   ClipsProtobuf
   yaml-cpp
-  cx_blackboard
   pluginlib
   rosbag2_cpp
   plansys2_problem_expert
@@ -97,9 +95,6 @@ add_library(ros_topic_subscriber_feature SHARED src/cx_features/ros_communicatio
 ament_target_dependencies(ros_topic_subscriber_feature ${dependencies})
 target_link_libraries(ros_topic_subscriber_feature PkgConfig::CLIPSMM)
 
-add_library(blackboard_feature SHARED src/cx_features/blackboard_feature/BlackboardFeature.cpp)
-ament_target_dependencies(blackboard_feature ${dependencies})
-target_link_libraries(blackboard_feature PkgConfig::CLIPSMM)
 
 # END OF PLUGINS REGISTRATION
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
@@ -130,7 +125,6 @@ install(TARGETS
   mock_feature
   plansys2_feature
   skill_execution_feature
-  blackboard_feature
   ros_service_requester_feature
   ros_topic_subscriber_feature
   ros_topic_publisher_feature

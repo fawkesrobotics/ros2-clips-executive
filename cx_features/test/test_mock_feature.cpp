@@ -11,9 +11,7 @@
 #include "cx_clips/CLIPSEnvManagerClient.hpp"
 #include "cx_clips/CLIPSEnvManagerNode.h"
 
-#include "cx_blackboard/BlackboardNode.hpp"
 
-#include "cx_features/BlackboardFeature.hpp"
 #include "cx_features/ClipsFeaturesManager.hpp"
 #include "cx_features/MockFeature.hpp"
 
