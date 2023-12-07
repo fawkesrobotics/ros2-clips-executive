@@ -56,6 +56,7 @@ DummySkill::on_activate(const rclcpp_lifecycle::State &state) {
 	  if (timer_ && get_current_state().id() ==
             lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE) {
 		RCLCPP_INFO(get_logger(), "Lambda function called after 7 seconds!");
+	  // TODO: does not always terminate?
       finish_execution(true, 1.0, "completed");
 		timer_->cancel();
 	   }
