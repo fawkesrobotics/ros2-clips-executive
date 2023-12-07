@@ -41,7 +41,9 @@ using CallbackReturn =
 CallbackReturn
 DummySkill::on_activate(const rclcpp_lifecycle::State &state) {
 
-  declare_parameter("exec_times." + action_name_ + ".time",5.0);
+  if(!has_parameter("exec_times." + action_name_ + ".time")) {
+    declare_parameter("exec_times." + action_name_ + ".time",5.0);
+  }
   get_parameter("exec_times." + action_name_ + ".time",duration_);
 	if(timer_) {
 		timer_->cancel();
