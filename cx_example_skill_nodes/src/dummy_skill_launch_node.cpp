@@ -15,7 +15,6 @@ int main(int argc, char **argv) {
   auto node =
       std::make_shared<cx::DummySkill>("dummy_skill_node", 500ms);
 
-  node->set_parameter(rclcpp::Parameter("robot_id", ""));
   node->trigger_transition(
       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
