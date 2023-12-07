@@ -40,24 +40,45 @@ using CallbackReturn =
 
 CallbackReturn
 DummySkill::on_activate(const rclcpp_lifecycle::State &state) {
-  std::cerr << "DummySkill::on_activate" << std::endl;
-  counter_ = 0;
 
-  return SkillExecution::on_activate(state);
-}
+  declare_parameter("exec_times." + action_name_ + ".time",5.0);
+  get_parameter("exec_times." + action_name_ + ".time",duration_);
+	if(timer_) {
+		timer_->cancel();
+	}
+	auto period_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<float>(duration_));
+	  auto callback_group = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
 
-void DummySkill::perform_execution() {
-  RCLCPP_INFO_STREAM(get_logger(), "Dummy Execution of ");
-  RCLCPP_INFO_STREAM(get_logger(), action_name_.c_str());
+
+	timer_ = rclcpp::create_timer(this, get_clock(), period_ns, [this] () {
+	  if (timer_ && get_current_state().id() ==
+            lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE) {
+		RCLCPP_INFO(get_logger(), "Lambda function called after 7 seconds!");
+      finish_execution(true, 1.0, "completed");
+		timer_->cancel();
+	   }
+	  
+	},
+							   nullptr
+	);
+  RCLCPP_INFO_STREAM(get_logger(), "Dummy Execution of " << action_name_ << " takes " << duration_ << " seconds");
   for (const auto &param : action_parameters_) {
     RCLCPP_INFO_STREAM(get_logger(), "\t[" << param << "]");
   }
+  return SkillExecution::on_activate(state);
 
-  if (counter_++ > 3) {
-    finish_execution(true, 1.0, "completed");
-  } else {
-    send_feedback(counter_ * 0.0, "running");
-  }
+}
+    // Override the finish_execution function
+void DummySkill::finish_execution(bool success, float progress,
+                        const std::string &status) {
+        // Call the base class implementation
+	    timer_->cancel();
+        SkillExecution::finish_execution(success, progress, status);
+    }
+void DummySkill::perform_execution() {
+	if(!timer_) {
+	on_activate(get_current_state());
+	}
 }
 
 } // namespace cx

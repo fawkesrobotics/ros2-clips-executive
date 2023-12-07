@@ -54,8 +54,13 @@ public:
   CallbackReturn on_activate(const rclcpp_lifecycle::State &state);
 
   void perform_execution() override;
+protected:
+  void finish_execution(bool success, float progress,
+                        const std::string &status) override;
 
-  int counter_;
+	float duration_;
+    rclcpp::TimerBase::SharedPtr  timer_;
+  
 };
 } // namespace cx
 #endif // !CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP
