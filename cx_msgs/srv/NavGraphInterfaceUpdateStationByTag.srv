@@ -1,0 +1,11 @@
+string name
+string side
+string frame
+float64[] tag_translation
+# (x,y,z) -> coordinate from frame origin
+float64[] tag_rotation
+# (x,y,z,w) -> Quaternion rotation from frame
+int16[] zone_coords
+# (x,y) -> Integral zone coordinates, i.e. [2,3] for C-Z23 or [-2,3] for M-Z23.
+---
+bool success
