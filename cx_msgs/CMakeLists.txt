@@ -18,6 +18,8 @@ set(MSGS
   "msg/PddlGenInterfaceMessages.msg"
   "msg/SkillExecution.msg"
   "msg/SkillActionExecInfo.msg"
+  "msg/NavGraphInterfaceMessage.msg"
+  "msg/NavGraphWithMPSInterfaceMessage.msg"
 )
 
 set(SERVICES
