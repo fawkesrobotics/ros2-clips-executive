@@ -92,6 +92,8 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
 
         // declare the parameters define in the list for each feature
         std::map<std::string, rclcpp::Parameter> feature_param_map{};
+        feature_param_map["agent_dir"] =  get_parameter("agent_dir");
+
         declare_parameter("clips_features." + feat_name + ".feature_parameters",
                           std::vector<std::string>());
         std::vector<std::string> feature_parameters =
