@@ -567,7 +567,7 @@ void CLIPSEnvManagerNode::guarded_load(const std::string &env_name,
 void CLIPSEnvManagerNode::add_functions(const std::string &env_name) {
   getEnvironmentByName(env_name)->add_function(
       "now",
-      sigc::slot<float>(sigc::mem_fun(*this, &CLIPSEnvManagerNode::clips_now)));
+      sigc::slot<double>(sigc::mem_fun(*this, &CLIPSEnvManagerNode::clips_now)));
   getEnvironmentByName(env_name)->add_function(
       "now-systime", sigc::slot<CLIPS::Values>(sigc::mem_fun(
                          *this, &CLIPSEnvManagerNode::clips_now_systime)));
@@ -629,7 +629,7 @@ void CLIPSEnvManagerNode::call_feature_context_destroy(
   // }
 }
 
-float CLIPSEnvManagerNode::clips_now() { return get_clock()->now().seconds(); }
+double CLIPSEnvManagerNode::clips_now() { return get_clock()->now().seconds(); }
 
 CLIPS::Values CLIPSEnvManagerNode::clips_now_systime() {
   CLIPS::Values rv;
