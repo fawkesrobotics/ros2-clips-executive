@@ -102,6 +102,7 @@ public:
       }
       // log any output to a dedicated clips log file
       clips_logger_->info(buffer_.c_str());
+      clips_logger_->flush();
       buffer_.clear();
 
     } else {
