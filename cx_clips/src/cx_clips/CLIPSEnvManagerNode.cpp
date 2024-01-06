@@ -481,7 +481,7 @@ CLIPSEnvManagerNode::new_env(const std::string &log_component_name) {
     SetEnvironmentContext(env, cm);
 
     EnvAddRouterWithContext(env, (char *)ROUTNER_NAME, /*router priority*/
-                            30, log_router_query, log_router_print, NULL, NULL,
+                            40, log_router_query, log_router_print, NULL, NULL,
                             log_router_exit, &cm->logger);
 
     sigaction(SIGINT, &oldact, NULL);
