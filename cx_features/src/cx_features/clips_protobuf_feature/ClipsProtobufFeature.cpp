@@ -51,10 +51,10 @@ bool ClipsProtobufFeature::clips_context_init(
               clips_feature_name.c_str());
 
   envs_[env_name] = clips;
+  std::vector<std::string> path = {parameters["agent_dir"].as_string() + "/" + parameters["protobuf_path"].as_string()};
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Loading protobuf files from: %s",
-              parameters["protobuf_path"].as_string().c_str());
-  std::vector<std::string> path = {parameters["protobuf_path"].as_string()};
+              path[0].c_str());
   protobuf_communicator =
       std::make_unique<protobuf_clips::ClipsProtobufCommunicator>(
           envs_[env_name].get_obj().get(),
