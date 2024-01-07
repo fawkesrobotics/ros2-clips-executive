@@ -224,7 +224,7 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
       fact = fact->next();
     }
   }
-  RCLCPP_INFO(get_logger(), "CLIPS Executive was inistialised!");
+  RCLCPP_INFO(get_logger(), "CLIPS Executive was initialised!");
 
   agenda_refresh_timer_ = create_wall_timer(publish_rate_, [this]() {
     std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));

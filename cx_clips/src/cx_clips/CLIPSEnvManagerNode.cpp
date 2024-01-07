@@ -86,37 +86,23 @@ public:
       if (strcmp(logical_name, "debug") == 0 ||
           strcmp(logical_name, "logdebug") == 0 ||
           strcmp(logical_name, WTRACE) == 0) {
-        RCLCPP_DEBUG(this->logger_,
-                     (component_ ? ((std::string)component_ + " " + buffer_)
-                                 : ("CLIPS " + buffer_).c_str())
-                         .c_str());
+        RCLCPP_DEBUG(this->logger_,buffer_.c_str());
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
                  strcmp(logical_name, WWARNING) == 0) {
-        RCLCPP_WARN(this->logger_,
-                    (component_ ? ((std::string)component_ + " " + buffer_)
-                                : ("CLIPS " + buffer_).c_str())
-                        .c_str());
+        RCLCPP_WARN(this->logger_,buffer_.c_str());
       } else if (strcmp(logical_name, "error") == 0 ||
                  strcmp(logical_name, "logerror") == 0 ||
                  strcmp(logical_name, WERROR) == 0) {
-        RCLCPP_ERROR(this->logger_,
-                     (component_ ? ((std::string)component_ + " " + buffer_)
-                                 : ("CLIPS " + buffer_).c_str())
-                         .c_str());
+        RCLCPP_ERROR(this->logger_, buffer_.c_str());
       } else if (strcmp(logical_name, WDIALOG) == 0) {
         // ignored
       } else {
-        RCLCPP_INFO(this->logger_,
-                    (component_ ? ((std::string)component_ + " " + buffer_)
-                                : ("CLIPS " + buffer_).c_str())
-                        .c_str());
+        RCLCPP_INFO(this->logger_,buffer_.c_str());
       }
       // log any output to a dedicated clips log file
-      clips_logger_->info((component_
-                               ? ((std::string)component_ + " " + buffer_)
-                               : ("CLIPS " + buffer_).c_str())
-                              .c_str());
+      clips_logger_->info(buffer_.c_str());
+      clips_logger_->flush();
       buffer_.clear();
 
     } else {
@@ -495,7 +481,7 @@ CLIPSEnvManagerNode::new_env(const std::string &log_component_name) {
     SetEnvironmentContext(env, cm);
 
     EnvAddRouterWithContext(env, (char *)ROUTNER_NAME, /*router priority*/
-                            30, log_router_query, log_router_print, NULL, NULL,
+                            40, log_router_query, log_router_print, NULL, NULL,
                             log_router_exit, &cm->logger);
 
     sigaction(SIGINT, &oldact, NULL);
