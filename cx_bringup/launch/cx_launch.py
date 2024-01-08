@@ -42,13 +42,13 @@ def generate_launch_description():
 
     declare_cx_params_file = DeclareLaunchArgument(
         'cx_params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'cx_params.yaml'),
+        default_value=os.path.join(bringup_dir, 'params', 'clips_features_manager.yaml'),
         description='Path to the ROS2 cx_params.yaml file')
 
     declare_clips_executive_params_file = DeclareLaunchArgument(
         'clips_executive_params_file',
         default_value=os.path.join(
-            bringup_dir, 'params', 'clips_executive.yaml'),
+            bringup_dir, 'params', 'simple_agent.yaml'),
         description='Path to Clips Executive params file')
 
     cx_node = Node(
@@ -59,7 +59,10 @@ def generate_launch_description():
         namespace=namespace,
         parameters=[
             cx_params_file,
-            clips_executive_params_file
+            clips_executive_params_file,
+            {"agent_dir":bringup_dir},
+            {"clips_executive_config": clips_executive_params_file},
+            {"clips_features_manager_config": cx_params_file},
         ],
         arguments=['--ros-args', '--log-level', log_level]
     )

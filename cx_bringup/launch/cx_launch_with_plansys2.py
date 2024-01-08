@@ -49,7 +49,7 @@ def generate_launch_description():
     declare_clips_executive_params_file = DeclareLaunchArgument(
         'clips_executive_params_file',
         default_value=os.path.join(
-            bringup_dir, 'params', 'clips_executive.yaml'),
+            bringup_dir, 'params', 'simple_agent.yaml'),
         description='Path to Clips Executive params file')
 
     plansys2_node_cmd = Node(
