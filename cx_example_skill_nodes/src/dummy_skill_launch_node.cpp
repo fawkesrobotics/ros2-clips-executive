@@ -12,8 +12,7 @@ using namespace std::chrono_literals;
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
-  auto node =
-      std::make_shared<cx::DummySkill>("dummy_skill_node", 500ms);
+  auto node = std::make_shared<cx::DummySkill>("dummy_skill_node", 500ms);
 
   node->trigger_transition(
       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);

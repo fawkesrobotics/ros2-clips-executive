@@ -48,19 +48,18 @@ class DummySkill : public cx::SkillExecution {
       rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
 public:
-  DummySkill(const std::string &id,
-                 const std::chrono::nanoseconds &rate);
+  DummySkill(const std::string &id, const std::chrono::nanoseconds &rate);
 
   CallbackReturn on_activate(const rclcpp_lifecycle::State &state);
 
   void perform_execution() override;
+
 protected:
   void finish_execution(bool success, float progress,
                         const std::string &status) override;
 
-	float duration_;
-    rclcpp::TimerBase::SharedPtr  timer_;
-  
+  float duration_;
+  rclcpp::TimerBase::SharedPtr timer_;
 };
 } // namespace cx
 #endif // !CX_EXAMPLE_SKILL_NODES__DUMMYMOVESKILL_HPP
