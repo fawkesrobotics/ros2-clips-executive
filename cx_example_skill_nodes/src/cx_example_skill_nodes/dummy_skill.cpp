@@ -19,7 +19,6 @@
  */
 
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp_action/rclcpp_action.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
 #include "cx_example_skill_nodes/dummy_skill.hpp"

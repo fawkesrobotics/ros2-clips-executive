@@ -20,15 +20,8 @@ find_package(cx_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
 
-set(DEPENDENCIES
-    ament_cmake
-    rclcpp
-    rclcpp_lifecycle
-    lifecycle_msgs
-    cx_msgs
-    cx_skill_execution
-    nav2_msgs
-    geometry_msgs)
+set(DEPENDENCIES cx_msgs cx_skill_execution rclcpp rclcpp_lifecycle
+                 lifecycle_msgs)
 
 set(SOURCES src/cx_example_skill_nodes/dummy_skill.cpp)
 
@@ -38,7 +31,6 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${DEPENDENCIES})
 
 add_executable(dummy_skill_node src/dummy_skill_launch_node.cpp)
-ament_target_dependencies(dummy_skill_node ${DEPENDENCIES})
 target_link_libraries(dummy_skill_node ${PROJECT_NAME})
 
 install(DIRECTORY include/ DESTINATION include/)
@@ -56,6 +48,6 @@ install(
 
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
-ament_export_dependencies(${dependencies})
+ament_export_dependencies(${DEPENDENCIES})
 
 ament_package()

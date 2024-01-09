@@ -30,7 +30,6 @@
 #include <string>
 
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp_action/rclcpp_action.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
 #include "cx_skill_execution/SkillExecution.hpp"
