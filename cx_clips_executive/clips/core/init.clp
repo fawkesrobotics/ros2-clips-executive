@@ -58,13 +58,13 @@
 
 (defrule executive-configurable-unwatch
   (declare (salience ?*SALIENCE-INIT*))
-  (executive-init)
+  (executive-initialized)
   =>
-	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/unwatch-facts")
+	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/unwatch_facts")
 																	 (eq ?c:type STRING) ?c:is-list)
 	 (cx-debug-unwatch-facts ?c:list-value)
   )
-	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/unwatch-rules")
+	(do-for-fact ((?c confval)) (and (eq ?c:path "/clips_executive/unwatch_rules")
 																	 (eq ?c:type STRING) ?c:is-list)
 	 (cx-debug-unwatch-rules ?c:list-value)
   )
@@ -153,7 +153,6 @@
   (declare (salience ?*SALIENCE-INIT*))
 	(executive-init)
 	(executive-init-request (state ERROR) (order ?i) (error-msgs $?error-msgs))
-	?sf <- (executive-init-stage)
 	=>
 	(printout error crlf)
 	(printout error "***********************************************************" crlf)
@@ -162,8 +161,6 @@
 	(printout error crlf)
 	(printout error "***********************************************************" crlf)
 	(printout error crlf)
-	(retract ?sf)
-	(assert (executive-init-stage FAILED))
 )
 
 (defrule executive-init-stage-request-feature
@@ -263,9 +260,7 @@
 
 (defrule executive-init-stage-finished
 	(executive-init)
-	?sf <- (executive-init-stage)
 	(not (executive-init-request (state ~COMPLETED)))
 	=>
-	(retract ?sf)
 	(assert (executive-initialized))
 )
