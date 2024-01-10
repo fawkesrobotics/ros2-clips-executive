@@ -106,10 +106,12 @@ void SkillExecutionFeature::request_skill_execution(
       skill_master_map_.erase(id);
     } else {
       RCLCPP_ERROR(node_->get_logger(), "Previous skill running, abort!");
-      clips->assert_fact_f(
-          "(skill-feedback (skill-id (sym-cat %s)) (robot \"%s\") (executor "
-          "\"%s\") (status S_FAILED) (error \"other skill already running\"))",
-          skill_id.c_str(), robot_id.c_str(), executor_id.c_str());
+      clips->assert_fact_f("(skill-feedback (skill-id (sym-cat \"%s\")) (robot "
+                           "\"%s\") (executor \"%s\") (status S_FAILED) (error "
+                           "\"other skill already running\") (time (now)))",
+                           skill_id.c_str(), robot_id.c_str(),
+                           executor_id.c_str());
+
       return;
       // Abort skill execution for the same agent id
     }
