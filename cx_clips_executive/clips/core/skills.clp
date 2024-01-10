@@ -89,6 +89,14 @@
 	(modify ?sf (status S_FAILED) (error-msg "Start timeout"))
 )
 
+(defrule skill-status-update-no-skill
+	?sf <- (skill-feedback (skill-id ?skill-id) (robot ?robot) (status ?new-status))
+  (not (skill (name ?n) (id ?skill-id) (robot ?robot)))
+  =>
+  (printout warn "Received unexpected skill feedback " ?new-status " for " ?skill-id " of " ?robot crlf)
+  (retract ?sf)
+)
+
 ; (defrule skill-idle
 ;  (declare (salience -4000))
 ;  ?sf <- (skill (status S_FINAL|S_FAILED))
