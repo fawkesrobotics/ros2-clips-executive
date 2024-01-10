@@ -62,6 +62,7 @@
 )
 
 (defrule skill-status-update
+  (declare (salience ?*SALIENCE-HIGH*))
   ?sf <- (skill-feedback (skill-id ?skill-id) (robot ?robot) (status ?new-status)
                            (error ?error-msg))
   ?s <- (skill (name ?n) (id ?skill-id) (status ?old-status&~?new-status&~S_FINAL&~S_FAILED)
