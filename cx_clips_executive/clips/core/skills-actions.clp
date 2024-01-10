@@ -138,14 +138,15 @@
 	(printout warn
 		  "Cancelling Skill Execution, corresponding action does not exist" crlf)
 	(call-skill-cancel ?robot ?exec)
-	(retract ?pe)
 )
 
-(defrule skill-action-retract-execinfo-without-action
-	?pe <- (skill-action-exec-info (goal-id ?goal-id) (plan-id ?plan-id) (executor ?exec)
-	                              (action-id ?id) (skill-id ?skill-id) (robot ?robot))
-	(not (skill (status S_RUNNING) (id ?skill-id) (executor ?exec)))
-	(not (plan-action (goal-id ?goal-id) (plan-id ?plan-id) (id ?action-id) (executor ?exec)))
+(defrule skill-action-cleanup-if-action-does-not-exist
+	?pe <- (skill-action-exec-info (goal-id ?goal-id) (plan-id ?plan-id)
+	                              (action-id ?id) (skill-id ?skill-id)
+	                              (robot ?robot) (executor ?exec))
+	?s <- (skill (id ?skill-id) (status S_FINAL|S_FAILED) (robot ?robot) (executor ?exec))
+	(not (plan-action (goal-id ?goal-id) (plan-id ?plan-id) (id ?id) (executor ?exec) (state WAITING|RUNNING)
+	                  (robot ?robot)))
 	=>
-	(retract ?pe)
+	(retract ?pe ?s)
 )
