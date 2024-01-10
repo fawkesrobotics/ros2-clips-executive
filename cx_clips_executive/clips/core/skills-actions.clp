@@ -55,6 +55,20 @@
 	(modify ?pa (executor ?exec))
 )
 
+(defrule skill-action-cancel-runnning-before-start
+	?pa <- (plan-action (goal-id ?goal-id) (plan-id ?plan-id) (id ?id) (state PENDING)
+	                    (action-name ?action-name) (executable TRUE)
+	                    (robot ?robot)
+	                    (executor ?executor)
+	                    (param-names $?params)
+	                    (param-values $?param-values))
+	(skill-action-mapping (name ?action-name))
+	(skill (id ?skill-id) (executor ?executor) (robot ?robot) (status ~S_FAILED&~S_FINAL))
+	=>
+	(printout warn "Action " ?action-name " for " ?robot " with executor " ?executor " pending, but executor is still busy. Cancelling previous skill call " ?skill-id crlf)
+	(call-skill-cancel ?robot ?executor)
+)
+
 (defrule skill-action-start
 	?pa <- (plan-action (goal-id ?goal-id) (plan-id ?plan-id) (id ?id) (state PENDING)
 	                    (action-name ?action-name) (executable TRUE)
@@ -64,6 +78,7 @@
 	                    (param-values $?param-values))
 	(skill-action-mapping (name ?action-name))
 	(not (skill-action-exec-info (robot ?robot)))
+	(not (skill (id ?skill-id) (executor ?executor) (robot ?robot)))
 	=>
 	(bind ?skill-id (skill-call ?action-name ?params ?param-values ?robot ?executor))
 	(modify ?pa (state WAITING))
