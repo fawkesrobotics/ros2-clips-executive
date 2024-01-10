@@ -39,6 +39,7 @@ clips_executive:
           - core/skills.clp
           - core/worldmodel.clp
           - core/wm-domain-sync.clp
+          - core/skills-actions.clp
       # These files are from the cx_bringup package
       - name: domain
         file: simple_agent/domain.clp
@@ -51,7 +52,6 @@ clips_executive:
       - name: action-execution
         files:
           - simple_agent/print-action.clp
-          - core/skills-actions.clp
       - name: refbox-comm
         files:
           - simple_agent/refbox-comm-init.clp
