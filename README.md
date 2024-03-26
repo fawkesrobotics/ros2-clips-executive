@@ -26,7 +26,7 @@ Install ROS 2 via the [install instructions](https://docs.ros.org/en/galactic/In
 ### Install Plansys2
 The CX requires only the instances inside Plansys2, which are responsible for planning. This excludes the following packages: `plansys2_executor`, `plansys2_terminal`, `plansys2_bt_actions`, `plansys2_tests`, `plansys2_bringup`.
 #### Ubuntu users
-Follow the Plansys2 [build instructions](https://intelligentroboticslab.gsyc.urjc.es/ros2_planning_system.github.io/build_instructions/index.html).
+Follow the Plansys2 [build instructions](https://plansys2.github.io/build_instructions/index.html).
 #### Other OS
 ##### Prerequisites:
 You need to install the dependencies of Plansys2 ([cascade_lifecycle](https://github.com/fmrico/cascade_lifecycle.git) and [popf](https://github.com/fmrico/popf.git))
