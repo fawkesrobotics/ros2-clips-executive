@@ -83,9 +83,8 @@ bool SkillExecutionFeature::clips_context_destroyed(
 void SkillExecutionFeature::request_skill_execution(
     const std::string &env_name, const std::string &skill_id,
     const std::string &action_name, const std::string &action_params,
-    const std::string &mapped_action,
-    const std::string &robot_id,
-	const std::string &executor_id) {
+    const std::string &mapped_action, const std::string &robot_id,
+    const std::string &executor_id) {
 
   if (envs_.find(env_name) == envs_.end()) {
     RCLCPP_ERROR(node_->get_logger(),
@@ -94,52 +93,43 @@ void SkillExecutionFeature::request_skill_execution(
                  env_name.c_str());
     return;
   }
-  RCLCPP_INFO(node_->get_logger(),
-              "Requesting skill (%s, %s) with mapped_action %s for robot %s and executor %s",
-              action_name.c_str(), action_params.c_str(), mapped_action.c_str(),
-              robot_id.c_str(), executor_id.c_str());
-  // make new skill execution master
-  auto skill_master = std::make_shared<cx::SkillExecutionMaster>(
-      /*name the master as the provided skill id*/ skill_id, skill_id,
-      action_name, mapped_action, action_params, robot_id, executor_id, envs_[env_name]);
-
-  auto skill_master_st = SkillMasterSt();
-  skill_master_st.skill_master = skill_master;
-  std::pair<std::string,std::string> id{robot_id,executor_id};
+  cx::LockSharedPtr<CLIPS::Environment> clips = envs_[env_name];
+  std::pair<std::string, std::string> id{robot_id, executor_id};
 
   // If there is currently running skill, which is unlikely to happen
-  if (skill_master_map_.find(id) != skill_master_map_.end()) {
+  auto old_entry = skill_master_map_.find(id);
+  if (old_entry != skill_master_map_.end()) {
     auto exec_info = skill_master_map_[id].skill_master->get_exec_info();
 
     if (exec_info.status == cx_msgs::msg::SkillActionExecInfo::S_FINAL ||
         exec_info.status == cx_msgs::msg::SkillActionExecInfo::S_FAILED) {
       skill_master_map_.erase(id);
     } else {
-      RCLCPP_WARN(node_->get_logger(), "Previous skill running!");
-      // Abort skill execution for the same agent id
-      auto curr_skill_m = skill_master_map_[id].skill_master;
-      curr_skill_m->cancel_execution();
+      RCLCPP_ERROR(node_->get_logger(), "Previous skill running, abort!");
+      clips->assert_fact_f("(skill-feedback (skill-id (sym-cat \"%s\")) (robot "
+                           "\"%s\") (executor \"%s\") (status S_FAILED) (error "
+                           "\"other skill already running\") (time (now)))",
+                           skill_id.c_str(), robot_id.c_str(),
+                           executor_id.c_str());
 
-      // Wait for the cancelation status or max timeout
-      auto start_time = node_->now();
-      auto req_time = (node_->now() - start_time).seconds();
-      // in case the same skill execution node is requested there will be a
-      // conflict, so wait for transitioning out of running state
-	  // TODO: this is not great, we should wait until we get the expected ExecState or timeout
-      while (curr_skill_m->get_exec_status() ==
-             SkillExecutionMaster::ExecState::RUNNING) {
-        req_time = (node_->now() - start_time).seconds();
-        if (req_time > 3.0)
-          break;
-      }
-      RCLCPP_WARN(node_->get_logger(), "Previous skill cancelled!");
+      return;
+      // Abort skill execution for the same agent id
     }
   }
-
   RCLCPP_INFO(node_->get_logger(),
-              "Requesting skill (%s, %s) with mapped_action %s for robot %s and executor %s",
+              "Requesting skill (%s, %s) with mapped_action %s for robot %s "
+              "and executor %s for %s ",
               action_name.c_str(), action_params.c_str(), mapped_action.c_str(),
-              robot_id.c_str(), executor_id.c_str());
+              robot_id.c_str(), executor_id.c_str(), skill_id.c_str());
+  // make new skill execution master
+  auto skill_master = std::make_shared<cx::SkillExecutionMaster>(
+      /*name the master as the provided skill id*/ skill_id, skill_id,
+      action_name, mapped_action, action_params, robot_id, executor_id,
+      envs_[env_name]);
+
+  auto skill_master_st = SkillMasterSt();
+  skill_master_st.skill_master = skill_master;
+
   // Spin exec node in executor
   skill_master_st.skill_master_exec_node =
       std::make_shared<cx::NodeThread>(skill_master->get_node_base_interface());
@@ -158,7 +148,7 @@ void SkillExecutionFeature::cancel_skill(const std::string &env_name,
                  env_name.c_str());
     return;
   }
-  std::pair<std::string, std::string> id{robot_id,executor_id};
+  std::pair<std::string, std::string> id{robot_id, executor_id};
   if (skill_master_map_.find(id) != skill_master_map_.end()) {
     skill_master_map_[id].skill_master->cancel_execution();
     // cx::LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name];

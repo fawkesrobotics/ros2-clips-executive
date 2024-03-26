@@ -2,7 +2,7 @@
 " Assert an action with a unique id."
 	(bind ?id-sym (gensym*))
 	(bind ?id-str (sub-string 4 (length$ ?id-sym) (str-cat ?id-sym)))
-	(assert (plan-action (id (string-to-field ?id-str)) (action-name ?name) (executor "fawkes_skiller") (param-values $?param-values)))
+	(assert (plan-action (id (string-to-field ?id-str)) (action-name ?name) (robot "robot1") (param-values $?param-values)))
 )
 
 (deffunction plan-assert-sequential (?plan-name ?goal-id ?robot $?action-tuples)

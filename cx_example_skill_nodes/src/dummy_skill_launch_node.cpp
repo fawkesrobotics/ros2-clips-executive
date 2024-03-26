@@ -6,16 +6,14 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
-#include "cx_example_skill_nodes/MoveSkillNav2.hpp"
+#include "cx_example_skill_nodes/dummy_skill.hpp"
 
 using namespace std::chrono_literals;
 
 int main(int argc, char **argv) {
   rclcpp::init(argc, argv);
-  auto node =
-      std::make_shared<cx::MoveSkillNav2>("nav2_move_node", 500ms);
+  auto node = std::make_shared<cx::DummySkill>("dummy_skill_node", 500ms);
 
-  node->set_parameter(rclcpp::Parameter("robot_id", ""));
   node->trigger_transition(
       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 

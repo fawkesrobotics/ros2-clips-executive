@@ -14,6 +14,7 @@ def generate_launch_description():
 
     namespace = LaunchConfiguration('namespace')
     clips_features_manager_file = LaunchConfiguration('clips_features_manager_file')
+    dummy_skiller_file = LaunchConfiguration('dummy_skiller_file')
     log_level = LaunchConfiguration('log_level')
     model_file = LaunchConfiguration('model_file')
 
@@ -50,6 +51,11 @@ def generate_launch_description():
         default_value=os.path.join(
             bringup_dir, 'params', 'simple_agent.yaml'),
         description='Path to Clips Executive params file')
+    declare_dummy_skiller_file = DeclareLaunchArgument(
+        'dummy_skiller_file',
+        default_value=os.path.join(
+            bringup_dir, 'params', 'dummy_skiller.yaml'),
+        description='Path to Clips Executive params file')
 
     cx_node = Node(
         package='cx_bringup',
@@ -67,13 +73,13 @@ def generate_launch_description():
         # arguments=[('--ros-args --log-level debug')]
     )
 
-    nav2_move_skill_node = Node(
+    robot1_dummy_skill_node = Node(
         package='cx_example_skill_nodes',
-        executable='skills_launch_node',
-        name='skills_node',
+        executable='dummy_skill_node',
+        name='robot1_skill_node',
         output='screen',
         emulate_tty=True,
-        parameters=[]
+        parameters=[{"robot_id": "robot1"}, dummy_skiller_file]
     )
 
     cx_lifecycle_manager = Node(
@@ -95,9 +101,10 @@ def generate_launch_description():
     ld.add_action(declare_namespace_)
     ld.add_action(declare_clips_features_manager_file)
     ld.add_action(declare_clips_executive_params_file)
+    ld.add_action(declare_dummy_skiller_file)
     ld.add_action(declare_model_file_cmd)
 
-    ld.add_action(nav2_move_skill_node)
+    ld.add_action(robot1_dummy_skill_node)
     ld.add_action(cx_node)
     ld.add_action(cx_lifecycle_manager)
 

@@ -65,7 +65,7 @@ protected:
 
   void send_response(const cx_msgs::msg::SkillExecution::SharedPtr msg);
   void send_feedback(float progress, const std::string &status);
-  void finish_execution(bool success, float progress,
+  virtual void finish_execution(bool success, float progress,
                         const std::string &status);
 
   std::string action_name_;

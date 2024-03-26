@@ -49,13 +49,14 @@ using SkillActionExecInfo = cx_msgs::msg::SkillActionExecInfo;
 SkillExecutionMaster::SkillExecutionMaster(
     const std::string &node_name, const std::string &skill_id,
     const std::string &action_name, const std::string &mapped_action,
-    const std::string &action_parameters, const std::string &robot_id, const std::string &executor_id,
+    const std::string &action_parameters, const std::string &robot_id,
+    const std::string &executor_id,
     cx::LockSharedPtr<CLIPS::Environment> &clips, const std::string &ns,
     const rclcpp::NodeOptions &options)
     : rclcpp::Node(node_name, ns, options), skill_id_(skill_id),
       action_name_(action_name), mapped_action_(mapped_action),
-      string_action_parameters_(action_parameters), robot_id_(robot_id), executor_id_(executor_id),
-      clips_(clips) {
+      string_action_parameters_(action_parameters), robot_id_(robot_id),
+      executor_id_(executor_id), clips_(clips) {
 
   skill_board_pub = create_publisher<SkillExecutionMsg>(
       "/skill_board", rclcpp::QoS(100).reliable());
@@ -98,7 +99,8 @@ void SkillExecutionMaster::skill_board_cb(
     break;
   case SkillExecutionMsg::RESPONSE:
     if (msg->action_parameters == action_parameters_ &&
-        msg->action == action_name_ && msg->robot_id == robot_id_&& msg->executor_id == executor_id_ ) {
+        msg->action == action_name_ && msg->robot_id == robot_id_ &&
+        msg->executor_id == executor_id_) {
       confirm_executor(msg->executor_id);
       node_id_ = msg->node_id;
       state_ = RUNNING;
@@ -113,7 +115,7 @@ void SkillExecutionMaster::skill_board_cb(
   case SkillExecutionMsg::FEEDBACK:
     if (state_ != RUNNING || msg->action_parameters != action_parameters_ ||
         msg->action != action_name_ || msg->node_id != node_id_ ||
-        msg->robot_id != robot_id_ || msg->executor_id != executor_id_ ) {
+        msg->robot_id != robot_id_ || msg->executor_id != executor_id_) {
       return;
     }
     feedback_ = msg->status;
@@ -156,12 +158,12 @@ void SkillExecutionMaster::skill_board_cb(
 
   std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
   clips_->assert_fact_f(
-      "(skill-feedback (skill-id %s) (robot \"%s\") (executor \"%s\") (status %s) (error "
-      "\"%s\"))",
-      exec_info_.skill_id.c_str(),
-      exec_info_.robot_id.c_str(),
-	  exec_info_.executor_id.c_str(),
-      exec_info_.string_status.c_str(), exec_info_.error_msg.c_str());
+      "(skill-feedback (skill-id %s) (robot \"%s\") (executor \"%s\") (status "
+      "%s) (error "
+      "\"%s\") (time (now)))",
+      exec_info_.skill_id.c_str(), exec_info_.robot_id.c_str(),
+      exec_info_.executor_id.c_str(), exec_info_.string_status.c_str(),
+      exec_info_.error_msg.c_str());
 }
 
 void SkillExecutionMaster::request_skill_execution() {
@@ -211,8 +213,8 @@ void SkillExecutionMaster::check_idle_time() {
     exec_info_.string_status = "S_FAILED";
     exec_info_.error_msg =
         "Timed out (4s) waiting for response from execution node for robot " +
-        robot_id_ + " and executor " + executor_id_ + " and skill (" + action_name_ + " " +
-        string_action_parameters_ + ")";
+        robot_id_ + " and executor " + executor_id_ + " and skill (" +
+        action_name_ + " " + string_action_parameters_ + ")";
   }
 }
 

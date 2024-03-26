@@ -27,17 +27,17 @@
 )
 
 (defrule skill-action-init-map-to
-	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
+	(declare (salience ?*SALIENCE-HIGH*))
 	(domain-operator (name ?action))
-	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/specs/" ?spec "/action-mapping/" ?action "/mapped-to") ?p) 1))
+	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/action_mapping/" ?action "/mapped_to") ?p) 1))
 	         (type STRING) (value ?s))
 	=>
 	(assert (skill-action-mapping (name ?action) (map-string ?s)))
 )
 (defrule skill-action-set-mapping-executor
+	(declare (salience ?*SALIENCE-HIGH*))
 	?sam <- (skill-action-mapping (name ?action) (executor ""))
-	(confval (path "/clips_executive/spec") (type STRING) (value ?spec))
-	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/specs/" ?spec "/action-mapping/" ?action "/executor") ?p) 1))
+	(confval (path ?p&:(eq (str-index (str-cat "/clips_executive/action_mapping/" ?action "/executor") ?p) 1))
 	         (type STRING) (value ?s))
 	=>
 	(if (neq ?s "") then
@@ -55,6 +55,20 @@
 	(modify ?pa (executor ?exec))
 )
 
+(defrule skill-action-cancel-runnning-before-start
+	?pa <- (plan-action (goal-id ?goal-id) (plan-id ?plan-id) (id ?id) (state PENDING)
+	                    (action-name ?action-name) (executable TRUE)
+	                    (robot ?robot)
+	                    (executor ?executor)
+	                    (param-names $?params)
+	                    (param-values $?param-values))
+	(skill-action-mapping (name ?action-name))
+	(skill (id ?skill-id) (executor ?executor) (robot ?robot) (status ~S_FAILED&~S_FINAL))
+	=>
+	(printout warn "Action " ?action-name " for " ?robot " with executor " ?executor " pending, but executor is still busy. Cancelling previous skill call " ?skill-id crlf)
+	(call-skill-cancel ?robot ?executor)
+)
+
 (defrule skill-action-start
 	?pa <- (plan-action (goal-id ?goal-id) (plan-id ?plan-id) (id ?id) (state PENDING)
 	                    (action-name ?action-name) (executable TRUE)
@@ -64,6 +78,7 @@
 	                    (param-values $?param-values))
 	(skill-action-mapping (name ?action-name))
 	(not (skill-action-exec-info (robot ?robot)))
+	(not (skill (id ?skill-id) (executor ?executor) (robot ?robot)))
 	=>
 	(bind ?skill-id (skill-call ?action-name ?params ?param-values ?robot ?executor))
 	(modify ?pa (state WAITING))
@@ -123,14 +138,15 @@
 	(printout warn
 		  "Cancelling Skill Execution, corresponding action does not exist" crlf)
 	(call-skill-cancel ?robot ?exec)
-	(retract ?pe)
 )
 
-(defrule skill-action-retract-execinfo-without-action
-	?pe <- (skill-action-exec-info (goal-id ?goal-id) (plan-id ?plan-id) (executor ?exec)
-	                              (action-id ?id) (skill-id ?skill-id) (robot ?robot))
-	(not (skill (status S_RUNNING) (id ?skill-id) (executor ?exec)))
-	(not (plan-action (goal-id ?goal-id) (plan-id ?plan-id) (id ?action-id) (executor ?exec)))
+(defrule skill-action-cleanup-if-action-does-not-exist
+	?pe <- (skill-action-exec-info (goal-id ?goal-id) (plan-id ?plan-id)
+	                              (action-id ?id) (skill-id ?skill-id)
+	                              (robot ?robot) (executor ?exec))
+	?s <- (skill (id ?skill-id) (status S_FINAL|S_FAILED) (robot ?robot) (executor ?exec))
+	(not (plan-action (goal-id ?goal-id) (plan-id ?plan-id) (id ?id) (executor ?exec) (state WAITING|RUNNING)
+	                  (robot ?robot)))
 	=>
-	(retract ?pe)
+	(retract ?pe ?s)
 )

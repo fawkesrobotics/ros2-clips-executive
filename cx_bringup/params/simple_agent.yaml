@@ -38,8 +38,8 @@ clips_executive:
           - core/domain.clp
           - core/skills.clp
           - core/worldmodel.clp
-          - core/wm-config.clp
           - core/wm-domain-sync.clp
+          - core/skills-actions.clp
       # These files are from the cx_bringup package
       - name: domain
         file: simple_agent/domain.clp
@@ -52,7 +52,6 @@ clips_executive:
       - name: action-execution
         files:
           - simple_agent/print-action.clp
-          - core/skills-actions.clp
       - name: refbox-comm
         files:
           - simple_agent/refbox-comm-init.clp
@@ -61,7 +60,7 @@ clips_executive:
     action_mapping:
       gowait:
         mapped_to: say{text="Good bye", wait=true}
-        executor: fawkes_skiller
+        executor: dummy_skiller
 
     parameters:
       simtest:

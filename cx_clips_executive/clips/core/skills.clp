@@ -25,6 +25,7 @@
 	(slot error-msg (type STRING))
 	(slot skill-string (type STRING))
 	(slot start-time (type FLOAT))
+	(slot last-updated (type FLOAT))
 	(slot robot (type STRING) (default ""))
 	(slot executor (type STRING) (default ""))
 )
@@ -36,6 +37,7 @@
   (slot error (type STRING))
   (slot robot (type STRING) (default ""))
   (slot executor (type STRING) (default ""))
+  (slot time (type FLOAT))
 )
 
 (deffunction skill-call (?action-name ?param-names ?param-values ?robot ?executor)
@@ -62,10 +64,11 @@
 )
 
 (defrule skill-status-update
+  (declare (salience ?*SALIENCE-HIGH*))
   ?sf <- (skill-feedback (skill-id ?skill-id) (robot ?robot) (status ?new-status)
-                           (error ?error-msg))
+                           (error ?error-msg) (time ?t))
   ?s <- (skill (name ?n) (id ?skill-id) (status ?old-status&~?new-status&~S_FINAL&~S_FAILED)
-                (robot ?robot))
+                (robot ?robot) (last-updated ?l&:(> ?t ?l)))
   =>
   (printout t "Skill " ?n " is " ?new-status", was: " ?old-status crlf)
   (retract ?sf)
@@ -86,6 +89,14 @@
   =>
 	(printout warn "Timeout starting skill " ?n " (" ?*SKILL-INIT-TIMEOUT-SEC* " sec): assuming failure" crlf)
 	(modify ?sf (status S_FAILED) (error-msg "Start timeout"))
+)
+
+(defrule skill-status-update-no-skill
+	?sf <- (skill-feedback (skill-id ?skill-id) (robot ?robot) (status ?new-status))
+  (not (skill (name ?n) (id ?skill-id) (robot ?robot)))
+  =>
+  (printout warn "Received unexpected skill feedback " ?new-status " for " ?skill-id " of " ?robot crlf)
+  (retract ?sf)
 )
 
 ; (defrule skill-idle

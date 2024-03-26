@@ -20,51 +20,34 @@ find_package(cx_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
 
-set(dependencies
-  ament_cmake
-  rclcpp
-  rclcpp_lifecycle
-  lifecycle_msgs
-  cx_msgs
-  cx_skill_execution
-  nav2_msgs 
-  geometry_msgs
-)
+set(DEPENDENCIES cx_msgs cx_skill_execution rclcpp rclcpp_lifecycle
+                 lifecycle_msgs)
 
-set(SOURCES
-  src/cx_example_skill_nodes/DummyMoveSkill.cpp
-  src/cx_example_skill_nodes/MoveSkillNav2.cpp
-)
+set(SOURCES src/cx_example_skill_nodes/dummy_skill.cpp)
 
 include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
-ament_target_dependencies(${PROJECT_NAME} ${dependencies})
+ament_target_dependencies(${PROJECT_NAME} ${DEPENDENCIES})
 
-add_executable(skills_launch_node src/skills_launch_node.cpp)
-ament_target_dependencies(skills_launch_node ${dependencies})
-target_link_libraries(skills_launch_node ${PROJECT_NAME})
+add_executable(dummy_skill_node src/dummy_skill_launch_node.cpp)
+target_link_libraries(dummy_skill_node ${PROJECT_NAME})
 
-install(
-  DIRECTORY include/
-  DESTINATION include/
-)
+install(DIRECTORY include/ DESTINATION include/)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-install(TARGETS
-  ${PROJECT_NAME}
-  skills_launch_node
+install(
+  TARGETS ${PROJECT_NAME} dummy_skill_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
+  RUNTIME DESTINATION lib/${PROJECT_NAME})
 
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
-ament_export_dependencies(${dependencies})
+ament_export_dependencies(${DEPENDENCIES})
 
 ament_package()
