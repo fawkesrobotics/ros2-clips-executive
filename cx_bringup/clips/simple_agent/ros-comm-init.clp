@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  ros-comm-init.clp - Initialize ROS2 based communication
 ;

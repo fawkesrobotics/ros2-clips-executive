@@ -39,7 +39,6 @@ add_executable(lifecycle_manager_node src/lifecycle_manager_node.cpp)
 ament_target_dependencies(lifecycle_manager_node ${dependencies})
 target_link_libraries(lifecycle_manager_node ${PROJECT_NAME})
 
-
 install(DIRECTORY include/
   DESTINATION include/
 )

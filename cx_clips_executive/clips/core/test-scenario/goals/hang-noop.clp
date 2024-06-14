@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ; The HANG-NOOP does nothing. It never leaves the DISPATCHED
 ; state.
 

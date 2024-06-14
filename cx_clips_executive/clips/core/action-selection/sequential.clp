@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  sequential.clp - CLIPS executive - action selection for sequential plans
 ;

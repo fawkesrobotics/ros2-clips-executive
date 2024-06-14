@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 #ifndef CX_FEATURES__MOCKFEATURE_HPP_
 #define CX_FEATURES__MOCKFEATURE_HPP_
 

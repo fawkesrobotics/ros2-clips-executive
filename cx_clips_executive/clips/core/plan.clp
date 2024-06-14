@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  plan.clp - CLIPS executive - plan representation
 ;
@@ -56,4 +58,3 @@
 		(retract ?plan)
 	)
 )
-

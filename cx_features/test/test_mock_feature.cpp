@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 #include <memory>
 #include <string>
 #include <thread>
@@ -11,15 +13,15 @@
 #include "cx_clips/CLIPSEnvManagerClient.hpp"
 #include "cx_clips/CLIPSEnvManagerNode.h"
 
-
 #include "cx_features/ClipsFeaturesManager.hpp"
 #include "cx_features/MockFeature.hpp"
 
 // TEST(test_mock_feature, test_context_init) {
 //   auto testing_node = rclcpp::Node::make_shared("testing_node");
 //   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
-//   auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
-//   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
+//   auto manager_client =
+//   std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client"); auto
+//   features_manager = std::make_shared<cx::ClipsFeaturesManager>();
 
 //   std::vector<std::string> allFeatures = {"mock_feature"};
 //   features_manager->set_parameter(
@@ -132,9 +134,10 @@
 // TEST(test_mock_feature, test_bb_feature) {
 //   auto testing_node = rclcpp::Node::make_shared("testing_node");
 //   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
-//   auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
-//   auto bb_node = std::make_shared<cx::Blackboard>();
-//   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
+//   auto manager_client =
+//   std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client"); auto
+//   bb_node = std::make_shared<cx::Blackboard>(); auto features_manager =
+//   std::make_shared<cx::ClipsFeaturesManager>();
 
 //   features_manager->pre_configure(manager_node);
 
@@ -194,7 +197,8 @@
 //   // auto created_env = manager_node->getEnvironmentByName(env_name);
 //   try {
 
-//     ASSERT_TRUE(manager_client->createNewClipsEnvironment(env_name, log_name));
+//     ASSERT_TRUE(manager_client->createNewClipsEnvironment(env_name,
+//     log_name));
 
 //     auto created_env = manager_node->getEnvironmentByName(env_name);
 //     auto bb_feature = features_manager->features_["blackboard_feature"];

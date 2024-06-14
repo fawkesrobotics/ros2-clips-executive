@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  run-parallel.clp - CLIPS executive - goal to run all sub-goals in parallel
 ;

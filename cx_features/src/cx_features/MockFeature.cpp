@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 #include <string>
 
 #include "cx_features/MockFeature.hpp"

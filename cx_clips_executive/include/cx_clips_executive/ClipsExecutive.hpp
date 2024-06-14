@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  ClipsFeature.hpp
  *
@@ -70,9 +72,10 @@ private:
                               CLIPS::Values param_names,
                               CLIPS::Values param_values);
 
-  std::map<std::string, std::string> get_action_mapping(
-      const YAML::Node &starting_node);
-  YAML::Node get_node_from_key(const YAML::Node& node, const std::string& target_key);
+  std::map<std::string, std::string>
+  get_action_mapping(const YAML::Node &starting_node);
+  YAML::Node get_node_from_key(const YAML::Node &node,
+                               const std::string &target_key);
 
 private:
   rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::Empty>::SharedPtr

@@ -4,9 +4,9 @@
   <name>cx_clips</name>
   <version>0.0.0</version>
   <description>Manager unit for CLIPS environments and its client wrapper for ease of use</description>
-   
+
   <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
-  
+
   <license>GPLv2+ license</license>
 
 

@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  pddl.clp - Interface to a PDDL planner plansys2 planner
 ;
@@ -34,7 +36,7 @@
 
 (deffunction plan-with-psys2 (?goal-id ?goal ?plan-id)
   "Add all available domain objects/facts and then
-   Call the Plansys PDDL planner Client for the given 
+   Call the Plansys PDDL planner Client for the given
    goal-id with the goal given as string."
   (do-for-all-facts ((?d domain-object))
     TRUE
@@ -42,7 +44,7 @@
   )
   (do-for-all-facts ((?f domain-fact))
     TRUE
-    (bind ?pred (str-cat "(" ?f:name)) 
+    (bind ?pred (str-cat "(" ?f:name))
     (foreach ?param-value ?f:param-values
       (printout t "Param-value:" ?param-value crlf)
       (bind ?pred (str-cat ?pred " " ?param-value))
@@ -64,9 +66,9 @@
 
 (defrule pddl-call
   ?g <- (goal (id ?goal-id))
-  ?p <-(pddl-plan 
-          (status NOT-STARTED) 
-          (goal-id ?goal-id) 
+  ?p <-(pddl-plan
+          (status NOT-STARTED)
+          (goal-id ?goal-id)
           (plan-id ?plan-id)
           (goal ?goal)
         )
@@ -81,8 +83,8 @@
   "Check whether the planner finished but has not found a plan."
   ?g <- (goal (id ?goal-id))
   ?pf <- (pddl-plan-feedback (status PLAN-FAILED) (plan-id ?plan-id))
-  ?p <- (pddl-plan 
-          ; (goal-id ?goal-id) 
+  ?p <- (pddl-plan
+          ; (goal-id ?goal-id)
           (plan-id ?plan-id)
         )
   =>
@@ -192,4 +194,3 @@
 ;   =>
 ;   (modify ?p (status PLANNED))
 ; )
-

@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  LockSharedPtr.hpp
  *
@@ -61,7 +63,7 @@ template <class T> LockSharedPtr<T>::LockSharedPtr() {
 
 template <class T> LockSharedPtr<T>::~LockSharedPtr() {
   RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "Destroying %i",
-              LockSharedPtr::numbers);
+               LockSharedPtr::numbers);
   LockSharedPtr::numbers--;
 }
 
@@ -125,8 +127,7 @@ template <class T> LockSharedPtr<T>::operator bool() const {
   return (obj != nullptr);
 }
 
-template <class T>
-std::mutex* LockSharedPtr<T>::get_mutex_instance() {
+template <class T> std::mutex *LockSharedPtr<T>::get_mutex_instance() {
   auto mutex = objmutex.get();
   return mutex;
 }

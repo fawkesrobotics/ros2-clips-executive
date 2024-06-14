@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  worldmodel.clp - CLIPS executive - generic world model representation
 ;
@@ -157,11 +159,11 @@
 				)
 			)
 		)
-	else	
+	else
 		(bind ?rv (wm-split-string-sym ?id "/"))
 	)
 
-	(return ?rv)			 
+	(return ?rv)
 )
 
 (deffunction wm-key-arg-is-multifield (?key ?l)

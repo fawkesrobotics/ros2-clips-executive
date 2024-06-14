@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (deftemplate testtempl
   (slot name (type SYMBOL))
   (slot someval (type FLOAT))

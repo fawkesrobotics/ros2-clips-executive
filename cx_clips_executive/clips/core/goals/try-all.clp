@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  try-all.clp - CLIPS executive - goal to try some sub-goals
 ;

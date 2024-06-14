@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  stalled-action.clp - CLIPS executive - detect and abort stalled actions
 ;

@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  pddl-init.clp - Initialize PDDL CLIPS interface
 ;
@@ -80,5 +82,3 @@
 ;   (path-load "pddl.clp")
 ;   (assert (ff-feature-loaded pddl_planner))
 ; )
-
-

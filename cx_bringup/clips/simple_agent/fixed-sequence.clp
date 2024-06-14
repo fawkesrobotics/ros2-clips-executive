@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (deffunction plan-assert-action (?name $?param-values)
 " Assert an action with a unique id."
 	(bind ?id-sym (gensym*))

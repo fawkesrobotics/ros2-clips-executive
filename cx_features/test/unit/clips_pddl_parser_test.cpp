@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 #include "ament_index_cpp/get_package_share_directory.hpp"
 
 #include <rclcpp/rclcpp.hpp>
@@ -21,17 +23,18 @@
 
 #include "gtest/gtest.h"
 
-// Make sure to set the parameter inside the clips_executive.yaml beforehand, as it is parsed by the Config Feature!
+// Make sure to set the parameter inside the clips_executive.yaml beforehand, as
+// it is parsed by the Config Feature!
 
 TEST(clips_pddl_parser_test, clips_parse_domain) {
   auto test_node = rclcpp::Node::make_shared("test_node");
-  // PSYS2 
-//   auto domain_node = std::make_shared<plansys2::DomainExpertNode>();
-//   auto problem_node = std::make_shared<plansys2::ProblemExpertNode>();
-//   auto planner_node = std::make_shared<plansys2::PlannerNode>();
-//   auto problem_client = std::make_shared<plansys2::ProblemExpertClient>();
-//   auto domain_client = std::make_shared<plansys2::DomainExpertClient>();
-//   auto planner_client = std::make_shared<plansys2::PlannerClient>();
+  // PSYS2
+  //   auto domain_node = std::make_shared<plansys2::DomainExpertNode>();
+  //   auto problem_node = std::make_shared<plansys2::ProblemExpertNode>();
+  //   auto planner_node = std::make_shared<plansys2::PlannerNode>();
+  //   auto problem_client = std::make_shared<plansys2::ProblemExpertClient>();
+  //   auto domain_client = std::make_shared<plansys2::DomainExpertClient>();
+  //   auto planner_client = std::make_shared<plansys2::PlannerClient>();
   // CX
   auto clips_env_manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
   auto manager_client =
@@ -39,7 +42,8 @@ TEST(clips_pddl_parser_test, clips_parse_domain) {
   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
   auto clips_executive_node = std::make_shared<cx::ClipsExecutive>();
 
-  std::vector<std::string> allFeatures = {"clips_pddl_parser", "plansys2", "skill_execution"};
+  std::vector<std::string> allFeatures = {"clips_pddl_parser", "plansys2",
+                                          "skill_execution"};
   features_manager->set_parameter(
       rclcpp::Parameter("clips_features", allFeatures));
   features_manager->declare_parameter("plansys2.plugin");
@@ -58,14 +62,15 @@ TEST(clips_pddl_parser_test, clips_parse_domain) {
   std::string pkgpath =
       ament_index_cpp::get_package_share_directory("cx_clips_executive");
 
-//   domain_node->set_parameter({"model_file", pkgpath + "/pddl/domain.pddl"});
-//   problem_node->set_parameter({"model_file", pkgpath + "/pddl/domain.pddl"});
+  //   domain_node->set_parameter({"model_file", pkgpath +
+  //   "/pddl/domain.pddl"}); problem_node->set_parameter({"model_file", pkgpath
+  //   + "/pddl/domain.pddl"});
 
   rclcpp::executors::SingleThreadedExecutor exe;
 
-//   exe.add_node(domain_node->get_node_base_interface());
-//   exe.add_node(problem_node->get_node_base_interface());
-//   exe.add_node(planner_node->get_node_base_interface());
+  //   exe.add_node(domain_node->get_node_base_interface());
+  //   exe.add_node(problem_node->get_node_base_interface());
+  //   exe.add_node(planner_node->get_node_base_interface());
 
   exe.add_node(clips_env_manager_node->get_node_base_interface());
   exe.add_node(features_manager->get_node_base_interface());
@@ -78,12 +83,12 @@ TEST(clips_pddl_parser_test, clips_parse_domain) {
     }
   });
 
-//   domain_node->trigger_transition(
-//       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
-//   problem_node->trigger_transition(
-//       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
-//   planner_node->trigger_transition(
-//       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
+  //   domain_node->trigger_transition(
+  //       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
+  //   problem_node->trigger_transition(
+  //       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
+  //   planner_node->trigger_transition(
+  //       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
   clips_env_manager_node->trigger_transition(
       lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
@@ -100,12 +105,12 @@ TEST(clips_pddl_parser_test, clips_parse_domain) {
     }
   }
 
-//   domain_node->trigger_transition(
-//       lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);
-//   problem_node->trigger_transition(
-//       lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);
-//   planner_node->trigger_transition(
-//       lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);
+  //   domain_node->trigger_transition(
+  //       lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);
+  //   problem_node->trigger_transition(
+  //       lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);
+  //   planner_node->trigger_transition(
+  //       lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);
 
   clips_env_manager_node->trigger_transition(
       lifecycle_msgs::msg::Transition::TRANSITION_ACTIVATE);

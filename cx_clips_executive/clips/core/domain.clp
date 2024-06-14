@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  domain.clp - Representation of a planning domain
 ;
@@ -280,7 +282,7 @@
 
 (defrule domain-check-if-atomic-formula-is-satisfied
   (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
-  
+
   (pddl-grounding (id ?grounding-id))
   (pddl-formula (id ?parent-base) (type atom))
   ?parent <- (grounded-pddl-formula (id ?id)
@@ -293,7 +295,7 @@
                                 (grounding ?grounding-id)
                                 (is-satisfied FALSE))
   )
-  => 
+  =>
   (modify ?parent (is-satisfied TRUE))
 )
 
@@ -347,7 +349,7 @@
                                     (is-satisfied FALSE)
                                     (grounding ?grounding-id))
  ; the formula is satisfied when there is no unsatisifed child
-  (not 
+  (not
     (and
       (pddl-formula (part-of ?parent-base) (id ?child-base))
       (grounded-pddl-formula (formula-id ?child-base)
@@ -713,7 +715,7 @@
   also a sensed effect of the operator, then remove the precondition on the
   effect. This means that part of the exogenous action may already have
   occurred before the action is selected."
-  
+
   (domain-operator (name ?op) (exogenous TRUE))
   (domain-predicate (name ?pred) (sensed TRUE) (value-predicate FALSE))
   (domain-effect (part-of ?op)

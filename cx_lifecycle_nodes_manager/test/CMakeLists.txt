@@ -3,4 +3,3 @@ ament_target_dependencies(lc_nodes_manager_test ${dependencies} cx_clips cx_feat
 target_link_libraries(lc_nodes_manager_test ${PROJECT_NAME})
 pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
 target_link_libraries(lc_nodes_manager_test PkgConfig::CLIPSMM)
-

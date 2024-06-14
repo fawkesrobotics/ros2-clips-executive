@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  ClipsFeaturesManager.cpp
  *
@@ -63,7 +65,8 @@ CallbackReturn
 ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
   (void)state; // ignoring unused parameter
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
-  declare_parameter<std::string>("agent_dir", ament_index_cpp::get_package_share_directory("cx_bringup"));
+  declare_parameter<std::string>(
+      "agent_dir", ament_index_cpp::get_package_share_directory("cx_bringup"));
 
   auto node = shared_from_this();
 
@@ -80,7 +83,7 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
   get_parameter("clips_features_list", features_ids_);
   RCLCPP_INFO(get_logger(), "Detect features:");
   for (const auto &feat : features_ids_) {
-  RCLCPP_INFO(get_logger(), "Detected [ %s ]", feat.c_str());
+    RCLCPP_INFO(get_logger(), "Detected [ %s ]", feat.c_str());
   }
 
   if (!features_ids_.empty()) {
@@ -92,61 +95,73 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
 
         // declare the parameters define in the list for each feature
         std::map<std::string, rclcpp::Parameter> feature_param_map{};
-        feature_param_map["agent_dir"] =  get_parameter("agent_dir");
+        feature_param_map["agent_dir"] = get_parameter("agent_dir");
 
         declare_parameter("clips_features." + feat_name + ".feature_parameters",
                           std::vector<std::string>());
         std::vector<std::string> feature_parameters =
-            get_parameter("clips_features." + feat_name + ".feature_parameters").as_string_array();
+            get_parameter("clips_features." + feat_name + ".feature_parameters")
+                .as_string_array();
 
         for (const std::string &feat_param : feature_parameters) {
           // declare the parameter
-          declare_parameter("clips_features." + feat_name + "." + feat_param + ".type", "");
-          std::string param_type =
-              get_parameter("clips_features." + feat_name + "." + feat_param + ".type").as_string();
+          declare_parameter(
+              "clips_features." + feat_name + "." + feat_param + ".type", "");
+          std::string param_type = get_parameter("clips_features." + feat_name +
+                                                 "." + feat_param + ".type")
+                                       .as_string();
 
           if (param_type == "string") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_STRING);
           }
           if (param_type == "integer") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_INTEGER);
           }
           if (param_type == "double") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_DOUBLE);
           }
           if (param_type == "bool") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_BOOL);
           }
           if (param_type == "byte-array") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_BOOL_ARRAY);
           }
           if (param_type == "string-array") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_STRING_ARRAY);
           }
           if (param_type == "integer-array") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_INTEGER_ARRAY);
           }
           if (param_type == "double-array") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_DOUBLE_ARRAY);
           }
           if (param_type == "bool-array") {
-            declare_parameter("clips_features." + feat_name + "." + feat_param + ".value",
+            declare_parameter("clips_features." + feat_name + "." + feat_param +
+                                  ".value",
                               rclcpp::PARAMETER_BOOL_ARRAY);
           }
-          feature_param_map[feat_param] =
-              get_parameter("clips_features." + feat_name + "." + feat_param + ".value");
+          feature_param_map[feat_param] = get_parameter(
+              "clips_features." + feat_name + "." + feat_param + ".value");
         }
 
-
-        features_types_[i] = cx::get_plugin_type_param(node, "clips_features." + feat_name);
+        features_types_[i] =
+            cx::get_plugin_type_param(node, "clips_features." + feat_name);
 
         cx::ClipsFeature::Ptr feature =
             pg_loader_.createUniqueInstance(features_types_[i]);

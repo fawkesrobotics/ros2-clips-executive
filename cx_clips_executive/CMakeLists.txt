@@ -44,7 +44,6 @@ set(CLIPS_EXECUTIVE_SOURCES
 #import clipsmm via pkg-config
 pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
 
-
 add_library(${PROJECT_NAME} SHARED ${CLIPS_EXECUTIVE_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
@@ -56,7 +55,6 @@ ament_target_dependencies(clips_executive_node ${dependencies})
 target_link_libraries(clips_executive_node ${PROJECT_NAME})
 target_link_libraries(clips_executive_node PkgConfig::CLIPSMM)
 target_link_libraries(clips_executive_node yaml-cpp)
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -87,6 +85,5 @@ install(TARGETS
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 ament_export_dependencies(${dependencies})
-
 
 ament_package()

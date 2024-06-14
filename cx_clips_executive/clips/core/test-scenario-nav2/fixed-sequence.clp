@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (defrule goal-expander-create-sequence
 	?g <- (goal (mode SELECTED) (id TESTGOAL))
 	=>

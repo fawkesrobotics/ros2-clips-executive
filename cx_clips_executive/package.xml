@@ -4,9 +4,9 @@
   <name>cx_clips_executive</name>
   <version>0.0.0</version>
   <description>All CLIPS executive relevant files and startup</description>
-    
+
   <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
-  
+
   <license>GPLv2+ license</license>
 
 

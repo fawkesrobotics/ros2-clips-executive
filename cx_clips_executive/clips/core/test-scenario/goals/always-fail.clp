@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ; The ALWAYS-FAIL does only one thing, fail after dispatch
 
 (defrule always-fail-goal-expand

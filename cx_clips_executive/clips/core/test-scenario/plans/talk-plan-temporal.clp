@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (defrule plan-talk-expand-temporal
   ?g <- (goal (mode SELECTED) (id ?goal-id) (class TALK))
   =>

@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ; #  Goal Creation
 (defrule goal-reasoner-parent-create
 	(domain-loaded)

@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  SkillExecutionFeature.hpp
  *
@@ -55,8 +57,7 @@ private:
                                const std::string &robot_id,
                                const std::string &executor_id);
 
-  void cancel_skill(const std::string &env_name,
-                    const std::string &robot_id,
+  void cancel_skill(const std::string &env_name, const std::string &robot_id,
                     const std::string &executor_id);
 
   void clips_read_skills(const std::string &env_name);
@@ -70,7 +71,8 @@ private:
     std::shared_ptr<cx::SkillExecutionMaster> skill_master;
     std::shared_ptr<cx::NodeThread> skill_master_exec_node;
   };
-  std::map<std::pair<std::string,std::string>, SkillMasterSt> skill_master_map_;
+  std::map<std::pair<std::string, std::string>, SkillMasterSt>
+      skill_master_map_;
 
 private:
 };

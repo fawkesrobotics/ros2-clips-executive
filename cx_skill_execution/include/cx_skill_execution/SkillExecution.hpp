@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  SkillExecution.hpp
  *
@@ -66,7 +68,7 @@ protected:
   void send_response(const cx_msgs::msg::SkillExecution::SharedPtr msg);
   void send_feedback(float progress, const std::string &status);
   virtual void finish_execution(bool success, float progress,
-                        const std::string &status);
+                                const std::string &status);
 
   std::string action_name_;
   std::vector<std::string> action_parameters_;

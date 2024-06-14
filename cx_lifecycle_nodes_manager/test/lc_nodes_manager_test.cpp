@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  lc_nodes_manager_test.cpp
  *
@@ -36,7 +38,8 @@ namespace cx {
 TEST(lc_nodes_manager_test, test_context_init) {
   auto testing_node = rclcpp::Node::make_shared("testing_node");
   auto manager_node = std::make_shared<cx::CLIPSEnvManagerNode>();
-  auto manager_client = std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
+  auto manager_client =
+      std::make_shared<cx::CLIPSEnvManagerClient>("clips_manager_client");
   auto features_manager = std::make_shared<cx::ClipsFeaturesManager>();
   auto lc_manager = std::make_shared<cx::LifecycleNodesManager>();
 

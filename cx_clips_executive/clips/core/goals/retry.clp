@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  retry.clp - CLIPS executive - goal to retry a sub-goal a number of times
 ;

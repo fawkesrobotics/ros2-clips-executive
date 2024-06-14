@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  goal-expander-pddl.clp - Expand a goal with a PDDL planner
 ;

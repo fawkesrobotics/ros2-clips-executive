@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  ClipsFeaturesManager.hpp
  *
@@ -69,7 +71,7 @@ public:
 
   void feature_init_context(const std::string &env_name,
                             const std::string &feature_name);
-                            
+
   CLIPS::Value clips_request_feature(const std::string &env_name,
                                      const std::string &feature_name);
 

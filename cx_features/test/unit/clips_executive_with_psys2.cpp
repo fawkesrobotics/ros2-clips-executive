@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 #include "ament_index_cpp/get_package_share_directory.hpp"
 
 #include <rclcpp/rclcpp.hpp>
@@ -54,10 +56,8 @@ TEST(cx_with_psys2, clips_generate_plan) {
   std::string pkgpath =
       ament_index_cpp::get_package_share_directory("cx_clips_executive");
 
-  domain_node->set_parameter(
-      {"model_file", pkgpath + "/pddl/domain.pddl"});
-  problem_node->set_parameter(
-      {"model_file", pkgpath + "/pddl/domain.pddl"});
+  domain_node->set_parameter({"model_file", pkgpath + "/pddl/domain.pddl"});
+  problem_node->set_parameter({"model_file", pkgpath + "/pddl/domain.pddl"});
 
   rclcpp::executors::SingleThreadedExecutor exe;
 
@@ -134,5 +134,5 @@ TEST(cx_with_psys2, clips_generate_plan) {
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   rclcpp::init(argc, argv);
-//   return RUN_ALL_TESTS();
+  //   return RUN_ALL_TESTS();
 }

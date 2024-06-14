@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (defrule print-action-start
 	?pa <- (plan-action (plan-id ?plan-id) (id ?id) (state PENDING)
                       (action-name print) (executable TRUE)

@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (defrule fire-skill
   (executive-init)
   (ff-feature-loaded skill_execution)

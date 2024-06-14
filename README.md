@@ -4,9 +4,9 @@ The ROS2 CLIPS Executive (**CX**) is the integration of the Fawkes CLIPS Executi
 
 1. Goal Management and Refinement: The central entities inside the CX are goals. They describe the objectives to achieve or conditions to maintain, e.g., to bring a certain object from point A to point B. The CX utilizes GR with the goal refinement mechanism in the form of goal lifecycles. This way, each goal goes through a predefined set of goal modes during its lifespan. This makes the program flow explicit and allows constant goal monitoring, observation of agent status and actions, as well as tracking and reacting to
 internal/exogenous factors.
-2. Planning: Provides PDDL-based planning by interacting with and utilizing a dedicated planner/planning system (currently planning with [Plansys2](https://github.com/IntelligentRoboticsLabs/ros2_planning_system) is supported). 
-3. Execution: Provides the means to execute all PDDL actions in a provided plan on the side of the embedding system. Skills in our project represent the identifier of the PDDL action, for which an executor node is implemented. Multi-agent execution is also supported.     
-4. Execution Monitoring: The execution of a plan is monitored continuously to deal with exogenous events. It provides functionalities, such as reasoning whether a provided plan action is actually executable by taking information about the world into account, and also mechanisms to retry/fail an action, when desired.  
+2. Planning: Provides PDDL-based planning by interacting with and utilizing a dedicated planner/planning system (currently planning with [Plansys2](https://github.com/IntelligentRoboticsLabs/ros2_planning_system) is supported).
+3. Execution: Provides the means to execute all PDDL actions in a provided plan on the side of the embedding system. Skills in our project represent the identifier of the PDDL action, for which an executor node is implemented. Multi-agent execution is also supported.
+4. Execution Monitoring: The execution of a plan is monitored continuously to deal with exogenous events. It provides functionalities, such as reasoning whether a provided plan action is actually executable by taking information about the world into account, and also mechanisms to retry/fail an action, when desired.
 
 The implemented packages provide tools to:
 - Bridge between ROS and CLIPS in order to control and manage CLIPS instances (CX CLIPS)
@@ -21,7 +21,7 @@ The implemented packages provide tools to:
 ## Build
 
 ### Install ROS2
-Install ROS 2 via the [install instructions](https://docs.ros.org/en/galactic/Installation.html) for desired distribution. 
+Install ROS 2 via the [install instructions](https://docs.ros.org/en/galactic/Installation.html) for desired distribution.
 
 ### Install Plansys2
 The CX requires only the instances inside Plansys2, which are responsible for planning. This excludes the following packages: `plansys2_executor`, `plansys2_terminal`, `plansys2_bt_actions`, `plansys2_tests`, `plansys2_bringup`.
@@ -59,17 +59,17 @@ Run:
 ```
 mkdir -p ~/cx_ws/src
 cd ~/cx_ws/src
-git clone https://github.com/fawkesrobotics/ros2-clips-executive 
+git clone https://github.com/fawkesrobotics/ros2-clips-executive
 # To pull the dependency repos, you can use the [vcstool](https://github.com/dirk-thomas/vcstool) and run:
 vcs import < dependency.repos
 
 cd ~/cx_ws
 # You need to source the Plansys2 WS
-source ~/plansys2_ws/install/local_setup.bash 
+source ~/plansys2_ws/install/local_setup.bash
 rosdep install -y -r -q --from-paths src --ignore-src --rosdistro <ros2-distro>
 colcon build --packages-ignore cx_example_skill_nodes --symlink-install
 
-# If you want the example skill nodes package the `nav2_msgs` package is required 
+# If you want the example skill nodes package the `nav2_msgs` package is required
 ```
 Note: you may need to source the ROS2 WS beforehand!
 
@@ -77,4 +77,4 @@ Note2: Remember to always source the ROS2 WS, Plansys2 WS and the CX WS afterwar
 
 ---
 
-We hope that our system finds utilization in more Robotics projects, as it offers the integration of a proven and established GR-based high-level controller on the side of Fawkes into the ROS ecosystem, which is capable of reasoning in dynamic settings and robotics competitions, such as the [RCLL](http://www.robocup-logistics.org/).   
+We hope that our system finds utilization in more Robotics projects, as it offers the integration of a proven and established GR-based high-level controller on the side of Fawkes into the ROS ecosystem, which is capable of reasoning in dynamic settings and robotics competitions, such as the [RCLL](http://www.robocup-logistics.org/).

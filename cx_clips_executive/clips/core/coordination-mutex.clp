@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  coordination-mutex.clp - CLIPS executive - asynchronous mutex handling
 ;
@@ -198,7 +200,7 @@
 (deffunction mutex-register-trigger ()
 	; Instead of using the defglobal, we could also read this from the config
 	; (config-load "/plugins/robot-memory/coordination")
-	
+
 	(bind ?trigger-query (bson-create))
 	(bind ?trigger-ptr (robmem-trigger-register ?*MUTEX-COLLECTION*
 																							?trigger-query "mutex-trigger"))

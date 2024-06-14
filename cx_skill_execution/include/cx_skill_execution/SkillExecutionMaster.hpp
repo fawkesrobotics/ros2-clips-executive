@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  SkillExecutionMaster.hpp
  *
@@ -46,7 +48,8 @@ public:
   SkillExecutionMaster(
       const std::string &node_name, const std::string &skill_id,
       const std::string &action_name, const std::string &action_parameters,
-      const std::string &mapped_action, const std::string &robot_id, const std::string &executor_id,
+      const std::string &mapped_action, const std::string &robot_id,
+      const std::string &executor_id,
       cx::LockSharedPtr<CLIPS::Environment> &clips,
       const std::string &namespace_ = "",
       const rclcpp::NodeOptions &options = rclcpp::NodeOptions());

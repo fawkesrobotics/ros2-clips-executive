@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  ConfigFeature.hpp
  *
@@ -81,8 +83,7 @@ public:
   std::string getFeatureName() const;
 
 private:
-  void clips_config_load(const std::string &env_name,
-                         const std::string &file,
+  void clips_config_load(const std::string &env_name, const std::string &file,
                          const std::string &cfg_prefix);
 
   std::string getScalarType(const YAML::Node &input_node);

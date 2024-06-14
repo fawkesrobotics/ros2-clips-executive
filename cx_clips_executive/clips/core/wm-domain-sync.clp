@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  wm-domain-sync.clp - CLIPS executive - sync world and domain model
 ;

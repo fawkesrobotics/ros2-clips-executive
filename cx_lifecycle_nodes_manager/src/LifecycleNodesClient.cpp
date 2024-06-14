@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  LifecycleNodesClient.cpp
  *
@@ -46,14 +48,14 @@ LifecycleNodesClient::LifecycleNodesClient(const std::string &node_name,
                                               node_->get_node_base_interface());
 
   RCLCPP_DEBUG(node_->get_logger(), "Creating client for service %s/get_state",
-              managed_node_name.c_str());
+               managed_node_name.c_str());
   get_node_state_client_ = node_->create_client<lifecycle_msgs::srv::GetState>(
       managed_node_name + "/get_state", rmw_qos_profile_services_default,
       callback_group_);
 
   RCLCPP_DEBUG(node_->get_logger(),
-              "Creating client for service %s/change_state",
-              managed_node_name.c_str());
+               "Creating client for service %s/change_state",
+               managed_node_name.c_str());
   change_node_state_client_ =
       node_->create_client<lifecycle_msgs::srv::ChangeState>(
           managed_node_name + "/change_state", rmw_qos_profile_services_default,
@@ -72,14 +74,14 @@ LifecycleNodesClient::LifecycleNodesClient(
                                               node_->get_node_base_interface());
 
   RCLCPP_DEBUG(node_->get_logger(), "Creating client for service %s/get_state",
-              managed_node_name.c_str());
+               managed_node_name.c_str());
   get_node_state_client_ = node_->create_client<lifecycle_msgs::srv::GetState>(
       managed_node_name + "/get_state", rmw_qos_profile_services_default,
       callback_group_);
 
   RCLCPP_DEBUG(node_->get_logger(),
-              "Creating client for service %s/change_state",
-              managed_node_name.c_str());
+               "Creating client for service %s/change_state",
+               managed_node_name.c_str());
   change_node_state_client_ =
       node_->create_client<lifecycle_msgs::srv::ChangeState>(
           managed_node_name + "/change_state", rmw_qos_profile_services_default,
@@ -103,7 +105,7 @@ uint8_t LifecycleNodesClient::get_node_state(seconds timeout) {
                 get_node_state_client_->get_service_name());
   }
   RCLCPP_DEBUG(node_->get_logger(), "%s service client: sending async request",
-              get_node_state_client_->get_service_name());
+               get_node_state_client_->get_service_name());
 
   auto req = std::make_shared<lifecycle_msgs::srv::GetState::Request>();
   auto future_res = get_node_state_client_->async_send_request(req);
@@ -138,7 +140,7 @@ bool LifecycleNodesClient::change_node_state(std::uint8_t transition,
   }
 
   RCLCPP_DEBUG(node_->get_logger(), "%s service client: sending async request",
-              change_node_state_client_->get_service_name());
+               change_node_state_client_->get_service_name());
 
   auto req = std::make_shared<lifecycle_msgs::srv::ChangeState::Request>();
   req->transition.id = transition;
@@ -156,7 +158,7 @@ bool LifecycleNodesClient::change_node_state(std::uint8_t transition,
   }
   if (future_res.get()->success) {
     RCLCPP_DEBUG(node_->get_logger(), "%s Successful transition to %d",
-                managed_node_name_.c_str(), static_cast<int>(transition));
+                 managed_node_name_.c_str(), static_cast<int>(transition));
     return true;
   } else {
     RCLCPP_WARN(node_->get_logger(), "Failed to trigger transition %u",

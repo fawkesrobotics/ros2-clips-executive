@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ; The ALWAYS-REJECT does only one thing, reject after expansion
 
 (defrule always-reject-goal-expand

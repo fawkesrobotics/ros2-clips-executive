@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  stalled-sequential-plan.clp -
 ;  detect stalled sequential strictly progressing plans

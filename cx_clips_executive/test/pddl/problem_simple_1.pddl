@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (define (problem simple_1)
   (:domain simple)
   (:objects
@@ -15,7 +17,7 @@
 
   ;; The goal is to have both packages delivered to their destinations:
   (:goal (and
-    (robot_talk leia m1 Jack) 
+    (robot_talk leia m1 Jack)
     )
   )
   )

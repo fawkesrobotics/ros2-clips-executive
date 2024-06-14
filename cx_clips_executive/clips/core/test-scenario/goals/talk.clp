@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ; #  Commit to goal (we "intend" it)
 (defrule talk-goal-commit
 	?g <- (goal (id ?goal-id) (parent ?id) (class TALK|PRINT) (mode EXPANDED))
