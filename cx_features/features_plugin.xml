@@ -39,4 +39,24 @@
       <description>Clips Feature providing Protobuf-based communication</description>
     </class>
   </library>
+  <library path="navgraph_compute">
+    <class type="cx::NavGraphCompute" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing access to NavGraphInterfaceCompute ROS2 services</description>
+    </class>
+  </library>
+  <library path="navgraph_set_boundingBox">
+    <class type="cx::NavGraphSetBoundingBox" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing access to NavGraphInterfaceSetBoundingBox ROS2 services</description>
+    </class>
+  </library>
+  <library path="navgraph_generate_waitzones">
+    <class type="cx::NavGraphGenerateWaitzones" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing access to NavGraphInterfaceGenerateWaitzones ROS2 services</description>
+    </class>
+  </library>
+  <library path="navgraph_update_station_by_tag">
+    <class type="cx::NavGraphUpdateStationByTag" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing access to NavGraphInterfaceUpdateStationByTag ROS2 services</description>
+    </class>
+  </library>
 </class_libraries>
