@@ -28,6 +28,8 @@ find_package(rosbag2_cpp REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
 find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_planner REQUIRED)
+find_package(cx_rl_interfaces REQUIRED)
+
 
 set(dependencies
   ament_cmake
@@ -46,6 +48,8 @@ set(dependencies
   plansys2_problem_expert
   plansys2_domain_expert
   plansys2_planner
+  cx_rl_interfaces
+  
 )
 
 set(CX_FEATURES_SOURCES
@@ -95,6 +99,10 @@ add_library(ros_topic_subscriber_feature SHARED src/cx_features/ros_communicatio
 ament_target_dependencies(ros_topic_subscriber_feature ${dependencies})
 target_link_libraries(ros_topic_subscriber_feature PkgConfig::CLIPSMM)
 
+add_library(reinforcement_learning_feature SHARED src/cx_features/reinforcement_learning_feature/ReinforcementLearningFeature.cpp)
+ament_target_dependencies(reinforcement_learning_feature ${dependencies})
+target_link_libraries(reinforcement_learning_feature PkgConfig::CLIPSMM)
+
 
 # END OF PLUGINS REGISTRATION
 add_library(${PROJECT_NAME} SHARED ${CX_FEATURES_SOURCES})
@@ -130,6 +138,7 @@ install(TARGETS
   ros_topic_publisher_feature
   clips_pddl_parser_feature
   clips_protobuf_feature
+  reinforcement_learning_feature
   ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

@@ -1,6 +1,6 @@
 clips_features_manager:
   ros__parameters:
-    clips_features_list: ["clips_pddl_parser", "skill_execution", "clips_protobuf",  "ros_topic_publisher", "ros_topic_subscriber", "ros_service_requester"]
+    clips_features_list: ["clips_pddl_parser", "skill_execution", "clips_protobuf",  "ros_topic_publisher", "ros_topic_subscriber", "ros_service_requester", "reinforcement_learning"]
     clips_features:
       mock_feature:
         plugin: "cx::MockFeature"
@@ -23,3 +23,27 @@ clips_features_manager:
           # This path assumes relativeness to agent_dir
           value: "proto"
           type: "string"
+      reinforcement_learning:
+        plugin: "cx::ReinforcementLearningFeature"
+        feature_parameters: ["reset_wait_time", "reset_max_time", "selection_wait_time", "selection_max_time", "speedup", "number_robots", "domain_based_reset"]
+        reset_wait_time:
+          value: 24.0
+          type: "double"
+        reset_max_time: 
+          value: 120.0
+          type: "double"
+        step_wait_time:
+          value: 6.0
+          type: "double"
+        step_max_time:
+          value: 60.0
+          type: "double"
+        speedup:
+          value: 6.0
+          type: "double"
+        number_robots:
+          value: 1
+          type: "integer"
+        domain_based_reset:
+          value: true
+          type: "bool"

@@ -39,4 +39,9 @@
       <description>Clips Feature providing Protobuf-based communication</description>
     </class>
   </library>
+  <library path="reinforcement_learning_feature">
+    <class type="cx::ReinforcementLearningFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing communication between CX reinforcement learning and the Clips environment</description>
+    </class>
+  </library>
 </class_libraries>
