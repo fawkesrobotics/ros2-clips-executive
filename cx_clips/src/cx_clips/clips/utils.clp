@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  utils.clp - CLIPS agent utility functions
 ;
@@ -41,16 +43,6 @@
 
 (deffunction is-odd-int (?num)
   (return (eq (mod ?num 2) 1))
-)
-
-(deffunction str-replace (?s ?search ?replace)
-  (bind ?i (str-index ?search ?s))
-  (bind ?l (str-length ?search))
-  (if (eq ?i FALSE)
-   then (return ?s)
-   else
-    (return (str-cat (sub-string 1 (- ?i 1) ?s) ?replace (sub-string (+ ?i ?l) (str-length ?s) ?s)))
-  )
 )
 
 ;; String "greater than" comparison.

@@ -1,0 +1,42 @@
+<class_libraries>
+  <library path="mock_feature">
+    <class type="cx::MockFeature" base_class_type="cx::ClipsFeature">
+      <description>Mock feature to test pluginlib</description>
+    </class>
+  </library>
+  <library path="plansys2_feature">
+    <class type="cx::Plansys2Feature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing plansys2 interaction to Clips Environment</description>
+    </class>
+  </library>
+  <library path="skill_execution_feature">
+    <class type="cx::SkillExecutionFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing skill execution possibilities to the Clips Environment</description>
+    </class>
+  </library>
+  <library path="clips_pddl_parser_feature">
+    <class type="cx::ClipsPddlParserFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing pddl file parsing to the Clips Environment</description>
+    </class>
+  </library>
+  <library path="ros_topic_subscriber_feature">
+    <class type="cx::RosTopicSubscriberFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature enabling the subscription to ROS2 topics</description>
+    </class>
+  </library>
+  <library path="ros_topic_publisher_feature">
+    <class type="cx::RosTopicPublisherFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature enabling the publishing to ROS2 topics</description>
+    </class>
+  </library>
+  <library path="ros_service_requester_feature">
+    <class type="cx::RosServiceRequesterFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature enabling requests to ROS2 services</description>
+    </class>
+  </library>
+  <library path="clips_protobuf_feature">
+    <class type="cx::ClipsProtobufFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing Protobuf-based communication</description>
+    </class>
+  </library>
+</class_libraries>

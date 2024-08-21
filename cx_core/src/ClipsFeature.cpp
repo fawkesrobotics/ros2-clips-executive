@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  ClipsFeature.cpp
  *
@@ -18,7 +20,6 @@
  *  Read the full text in the LICENSE.GPL file in the doc directory.
  */
 
-#include <clipsmm.h>
 #include <string>
 
 #include "cx_core/ClipsFeature.hpp"
@@ -43,4 +44,3 @@ void ClipsFeature::initialise(
 }
 
 } // namespace cx
-

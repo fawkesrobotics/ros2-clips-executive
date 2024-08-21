@@ -22,7 +22,6 @@
 #define CX_CLIPS__CLIPSENVMANAGERNODE_H_
 
 #include <algorithm>
-#include <clipsmm.h>
 #include <list>
 #include <map>
 #include <memory>
@@ -57,7 +56,7 @@ class CLIPSEnvManagerNode : public rclcpp_lifecycle::LifecycleNode {
 
 public:
   typedef struct {
-    LockSharedPtr<CLIPS::Environment> env;
+    LockSharedPtr<clips::Environment> env;
     std::list<std::string> req_feat;
   } ClipsEnvData;
 
@@ -72,10 +71,10 @@ public:
   // CallbackReturn on_shutdown(const rclcpp_lifecycle::State &state);
   // CallbackReturn on_error(const rclcpp_lifecycle::State &state);
 
-  std::map<std::string, LockSharedPtr<CLIPS::Environment>>
+  std::map<std::string, LockSharedPtr<clips::Environment>>
   getEnvironments() const;
 
-  LockSharedPtr<CLIPS::Environment>
+  LockSharedPtr<clips::Environment>
   getEnvironmentByName(const std::string &env_name);
 
   void create_env_callback(
@@ -106,16 +105,14 @@ public:
           response);
 
 private:
-  LockSharedPtr<CLIPS::Environment>
+  LockSharedPtr<clips::Environment>
   new_env(const std::string &log_component_name);
-  void assert_features(LockSharedPtr<CLIPS::Environment> &clips,
+  void assert_features(LockSharedPtr<clips::Environment> &clips,
                        bool immediate_assert);
   void add_functions(const std::string &env_name);
   void guarded_load(const std::string &env_name, const std::string &filename);
-  CLIPS::Value clips_request_feature(const std::string &env_name,
-                                     const std::string &feature_name);
-  double clips_now();
-  CLIPS::Values clips_now_systime();
+  clips::CLIPSValue clips_request_feature(const std::string &env_name,
+                                          const std::string &feature_name);
 
   // Function for service clients
   void call_feature_context_initialisation(const std::string &env_name,

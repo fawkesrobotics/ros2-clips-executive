@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  cx_node.cpp
  *
@@ -28,7 +30,7 @@
 
 #include "cx_clips/CLIPSEnvManagerNode.h"
 #include "cx_clips_executive/ClipsExecutive.hpp"
-#include "cx_features/ClipsFeaturesManager.hpp"
+#include "cx_feature_manager/ClipsFeaturesManager.hpp"
 
 int main(int argc, const char **argv) {
 

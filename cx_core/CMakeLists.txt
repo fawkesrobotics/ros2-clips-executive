@@ -15,6 +15,8 @@ find_package(ament_cmake REQUIRED)
 find_package(PkgConfig REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(cx_msgs REQUIRED)
+find_package(clips_vendor REQUIRED)
+find_package(clips REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -29,12 +31,9 @@ set(CX_CORE_SOURCES
 
 include_directories(include)
 
-# import clipsmm via pkg-config
-pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
-
 add_library(${PROJECT_NAME} SHARED ${CX_CORE_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
-target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
+target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 
 install(
   DIRECTORY include/

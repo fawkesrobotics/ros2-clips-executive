@@ -3,7 +3,7 @@ project(cx_skill_execution)
 
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 20)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -20,6 +20,8 @@ find_package(lifecycle_msgs REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(cx_clips REQUIRED)
+find_package(clips_vendor REQUIRED)
+find_package(clips REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -37,14 +39,12 @@ set(CLIPS_EXECUTIVE_SOURCES
   src/cx_skill_execution/SkillExecutionMaster.cpp
 )
 
-pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
-
 include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED ${CLIPS_EXECUTIVE_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
-target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
+target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 
 install(
   DIRECTORY include/

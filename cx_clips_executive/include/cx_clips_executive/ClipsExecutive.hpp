@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  ClipsFeature.hpp
  *
@@ -22,7 +24,7 @@
 #define CX_CLIPS_EXECUTIVE__CLIPSEXECUTIVE_HPP_
 
 #include <chrono>
-#include <clipsmm.h>
+#include <clips_ns/clips.h>
 #include <map>
 #include <memory>
 #include <string>
@@ -63,16 +65,21 @@ public:
 
   // TODO: MOVE TO PRIVATE LATER
   std::shared_ptr<cx::CLIPSEnvManagerNode> clips_env_manager_node_;
-  LockSharedPtr<CLIPS::Environment> clips_;
+  LockSharedPtr<clips::Environment> clips_;
 
 private:
-  std::string clips_map_skill(std::string action_name,
-                              CLIPS::Values param_names,
-                              CLIPS::Values param_values);
+  std::string clips_map_skill(const std::string &action_name,
+                              const std::vector<std::string> &param_names,
+                              const std::vector<std::string> &param_values);
 
-  std::map<std::string, std::string> get_action_mapping(
-      const YAML::Node &starting_node);
-  YAML::Node get_node_from_key(const YAML::Node& node, const std::string& target_key);
+  std::map<std::string, std::string>
+  get_action_mapping(const YAML::Node &starting_node);
+  YAML::Node get_node_from_key(const YAML::Node &node,
+                               const std::string &target_key);
+
+  std::vector<std::string> multifield_to_string_vec(clips::Multifield *multi,
+                                                    const std::string &fun_name,
+                                                    clips::UDFContext *udfc);
 
 private:
   rclcpp_lifecycle::LifecyclePublisher<std_msgs::msg::Empty>::SharedPtr

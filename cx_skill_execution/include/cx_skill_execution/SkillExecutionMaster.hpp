@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  SkillExecutionMaster.hpp
  *
@@ -35,7 +37,8 @@
 #include "cx_msgs/msg/skill_action_exec_info.hpp"
 #include "cx_msgs/msg/skill_execution.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
-#include <clipsmm.h>
+
+#include "clips_ns/clips.h"
 
 namespace cx {
 
@@ -46,8 +49,9 @@ public:
   SkillExecutionMaster(
       const std::string &node_name, const std::string &skill_id,
       const std::string &action_name, const std::string &action_parameters,
-      const std::string &mapped_action, const std::string &robot_id, const std::string &executor_id,
-      cx::LockSharedPtr<CLIPS::Environment> &clips,
+      const std::string &mapped_action, const std::string &robot_id,
+      const std::string &executor_id,
+      cx::LockSharedPtr<clips::Environment> &clips,
       const std::string &namespace_ = "",
       const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
 
@@ -83,7 +87,7 @@ protected:
   std::vector<std::string> action_parameters_;
   std::string node_id_;
 
-  cx::LockSharedPtr<CLIPS::Environment> &clips_;
+  cx::LockSharedPtr<clips::Environment> &clips_;
   ExecState state_;
   cx_msgs::msg::SkillActionExecInfo exec_info_{};
   std::string feedback_{};

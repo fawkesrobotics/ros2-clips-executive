@@ -5,7 +5,7 @@ clips_manager:
     # logs clips activities in a file at the location of ros logs.
     log_clips_to_file: true
     # CLIPS events to log.
-    watch: [rules, facts, activations]
+    watch: [rules, facts, globals]
 
 clips_executive:
   ros__parameters:
@@ -55,7 +55,6 @@ clips_executive:
       - name: refbox-comm
         files:
           - simple_agent/refbox-comm-init.clp
-          - simple_agent/ros-comm-init.clp
     # Map plan actions to skill strings.
     action_mapping:
       gowait:
@@ -78,4 +77,3 @@ clips_executive:
         team-name: Carologistics
         crypto-key: randomkey
         cipher: "aes-128-cbc"
-

@@ -1,0 +1,7 @@
+<class_libraries>
+  <library path="cx_mock_feature">
+    <class type="cx::MockFeature" base_class_type="cx::ClipsFeature">
+      <description>Mock feature to test pluginlib</description>
+    </class>
+  </library>
+</class_libraries>

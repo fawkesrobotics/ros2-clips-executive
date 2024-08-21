@@ -58,7 +58,7 @@ bool {{name_camel}}::clips_context_destroyed(
 }
 
 bool {{name_camel}}::clips_context_init(
-    const std::string &env_name, LockSharedPtr<CLIPS::Environment> &clips) {
+    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Initialising context for feature %s",
               clips_feature_name.c_str());
@@ -67,12 +67,12 @@ bool {{name_camel}}::clips_context_init(
 
   clips->add_function(
       "ros-{{publisher_name}}-set-field-publish",
-      sigc::slot<void, std::string, std::string, CLIPS::Value>(sigc::bind<0>(
+      sigc::slot<void, std::string, std::string, clips::UDFValue>(sigc::bind<0>(
           sigc::mem_fun(*this, &{{name_camel}}::set_field_publish),
           env_name)));
   clips->add_function(
       "ros-{{publisher_name}}-set-array-publish",
-      sigc::slot<void, std::string, std::string, CLIPS::Values>(sigc::bind<0>(
+      sigc::slot<void, std::string, std::string, clips::UDFValue>(sigc::bind<0>(
           sigc::mem_fun(*this, &{{name_camel}}::set_array_publish),
           env_name)));
   clips->add_function(
@@ -102,7 +102,7 @@ void {{name_camel}}::create_message(const std::string &env_name,
 void {{name_camel}}::set_field_publish(const std::string &env_name,
                                                  const std::string &topic,
                                                  const std::string &field,
-                                                 CLIPS::Value value) {
+                                                 clips::UDFValue value) {
 
 
 {%- for slot in slots %}
@@ -128,7 +128,7 @@ void {{name_camel}}::set_field_publish(const std::string &env_name,
 void {{name_camel}}::set_array_publish(const std::string &env_name,
                                                  const std::string &topic,
                                                  const std::string &field,
-                                                 CLIPS::Values values) {
+                                                 clips::UDFValue values) {
 
 {%- for slot in slots|selectattr("array") %}
 {%- if slot.array %}
