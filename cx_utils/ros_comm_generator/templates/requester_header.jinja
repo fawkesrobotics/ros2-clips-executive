@@ -41,13 +41,13 @@ public:
   void initialise(const std::string &feature_name) override;
 
   bool clips_context_init(const std::string &env_name,
-                          LockSharedPtr<CLIPS::Environment> &clips) override;
+                          LockSharedPtr<clips::Environment> &clips) override;
   bool clips_context_destroyed(const std::string &env_name) override;
 
   std::string getFeatureName() const;
 
 private:
-  std::map<std::string, LockSharedPtr<CLIPS::Environment>> envs_;
+  std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
   std::thread spin_thread_;
   std::map<
       std::string,
@@ -57,19 +57,16 @@ private:
       std::string,
       std::map<std::string, std::shared_ptr<{{message_type}}::Request>>>
       requests_;
-  void create_request(const std::string &env_name,
-                      const std::string &service_name);
+  void create_request(clips::Environment *env, const std::string &service_name);
 
-  void set_field_request(const std::string &env_name,
-                         const std::string &service_name,
-                         const std::string &field_name, CLIPS::Value value);
+  void set_field_request(clips::Environment *env, const std::string &service_name,
+                         const std::string &field_name, clips::UDFValue value);
 
-  void set_array_request(const std::string &env_name,
-                         const std::string &service_name,
-                         const std::string &field_name, CLIPS::Values values);
+  void set_array_request(clips::Environment *env, const std::string &service_name,
+                         const std::string &field_name, clips::UDFValue values,
+                         clips::UDFContext *udfc);
 
-  void request_from_node(const std::string &env_name,
-                         const std::string &service_name);
+  void request_from_node(clips::Environment *env, const std::string &service_name);
 
   void service_callback(
       rclcpp::Client<{{message_type}}>::SharedFuture response,

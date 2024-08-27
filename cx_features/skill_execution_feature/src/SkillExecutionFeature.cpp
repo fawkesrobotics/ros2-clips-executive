@@ -59,7 +59,7 @@ bool SkillExecutionFeature::clips_context_init(
 
   clips::AddUDF(
       clips.get_obj().get(), "call-skill-execution", "v", 6, 6,
-      "sy;sy;sy;sy;sy;sy",
+      ";sy;sy;sy;sy;sy;sy",
       [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         SkillExecutionFeature *instance =
@@ -85,7 +85,7 @@ bool SkillExecutionFeature::clips_context_init(
       "request_skill_execution", this);
 
   clips::AddUDF(
-      clips.get_obj().get(), "call-skill-cancel", "v", 2, 2, "sy;sy",
+      clips.get_obj().get(), "call-skill-cancel", "v", 2, 2, ";sy;sy",
       [](clips::Environment * /*env*/, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         SkillExecutionFeature *instance =

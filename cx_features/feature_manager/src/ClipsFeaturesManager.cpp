@@ -207,7 +207,7 @@ ClipsFeaturesManager::on_activate(const rclcpp_lifecycle::State &state) {
     // std::lock_guard<std::mutex>
     // guard(*(envd.second.env.get_mutex_instance()));
     clips::AddUDF(
-        envd.second.env.get_obj().get(), "ff-feature-request", "b", 1, 1, "sy",
+        envd.second.env.get_obj().get(), "ff-feature-request", "b", 1, 1, ";sy",
         [](clips::Environment *env, clips::UDFContext *udfc,
            clips::UDFValue *out) {
           ClipsFeaturesManager *instance =

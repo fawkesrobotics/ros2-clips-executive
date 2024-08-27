@@ -233,7 +233,7 @@ ClipsExecutive::on_activate(const rclcpp_lifecycle::State &state) {
               NULL);
 
   clips::AddUDF(
-      clips_.get_obj().get(), "map-action-skill", "sy", 3, 3, "*;s;m;m",
+      clips_.get_obj().get(), "map-action-skill", "sy", 3, 3, ";s;m;m",
       [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue *out) {
         ClipsExecutive *instance = static_cast<ClipsExecutive *>(udfc->context);

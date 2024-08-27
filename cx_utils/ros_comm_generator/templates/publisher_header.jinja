@@ -55,19 +55,17 @@ private:
       publishers_;
   std::map<std::string, std::map<std::string, {{message_type}}>> messages_;
 
-  void create_message(const std::string &env_name, const std::string &topic);
+  void create_message(clips::Environment *env, const std::string &topic);
 
-  void set_field_publish(const std::string &env_name, const std::string &topic,
+  void set_field_publish(clips::Environment *env, const std::string &topic,
                          const std::string &field, clips::UDFValue value);
 
-  void set_array_publish(const std::string &env_name, const std::string &topic,
-                         const std::string &field, clips::UDFValue values);
+  void set_array_publish(clips::Environment *env, const std::string &topic,
+                         const std::string &field, clips::UDFValue values, clips::UDFContext *udfc);
 
-  void publish_to_topic(const std::string &env_name,
-                        const std::string &topic_name);
+  void publish_to_topic(clips::Environment *env, const std::string &topic_name);
 
-  void creater_publisher(const std::string &env_name,
-                         const std::string &topic_name);
+  void create_new_publisher(clips::Environment *env, const std::string &topic_name);
 };
 
 } // namespace cx

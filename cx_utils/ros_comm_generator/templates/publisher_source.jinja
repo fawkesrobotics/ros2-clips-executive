@@ -50,107 +50,230 @@ void {{name_camel}}::initialise(const std::string &feature_name) {
 bool {{name_camel}}::clips_context_destroyed(
     const std::string &env_name) {
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+  RCLCPP_INFO(get_logger(),
               "Destroying clips context!");
+  clips::RemoveUDF(envs_[env_name].get_obj().get(), "ros-{{publisher_name}}-set-field-publish");
+  clips::RemoveUDF(envs_[env_name].get_obj().get(), "ros-{{publisher_name}}-set-array-publish");
+  clips::RemoveUDF(envs_[env_name].get_obj().get(), "ros-{{publisher_name}}-create-message");
+  clips::RemoveUDF(envs_[env_name].get_obj().get(), "ros-{{publisher_name}}-create-publisher");
+  clips::RemoveUDF(envs_[env_name].get_obj().get(), "ros-{{publisher_name}}-create-publisher");
   envs_.erase(env_name);
 
   return true;
 }
 
-bool {{name_camel}}::clips_context_init(
-    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+bool {{name_camel}}::clips_context_init(const std::string &env_name,
+    LockSharedPtr<clips::Environment> &clips) {
+  RCLCPP_INFO(get_logger(),
               "Initialising context for feature %s",
               clips_feature_name.c_str());
 
   envs_[env_name] = clips;
+  clips::AddUDF(
+      clips.get_obj().get(), "ros-{{publisher_name}}-set-field-publish", "v", 3, 3, ";sy;sy;*",
+      [](clips::Environment *env, clips::UDFContext *udfc,
+         clips::UDFValue * /*out*/) {
+        auto *instance = static_cast<{{name_camel}} *>(udfc->context);
+        clips::UDFValue topic, field, value;
+        using namespace clips;
+        clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &topic);
+        clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field);
+        clips::UDFNthArgument(udfc, 3, ANY_TYPE_BITS, &value);
 
-  clips->add_function(
-      "ros-{{publisher_name}}-set-field-publish",
-      sigc::slot<void, std::string, std::string, clips::UDFValue>(sigc::bind<0>(
-          sigc::mem_fun(*this, &{{name_camel}}::set_field_publish),
-          env_name)));
-  clips->add_function(
-      "ros-{{publisher_name}}-set-array-publish",
-      sigc::slot<void, std::string, std::string, clips::UDFValue>(sigc::bind<0>(
-          sigc::mem_fun(*this, &{{name_camel}}::set_array_publish),
-          env_name)));
-  clips->add_function(
-      "ros-{{publisher_name}}-create-message",
-      sigc::slot<void, std::string>(sigc::bind<0>(
-          sigc::mem_fun(*this, &{{name_camel}}::create_message),
-          env_name)));
-  clips->add_function(
-      "ros-{{publisher_name}}-create-publisher",
-      sigc::slot<void, std::string>(sigc::bind<0>(
-          sigc::mem_fun(*this, &{{name_camel}}::creater_publisher),
-          env_name)));
-  clips->add_function(
-      "ros-{{publisher_name}}-publish",
-      sigc::slot<void, std::string>(sigc::bind<0>(
-          sigc::mem_fun(*this, &{{name_camel}}::publish_to_topic),
-          env_name)));
+        instance->set_field_publish(env, topic.lexemeValue->contents,
+                                    field.lexemeValue->contents, value);
+      },
+      "set_array_publish", this);
+
+  clips::AddUDF(
+    clips.get_obj().get(), "ros-{{publisher_name}}-set-array-publish", "v", 3, 3, ";sy;sy;m",
+    [](clips::Environment *env, clips::UDFContext *udfc,
+       clips::UDFValue * /*out*/) {
+      auto *instance = static_cast<{{name_camel}} *>(udfc->context);
+      clips::UDFValue topic, field, value;
+      using namespace clips;
+      clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &topic);
+      clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field);
+      clips::UDFNthArgument(udfc, 3, MULTIFIELD_BIT, &value);
+
+      instance->set_array_publish(env, topic.lexemeValue->contents,
+                                  field.lexemeValue->contents, value, udfc);
+    },
+    "set_array_publish", this);
+
+  clips::AddUDF(
+      clips.get_obj().get(), "ros-{{publisher_name}}-create-message", "v", 1, 1, ";sy",
+      [](clips::Environment *env, clips::UDFContext *udfc,
+         clips::UDFValue * /*out*/) {
+        auto *instance = static_cast<{{name_camel}} *>(udfc->context);
+        clips::UDFValue topic;
+        using namespace clips;
+        clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &topic);
+        instance->create_message(env, topic.lexemeValue->contents);
+      },
+      "create_message", this);
+
+  clips::AddUDF(
+    clips.get_obj().get(), "ros-{{publisher_name}}-create-publisher", "v", 1, 1, ";sy",
+    [](clips::Environment *env, clips::UDFContext *udfc,
+       clips::UDFValue * /*out*/) {
+      auto *instance = static_cast<{{name_camel}} *>(udfc->context);
+      clips::UDFValue topic;
+      using namespace clips;
+      clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &topic);
+
+      instance->create_new_publisher(env, topic.lexemeValue->contents);
+    },
+    "create_new_publisher", this);
+
+  clips::AddUDF(
+    clips.get_obj().get(), "ros-{{publisher_name}}-publish", "v", 1, 1, ";sy",
+    [](clips::Environment *env, clips::UDFContext *udfc,
+       clips::UDFValue * /*out*/) {
+      auto *instance = static_cast<{{name_camel}} *>(udfc->context);
+      clips::UDFValue topic;
+      using namespace clips;
+      clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &topic);
+
+      instance->publish_to_topic(env, topic.lexemeValue->contents);
+    },
+    "publish_to_topic", this);
 
   return true;
 }
 
-void {{name_camel}}::create_message(const std::string &env_name,
-                                              const std::string &topic) {
-  messages_[env_name][topic] = std_msgs::msg::String();
+void {{name_camel}}::create_message(clips::Environment *env, const std::string &topic) {
+  bool found_env = false;
+  std::string env_name;
+
+  for (auto &entry : envs_) {
+    if (entry.second.get_obj().get() == env) {
+      env_name = entry.first;
+      found_env = true;
+      break;
+    }
+  }
+  if (!found_env) {
+    RCLCPP_ERROR(get_logger(),
+                 "Unable to determine environment from raw pointer");
+    return;
+  }
+
+  messages_[env_name][topic] = {{message_type}}();
 }
 
-void {{name_camel}}::set_field_publish(const std::string &env_name,
-                                                 const std::string &topic,
-                                                 const std::string &field,
-                                                 clips::UDFValue value) {
+void {{name_camel}}::set_field_publish(clips::Environment *env,
+                                       const std::string &topic,
+                                       const std::string &field,
+                                       clips::UDFValue value) {
+  bool found_env = false;
+  std::string env_name;
 
+  for (auto &entry : envs_) {
+    if (entry.second.get_obj().get() == env) {
+      env_name = entry.first;
+      found_env = true;
+      break;
+    }
+  }
+  if (!found_env) {
+    RCLCPP_ERROR(get_logger(),
+                 "Unable to determine environment from raw pointer");
+    return;
+  }
 
 {%- for slot in slots %}
 {%- if not slot.array %}
   if (field == "{{ slot.name }}") {
 {%- if slot.clips_type == "STRING" %}
-    messages_[env_name][topic].{{ slot.name }} = value.as_string();
+    messages_[env_name][topic].{{ slot.name }} = value.lexemeValue->contents;
 {%- endif %}
 {%- if slot.clips_type == "INTEGER" %}
-    messages_[env_name][topic].{{ slot.name }} = value.as_integer();
+    messages_[env_name][topic].{{ slot.name }} = value.integerValue->contents;
 {%- endif %}
 {%- if slot.clips_type == "FLOAT" %}
-    messages_[env_name][topic].{{ slot.name }} = value.as_float();
+    messages_[env_name][topic].{{ slot.name }} = value.floatValue->contents;
 {%- endif %}
 {%- if slot.clips_type == "BOOLEAN" %}
-    messages_[env_name][service_name]->{{ slot.name }} = value.as_string().compare(std::string("TRUE")) ? true : false;
+    messages_[env_name][topic].{{ slot.name }} = std::string(value.lexemeValue->contents).compare(std::string("TRUE")) ? true : false;
 {%- endif %}
   }
 {%- endif -%}
 {%- endfor %}
 }
 
-void {{name_camel}}::set_array_publish(const std::string &env_name,
-                                                 const std::string &topic,
-                                                 const std::string &field,
-                                                 clips::UDFValue values) {
+void {{name_camel}}::set_array_publish(clips::Environment *env,
+                                       const std::string &topic,
+                                       const std::string &field,
+                                       clips::UDFValue values, clips::UDFContext *udfc) {
+  bool found_env = false;
+  std::string env_name;
+
+  for (auto &entry : envs_) {
+    if (entry.second.get_obj().get() == env) {
+      env_name = entry.first;
+      found_env = true;
+      break;
+    }
+  }
+  if (!found_env) {
+    RCLCPP_ERROR(get_logger(),
+                 "Unable to determine environment from raw pointer");
+    clips::UDFThrowError(udfc);
+    return;
+  }
+  clips::Multifield *multi = values.multifieldValue;
 
 {%- for slot in slots|selectattr("array") %}
 {%- if slot.array %}
   if (field == "{{ slot.name }}") {
   {%- if slot.clips_type == "STRING" %}
     std::vector<{{slot.cpp_type}}> values_vector_{{slot.name}};
-    for (auto value : values) {
-      values_vector_{{slot.name}}.push_back(value.as_string());
+    for (size_t i = 0; i < multi->length; i++) {
+      switch (multi->contents[i].header->type) {
+      case STRING_TYPE:
+      case SYMBOL_TYPE:
+        values_vector_{{slot.name}}.push_back(multi->contents[i].lexemeValue->contents);
+        break;
+      default:
+        RCLCPP_ERROR(get_logger(),
+                     "Unexpected Type %i (expected STRING/SYMBOL) of %li nth argument of UDF ros-{{publisher_name}}-set-array-publish",
+                     multi->contents[i].header->type, i);
+        clips::UDFThrowError(udfc);
+      }
     }
+
     messages_[env_name][topic].{{ slot.name }} = values_vector_{{slot.name}};
   {%- endif %}
   {%- if slot.clips_type == "INTEGER" %}
     std::vector<{{slot.cpp_type}}> values_vector_{{slot.name}};
-    for (auto value : values) {
-      values_vector_{{slot.name}}.push_back(value.as_integer());
+    for (size_t i = 0; i < multi->length; i++) {
+      switch (multi->contents[i].header->type) {
+      case INTEGER_TYPE:
+        values_vector_{{slot.name}}.push_back(multi->contents[i].integerType->contents);
+        break;
+      default:
+        RCLCPP_ERROR(get_logger(),
+                     "Unexpected Type %i (expected INTEGER) of %li nth argument of UDF ros-{{publisher_name}}-set-array-publish",
+                     multi->contents[i].header->type, i);
+        clips::UDFThrowError(udfc);
+      }
     }
     messages_[env_name][topic].{{ slot.name }} = values_vector_{{slot.name}};
   {%- endif %}
   {%- if slot.clips_type == "FLOAT" %}
     std::vector<{{slot.cpp_type}}> values_vector_{{slot.name}};
-    for (auto value : values) {
-      values_vector_{{slot.name}}.push_back(value.as_float());
+    for (size_t i = 0; i < multi->length; i++) {
+      switch (multi->contents[i].header->type) {
+      case FLOAT_TYPE:
+        values_vector_{{slot.name}}.push_back(multi->contents[i].floatType->contents);
+        break;
+      default:
+        RCLCPP_ERROR(get_logger(),
+                     "Unexpected Type %i (expected FLOAT) of %li nth argument of UDF ros-{{publisher_name}}-set-array-publish",
+                     multi->contents[i].header->type, i);
+        clips::UDFThrowError(udfc);
+      }
     }
     messages_[env_name][topic].{{ slot.name }} = values_vector_{{slot.name}};
   {%- endif %}
@@ -164,13 +287,41 @@ void {{name_camel}}::set_array_publish(const std::string &env_name,
 {%- endfor %}
 }
 
-void {{name_camel}}::publish_to_topic(const std::string &env_name,
-                                                const std::string &topic_name) {
+void {{name_camel}}::publish_to_topic(clips::Environment *env, const std::string &topic_name) {
+  bool found_env = false;
+  std::string env_name;
+
+  for (auto &entry : envs_) {
+    if (entry.second.get_obj().get() == env) {
+      env_name = entry.first;
+      found_env = true;
+      break;
+    }
+  }
+  if (!found_env) {
+    RCLCPP_ERROR(get_logger(),
+                 "Unable to determine environment from raw pointer");
+    return;
+  }
   publishers_[env_name][topic_name]->publish(messages_[env_name][topic_name]);
 }
 
-void {{name_camel}}::creater_publisher(
-    const std::string &env_name, const std::string &topic_name) {
+void {{name_camel}}::create_new_publisher(clips::Environment *env, const std::string &topic_name) {
+  bool found_env = false;
+  std::string env_name;
+
+  for (auto &entry : envs_) {
+    if (entry.second.get_obj().get() == env) {
+      env_name = entry.first;
+      found_env = true;
+      break;
+    }
+  }
+  if (!found_env) {
+    RCLCPP_ERROR(get_logger(),
+                 "Unable to determine environment from raw pointer");
+    return;
+  }
   rclcpp::Publisher<{{message_type}}>::SharedPtr publisher_;
   publishers_[env_name][topic_name] =
       this->create_publisher<{{message_type}}>(topic_name, 10);

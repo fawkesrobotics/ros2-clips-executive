@@ -50,7 +50,7 @@ bool ConfigFeature::clips_context_init(
   envs_[env_name] = clips;
   clips::Eval(clips.get_obj().get(), "(path-load \"ff-config.clp\")", NULL);
   clips::AddUDF(
-      clips.get_obj().get(), "config-load", "v", 2, 2, "sy;sy",
+      clips.get_obj().get(), "config-load", "v", 2, 2, ";sy;sy",
       [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         ConfigFeature *instance = static_cast<ConfigFeature *>(udfc->context);

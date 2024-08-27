@@ -58,7 +58,7 @@ bool Plansys2Feature::clips_context_init(
   planner_client_ = std::make_shared<plansys2::PlannerClient>();
 
   clips::AddUDF(
-      clips.get_obj().get(), "psys2-add-domain-instance", "v", 2, 2, "sy;sy",
+      clips.get_obj().get(), "psys2-add-domain-instance", "v", 2, 2, ";sy;sy",
       [](clips::Environment * /*env*/, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         auto *instance = static_cast<Plansys2Feature *>(udfc->context);
@@ -73,7 +73,7 @@ bool Plansys2Feature::clips_context_init(
       "addProblemInstance", this);
 
   clips::AddUDF(
-      clips.get_obj().get(), "psys2-add-domain-predicate", "v", 1, 1, "sy",
+      clips.get_obj().get(), "psys2-add-domain-predicate", "v", 1, 1, ";sy",
       [](clips::Environment * /*env*/, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         auto *instance = static_cast<Plansys2Feature *>(udfc->context);
@@ -94,7 +94,7 @@ bool Plansys2Feature::clips_context_init(
       "clearProblemExpertKnowledge", this);
 
   clips::AddUDF(
-      clips.get_obj().get(), "psys2-call-planner", "v", 3, 3, "sy;sy;sy",
+      clips.get_obj().get(), "psys2-call-planner", "v", 3, 3, ";sy;sy;sy",
       [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         auto *instance = static_cast<Plansys2Feature *>(udfc->context);
