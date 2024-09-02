@@ -4,9 +4,9 @@
   <name>cx_clips_executive</name>
   <version>0.0.0</version>
   <description>All CLIPS executive relevant files and startup</description>
-    
+
   <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
-  
+
   <license>GPLv2+ license</license>
 
 
@@ -14,7 +14,7 @@
 
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
-  <depend>PkgConfig</depend>
+  <depend>pkg-config</depend>
   <depend>cx_clips</depend>
   <depend>cx_utils</depend>
   <depend>lifecycle_msgs</depend>
