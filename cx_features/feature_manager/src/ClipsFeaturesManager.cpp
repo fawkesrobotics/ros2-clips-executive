@@ -237,6 +237,7 @@ ClipsFeaturesManager::on_deactivate(const rclcpp_lifecycle::State &state) {
     // guard(*(envd.second.env.get_mutex_instance()));
     clips::RemoveUDF(envd.second.env.get_obj().get(), "ff-feature-request");
   }
+  features_.clear();
 
   return CallbackReturn::SUCCESS;
 }
