@@ -57,7 +57,7 @@ bool {{name_camel}}::clips_context_init(
 
   // add functions for subscribing and unsubscribing to the clips environment
   clips::AddUDF(
-    clips.get_obj().get(), "ros-{{subscriber_name}}-subscribe", "v", 1, 1, ";s",
+    clips.get_obj().get(), "{{name_camel}}-subscribe", "v", 1, 1, ";s",
     [](clips::Environment *env, clips::UDFContext *udfc, clips::UDFValue * /*out*/) {
         auto *instance = static_cast<{{name_camel}} *>(udfc->context);
         clips::UDFValue topic;
@@ -69,7 +69,7 @@ bool {{name_camel}}::clips_context_init(
     "subscribe_to_topic", this);
 
   clips::AddUDF(
-    clips.get_obj().get(), "ros-{{subscriber_name}}-unsubscribe", "v", 1, 1, ";s",
+    clips.get_obj().get(), "{{name_camel}}-unsubscribe", "v", 1, 1, ";s",
     [](clips::Environment *env, clips::UDFContext *udfc, clips::UDFValue * /*out*/) {
         auto *instance = static_cast<{{name_camel}} *>(udfc->context);
         clips::UDFValue topic;
@@ -82,9 +82,9 @@ bool {{name_camel}}::clips_context_init(
 
 
   // add fact templates
-  clips::Build(clips.get_obj().get(),"(deftemplate ros-{{subscriber_name}}-subscribed \
+  clips::Build(clips.get_obj().get(),"(deftemplate {{name_camel}}-subscribed \
             (slot topic (type STRING)))");
-  clips::Build(clips.get_obj().get(),"(deftemplate ros-{{subscriber_name}}-message \
+  clips::Build(clips.get_obj().get(),"(deftemplate {{name_camel}}-message \
             (slot topic (type STRING)) \
             {%- for slot in slots %}
             (slot {{ slot.name }} (type {{slot.clips_type}})) \
@@ -99,8 +99,8 @@ bool {{name_camel}}::clips_context_destroyed(
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Destroying clips context!");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(), "ros-{{subscriber_name}}-subscribe");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(), "ros-{{subscriber_name}}-unsubscribe");
+  clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_camel}}-subscribe");
+  clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_camel}}-unsubscribe");
   envs_.erase(env_name);
 
   return true;
@@ -139,7 +139,7 @@ void {{name_camel}}::subscribe_to_topic(clips::Environment *env,
             topic_name, 10, [=](const {{message_type}}::SharedPtr msg) {
               topic_callback(msg, topic_name, env_name);
             });
-    clips::AssertString(envs_[env_name].get_obj().get(), ("(ros-{{subscriber_name}}-subscribed (topic \"" +
+    clips::AssertString(envs_[env_name].get_obj().get(), ("({{name_camel}}-subscribed (topic \"" +
                                  topic_name + "\"))").c_str());
   }
 }
@@ -171,7 +171,7 @@ void {{name_camel}}::unsubscribe_from_topic(clips::Environment *env,
   }
 
   // remove old message facts
-  clips::Eval(env, ("(do-for-all-facts ((?f ros-{{subscriber_name}}-message)) (eq (str-cat ?f:topic) (str-cat " + topic_name + "))  (retract ?f))").c_str(), NULL);
+  clips::Eval(env, ("(do-for-all-facts ((?f {{name_camel}}-message)) (eq (str-cat ?f:topic) (str-cat " + topic_name + "))  (retract ?f))").c_str(), NULL);
 }
 
 void {{name_camel}}::topic_callback(
@@ -181,10 +181,10 @@ void {{name_camel}}::topic_callback(
   std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
 
   // remove old message facts
-  clips::Eval(clips.get_obj().get(), ("(do-for-all-facts ((?f ros-{{subscriber_name}}-message)) (eq (str-cat ?f:topic) (str-cat " + topic_name + "))  (retract ?f))").c_str(), NULL);
+  clips::Eval(clips.get_obj().get(), ("(do-for-all-facts ((?f {{name_camel}}-message)) (eq (str-cat ?f:topic) (str-cat " + topic_name + "))  (retract ?f))").c_str(), NULL);
 
   // assert the newest message
-  clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "ros-{{subscriber_name}}-message");
+  clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_camel}}-message");
   {%- for slot in slots %}
 {% if slot.array %}
   std::string values_{{slot.name}};

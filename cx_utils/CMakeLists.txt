@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 project(cx_utils)
 
-# packages to ignore: colcon build --symlink-install --packages-ignore plansys2_executor plansys2_bt_actions plansys2_terminal plansys2_bringup plansys2_tests
-
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
@@ -54,13 +52,17 @@ install(
   DESTINATION lib/${PROJECT_NAME}
 )
 
+install(FILES ros_comm_generator/cmake/cx_generate_comm.cmake
+        DESTINATION share/${PROJECT_NAME}/cmake)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
 endif()
-
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 ament_export_dependencies(${dependencies})
 
-ament_package()
+ament_package(
+CONFIG_EXTRAS ros_comm_generator/cmake/cx_generate_comm.cmake
+)

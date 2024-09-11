@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  {{name_camel}}.hpp
  *
@@ -16,7 +18,7 @@
  *
  *  Read the full text in the LICENSE.GPL file in the doc directory.
  */
-
+// clang-format off
 #ifndef CX_FEATURES__{{name_upper}}_HPP_
 #define CX_FEATURES__{{name_upper}}_HPP_
 
@@ -51,8 +53,29 @@ private:
   std::thread spin_thread_;
   std::map<std::string,
            std::map<std::string,
+                    rclcpp::Publisher<{{message_type}}>::SharedPtr>>
+      publishers_;
+  std::map<std::string,
+           std::map<std::string,
                     rclcpp::Subscription<{{message_type}}>::SharedPtr>>
       subscriptions_;
+  std::unordered_set<{{message_type}}*> messages_;
+
+clips::UDFValue create_message(clips::Environment *env);
+
+clips::UDFValue get_field(clips::Environment *env,
+                          {{message_type}} *msg,
+                          const std::string &field);
+
+  void set_field_publish({{message_type }} *msg, const std::string &field, clips::UDFValue value, clips::UDFContext *udfc);
+
+  void publish_to_topic(clips::Environment *env, {{message_type}} *msg, const std::string &topic_name);
+
+  void create_new_publisher(clips::Environment *env, const std::string &topic_name);
+
+  void destroy_publisher(clips::Environment *env, const std::string &topic_name);
+
+  void destroy_msg({{message_type}} *msg);
 
   void subscribe_to_topic(clips::Environment *env, const std::string &topic_name);
 

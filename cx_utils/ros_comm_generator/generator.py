@@ -1,165 +1,239 @@
 #!/usr/bin/env python3
-from ament_index_python.packages import get_package_share_directory
-
+# Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 import argparse
 import re
-from jinja2 import Template
 from datetime import datetime
 
+import rosidl_parser.definition
+from ament_index_python.packages import get_package_share_directory
+from jinja2 import Template
+from rosidl_runtime_py.utilities import get_message
+from rosidl_runtime_py.utilities import get_service
+
+
 def to_camel_case(s):
-    words = s.split('_')  # Split the string into words based on underscores
+    words = s.split("_")  # Split the string into words based on underscores
     camel_case_words = [word.capitalize() for word in words[0:]]
-    camel_case_string = ''.join(camel_case_words)
+    camel_case_string = "".join(camel_case_words)
     return camel_case_string
 
+
 def to_upper_case(s):
-    words = s.split('_')  # Split the string into words based on underscores
+    words = s.split("_")  # Split the string into words based on underscores
     upper_case_words = [word.upper() for word in words]
-    upper_case_words = ''.join(upper_case_words)
+    upper_case_words = "".join(upper_case_words)
     return upper_case_words
+
+
+def to_snake_case(name):
+    name_snake = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", name)
+
+    name_snake = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", name_snake).lower()
+    return name_snake
+
+
+def to_kebab_case(name):
+    name_kebab = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1-\2", name)
+    name_kebab = re.sub(r"([a-z0-9])([A-Z])", r"\1-\2", name_kebab).lower()
+    return name_kebab
 
 
 # Dictionary for mapping ROS2 types to CLIPS types
 clips_types = {
-    'bool': 'BOOLEAN',
-    'byte': 'INTEGER',
-    'char': 'STRING',
-    'float32': 'FLOAT',
-    'float64': 'FLOAT',
-    'int8': 'INTEGER',
-    'uint8': 'INTEGER',
-    'int16': 'INTEGER',
-    'uint16': 'INTEGER',
-    'int32': 'INTEGER',
-    'uint32': 'INTEGER',
-    'int64': 'INTEGER',
-    'uint64': 'INTEGER',
-    'string': 'STRING',
-    'wstring': 'STRING'
+    "bool": "BOOLEAN",
+    "byte": "INTEGER",
+    "char": "STRING",
+    "float32": "FLOAT",
+    "float64": "FLOAT",
+    "int8": "INTEGER",
+    "uint8": "INTEGER",
+    "int16": "INTEGER",
+    "uint16": "INTEGER",
+    "int32": "INTEGER",
+    "uint32": "INTEGER",
+    "int64": "INTEGER",
+    "uint64": "INTEGER",
+    "string": "STRING",
+    "wstring": "STRING",
 }
 
 # Dictionary for mapping ROS2 types to C++ types
 cpp_types = {
-    'bool': 'bool',
-    'byte': 'uint8_t',
-    'char': 'char',
-    'float32': 'float',
-    'float64': 'double',
-    'int8': 'int8_t',
-    'uint8': 'uint8_t',
-    'int16': 'int16_t',
-    'uint16': 'uint16_t',
-    'int32': 'int32_t',
-    'uint32': 'uint32_t',
-    'int64': 'int64_t',
-    'uint64': 'uint64_t',
-    'string': 'std::string',
-    'wstring': 'std::u16string'
+    "bool": "bool",
+    "byte": "uint8_t",
+    "char": "char",
+    "float32": "float",
+    "float64": "double",
+    "int8": "int8_t",
+    "uint8": "uint8_t",
+    "int16": "int16_t",
+    "uint16": "uint16_t",
+    "int32": "int32_t",
+    "uint32": "uint32_t",
+    "int64": "int64_t",
+    "uint64": "uint64_t",
+    "string": "std::string",
+    "wstring": "std::u16string",
 }
 
-# Capture pattern for fields
-pattern = r'\b(?P<type>(?:bool|byte|char|float32|float64|int8|uint8|int16|uint16|int32|uint32|int64|uint64|string|wstring))\b(?P<restrictions>(?:<=\d+))?(?P<array>(?:\[\d*(?P<length>(?:<=\d+))?\]))?\s+(?P<name>[a-z]\w*)\b'
-regex = re.compile(pattern)
 
-# Parse arguments
-parser = argparse.ArgumentParser(
-                    prog='generator',
-                    description='This program is a generator for ROS2 communication in the ROS2 CX project')
+# Helper function to convert ROS 2 types into readable strings
+def get_field_type_str(field_type):
+    if isinstance(field_type, rosidl_parser.definition.AbstractString):
+        return "string"
+    elif isinstance(field_type, rosidl_parser.definition.BasicType):
+        return field_type.typename
+    elif isinstance(field_type, rosidl_parser.definition.AbstractSequence):
+        return f"{get_field_type_str(field_type.value_type)}"
+    # Check if the field is a namespaced type (i.e., a custom message type like geometry_msgs/Twist)
+    elif isinstance(field_type, rosidl_parser.definition.NamespacedType):
+        # Join the namespace and the type name (e.g., geometry_msgs/Twist)
+        full_name = "::".join(field_type.namespaces + [field_type.name])
+        return full_name
 
-parser.add_argument('file')
-parser.add_argument('name')
-parser.add_argument('message_type')
-parser.add_argument('message_include')
-parser.add_argument('-s', '--subscriber', action='store_true')
-parser.add_argument('-p', '--publisher', action='store_true')
-parser.add_argument('-r', '--requester', action='store_true')
-parser.add_argument('-i', '--include_path_prefix')
-
-args = parser.parse_args()
-
-if args.subscriber and args.publisher:
-    print('Error: Cannot be both subscriber and publisher')
-    exit(1)
-
-if args.subscriber and args.requester:
-    print('Error: Cannot be both subscriber and requester')
-    exit(1)
-
-if args.publisher and args.requester:
-    print('Error: Cannot be both publisher and requester')
-    exit(1)
-
-if not args.subscriber and not args.publisher and not args.requester:
-    print('Error: Must be either subscriber or publisher or requester')
-    exit(1)
+    # Fallback for any other unexpected type
+    else:
+        print("Unexpected field type: ", field_type)
+        return str(field_type)
 
 
-# Open file
-try:
-    f = open(args.file, 'r')
-except:
-    print('Error: File not found')
-    exit(1)
-
-# Read file
-lines = f.readlines()
-
-# Find fields and store them in a dictionary
-fields = {}
-response_fields = {}
-in_response = False
-for line in lines:
-    if line.startswith("---") and args.requester:
-        in_response = True
-        continue
-    match = regex.match(line)
-    if match:
-        type_part = match.group('type')
-        restrictions_part = match.group('restrictions')
-        array_part = match.group('array')
-        lengths_part = match.group('length')
-        name_part = match.group('name')
-        field = {
-            'name': name_part,
-            'type': type_part,
-            'clips_type' : clips_types[type_part],
-            'cpp_type' : cpp_types[type_part],
-            'array': (True if array_part is not None else False),
-            'restrictions': restrictions_part,
-            'lengths': lengths_part
-        }
-        if in_response:
-            response_fields[name_part] = field
+# Function to extract fields from a message class and convert to readable format
+def extract_fields(message_type):
+    extracted_fields = {}
+    print(message_type)
+    for field_name, field_type in zip(message_type.__slots__, message_type.SLOT_TYPES):
+        # Remove leading underscore from field_name
+        clean_field_name = field_name[1:] if field_name.startswith("_") else field_name
+        str_type = get_field_type_str(field_type)
+        if str_type in clips_types:
+            clips_type = clips_types[str_type]
         else:
-            fields[name_part] = field
+            clips_type = "EXTERNAL-ADDRESS"
+        if str_type in cpp_types:
+            cpp_type = cpp_types[str_type]
+        else:
+            cpp_type = "void *"
 
-time_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        extracted_fields[clean_field_name] = {
+            "name": clean_field_name,
+            "type": str_type,
+            "clips_type": clips_type,
+            "cpp_type": cpp_type,
+            "array": isinstance(field_type, rosidl_parser.definition.AbstractSequence),  # Detect if it's an array
+            "restrictions": None,  # Customize for specific restrictions if necessary
+            "lengths": None,  # Customize for specific length if necessary
+        }
+    return extracted_fields
 
-package_dir = get_package_share_directory('cx_utils')
 
-if args.subscriber:
-    with open(package_dir+"/templates/"+'subscriber_source.jinja') as s, open(package_dir+"/templates/"+'subscriber_header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
-        tmpl = Template(s.read())
-        out = tmpl.render(name_camel = to_camel_case(args.name), message_type=args.message_type, subscriber_name = args.name, slots = fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix))
-        source_file.write(out)
-        tmpl = Template(h.read())
-        out = tmpl.render(name_upper = to_upper_case(args.name), name_camel = to_camel_case(args.name), message_type=args.message_type, subscriber_name = args.name, slots = fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix), message_include_path=args.message_include)
-        header_file.write(out)
+def main():
+    # Set up argument parsing
+    parser = argparse.ArgumentParser(
+        description="Generate CLIPS bindings for ROS 2 messages, services, \
+        or actions for usage with the CLIPS Executive."
+    )
 
-if args.publisher:
-    with open(package_dir+"/templates/"+'publisher_source.jinja') as s, open(package_dir+"/templates/"+'publisher_header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
-        tmpl = Template(s.read())
-        out = tmpl.render(name_camel = to_camel_case(args.name), message_type=args.message_type, publisher_name = args.name, slots = fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix))
-        source_file.write(out)
-        tmpl = Template(h.read())
-        out = tmpl.render(name_upper = to_upper_case(args.name), name_camel = to_camel_case(args.name), message_type=args.message_type, publisher_name = args.name, slots = fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix), message_include_path=args.message_include)
-        header_file.write(out)
+    # Define arguments
+    parser.add_argument(
+        "type",
+        choices=["message", "service", "action"],
+        help="Type of ROS 2 entity to generate (message, service, action).",
+    )
+    parser.add_argument(
+        "package",
+        type=str,
+        help="Name of the package containing the message/service/action.",
+    )
+    parser.add_argument(
+        "name",
+        type=str,
+        help="Name of the message/service/action to generate bindings for.",
+    )
 
-if args.requester:
-    with open(package_dir+"/templates/"+'requester_source.jinja') as s, open(package_dir+"/templates/"+'requester_header.jinja') as h, open(to_camel_case(args.name)+'.cpp', 'w') as source_file, open(to_camel_case(args.name)+'.hpp', 'w') as header_file:
-        tmpl = Template(s.read())
-        out = tmpl.render(name_camel = to_camel_case(args.name), message_type=args.message_type, requester_name = args.name, slots = fields.values(), response_slots=response_fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix))
-        source_file.write(out)
-        tmpl = Template(h.read())
-        out = tmpl.render(name_upper = to_upper_case(args.name), name_camel = to_camel_case(args.name), message_type=args.message_type, requester_name = args.name, slots = fields.values(), gen_date = time_string, include_path_prefix=('cx_features' if args.include_path_prefix is None else args.include_path_prefix), message_include_path=args.message_include)
-        header_file.write(out)
+    # Parse the arguments
+    args = parser.parse_args()
+
+    # Simulate generating the bindings
+    print(f"Generating {args.type} bindings for {args.package}/{args.type}/{args.name}")
+    fields = {}
+    response_fields = {}
+
+    package_dir = get_package_share_directory("cx_utils")
+    time_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    if args.type == "service":
+        # We are dealing with a service
+        srv_type_str = args.package + "/srv/" + args.name
+        try:
+            srv_type = get_service(srv_type_str)
+
+            msg_type_request = srv_type.Request
+            msg_type_response = srv_type.Response
+            fields = extract_fields(msg_type_request)
+            response_fields = extract_fields(msg_type_response)
+        except Exception as e:
+            print(f"Failed to load service {srv_type_str}: {e}")
+    if args.type == "message":
+        msg_type_str = args.package + "/msg/" + args.name
+        try:
+            msg_type = get_message(msg_type_str)
+            print("msg_type: ", msg_type)
+            fields = extract_fields(msg_type)
+            print("fields: ", fields)
+            class_name = "CX" + to_camel_case(args.package) + args.name + "Feature"
+            print("slots: ", fields.values())
+            file_name = "cx_" + to_snake_case(args.package) + "_" + to_snake_case(args.name) + "_feature"
+            cpp_msg_type = args.package + "::msg::" + args.name
+            include_header = "<" + args.package + "/msg/" + to_snake_case(args.name) + ".hpp>"
+            with open(package_dir + "/templates/" + "msg.jinja.cpp") as s, open(
+                file_name + ".cpp", "w"
+            ) as source_file:  # noqa: E501
+                tmpl = Template(s.read())
+                out = tmpl.render(
+                    name_camel=class_name,
+                    message_type=cpp_msg_type,
+                    slots=fields.values(),
+                    gen_date=time_string,
+                    name_snake=to_snake_case(class_name),
+                    name_kebab=to_kebab_case(class_name),
+                )
+                source_file.write(out)
+            with open(package_dir + "/templates/" + "msg.jinja.hpp") as h, open(
+                file_name + ".hpp", "w"
+            ) as header_file:  # noqa: E501
+                tmpl = Template(h.read())
+                out = tmpl.render(
+                    name_upper=to_upper_case(args.name),
+                    name_camel=class_name,
+                    message_type=cpp_msg_type,
+                    subscriber_name=args.name,
+                    slots=fields.values(),
+                    gen_date=time_string,
+                    message_include_path=include_header,
+                    name_snake=to_snake_case(class_name),
+                )
+                header_file.write(out)
+            with open(file_name + "_plugin.xml", "w") as plugin_file, open(
+                package_dir + "/templates/" + "feature_plugin.jinja.xml"
+            ) as pl:
+                tmpl = Template(pl.read())
+                out = tmpl.render(
+                    message_type=cpp_msg_type,
+                    gen_date=time_string,
+                    message_include_path=include_header,
+                    name_camel=class_name,
+                    name_snake=to_snake_case(class_name),
+                )
+                plugin_file.write(out)
+        except Exception as e:
+            print(f"Failed to load message {msg_type_str}: {e}")
+    if args.type == "action":
+        raise Exception("cx_ros_comm_generator", "Action clients and servers are not supported yet")
+
+    print("Fields:", fields)
+    if response_fields:
+        print("Response fields:", response_fields)
+
+
+if __name__ == "__main__":
+    main()
