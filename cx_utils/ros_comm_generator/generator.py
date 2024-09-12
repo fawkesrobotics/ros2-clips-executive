@@ -136,7 +136,7 @@ def main():
     # Define arguments
     parser.add_argument(
         "type",
-        choices=["message", "service", "action"],
+        choices=["msg", "srv", "action"],
         help="Type of ROS 2 entity to generate (message, service, action).",
     )
     parser.add_argument(
@@ -161,30 +161,42 @@ def main():
     package_dir = get_package_share_directory("cx_utils")
     time_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    if args.type == "service":
-        # We are dealing with a service
-        srv_type_str = args.package + "/srv/" + args.name
+    class_name = "CX" + to_camel_case(args.package) + args.name + "Feature"
+    file_name = "cx_" + to_snake_case(args.package) + "_" + to_snake_case(args.name) + "_feature"
+    include_header = "<" + args.package + "/" + args.type + "/" + to_snake_case(args.name) + ".hpp>"
+    cpp_msg_type = args.package + "::" + args.type + "::" + args.name
+    msg_type_str = args.package + "/" + args.type + "/" + args.name
+
+    if args.type == "srv":
         try:
-            srv_type = get_service(srv_type_str)
+            srv_type = get_service(msg_type_str)
 
             msg_type_request = srv_type.Request
             msg_type_response = srv_type.Response
             fields = extract_fields(msg_type_request)
             response_fields = extract_fields(msg_type_response)
+            with open(package_dir + "/templates/" + "srv.jinja.cpp") as s, open(
+                file_name + ".cpp", "w"
+            ) as source_file:  # noqa: E501
+                tmpl = Template(s.read())
+                out = tmpl.render(
+                    name_camel=class_name,
+                    message_type=cpp_msg_type,
+                    request_slots=fields.values(),
+                    response_slots=response_fields.values(),
+                    gen_date=time_string,
+                    name_snake=to_snake_case(class_name),
+                    name_kebab=to_kebab_case(class_name),
+                )
+                source_file.write(out)
         except Exception as e:
-            print(f"Failed to load service {srv_type_str}: {e}")
-    if args.type == "message":
-        msg_type_str = args.package + "/msg/" + args.name
+            print(f"Failed to load {args.type} {msg_type_str}: {e}")
+            exit(1)
+
+    if args.type == "msg":
         try:
             msg_type = get_message(msg_type_str)
-            print("msg_type: ", msg_type)
             fields = extract_fields(msg_type)
-            print("fields: ", fields)
-            class_name = "CX" + to_camel_case(args.package) + args.name + "Feature"
-            print("slots: ", fields.values())
-            file_name = "cx_" + to_snake_case(args.package) + "_" + to_snake_case(args.name) + "_feature"
-            cpp_msg_type = args.package + "::msg::" + args.name
-            include_header = "<" + args.package + "/msg/" + to_snake_case(args.name) + ".hpp>"
             with open(package_dir + "/templates/" + "msg.jinja.cpp") as s, open(
                 file_name + ".cpp", "w"
             ) as source_file:  # noqa: E501
@@ -198,37 +210,36 @@ def main():
                     name_kebab=to_kebab_case(class_name),
                 )
                 source_file.write(out)
-            with open(package_dir + "/templates/" + "msg.jinja.hpp") as h, open(
-                file_name + ".hpp", "w"
-            ) as header_file:  # noqa: E501
-                tmpl = Template(h.read())
-                out = tmpl.render(
-                    name_upper=to_upper_case(args.name),
-                    name_camel=class_name,
-                    message_type=cpp_msg_type,
-                    subscriber_name=args.name,
-                    slots=fields.values(),
-                    gen_date=time_string,
-                    message_include_path=include_header,
-                    name_snake=to_snake_case(class_name),
-                )
-                header_file.write(out)
-            with open(file_name + "_plugin.xml", "w") as plugin_file, open(
-                package_dir + "/templates/" + "feature_plugin.jinja.xml"
-            ) as pl:
-                tmpl = Template(pl.read())
-                out = tmpl.render(
-                    message_type=cpp_msg_type,
-                    gen_date=time_string,
-                    message_include_path=include_header,
-                    name_camel=class_name,
-                    name_snake=to_snake_case(class_name),
-                )
-                plugin_file.write(out)
         except Exception as e:
-            print(f"Failed to load message {msg_type_str}: {e}")
+            print(f"Failed to load {args.type} {msg_type_str}: {e}")
+            exit(1)
     if args.type == "action":
         raise Exception("cx_ros_comm_generator", "Action clients and servers are not supported yet")
+    with open(package_dir + "/templates/" + args.type + ".jinja.hpp") as h, open(
+        file_name + ".hpp", "w"
+    ) as header_file:  # noqa: E501
+        tmpl = Template(h.read())
+        out = tmpl.render(
+            name_upper=to_upper_case(args.name),
+            name_camel=class_name,
+            message_type=cpp_msg_type,
+            gen_date=time_string,
+            message_include_path=include_header,
+            name_snake=to_snake_case(class_name),
+        )
+        header_file.write(out)
+    with open(file_name + "_plugin.xml", "w") as plugin_file, open(
+        package_dir + "/templates/" + "feature_plugin.jinja.xml"
+    ) as pl:
+        tmpl = Template(pl.read())
+        out = tmpl.render(
+            message_type=cpp_msg_type,
+            gen_date=time_string,
+            message_include_path=include_header,
+            name_camel=class_name,
+            name_snake=to_snake_case(class_name),
+        )
+        plugin_file.write(out)
 
     print("Fields:", fields)
     if response_fields:

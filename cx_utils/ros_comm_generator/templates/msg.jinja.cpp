@@ -57,7 +57,6 @@ bool {{name_camel}}::clips_context_destroyed(
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_kebab}}-create-subscriber");
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_kebab}}-destroy-subscriber");
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_kebab}}-set-field");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_kebab}}-set-array");
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_kebab}}-get-field");
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_kebab}}-create-msg");
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "{{name_kebab}}-create-publisher");
@@ -143,7 +142,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
 
       instance->destroy_publisher(env, topic.lexemeValue->contents);
     },
-    "create_new_publisher", this);
+    "destroy_publisher", this);
 
   clips::AddUDF(
     clips.get_obj().get(), "{{name_kebab}}-publish", "v", 2, 2, ";e;sy",
@@ -293,7 +292,7 @@ void {{name_camel}}::set_field_publish({{message_type}} *msg,
     msg->{{ slot.name }} = value.floatValue->contents;
 {%- endif %}
 {%- if slot.clips_type == "BOOLEAN" %}
-    msg->{{ slot.name }} = std::string(value.lexemeValue->contents).compare(std::string("TRUE")) ? true : false;
+    msg->{{ slot.name }} = std::string(value.lexemeValue->contents).compare(std::string("TRUE")) ? false : true;
 {%- endif %}
 {%- if slot.clips_type == "EXTERNAL-ADDRESS" %}
     msg->{{ slot.name }} = *static_cast<{{slot.type}} *>(value.externalAddressValue->contents);
@@ -312,7 +311,7 @@ void {{name_camel}}::set_field_publish({{message_type}} *msg,
         break;
       default:
         RCLCPP_ERROR(get_logger(),
-                     "Unexpected Type %i (expected STRING/SYMBOL) of %li nth argument of UDF {{name_kebab}}-set-array",
+                     "Unexpected Type %i (expected STRING/SYMBOL) of %li nth argument of UDF {{name_kebab}}-set-field",
                      multi->contents[i].header->type, i);
         clips::UDFThrowError(udfc);
       }
@@ -329,7 +328,7 @@ void {{name_camel}}::set_field_publish({{message_type}} *msg,
         break;
       default:
         RCLCPP_ERROR(get_logger(),
-                     "Unexpected Type %i (expected INTEGER) of %li nth argument of UDF {{name_kebab}}-set-array",
+                     "Unexpected Type %i (expected INTEGER) of %li nth argument of UDF {{name_kebab}}-set-field",
                      multi->contents[i].header->type, i);
         clips::UDFThrowError(udfc);
       }
@@ -345,7 +344,7 @@ void {{name_camel}}::set_field_publish({{message_type}} *msg,
         break;
       default:
         RCLCPP_ERROR(get_logger(),
-                     "Unexpected Type %i (expected FLOAT) of %li nth argument of UDF {{name_kebab}}-set-array",
+                     "Unexpected Type %i (expected FLOAT) of %li nth argument of UDF {{name_kebab}}-set-field",
                      multi->contents[i].header->type, i);
         clips::UDFThrowError(udfc);
       }
@@ -361,7 +360,7 @@ void {{name_camel}}::set_field_publish({{message_type}} *msg,
         break;
       default:
         RCLCPP_ERROR(get_logger(),
-                     "Unexpected Type %i (expected FLOAT) of %li nth argument of UDF {{name_kebab}}-set-array",
+                     "Unexpected Type %i (expected FLOAT) of %li nth argument of UDF {{name_kebab}}-set-field",
                      multi->contents[i].header->type, i);
         clips::UDFThrowError(udfc);
       }

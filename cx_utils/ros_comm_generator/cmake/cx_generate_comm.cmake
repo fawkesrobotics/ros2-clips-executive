@@ -12,7 +12,7 @@ function(cx_helper_to_snake_case input_string output_variable)
     set(${output_variable} "${temp_string}" PARENT_SCOPE)
 endfunction()
 
-macro(cx_generate_msg_bindings package msg_name)
+macro(cx_generate_bindings package msg_name type)
   # generate bindings to publish/subscribe to ros topics of messages from
   # a given message type (defined by it's package and name).
   # Example: cx_generate_msg_bindings(std_msgs String)
@@ -30,7 +30,7 @@ macro(cx_generate_msg_bindings package msg_name)
   cx_helper_to_snake_case(${package} snake_case_package)
   cx_helper_to_snake_case(${msg_name} snake_case_msg_name)
   set(feature_name cx_${snake_case_package}_${snake_case_msg_name}_feature)
-  message(STATUS "Generate bindings for ${package}/msg/${msg_name}")
+  message(STATUS "Generate bindings for ${package}/${type}/${msg_name}")
 
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
   find_package(${package} REQUIRED)
@@ -48,8 +48,8 @@ macro(cx_generate_msg_bindings package msg_name)
   endif()
   add_custom_command(
       OUTPUT  ${feature_name}.cpp ${feature_name}.hpp ${feature_name}_plugin.xml
-      COMMAND ${Python3_EXECUTABLE} ${GENERATOR_SCRIPT} message ${package} ${msg_name}
-      DEPENDS ${GENERATOR_SCRIPT} ${TEMPLATES_DIR}/msg.jinja.cpp ${TEMPLATES_DIR}/msg.jinja.hpp ${TEMPLATES_DIR}/feature_plugin.jinja.xml
+      COMMAND ${Python3_EXECUTABLE} ${GENERATOR_SCRIPT} ${type} ${package} ${msg_name}
+      DEPENDS ${GENERATOR_SCRIPT} ${TEMPLATES_DIR}/msg.jinja.cpp ${TEMPLATES_DIR}/msg.jinja.hpp ${TEMPLATES_DIR}/feature_plugin.jinja.xml ${TEMPLATES_DIR}/srv.jinja.cpp ${TEMPLATES_DIR}/srv.jinja.hpp
       COMMENT "Generate cx feature for ${package} ${msg_name}"
   )
 
@@ -81,4 +81,8 @@ macro(cx_generate_msg_bindings package msg_name)
   set(__PLUGINLIB_CATEGORY_CONTENT__${plugin_category}
     "${__PLUGINLIB_CATEGORY_CONTENT__${plugin_category}}share/${PROJECT_NAME}/${relative_filename}\n")
   list(APPEND __PLUGINLIB_PLUGIN_CATEGORIES ${plugin_category})  # duplicates are removes on use
+endmacro()
+
+macro(cx_generate_msg_bindings package msg_name)
+  cx_generate_bindings(${package} ${msg_name} "msg")
 endmacro()

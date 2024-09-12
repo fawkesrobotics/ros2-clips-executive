@@ -58,7 +58,7 @@ ament_target_dependencies(cx_node ${dependencies})
 target_compile_definitions(cx_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 target_link_libraries(cx_node ClipsNS::libclips_ns)
 
-# generate bindings to interface with ROS messages, such as std_msgs::String
+# generate bindings to interface with ROS messages, such as std_msgs::msg::String
 cx_generate_msg_bindings("std_msgs" "String")
 
 if(BUILD_TESTING)
