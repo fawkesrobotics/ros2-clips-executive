@@ -45,7 +45,15 @@ extern "C" {
 using namespace std::chrono_literals;
 
 namespace cx {
-
+constexpr const char *RED = "\033[31m";
+constexpr const char *GREEN = "\033[32m";
+constexpr const char *YELLOW = "\033[33m";
+constexpr const char *BLUE = "\033[34m";
+constexpr const char *MAGENTA = "\033[35m";
+constexpr const char *CYAN = "\033[36m";
+constexpr const char *WHITE = "\033[37m";
+constexpr const char *BOLD = "\033[1m";
+constexpr const char *RESET = "\033[0m";
 #define ROUTNER_NAME "cxlog"
 
 /// @cond INTERNALS
@@ -89,9 +97,30 @@ public:
       if (i > 1) {
         buffer_ += str;
       }
-      if (strcmp(logical_name, "debug") == 0 ||
-          strcmp(logical_name, "logdebug") == 0 ||
-          strcmp(logical_name, clips::STDOUT) == 0) {
+      if (strcmp(logical_name, "red") == 0) {
+        RCLCPP_INFO(this->logger_,
+                    (std::string(cx::RED) + buffer_ + cx::RESET).c_str());
+      } else if (strcmp(logical_name, "green") == 0) {
+        RCLCPP_INFO(this->logger_,
+                    (std::string(cx::GREEN) + buffer_ + cx::RESET).c_str());
+      } else if (strcmp(logical_name, "yellow") == 0) {
+        RCLCPP_INFO(this->logger_,
+                    (std::string(cx::YELLOW) + buffer_ + cx::RESET).c_str());
+      } else if (strcmp(logical_name, "blue") == 0) {
+        RCLCPP_INFO(this->logger_,
+                    (std::string(cx::BLUE) + buffer_ + cx::RESET).c_str());
+      } else if (strcmp(logical_name, "magenta") == 0) {
+        RCLCPP_INFO(this->logger_,
+                    (std::string(cx::MAGENTA) + buffer_ + cx::RESET).c_str());
+      } else if (strcmp(logical_name, "cyan") == 0) {
+        RCLCPP_INFO(this->logger_,
+                    (std::string(cx::CYAN) + buffer_ + cx::RESET).c_str());
+      } else if (strcmp(logical_name, "white") == 0) {
+        RCLCPP_INFO(this->logger_,
+                    (std::string(cx::WHITE) + buffer_ + cx::RESET).c_str());
+      } else if (strcmp(logical_name, "debug") == 0 ||
+                 strcmp(logical_name, "logdebug") == 0 ||
+                 strcmp(logical_name, clips::STDOUT) == 0) {
         RCLCPP_DEBUG(this->logger_, buffer_.c_str());
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
@@ -139,6 +168,22 @@ static bool log_router_query(clips::Environment * /*env*/,
                              const char *logical_name, void * /*context*/) {
   // envs
   if (strcmp(logical_name, "l") == 0)
+    return true;
+  if (strcmp(logical_name, "red") == 0)
+    return true;
+  if (strcmp(logical_name, "green") == 0)
+    return true;
+  if (strcmp(logical_name, "blue") == 0)
+    return true;
+  if (strcmp(logical_name, "yellow") == 0)
+    return true;
+  if (strcmp(logical_name, "magenta") == 0)
+    return true;
+  if (strcmp(logical_name, "cyan") == 0)
+    return true;
+  if (strcmp(logical_name, "white") == 0)
+    return true;
+  if (strcmp(logical_name, "bold") == 0)
     return true;
   if (strcmp(logical_name, "info") == 0)
     return true;
