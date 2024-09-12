@@ -36,3 +36,46 @@
   ; destroy the msg after usage to free up the memory
   (cx-std-msgs-string-feature-destroy-msg ?msg)
 )
+
+; --- ROS services ---
+
+(defrule set-bool-client-service-init
+" Create a simple client and service using the generated bindings. "
+  (not (cx-std-srvs-set-bool-feature-client (service "ros_cx_client")))
+  (not (cx-std-srvs-set-bool-feature-service (name "ros_cx_srv")))
+=>
+  (cx-std-srvs-set-bool-feature-create-client "ros_cx_client")
+  (printout info "Created client for /ros_cx_client" crlf)
+  (cx-std-srvs-set-bool-feature-create-service "ros_cx_srv")
+  (printout info "Created service for /ros_cx_srv" crlf)
+)
+
+; this function needs to be defined in order to respond to messages
+(deffunction cx-std-srvs-set-bool-feature-service-callback (?service-name ?request ?response)
+  (bind ?req-data (cx-std-srvs-set-bool-feature-get-field-request ?request "data"))
+  (printout info "Received request on " ?service-name ". Data: " ?req-data crlf)
+  (printout info "Received " ?req-data ", responding with same value" crlf)
+  (if ?req-data then
+    (cx-std-srvs-set-bool-feature-set-field-response ?response "success" TRUE)
+    (cx-std-srvs-set-bool-feature-set-field-response ?response "message" (str-cat "I got the request: " ?req-data))
+    ;example usage of sending a request
+    (printout info "Additionally, request as client with data: True" crlf)
+    (bind ?new-req (cx-std-srvs-set-bool-feature-create-request))
+    (cx-std-srvs-set-bool-feature-set-field-request ?new-req "data" TRUE)
+    (cx-std-srvs-set-bool-feature-send-request ?new-req "ros_cx_client")
+    (cx-std-srvs-set-bool-feature-destroy-request ?new-req)
+   else
+    (cx-std-srvs-set-bool-feature-set-field-response ?response "success" FALSE)
+    (cx-std-srvs-set-bool-feature-set-field-response ?response "message" (str-cat "I got rhe request: " ?req-data))
+  )
+)
+
+(defrule set-bool-client-response-received
+" Create a simple client and service using the generated bindings. "
+  ?msg-fact <- (cx-std-srvs-set-bool-feature-response (service ?service) (msg-ptr ?ptr))
+=>
+  (bind ?succ (cx-std-srvs-set-bool-feature-get-field-response ?ptr "success"))
+  (bind ?msg (cx-std-srvs-set-bool-feature-get-field-response ?ptr "message"))
+  (printout green "Received response from " ?service " with: " ?succ " (" ?msg ")" crlf)
+  (retract ?msg-fact)
+)

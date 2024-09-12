@@ -61,6 +61,9 @@ target_link_libraries(cx_node ClipsNS::libclips_ns)
 # generate bindings to interface with ROS messages, such as std_msgs::msg::String
 cx_generate_msg_bindings("std_msgs" "String")
 
+# generate bindings to interface with ROS services, such as std_srvs::srv::
+cx_generate_srv_bindings("std_srvs" "SetBool")
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()

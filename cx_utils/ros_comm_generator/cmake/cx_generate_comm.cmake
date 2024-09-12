@@ -86,3 +86,7 @@ endmacro()
 macro(cx_generate_msg_bindings package msg_name)
   cx_generate_bindings(${package} ${msg_name} "msg")
 endmacro()
+
+macro(cx_generate_srv_bindings package srv_name)
+  cx_generate_bindings(${package} ${srv_name} "srv")
+endmacro()

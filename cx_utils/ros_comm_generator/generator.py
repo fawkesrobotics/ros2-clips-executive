@@ -41,6 +41,7 @@ def to_kebab_case(name):
 # Dictionary for mapping ROS2 types to CLIPS types
 clips_types = {
     "bool": "BOOLEAN",
+    "boolean": "BOOLEAN",
     "byte": "INTEGER",
     "char": "STRING",
     "float32": "FLOAT",
@@ -60,6 +61,7 @@ clips_types = {
 # Dictionary for mapping ROS2 types to C++ types
 cpp_types = {
     "bool": "bool",
+    "boolean": "bool",
     "byte": "uint8_t",
     "char": "char",
     "float32": "float",
