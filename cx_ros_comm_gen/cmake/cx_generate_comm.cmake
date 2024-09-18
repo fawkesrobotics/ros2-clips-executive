@@ -36,7 +36,7 @@ macro(cx_generate_bindings package msg_name type)
   find_package(${package} REQUIRED)
   find_package(cx_core REQUIRED)
   find_package(pluginlib REQUIRED)
-  find_package(cx_utils REQUIRED)
+  find_package(cx_ros_comm_gen REQUIRED)
   find_package(clips_vendor REQUIRED)
   find_package(clips REQUIRED)
   if("${type}" MATCHES "action")
@@ -45,8 +45,8 @@ macro(cx_generate_bindings package msg_name type)
   endif()
 
   # Generator script
-  set(GENERATOR_SCRIPT "${cx_utils_DIR}/../../../lib/cx_utils/generator.py")
-  set(TEMPLATES_DIR "${cx_utils_DIR}/../templates/")
+  set(GENERATOR_SCRIPT "${cx_ros_comm_gen_DIR}/../../../lib/cx_ros_comm_gen/generator.py")
+  set(TEMPLATES_DIR "${cx_ros_comm_gen_DIR}/../templates/")
   if(NOT EXISTS "${GENERATOR_SCRIPT}")
       message(FATAL_ERROR "Python script ${GENERATOR_SCRIPT} does not exist")
   endif()
@@ -98,6 +98,19 @@ macro(cx_generate_bindings package msg_name type)
 endmacro()
 
 macro(cx_generate_msg_bindings package msg_name)
+  # generate bindings to publish/subscribe to ros topics of messages from
+  # a given message type (defined by it's package and name).
+  # Example: cx_generate_msg_bindings(std_msgs String)
+  # Provides the cx::CXStdMsgsStringFeature
+  # which defines functions:
+  #  - cx-std-msgs-string-feature-subscribe
+  #  - cx-std-msgs-string-feature-unsubscribe
+  #  - cx-std-msgs-string-feature-set-field
+  #  - cx-std-msgs-string-feature-get-field
+  #  - cx-std-msgs-string-feature-create-message
+  #  - cx-std-msgs-string-feature-create-publisher
+  #  - cx-std-msgs-string-feature-publish
+  # and templates:
   cx_generate_bindings(${package} ${msg_name} "msg")
 endmacro()
 

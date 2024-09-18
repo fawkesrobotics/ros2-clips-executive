@@ -162,7 +162,7 @@ def main():
     fields = {}
     response_fields = {}
 
-    package_dir = get_package_share_directory("cx_utils")
+    package_dir = get_package_share_directory("cx_ros_comm_gen")
     time_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     class_name = "CX" + to_camel_case(args.package) + args.name + "Feature"

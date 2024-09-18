@@ -20,6 +20,7 @@ find_package(plansys2_lifecycle_manager REQUIRED)
 find_package(cx_feature_manager REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_clips_executive REQUIRED)
+find_package(cx_ros_comm_gen REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 set(dependencies

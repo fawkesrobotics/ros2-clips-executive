@@ -42,19 +42,6 @@ install(TARGETS
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
-install(
-  DIRECTORY ros_comm_generator/templates
-  DESTINATION share/${PROJECT_NAME}
-)
-
-install(
-  FILES ros_comm_generator/generator.py
-  DESTINATION lib/${PROJECT_NAME}
-)
-
-install(FILES ros_comm_generator/cmake/cx_generate_comm.cmake
-        DESTINATION share/${PROJECT_NAME}/cmake)
-
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
@@ -63,6 +50,4 @@ ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 ament_export_dependencies(${dependencies})
 
-ament_package(
-CONFIG_EXTRAS ros_comm_generator/cmake/cx_generate_comm.cmake
-)
+ament_package()
