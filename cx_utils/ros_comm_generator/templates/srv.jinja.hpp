@@ -59,30 +59,28 @@ private:
            std::map<std::string,
                     rclcpp::Client<{{message_type}}>::SharedPtr>>
       clients_;
-  std::unordered_set<{{message_type}}::Request*> requests_;
-  std::unordered_set<{{message_type}}::Response*> responses_;
+  std::unordered_map<void*, std::shared_ptr<{{message_type}}::Request>> requests_;
+  std::unordered_map<void*, std::shared_ptr<{{message_type}}::Response>> responses_;
 
-clips::UDFValue create_request(clips::Environment *env);
+  std::unordered_set<std::string> function_names_;
 
-clips::UDFValue get_field_request(clips::Environment *env,
-                          {{message_type}}::Request *req,
-                          const std::string &field);
-
-clips::UDFValue get_field_response(clips::Environment *env,
-                          {{message_type}}::Response *resp,
-                          const std::string &field);
-
-  void set_field_request({{message_type}}::Request *msg, const std::string &field, clips::UDFValue value, clips::UDFContext *udfc);
-
-  void set_field_response({{message_type}}::Response *msg, const std::string &field, clips::UDFValue value, clips::UDFContext *udfc);
+{% set template_part = "declaration" %}
+{% set template_type = "Request" %}
+{% include 'get_field.jinja.cpp' with context %}
+{% include 'set_field.jinja.cpp' with context %}
+{% include 'create.jinja.cpp' with context %}
+{% include 'destroy.jinja.cpp' with context %}
+{% set template_type = "Response" %}
+{% include 'get_field.jinja.cpp' with context %}
+{% include 'set_field.jinja.cpp' with context %}
+{% include 'create.jinja.cpp' with context %}
+{% include 'destroy.jinja.cpp' with context %}
 
   void send_request(clips::Environment *env, {{message_type}}::Request *msg, const std::string &service_name);
 
   void create_new_client(clips::Environment *env, const std::string &service_name);
 
   void destroy_client(clips::Environment *env, const std::string &service_name);
-
-  void destroy_request({{message_type}}::Request *req);
 
   void create_new_service(clips::Environment *env, const std::string &service_name);
 

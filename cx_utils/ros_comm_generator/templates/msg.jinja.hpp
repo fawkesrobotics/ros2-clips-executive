@@ -59,15 +59,15 @@ private:
            std::map<std::string,
                     rclcpp::Subscription<{{message_type}}>::SharedPtr>>
       subscriptions_;
-  std::unordered_set<{{message_type}}*> messages_;
+  std::unordered_map<void*, std::shared_ptr<{{message_type}}>> messages_;
+  std::unordered_set<std::string> function_names_;
+
+{% set template_part = "declaration" %}
+{% set template_type = "" %}
+{% include 'get_field.jinja.cpp' with context %}
+{% include 'set_field.jinja.cpp' with context %}
 
 clips::UDFValue create_message(clips::Environment *env);
-
-clips::UDFValue get_field(clips::Environment *env,
-                          {{message_type}} *msg,
-                          const std::string &field);
-
-  void set_field_publish({{message_type }} *msg, const std::string &field, clips::UDFValue value, clips::UDFContext *udfc);
 
   void publish_to_topic(clips::Environment *env, {{message_type}} *msg, const std::string &topic_name);
 

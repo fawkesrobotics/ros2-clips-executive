@@ -39,6 +39,10 @@ macro(cx_generate_bindings package msg_name type)
   find_package(cx_utils REQUIRED)
   find_package(clips_vendor REQUIRED)
   find_package(clips REQUIRED)
+  if("${type}" MATCHES "action")
+    find_package(rclcpp_action)
+    set(extra_deps "rclcpp_action")
+  endif()
 
   # Generator script
   set(GENERATOR_SCRIPT "${cx_utils_DIR}/../../../lib/cx_utils/generator.py")
@@ -49,14 +53,24 @@ macro(cx_generate_bindings package msg_name type)
   add_custom_command(
       OUTPUT  ${feature_name}.cpp ${feature_name}.hpp ${feature_name}_plugin.xml
       COMMAND ${Python3_EXECUTABLE} ${GENERATOR_SCRIPT} ${type} ${package} ${msg_name}
-      DEPENDS ${GENERATOR_SCRIPT} ${TEMPLATES_DIR}/msg.jinja.cpp ${TEMPLATES_DIR}/msg.jinja.hpp ${TEMPLATES_DIR}/feature_plugin.jinja.xml ${TEMPLATES_DIR}/srv.jinja.cpp ${TEMPLATES_DIR}/srv.jinja.hpp
+      DEPENDS ${GENERATOR_SCRIPT}
+              ${TEMPLATES_DIR}/${type}.jinja.cpp
+              ${TEMPLATES_DIR}/${type}.jinja.hpp
+              ${TEMPLATES_DIR}/feature_plugin.jinja.xml
+              ${TEMPLATES_DIR}/set_field.jinja.cpp
+              ${TEMPLATES_DIR}/get_field.jinja.cpp
+              ${TEMPLATES_DIR}/create.jinja.cpp
+              ${TEMPLATES_DIR}/destroy.jinja.cpp
+              ${TEMPLATES_DIR}/ret_fun.jinja.cpp
+              ${TEMPLATES_DIR}/void_fun.jinja.cpp
       COMMENT "Generate cx feature for ${package} ${msg_name}"
   )
 
   # Build plugin from library
   add_library(${feature_name} SHARED ${feature_name}.cpp)
+  set_property(TARGET ${feature_name} PROPERTY CXX_STANDARD 20)
   target_link_libraries(${feature_name} ClipsNS::libclips_ns)
-  ament_target_dependencies(${feature_name} cx_core pluginlib ${package})
+  ament_target_dependencies(${feature_name} cx_core pluginlib ${package} ${extra_deps})
   install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/${feature_name}.hpp
     DESTINATION include/
@@ -89,4 +103,8 @@ endmacro()
 
 macro(cx_generate_srv_bindings package srv_name)
   cx_generate_bindings(${package} ${srv_name} "srv")
+endmacro()
+
+macro(cx_generate_action_bindings package action_name)
+  cx_generate_bindings(${package} ${action_name} "action")
 endmacro()

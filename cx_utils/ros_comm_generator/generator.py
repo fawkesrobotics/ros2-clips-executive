@@ -6,7 +6,10 @@ from datetime import datetime
 
 import rosidl_parser.definition
 from ament_index_python.packages import get_package_share_directory
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
 from jinja2 import Template
+from rosidl_runtime_py.utilities import get_action
 from rosidl_runtime_py.utilities import get_message
 from rosidl_runtime_py.utilities import get_service
 
@@ -102,7 +105,6 @@ def get_field_type_str(field_type):
 # Function to extract fields from a message class and convert to readable format
 def extract_fields(message_type):
     extracted_fields = {}
-    print(message_type)
     for field_name, field_type in zip(message_type.__slots__, message_type.SLOT_TYPES):
         # Remove leading underscore from field_name
         clean_field_name = field_name[1:] if field_name.startswith("_") else field_name
@@ -168,6 +170,10 @@ def main():
     include_header = "<" + args.package + "/" + args.type + "/" + to_snake_case(args.name) + ".hpp>"
     cpp_msg_type = args.package + "::" + args.type + "::" + args.name
     msg_type_str = args.package + "/" + args.type + "/" + args.name
+    env = Environment(loader=FileSystemLoader(package_dir + "/templates"))
+    env.filters["camel_case"] = to_camel_case
+    env.filters["kebab_case"] = to_kebab_case
+    env.filters["snake_case"] = to_snake_case
 
     if args.type == "srv":
         try:
@@ -177,10 +183,8 @@ def main():
             msg_type_response = srv_type.Response
             fields = extract_fields(msg_type_request)
             response_fields = extract_fields(msg_type_response)
-            with open(package_dir + "/templates/" + "srv.jinja.cpp") as s, open(
-                file_name + ".cpp", "w"
-            ) as source_file:  # noqa: E501
-                tmpl = Template(s.read())
+            with open(file_name + ".cpp", "w") as source_file:  # noqa: E501
+                tmpl = env.get_template(args.type + ".jinja.cpp")
                 out = tmpl.render(
                     name_camel=class_name,
                     message_type=cpp_msg_type,
@@ -199,10 +203,8 @@ def main():
         try:
             msg_type = get_message(msg_type_str)
             fields = extract_fields(msg_type)
-            with open(package_dir + "/templates/" + "msg.jinja.cpp") as s, open(
-                file_name + ".cpp", "w"
-            ) as source_file:  # noqa: E501
-                tmpl = Template(s.read())
+            with open(file_name + ".cpp", "w") as source_file:  # noqa: E501
+                tmpl = env.get_template(args.type + ".jinja.cpp")
                 out = tmpl.render(
                     name_camel=class_name,
                     message_type=cpp_msg_type,
@@ -216,11 +218,34 @@ def main():
             print(f"Failed to load {args.type} {msg_type_str}: {e}")
             exit(1)
     if args.type == "action":
-        raise Exception("cx_ros_comm_generator", "Action clients and servers are not supported yet")
-    with open(package_dir + "/templates/" + args.type + ".jinja.hpp") as h, open(
-        file_name + ".hpp", "w"
-    ) as header_file:  # noqa: E501
-        tmpl = Template(h.read())
+        try:
+            action_type = get_action(msg_type_str)
+
+            msg_type_goal = action_type.Goal
+            msg_type_result = action_type.Result
+            msg_type_feedback = action_type.Feedback
+            fields = extract_fields(msg_type_goal)
+            result_fields = extract_fields(msg_type_result)
+            feedback_fields = extract_fields(msg_type_feedback)
+            with open(file_name + ".cpp", "w") as source_file:  # noqa: E501
+                tmpl = env.get_template("action.jinja.cpp")
+                out = tmpl.render(
+                    name_camel=class_name,
+                    message_type=cpp_msg_type,
+                    goal_slots=fields.values(),
+                    result_slots=result_fields.values(),
+                    feedback_slots=feedback_fields.values(),
+                    gen_date=time_string,
+                    name_snake=to_snake_case(class_name),
+                    name_kebab=to_kebab_case(class_name),
+                )
+                source_file.write(out)
+        except Exception as e:
+            print(f"Failed to load {args.type} {msg_type_str}: {e}")
+            exit(1)
+
+    with open(file_name + ".hpp", "w") as header_file:  # noqa: E501
+        tmpl = env.get_template(args.type + ".jinja.hpp")
         out = tmpl.render(
             name_upper=to_upper_case(args.name),
             name_camel=class_name,
@@ -242,10 +267,6 @@ def main():
             name_snake=to_snake_case(class_name),
         )
         plugin_file.write(out)
-
-    print("Fields:", fields)
-    if response_fields:
-        print("Response fields:", response_fields)
 
 
 if __name__ == "__main__":
