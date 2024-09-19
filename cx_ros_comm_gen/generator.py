@@ -165,7 +165,8 @@ def main():
     package_dir = get_package_share_directory("cx_ros_comm_gen")
     time_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    class_name = "CX" + to_camel_case(args.package) + args.name + "Feature"
+    short_class_name = to_camel_case(args.package) + args.name
+    class_name = "CX" + short_class_name + "Feature"
     file_name = "cx_" + to_snake_case(args.package) + "_" + to_snake_case(args.name) + "_feature"
     include_header = "<" + args.package + "/" + args.type + "/" + to_snake_case(args.name) + ".hpp>"
     cpp_msg_type = args.package + "::" + args.type + "::" + args.name
@@ -192,7 +193,7 @@ def main():
                     response_slots=response_fields.values(),
                     gen_date=time_string,
                     name_snake=to_snake_case(class_name),
-                    name_kebab=to_kebab_case(class_name),
+                    name_kebab=to_kebab_case(short_class_name),
                 )
                 source_file.write(out)
         except Exception as e:
@@ -211,7 +212,7 @@ def main():
                     slots=fields.values(),
                     gen_date=time_string,
                     name_snake=to_snake_case(class_name),
-                    name_kebab=to_kebab_case(class_name),
+                    name_kebab=to_kebab_case(short_class_name),
                 )
                 source_file.write(out)
         except Exception as e:
@@ -237,7 +238,7 @@ def main():
                     feedback_slots=feedback_fields.values(),
                     gen_date=time_string,
                     name_snake=to_snake_case(class_name),
-                    name_kebab=to_kebab_case(class_name),
+                    name_kebab=to_kebab_case(short_class_name),
                 )
                 source_file.write(out)
         except Exception as e:
