@@ -142,7 +142,7 @@
   =>
   (bind ?step (+ ?remaining 1))
   (bind ?res (+ (nth$ ?remaining ?seq) (nth$ (- ?remaining 1) ?seq)))
-  (printout yellow "Computing partial result fibonacci(" ?remaining ") = "?res crlf)
+  (printout magenta "Computing partial result fibonacci(" ?remaining ") = " ?res crlf)
   (bind ?seq (create$ ?seq ?res))
   (modify ?f (progress ?step) (result (+ ?old-res ?res)) (sequence ?seq))
   (bind ?feedback (example-interfaces-fibonacci-feedback-create))
@@ -154,15 +154,13 @@
 
 (defrule fibonacci-compute-done
   ?ag <- (example-interfaces-fibonacci-accepted-goal (server ?server) (server-goal-handle-ptr ?ptr))
-  ?f <- (fibonacci (order ?order) (progress ?remaining&:(< ?order ?remaining)) (result ?old-res) (sequence $?seq)); (uuid $?uuid&:(eq ?uuid (example-interfaces-fibonacci-server-goal-handle-get-goal-id ?ptr))))
+  ?f <- (fibonacci (order ?order) (progress ?remaining&:(< ?order ?remaining)) (result ?old-res) (sequence $?seq) (uuid ?uuid&:(eq ?uuid (example-interfaces-fibonacci-server-goal-handle-get-goal-id ?ptr))))
   =>
-  (printout green "Final fibonacci sequence: " ?seq crlf)
+  (printout green "Final fibonacci sequence (server): " ?seq crlf)
   (bind ?result (example-interfaces-fibonacci-result-create))
   (example-interfaces-fibonacci-result-set-field ?result "sequence" ?seq)
   (example-interfaces-fibonacci-server-goal-handle-succeed ?ptr ?result)
   (example-interfaces-fibonacci-result-destroy ?result)
-  (example-interfaces-fibonacci-destroy-server "ros_cx_fibonacci")
-  (example-interfaces-fibonacci-destroy-client "ros_cx_fibonacci")
   (example-interfaces-fibonacci-server-goal-handle-destroy ?ptr)
   (retract ?f)
   (retract ?ag)
@@ -197,19 +195,26 @@
   (retract ?f)
 )
 
-(defrule fibonacci-client-process-goal-reponse
-  (declare (salience -100))
+(defrule fibonacci-client-cleanup-after-wrapped-result
+  (declare (salience 99))
   ?f <- (example-interfaces-fibonacci-goal-response (server ?server) (client-goal-handle-ptr ?ghp))
+  ?g <- (example-interfaces-fibonacci-wrapped-result (server ?server) (goal-id ?uuid) (code SUCCEEDED) (result-ptr ?rp))
   (time ?now)
   =>
   (bind ?g-status (example-interfaces-fibonacci-client-goal-handle-get-status ?ghp))
   (if (> ?g-status 3) then ; status is final in one way or another
+    (bind ?seq (example-interfaces-fibonacci-result-get-field ?rp "sequence"))
+    (printout green "Final fibonacci sequence (client): " ?seq crlf)
+    (example-interfaces-fibonacci-result-destroy ?rp)
+    (retract ?g)
     (bind ?g-id (example-interfaces-fibonacci-client-goal-handle-get-goal-id ?ghp))
     (bind ?g-stamp (example-interfaces-fibonacci-client-goal-handle-get-goal-stamp ?ghp))
     (bind ?g-is-f-aware (example-interfaces-fibonacci-client-goal-handle-is-feedback-aware ?ghp))
     (bind ?g-is-r-aware (example-interfaces-fibonacci-client-goal-handle-is-result-aware ?ghp))
-    (printout magenta "Final goal response [" (- (now) ?g-stamp) "] " ?g-status " " ?g-id " f " ?g-is-f-aware " r " ?g-is-r-aware crlf)
+    (printout cyan "Final goal response [" (- (now) ?g-stamp) "] " ?uuid " " ?g-status " " ?g-id " f " ?g-is-f-aware " r " ?g-is-r-aware crlf)
     (example-interfaces-fibonacci-client-goal-handle-destroy ?ghp)
     (retract ?f)
+    (example-interfaces-fibonacci-destroy-server "ros_cx_fibonacci")
+    (example-interfaces-fibonacci-destroy-client "ros_cx_fibonacci")
   )
 )
