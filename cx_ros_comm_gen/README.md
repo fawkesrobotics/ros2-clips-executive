@@ -176,8 +176,8 @@ Given a package (e.g., "example_interfaces") and an action (e.g., "Fibonacci") a
 ; Asserted by the goal result callback of a client.
 ; Process the result and then destroy the result pointer before retracting this fact.
 ; "code" is either UNKNOWN SUCCEEDED CANCELED or ABORTED.
-; "uuid" is the string representation of a uuid according to rclcpp_action::to_string().
-(<package-kebab>-<action-kebab>-wrapped-result (server ?server-name-string) (uuid ?uuid-str) (code ?code-symbol) (result-ptr ?f-ptr))
+; "goal-id" is the string representation of a uuid according to rclcpp_action::to_string().
+(<package-kebab>-<action-kebab>-wrapped-result (server ?server-name-string) (goal-id ?uuid-str) (code ?code-symbol) (result-ptr ?f-ptr))
 
 ; Asserted by the goal result callback of a server.
 ; Process the server goal handle to retrieve important information such as the goal sent by the client.

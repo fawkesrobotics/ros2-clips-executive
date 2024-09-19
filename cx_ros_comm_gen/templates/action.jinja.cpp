@@ -413,7 +413,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
             )");
   clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-wrapped-result \
             (slot server (type STRING) ) \
-            (slot uuid (type STRING)) \
+            (slot goal-id (type STRING)) \
             (slot code (type SYMBOL)) \
             (slot result-ptr (type EXTERNAL-ADDRESS)) \
             )");
