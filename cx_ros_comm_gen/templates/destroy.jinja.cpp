@@ -23,7 +23,7 @@ void {{name_camel}}::{{template_type|snake_case}}_destroy({{message_type}}::{{te
 
       instance->{{template_type|snake_case}}_destroy(static_cast<{{message_type}}::{{template_type|camel_case}}*>({{template_type|snake_case}}.externalAddressValue->contents));
     },
-    "destroy_{{template_type|snake_case}}", this);
+    "{{template_type|snake_case}}_destroy", this);
 {%- endif -%}
 
 {%- if template_part == "declaration" %}

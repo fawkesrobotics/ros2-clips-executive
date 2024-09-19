@@ -90,6 +90,7 @@
 )
 
 (deffunction cx-example-interfaces-fibonacci-feature-cancel-goal-callback (?server ?goal ?goal-handle)
+  (cx-example-interfaces-fibonacci-feature-goal-destroy ?goal)
   ; (return 0) ; REJECT
   (return 1) ; ACCEPT
 )
@@ -102,7 +103,7 @@
   (cx-example-interfaces-fibonacci-feature-create-client "ros_cx_fibonacci")
   (printout info "Created client for /ros_cx_fibonacci" crlf)
   (cx-example-interfaces-fibonacci-feature-create-server "ros_cx_fibonacci")
-  (printout info "Created service for /ros_cx_fibonacci" crlf)
+  (printout info "Created server for /ros_cx_fibonacci" crlf)
 )
 
 (deftemplate fibonacci
@@ -115,7 +116,7 @@
 )
 
 (defrule fibonacci-goal-accepted-start-compute
-  (cx-example-interfaces-fibonacci-feature-accepted-goal (server ?server) (goal-handle-ptr ?ptr))
+  (cx-example-interfaces-fibonacci-feature-accepted-goal (server ?server) (server-goal-handle-ptr ?ptr))
   (not (fibonacci (uuid ?uuid&:(eq ?uuid (cx-example-interfaces-fibonacci-feature-server-goal-handle-get-goal-id ?ptr)))))
   =>
   (if (not (cx-example-interfaces-fibonacci-feature-server-goal-handle-is-canceling ?ptr)) then
@@ -126,10 +127,12 @@
    else
     (printout error "Somehow the goal is canceling already" crlf)
   )
+  ; do not destroy the server goal handle here, only do it once the goal is fully processed and finished
+  ;(cx-example-interfaces-fibonacci-feature-server-goal-handle-destroy ?ptr)
 )
 
 (defrule fibonacci-compute-next
-  (cx-example-interfaces-fibonacci-feature-accepted-goal (server ?server) (goal-handle-ptr ?ptr))
+  (cx-example-interfaces-fibonacci-feature-accepted-goal (server ?server) (server-goal-handle-ptr ?ptr))
   ?f <- (fibonacci (order ?order) (progress ?remaining&:(>= ?order ?remaining))
   (last-computed ?computed) (result ?old-res) (sequence $?seq) (uuid ?uuid))
   (time ?now&:(> (- ?now ?computed) 1))
@@ -148,14 +151,16 @@
 )
 
 (defrule fibonacci-compute-done
-  (cx-example-interfaces-fibonacci-feature-accepted-goal (server ?server) (goal-handle-ptr ?ptr))
-  ?f <- (fibonacci (order ?order) (progress ?remaining&:(< ?order ?remaining)) (result ?old-res) (sequence $?seq) (uuid $?uuid&:(eq ?uuid (cx-example-interfaces-fibonacci-feature-server-goal-handle-get-goal-id ?ptr))))
+  (cx-example-interfaces-fibonacci-feature-accepted-goal (server ?server) (server-goal-handle-ptr ?ptr))
+  ?f <- (fibonacci (order ?order) (progress ?remaining&:(< ?order ?remaining)) (result ?old-res) (sequence $?seq)); (uuid $?uuid&:(eq ?uuid (cx-example-interfaces-fibonacci-feature-server-goal-handle-get-goal-id ?ptr))))
   =>
   (printout green "Final fibonacci sequence: " ?seq crlf)
   (bind ?result (cx-example-interfaces-fibonacci-feature-result-create))
   (cx-example-interfaces-fibonacci-feature-result-set-field ?result "sequence" ?seq)
   (cx-example-interfaces-fibonacci-feature-server-goal-handle-succeed ?ptr ?result)
   (cx-example-interfaces-fibonacci-feature-result-destroy ?result)
+  (cx-example-interfaces-fibonacci-feature-destroy-server "ros_cx_fibonacci")
+  (cx-example-interfaces-fibonacci-feature-destroy-client "ros_cx_fibonacci")
 )
 
 (defrule fibonacci-client-send-goal
@@ -164,8 +169,9 @@
   =>
   (assert (send-request))
   (bind ?goal (cx-example-interfaces-fibonacci-feature-goal-create))
-  (cx-example-interfaces-fibonacci-feature-goal-set-field ?goal "order" 20)
+  (cx-example-interfaces-fibonacci-feature-goal-set-field ?goal "order" 5)
   (cx-example-interfaces-fibonacci-feature-send-goal ?goal ?server)
+  ; do not destroy the goal yet, it needs to persist
   ;(cx-example-interfaces-fibonacci-feature-destroy-goal ?goal)
 )
 
@@ -178,10 +184,27 @@
   (bind ?g-status (cx-example-interfaces-fibonacci-feature-client-goal-handle-get-status ?ghp))
   (bind ?g-is-f-aware (cx-example-interfaces-fibonacci-feature-client-goal-handle-is-feedback-aware ?ghp))
   (bind ?g-is-r-aware (cx-example-interfaces-fibonacci-feature-client-goal-handle-is-result-aware ?ghp))
-  (printout cyan ?g-stamp crlf) ; the stamp seems to be broken (looks like a rclcpp_action issue?!
+  ; the stamp seems to be broken (looks like a rclcpp_action issue
   (printout cyan "[" (- (now) ?g-stamp) "] " ?g-status " " ?g-id " f " ?g-is-f-aware " r " ?g-is-r-aware crlf)
   (bind ?part-seq (cx-example-interfaces-fibonacci-feature-feedback-get-field ?fp "sequence"))
   (printout blue "partial sequence: " ?part-seq   crlf)
   (cx-example-interfaces-fibonacci-feature-feedback-destroy ?fp)
   (retract ?f)
+)
+
+(defrule fibonacci-client-process-goal-reponse
+  (declare (salience -100))
+  ?f <- (cx-example-interfaces-fibonacci-feature-goal-response (server ?server) (client-goal-handle-ptr ?ghp))
+  (time ?now)
+  =>
+  (bind ?g-status (cx-example-interfaces-fibonacci-feature-client-goal-handle-get-status ?ghp))
+  (if (> ?g-status 3) then ; status is final in one way or another
+    (bind ?g-id (cx-example-interfaces-fibonacci-feature-client-goal-handle-get-goal-id ?ghp))
+    (bind ?g-stamp (cx-example-interfaces-fibonacci-feature-client-goal-handle-get-goal-stamp ?ghp))
+    (bind ?g-is-f-aware (cx-example-interfaces-fibonacci-feature-client-goal-handle-is-feedback-aware ?ghp))
+    (bind ?g-is-r-aware (cx-example-interfaces-fibonacci-feature-client-goal-handle-is-result-aware ?ghp))
+    (printout magenta "Final goal response [" (- (now) ?g-stamp) "] " ?g-status " " ?g-id " f " ?g-is-f-aware " r " ?g-is-r-aware crlf)
+    (cx-example-interfaces-fibonacci-feature-client-goal-handle-destroy ?ghp)
+    (retract ?f)
+  )
 )

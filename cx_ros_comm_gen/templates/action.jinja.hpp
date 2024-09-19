@@ -50,6 +50,12 @@ public:
   std::string getFeatureName() const;
 
 private:
+  std::queue<std::function<void()>> task_queue_;
+  std::mutex queue_mutex_;
+  std::condition_variable cv_;
+  std::thread clips_worker_thread_;
+  bool stop_flag_ = false;
+
   std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
   std::thread spin_thread_;
   std::map<std::string,
@@ -115,6 +121,10 @@ private:
   void create_new_server(clips::Environment *env, const std::string &server_name);
 
   void destroy_server(clips::Environment *env, const std::string &server_name);
+
+  void client_goal_handle_destroy(void *handle_ptr);
+
+  void server_goal_handle_destroy(void *handle_ptr);
 
   void server_goal_handle_abort(void *goal_handle_raw, void *result_raw, clips::UDFContext *udfc);
   void server_goal_handle_succeed(void *goal_handle_raw, void *result_raw, clips::UDFContext *udfc);

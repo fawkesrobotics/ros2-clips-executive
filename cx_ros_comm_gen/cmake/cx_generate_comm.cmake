@@ -13,20 +13,6 @@ function(cx_helper_to_snake_case input_string output_variable)
 endfunction()
 
 macro(cx_generate_bindings package msg_name type)
-  # generate bindings to publish/subscribe to ros topics of messages from
-  # a given message type (defined by it's package and name).
-  # Example: cx_generate_msg_bindings(std_msgs String)
-  # Provides the cx::CXStdMsgsStringFeature
-  # which defines functions:
-  #  - cx-std-msgs-string-feature-subscribe
-  #  - cx-std-msgs-string-feature-unsubscribe
-  #  - cx-std-msgs-string-feature-set-field
-  #  - cx-std-msgs-string-feature-get-field
-  #  - cx-std-msgs-string-feature-create-message
-  #  - cx-std-msgs-string-feature-create-publisher
-  #  - cx-std-msgs-string-feature-publish
-  # and templates:
-
   cx_helper_to_snake_case(${package} snake_case_package)
   cx_helper_to_snake_case(${msg_name} snake_case_msg_name)
   set(feature_name cx_${snake_case_package}_${snake_case_msg_name}_feature)
@@ -34,9 +20,7 @@ macro(cx_generate_bindings package msg_name type)
 
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
   find_package(${package} REQUIRED)
-  find_package(cx_core REQUIRED)
   find_package(pluginlib REQUIRED)
-  find_package(cx_ros_comm_gen REQUIRED)
   find_package(clips_vendor REQUIRED)
   find_package(clips REQUIRED)
   if("${type}" MATCHES "action")
@@ -80,6 +64,7 @@ macro(cx_generate_bindings package msg_name type)
     FILES ${CMAKE_CURRENT_BINARY_DIR}/${feature_name}_plugin.xml
     DESTINATION share/${PROJECT_NAME}
   )
+  # install library and register the feature plugin
   install(TARGETS
     ${feature_name}
     ARCHIVE DESTINATION lib
@@ -88,7 +73,8 @@ macro(cx_generate_bindings package msg_name type)
   )
   get_filename_component(relative_dir "${relative_filename}" DIRECTORY)
   # this is just the relevant part from
-  # pluginlib_export_plugin_description_file without checking for existence of the file
+  # pluginlib_export_plugin_description_file without checking for existence of the file as it checks in src dir only.
+  # As the macro generates the xml file, it is located in build dir instead
   set(plugin_category cx_core)
   set(relative_filename ${feature_name}_plugin.xml)
   set(relative_dir "")
@@ -98,19 +84,6 @@ macro(cx_generate_bindings package msg_name type)
 endmacro()
 
 macro(cx_generate_msg_bindings package msg_name)
-  # generate bindings to publish/subscribe to ros topics of messages from
-  # a given message type (defined by it's package and name).
-  # Example: cx_generate_msg_bindings(std_msgs String)
-  # Provides the cx::CXStdMsgsStringFeature
-  # which defines functions:
-  #  - cx-std-msgs-string-feature-subscribe
-  #  - cx-std-msgs-string-feature-unsubscribe
-  #  - cx-std-msgs-string-feature-set-field
-  #  - cx-std-msgs-string-feature-get-field
-  #  - cx-std-msgs-string-feature-create-message
-  #  - cx-std-msgs-string-feature-create-publisher
-  #  - cx-std-msgs-string-feature-publish
-  # and templates:
   cx_generate_bindings(${package} ${msg_name} "msg")
 endmacro()
 

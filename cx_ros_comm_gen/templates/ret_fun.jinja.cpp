@@ -12,14 +12,19 @@ clips::UDFValue {{name_camel}}::{{template_type|snake_case}}_{{template_call_fun
     return res;
   }
 {%- if template_ret_type == "Bool" %}
+{% set ret_type_bit = "b" %}
   res.lexemeValue = clips::CreateSymbol(env, {{template_type|snake_case}}->{{template_call_fun|snake_case}}() ? "TRUE" : "FALSE");
 {%- elif template_ret_type == "Integer" %}
+{% set ret_type_bit = "l" %}
   res.integerValue = clips::CreateInteger(env, {{template_type|snake_case}}->{{template_call_fun|snake_case}}());
 {%- elif template_ret_type == "Float" %}
+{% set ret_type_bit = "d" %}
   res.floatValue = clips::Float(env, {{template_type|snake_case}}->{{template_call_fun|snake_case}}());
 {%- elif template_ret_type == "String" %}
+{% set ret_type_bit = "s" %}
   res.lexemeValue = clips::String(env, {{template_type|snake_case}}->{{template_call_fun|snake_case}}().c_str());
 {%- endif -%}
+
   return res;
 }
 {%- endif -%}
@@ -27,7 +32,7 @@ clips::UDFValue {{name_camel}}::{{template_type|snake_case}}_{{template_call_fun
 {%- if template_part == "registration" %}
   function_names_.insert("{{name_kebab}}-{{template_type|kebab_case}}-{{template_call_fun|kebab_case}}");
   clips::AddUDF(
-    clips.get_obj().get(),"{{name_kebab}}-{{template_type|kebab_case}}-{{template_call_fun|kebab_case}}", "b", 1, 1, ";e",
+    clips.get_obj().get(),"{{name_kebab}}-{{template_type|kebab_case}}-{{template_call_fun|kebab_case}}", "{{ret_type_bit}}", 1, 1, ";e",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue *out) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);

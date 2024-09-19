@@ -344,7 +344,6 @@ void {{name_camel}}::unsubscribe_from_topic(clips::Environment *env,
   }
 
   clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-subscriber)) (eq (str-cat ?f:topic) (str-cat " + topic_name + "))  (retract ?f))").c_str(), NULL);
-  clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-msg)) (eq (str-cat ?f:topic) (str-cat " + topic_name + "))  (retract ?f))").c_str(), NULL);
 }
 
 void {{name_camel}}::topic_callback(

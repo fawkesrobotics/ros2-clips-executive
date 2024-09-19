@@ -37,8 +37,28 @@ using std::placeholders::_1;
 namespace cx {
 
 {{name_camel}}::{{name_camel}}()
-    : Node("{{name_snake}}_msg_feature_node") {}
-{{name_camel}}::~{{name_camel}}() {}
+    : Node("{{name_snake}}_msg_feature_node") {
+    clips_worker_thread_ = std::thread([this] () {
+  while (!stop_flag_) {
+      std::function<void()> task;
+      {
+          std::unique_lock<std::mutex> lock(queue_mutex_);
+          cv_.wait(lock, [&] { return !task_queue_.empty(); });
+          task = std::move(task_queue_.front());
+          task_queue_.pop();
+      }
+      task();
+  }});
+}
+
+{{name_camel}}::~{{name_camel}}() {
+  stop_flag_ = true;
+  cv_.notify_all();
+
+  if (clips_worker_thread_.joinable()) {
+      clips_worker_thread_.join();
+  }
+}
 
 std::string {{name_camel}}::getFeatureName() const {
   return clips_feature_name;
@@ -146,7 +166,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
     },
     "create_new_client", this);
 
-  fun_name = "{{name_kebab}}-client-destroy";
+  fun_name = "{{name_kebab}}-destroy-client";
   function_names_.insert(fun_name);
   clips::AddUDF(
     clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
@@ -347,6 +367,36 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
     },
     "client_goal_handle_get_goal_stamp", this);
 
+  fun_name = "{{name_kebab}}-client-goal-handle-destroy";
+  function_names_.insert(fun_name);
+  clips::AddUDF(
+    clips.get_obj().get(), fun_name.c_str(), "d", 1, 1, ";e",
+    [](clips::Environment */*env*/, clips::UDFContext *udfc,
+       clips::UDFValue * /*out*/) {
+      auto *instance = static_cast<{{name_camel}} *>(udfc->context);
+      clips::UDFValue data_ptr;
+      using namespace clips;
+      clips::UDFNthArgument(udfc, 1, EXTERNAL_ADDRESS_BIT, &data_ptr);
+
+      instance->client_goal_handle_destroy(data_ptr.externalAddressValue->contents);
+    },
+    "client_goal_handle_destroy", this);
+
+  fun_name = "{{name_kebab}}-server-goal-handle-destroy";
+  function_names_.insert(fun_name);
+  clips::AddUDF(
+    clips.get_obj().get(), fun_name.c_str(), "d", 1, 1, ";e",
+    [](clips::Environment */*env*/, clips::UDFContext *udfc,
+       clips::UDFValue * /*out*/) {
+      auto *instance = static_cast<{{name_camel}} *>(udfc->context);
+      clips::UDFValue data_ptr;
+      using namespace clips;
+      clips::UDFNthArgument(udfc, 1, EXTERNAL_ADDRESS_BIT, &data_ptr);
+
+      instance->server_goal_handle_destroy(data_ptr.externalAddressValue->contents);
+    },
+    "server_goal_handle_destroy", this);
+
   // add fact templates
   clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-client \
             (slot server (type STRING)))");
@@ -369,7 +419,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
             )");
   clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-accepted-goal \
             (slot server (type STRING) ) \
-            (slot goal-handle-ptr (type EXTERNAL-ADDRESS)) \
+            (slot server-goal-handle-ptr (type EXTERNAL-ADDRESS)) \
             )");
   return true;
 }
@@ -437,46 +487,63 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
   cx::LockSharedPtr<clips::Environment> &clips = envs_[env_name];
    auto send_goal_options = rclcpp_action::Client<{{message_type}}>::SendGoalOptions();
   send_goal_options.goal_response_callback = [this, &clips, server_name](const std::shared_ptr<rclcpp_action::ClientGoalHandle<{{message_type}}>> &goal_handle) {
-    std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-    clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-goal-response");
-    clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
-    clips::FBPutSlotCLIPSExternalAddress(fact_builder,"client-goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
-    clips::FBAssert(fact_builder);
-    clips::FBDispose(fact_builder);
+    task_queue_.push([this, &clips, server_name, goal_handle]() {
+      std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
+      client_goal_handles_.try_emplace(goal_handle.get(), goal_handle);
+      clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-goal-response");
+      clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
+      clips::FBPutSlotCLIPSExternalAddress(fact_builder,"client-goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
+      clips::FBAssert(fact_builder);
+      clips::FBDispose(fact_builder);
+    });
+    cv_.notify_one();  // Notify the worker thread
   };
 
   send_goal_options.feedback_callback = [this, &clips, server_name](
       std::shared_ptr<rclcpp_action::ClientGoalHandle<{{message_type}}>> goal_handle,
       const std::shared_ptr<const {{message_type}}::Feedback> feedback) {
-    std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-    const_feedbacks_.try_emplace(const_cast<void *>(static_cast<const void*>(feedback.get())), feedback);
-    client_goal_handles_.try_emplace(goal_handle.get(), goal_handle);
-    clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-goal-feedback");
-    clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
-    clips::FBPutSlotCLIPSExternalAddress(fact_builder,"client-goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
-    clips::FBPutSlotCLIPSExternalAddress(fact_builder,"feedback-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), const_cast<void *>(static_cast<const void *>(feedback.get()))));
-    clips::FBAssert(fact_builder);
-    clips::FBDispose(fact_builder);
+    // this indirection is necessary as the feedback callback is called while an internal lock is acquired.
+    // The same lock is acquired in calls lige get_status().
+    // This can cause a deadlock if get_status() is called from within clips right after a callback is received.
+    // clips lock is still held, hence callback can't proceed, but internal lock is already ackquired when this callback is invoked.
+    std::lock_guard<std::mutex> lock(queue_mutex_);
+    task_queue_.push([this, &clips, server_name, goal_handle, feedback]() {
+      // Enqueue the task to avoid directly locking the handle_mutex_ in a callback
+    std::lock_guard<std::mutex> lock(queue_mutex_);
+      std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
+      const_feedbacks_.try_emplace(const_cast<void *>(static_cast<const void*>(feedback.get())), feedback);
+      client_goal_handles_.try_emplace(goal_handle.get(), goal_handle);
+      clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-goal-feedback");
+      clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
+      clips::FBPutSlotCLIPSExternalAddress(fact_builder,"client-goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
+      clips::FBPutSlotCLIPSExternalAddress(fact_builder,"feedback-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), const_cast<void *>(static_cast<const void *>(feedback.get()))));
+      clips::FBAssert(fact_builder);
+      clips::FBDispose(fact_builder);
+    });
+    cv_.notify_one();  // Notify the worker thread
   };
 
   send_goal_options.result_callback = [this, &clips, server_name](const rclcpp_action::ClientGoalHandle<{{message_type}}>::WrappedResult &wrapped_result) {
-    results_.try_emplace(wrapped_result.result.get(), wrapped_result.result);
-    clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-wrapped-result");
-    clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
-    clips::FBPutSlotString(fact_builder,"goal-id",rclcpp_action::to_string(wrapped_result.goal_id).c_str());
-    std::string code_str = "UNKNOWN";
-    switch(wrapped_result.code) {
-      case rclcpp_action::ResultCode::UNKNOWN: break;
-      case rclcpp_action::ResultCode::SUCCEEDED: code_str = "SUCCEEDED"; break;
-      case rclcpp_action::ResultCode::CANCELED: code_str = "CANCELED"; break;
-      case rclcpp_action::ResultCode::ABORTED: code_str = "ABORTED"; break;
-    }
-    results_.try_emplace(wrapped_result.result.get(), wrapped_result.result);
-    clips::FBPutSlotSymbol(fact_builder,"code", code_str.c_str());
-    clips::FBPutSlotCLIPSExternalAddress(fact_builder,"result-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), wrapped_result.result.get()));
-    clips::FBAssert(fact_builder);
-    clips::FBDispose(fact_builder);
-    };
+    task_queue_.push([this, &clips, server_name, wrapped_result]() {
+      results_.try_emplace(wrapped_result.result.get(), wrapped_result.result);
+      clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-wrapped-result");
+      clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
+      clips::FBPutSlotString(fact_builder,"goal-id",rclcpp_action::to_string(wrapped_result.goal_id).c_str());
+      std::string code_str = "UNKNOWN";
+      switch(wrapped_result.code) {
+        case rclcpp_action::ResultCode::UNKNOWN: break;
+        case rclcpp_action::ResultCode::SUCCEEDED: code_str = "SUCCEEDED"; break;
+        case rclcpp_action::ResultCode::CANCELED: code_str = "CANCELED"; break;
+        case rclcpp_action::ResultCode::ABORTED: code_str = "ABORTED"; break;
+      }
+      results_.try_emplace(wrapped_result.result.get(), wrapped_result.result);
+      clips::FBPutSlotSymbol(fact_builder,"code", code_str.c_str());
+      clips::FBPutSlotCLIPSExternalAddress(fact_builder,"result-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), wrapped_result.result.get()));
+      clips::FBAssert(fact_builder);
+      clips::FBDispose(fact_builder);
+    });
+    cv_.notify_one();  // Notify the worker thread
+  };
 
   clients_[env_name][server_name]->async_send_goal(*goal, send_goal_options);
   }).detach();
@@ -500,7 +567,6 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
   }
   auto handle_goal = [this, env_name, server_name](const rclcpp_action::GoalUUID & uuid,
       std::shared_ptr<const {{message_type}}::Goal> goal) {
-
     cx::LockSharedPtr<clips::Environment> &clips = envs_[env_name];
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     clips::Deffunction *dec_fun = clips::FindDeffunction(clips.get_obj().get(),"{{name_kebab}}-handle-goal-callback");
@@ -528,7 +594,7 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
       return rclcpp_action::CancelResponse::ACCEPT;
     }
     // store the goal handle to ensure it is not cleaned up implicitly
-    server_goal_handles_.try_emplace(goal_handle.get(),goal_handle);
+    // server_goal_handles_.try_emplace(goal_handle.get(),goal_handle);
 
     clips::FunctionCallBuilder *fcb = clips::CreateFunctionCallBuilder(clips.get_obj().get(),3);
     clips::FCBAppendString(fcb, server_name.c_str());
@@ -547,7 +613,7 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     server_goal_handles_.try_emplace(goal_handle.get(),goal_handle);
     clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-accepted-goal");
     clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
-    clips::FBPutSlotCLIPSExternalAddress(fact_builder,"goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
+    clips::FBPutSlotCLIPSExternalAddress(fact_builder,"server-goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
     clips::FBAssert(fact_builder);
     clips::FBDispose(fact_builder);
   };
@@ -586,12 +652,12 @@ void {{name_camel}}::destroy_server(clips::Environment *env, const std::string &
   } else {
       RCLCPP_WARN(this->get_logger(), "Environment %s not found", env_name.c_str());
   }
+
+  clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-server)) (eq (str-cat ?f:name) (str-cat " + server_name + "))  (retract ?f))").c_str(), NULL);
 }
 
 void {{name_camel}}::create_new_client(clips::Environment *env,
     const std::string &server_name) {
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name), "Creating client for serive %s",
-              server_name.c_str());
   bool found_env = false;
   std::string env_name;
 
@@ -736,6 +802,8 @@ clips::UDFValue {{name_camel}}::server_goal_handle_get_goal_id(clips::Environmen
 {% include 'ret_fun.jinja.cpp' with context %}
 {% set template_call_fun = "IsExecuting" %}
 {% include 'ret_fun.jinja.cpp' with context %}
+{% set template_call_fun = "Execute" %}
+{% include 'void_fun.jinja.cpp' with context %}
 
 {% set template_type = "ClientGoalHandle" %}
 {% set template_call_fun = "IsFeedbackAware" %}
@@ -796,5 +864,21 @@ clips::UDFValue {{name_camel}}::client_goal_handle_get_goal_stamp(clips::Environ
   }
   return res;
 }
+
+void {{name_camel}}::client_goal_handle_destroy(void *g) {
+  auto it = client_goal_handles_.find(g);
+  if (it != client_goal_handles_.end()) {
+      client_goal_handles_.erase(it);
+  }
+}
+
+void {{name_camel}}::server_goal_handle_destroy(void *g) {
+  auto it = server_goal_handles_.find(g);
+  if (it != server_goal_handles_.end()) {
+      server_goal_handles_.erase(it);
+  }
+}
+
+
 } // namespace cx
 PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsFeature)
