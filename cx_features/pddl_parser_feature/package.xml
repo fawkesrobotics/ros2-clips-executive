@@ -2,8 +2,8 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>cx_pddl_parser_feature</name>
-  <version>0.0.0</version>
-  <description>Consists of all features that provide functionality to CLIPS and an implemented manager unit</description>
+  <version>0.1.0</version>
+  <description>Provide pddl parsing functions and deftemplates to Clips.</description>
 
   <maintainer email="viehmann@kbsg.rwth-aachen.de">Tarik Viehmann</maintainer>
 

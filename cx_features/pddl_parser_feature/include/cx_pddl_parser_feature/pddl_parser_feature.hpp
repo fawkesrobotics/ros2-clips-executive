@@ -1,7 +1,7 @@
 // Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
 /***************************************************************************
- *  PddlParserFeature.hpp
+ *  pddl_parser_feature.hpp
  *
  *  Created: 15 September 2021
  *  Copyright  2021  Ivaylo Doychev
@@ -39,17 +39,13 @@ public:
   PddlParserFeature();
   ~PddlParserFeature();
 
-  void initialize(const std::string &feature_name) override;
-
   bool clips_context_init(const std::string &env_name,
                           LockSharedPtr<clips::Environment> &clips) override;
   bool clips_context_destroyed(const std::string &env_name) override;
 
-  std::string getFeatureName() const;
-
 private:
-  std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
-  std::unique_ptr<clips_pddl_parser::ClipsPddlParser> pddl_parser;
+  std::map<std::string, std::unique_ptr<clips_pddl_parser::ClipsPddlParser>>
+      pddl_parsers_;
 
 private:
 };

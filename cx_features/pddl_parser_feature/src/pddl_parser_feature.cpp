@@ -1,7 +1,7 @@
 // Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
 /***************************************************************************
- *  PddlParserFeature.cpp
+ *  pddl_parser_feature.cpp
  *
  *  Created: 15 September 2021
  *  Copyright  2021  Ivaylo Doychev
@@ -27,7 +27,7 @@
 #include <clips_pddl_parser/clips_pddl_parser.h>
 
 #include "cx_feature/clips_feature.hpp"
-#include "cx_pddl_parser_feature/PddlParserFeature.hpp"
+#include "cx_pddl_parser_feature/pddl_parser_feature.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 
 // To export as plugin
@@ -38,33 +38,28 @@ namespace cx {
 PddlParserFeature::PddlParserFeature() {}
 PddlParserFeature::~PddlParserFeature() {}
 
-std::string PddlParserFeature::getFeatureName() const {
-  return clips_feature_name;
-}
-
-void PddlParserFeature::initialize(const std::string &feature_name) {
-  clips_feature_name = feature_name;
-}
-
 bool PddlParserFeature::clips_context_init(
     const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Initialising context for feature %s",
-              clips_feature_name.c_str());
+  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_),
+               "Initializing context for feature %s",
+               clips_feature_name_.c_str());
 
   envs_[env_name] = clips;
-  pddl_parser = std::make_unique<clips_pddl_parser::ClipsPddlParser>(
-      envs_[env_name].get_obj().get(), *(envs_[env_name].get_mutex_instance()),
-      false);
+  pddl_parsers_[env_name] =
+      std::make_unique<clips_pddl_parser::ClipsPddlParser>(
+          envs_[env_name].get_obj().get(),
+          *(envs_[env_name].get_mutex_instance()), false);
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name), "Initialised context!");
+  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_), "Initialized context!");
   return true;
 }
 
 bool PddlParserFeature::clips_context_destroyed(const std::string &env_name) {
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Destroying clips context!");
+  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_),
+               "Destroying clips context!");
+
+  pddl_parsers_.erase(env_name);
   envs_.erase(env_name);
   return true;
 }

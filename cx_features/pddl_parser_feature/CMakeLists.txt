@@ -30,7 +30,7 @@ set(dependencies
   clips
 )
 
-add_library(${PROJECT_NAME} SHARED src/PddlParserFeature.cpp)
+add_library(${PROJECT_NAME} SHARED src/pddl_parser_feature.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} ClipsPddlParser::clips_pddl_parser
                                       ClipsNS::libclips_ns)
