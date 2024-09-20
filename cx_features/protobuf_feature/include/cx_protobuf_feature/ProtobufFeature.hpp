@@ -27,7 +27,7 @@
 #include <memory>
 #include <string>
 
-#include "cx_core/ClipsFeature.hpp"
+#include "cx_feature/clips_feature.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 
 namespace cx {
@@ -37,7 +37,7 @@ public:
   ProtobufFeature();
   ~ProtobufFeature();
 
-  void initialise(const std::string &feature_name) override;
+  void initialize(const std::string &feature_name) override;
 
   bool clips_context_init(const std::string &env_name,
                           LockSharedPtr<clips::Environment> &clips) override;

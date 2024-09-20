@@ -36,7 +36,7 @@
 
 #include "cx_clips/CLIPSEnvManagerClient.hpp"
 #include "cx_clips/CLIPSEnvManagerNode.h"
-#include "cx_core/ClipsFeature.hpp"
+#include "cx_feature/clips_feature.hpp"
 
 #include "cx_config_feature/ConfigFeature.hpp"
 

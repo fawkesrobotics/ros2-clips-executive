@@ -13,11 +13,11 @@
 
   <depend>rclcpp</depend>
   <depend>pluginlib</depend>
-  <depend>cx_core</depend>
+  <depend>cx_feature</depend>
   <depend>cx_utils</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
-    <cx_core plugin="${prefix}/mock_feature_plugin.xml"/>
+    <cx_feature plugin="${prefix}/mock_feature_plugin.xml"/>
   </export>
 </package>

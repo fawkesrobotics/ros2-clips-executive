@@ -22,25 +22,31 @@
 
 #include <string>
 
-#include "cx_core/ClipsFeature.hpp"
+#include "cx_feature/clips_feature.hpp"
 namespace cx {
 
 ClipsFeature::ClipsFeature() {}
-// Empty Destructor as delcared virtual
 ClipsFeature::~ClipsFeature() {}
 
-// todo: remove this file and implementation as it does nothing and is not
-// necessary
-std::string ClipsFeature::getFeatureName() const { return clips_feature_name; }
+std::string ClipsFeature::get_feature_name() const {
+  return clips_feature_name_;
+}
 
-void ClipsFeature::initialise(const std::string &feature_name) {
+bool clips_context_init(const std::string &env_name,
+                        LockSharedPtr<clips::Environment> &clips) {
+  envs_[env_name] = clips;
+}
+
+void ClipsFeature::initialize(const std::string &feature_name) {
   (void)feature_name;
 }
-void ClipsFeature::initialise(
+
+void ClipsFeature::initialize(
     const std::string &feature_name,
     std::map<std::string, rclcpp::Parameter> &parameter_args) {
-  parameters = parameter_args;
-  initialise(feature_name);
+  parameters_ = parameter_args;
+  clips_feature_name_ = feature_name;
+  initialize(feature_name);
 }
 
 } // namespace cx

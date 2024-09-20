@@ -15,7 +15,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(pluginlib REQUIRED)
-find_package(cx_core REQUIRED)
+find_package(cx_feature REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(clips_vendor REQUIRED)
 find_package(clips REQUIRED)
@@ -24,14 +24,14 @@ set(dependencies
   ament_cmake
   rclcpp
   pluginlib
-  cx_core
+  cx_feature
   cx_utils
   clips_vendor
   clips
 )
 include_directories(include)
 
-pluginlib_export_plugin_description_file(cx_core mock_feature_plugin.xml)
+pluginlib_export_plugin_description_file(cx_feature mock_feature_plugin.xml)
 
 add_library(${PROJECT_NAME} SHARED src/MockFeature.cpp)
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)

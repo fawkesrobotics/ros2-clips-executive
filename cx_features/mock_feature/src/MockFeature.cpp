@@ -15,7 +15,7 @@ MockFeature::~MockFeature() {}
 
 std::string MockFeature::getFeatureName() const { return clips_feature_name; }
 
-void MockFeature::initialise(const std::string &feature_name) {
+void MockFeature::initialize(const std::string &feature_name) {
   clips_feature_name = feature_name;
 }
 

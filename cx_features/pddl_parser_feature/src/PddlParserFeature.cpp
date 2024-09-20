@@ -26,7 +26,7 @@
 
 #include <clips_pddl_parser/clips_pddl_parser.h>
 
-#include "cx_core/ClipsFeature.hpp"
+#include "cx_feature/clips_feature.hpp"
 #include "cx_pddl_parser_feature/PddlParserFeature.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 
@@ -42,7 +42,7 @@ std::string PddlParserFeature::getFeatureName() const {
   return clips_feature_name;
 }
 
-void PddlParserFeature::initialise(const std::string &feature_name) {
+void PddlParserFeature::initialize(const std::string &feature_name) {
   clips_feature_name = feature_name;
 }
 

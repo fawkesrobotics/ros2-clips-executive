@@ -42,7 +42,7 @@ std::string Plansys2Feature::getFeatureName() const {
   return clips_feature_name;
 }
 
-void Plansys2Feature::initialise(const std::string &feature_name) {
+void Plansys2Feature::initialize(const std::string &feature_name) {
   clips_feature_name = feature_name;
 }
 

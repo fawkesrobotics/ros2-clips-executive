@@ -27,7 +27,7 @@
 
 #include "cx_feature_manager/ClipsFeaturesManager.hpp"
 
-#include "cx_core/ClipsFeature.hpp"
+#include "cx_feature/clips_feature.hpp"
 #include "cx_msgs/srv/clips_feature_context.hpp"
 #include "cx_utils/params_utils.hpp"
 
@@ -43,7 +43,7 @@ ClipsFeaturesManager::ClipsFeaturesManager()
           rclcpp::NodeOptions().allow_undeclared_parameters(true)),
       env_manager_client_{std::make_shared<cx::CLIPSEnvManagerClient>(
           "clips_manager_client_fm")},
-      pg_loader_("cx_core", "cx::ClipsFeature"), default_ids_{},
+      pg_loader_("cx_feature", "cx::ClipsFeature"), default_ids_{},
       default_types_{} {
 
   declare_parameter("clips_features_list", default_ids_);
@@ -166,9 +166,9 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
 
         // Call the feature initialisation
         if (feature_parameters.size() > 0) {
-          feature->initialise(feat_name, feature_param_map);
+          feature->initialize(feat_name, feature_param_map);
         } else {
-          feature->initialise(feat_name);
+          feature->initialize(feat_name);
         }
 
         RCLCPP_INFO(get_logger(), "Created feature : %s of type %s",
@@ -358,7 +358,7 @@ void ClipsFeaturesManager::addGeneralFeatures() {
   std::string agent_dir;
   get_parameter("agent_dir", agent_dir);
   auto configFeature = std::make_shared<cx::ConfigFeature>(agent_dir);
-  configFeature->initialise("config_feature");
+  configFeature->initialize("config_feature");
   RCLCPP_INFO(get_logger(), "Created feature config_feature");
 
   features_.insert({"config_feature", configFeature});

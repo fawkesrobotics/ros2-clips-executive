@@ -34,13 +34,6 @@ ConfigFeature::ConfigFeature(std::string agent_dir) : agent_dir_(agent_dir) {}
 
 ConfigFeature::~ConfigFeature() {}
 
-std::string ConfigFeature::getFeatureName() const { return clips_feature_name; }
-
-void ConfigFeature::initialise(const std::string &feature_name) {
-  clips_feature_name = feature_name;
-  // clips_config_load("clips-executive", "/clips-executive");
-}
-
 bool ConfigFeature::clips_context_init(
     const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),

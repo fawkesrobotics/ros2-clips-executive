@@ -15,7 +15,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(pluginlib REQUIRED)
-find_package(cx_core REQUIRED)
+find_package(cx_feature REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(cx_skill_execution REQUIRED)
 find_package(clips_vendor REQUIRED)
@@ -24,7 +24,7 @@ find_package(clips REQUIRED)
 set(dependencies
   ament_cmake
   rclcpp
-  cx_core
+  cx_feature
   cx_utils
   cx_skill_execution
   pluginlib
@@ -32,7 +32,7 @@ set(dependencies
 
 include_directories(include)
 
-pluginlib_export_plugin_description_file(cx_core skill_execution_feature_plugin.xml)
+pluginlib_export_plugin_description_file(cx_feature skill_execution_feature_plugin.xml)
 
 add_library(${PROJECT_NAME} SHARED src/SkillExecutionFeature.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})

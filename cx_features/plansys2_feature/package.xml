@@ -12,7 +12,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclcpp</depend>
-  <depend>cx_core</depend>
+  <depend>cx_feature</depend>
   <depend>cx_utils</depend>
   <depend>pluginlib</depend>
   <depend>clips_vendor</depend>
@@ -29,6 +29,6 @@
 
   <export>
     <build_type>ament_cmake</build_type>
-    <cx_core plugin="${prefix}/plansys2_feature_plugin.xml"/>
+    <cx_feature plugin="${prefix}/plansys2_feature_plugin.xml"/>
   </export>
 </package>

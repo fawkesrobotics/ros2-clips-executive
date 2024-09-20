@@ -16,7 +16,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(pluginlib REQUIRED)
-find_package(cx_core REQUIRED)
+find_package(cx_feature REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_config_feature REQUIRED)
 find_package(cx_utils REQUIRED)
@@ -27,7 +27,7 @@ set(dependencies
   ament_cmake
   rclcpp
   rclcpp_lifecycle
-  cx_core
+  cx_feature
   cx_clips
   cx_utils
   cx_config_feature

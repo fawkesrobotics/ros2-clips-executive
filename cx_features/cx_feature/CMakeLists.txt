@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(cx_core)
+project(cx_feature)
 
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
@@ -25,13 +25,13 @@ set(dependencies
   cx_msgs
 )
 
-set(CX_CORE_SOURCES
-  src/ClipsFeature.cpp
+set(CX_FEATURE_SOURCES
+  src/clips_feature.cpp
 )
 
 include_directories(include)
 
-add_library(${PROJECT_NAME} SHARED ${CX_CORE_SOURCES})
+add_library(${PROJECT_NAME} SHARED ${CX_FEATURE_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 

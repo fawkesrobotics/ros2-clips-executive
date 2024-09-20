@@ -42,7 +42,7 @@ std::string SkillExecutionFeature::getFeatureName() const {
   return clips_feature_name;
 }
 
-void SkillExecutionFeature::initialise(const std::string &feature_name) {
+void SkillExecutionFeature::initialize(const std::string &feature_name) {
   clips_feature_name = feature_name;
 }
 

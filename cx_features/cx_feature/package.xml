@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>cx_core</name>
-  <version>0.0.0</version>
-  <description>Headers for cx interfaces/plugins</description>
+  <name>cx_feature</name>
+  <version>0.1.0</version>
+  <description>Base class for Clips features</description>
 
-  <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
+  <maintainer email="viehmann@kbsg.rwth-aachen.de">Tarik Viehmann</maintainer>
 
   <license>GPLv2+ license</license>
 
