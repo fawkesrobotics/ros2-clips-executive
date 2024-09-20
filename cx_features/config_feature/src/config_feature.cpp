@@ -1,7 +1,7 @@
 // Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
 /***************************************************************************
- *  ConfigFeature.cpp
+ *  config_feature.cpp
  *
  *  Created: 04 July 2021
  *  Copyright  2021  Ivaylo Doychev
@@ -27,7 +27,7 @@
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <yaml-cpp/yaml.h>
 
-#include "cx_config_feature/ConfigFeature.hpp"
+#include "cx_config_feature/config_feature.hpp"
 
 namespace cx {
 ConfigFeature::ConfigFeature(std::string agent_dir) : agent_dir_(agent_dir) {}
@@ -80,8 +80,6 @@ void ConfigFeature::clips_config_load(clips::Environment *env,
 
   try {
     YAML::Node config = YAML::LoadFile(file);
-    // std::lock_guard<std::mutex>
-    // guard(*(envs_[env_name].get_mutex_instance()));
 
     iterateThroughYamlRecuresively(config[cfg_main_node], name, cfg_prefix,
                                    env);

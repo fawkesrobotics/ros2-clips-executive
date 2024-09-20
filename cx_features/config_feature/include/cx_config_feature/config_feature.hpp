@@ -1,7 +1,7 @@
 // Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
 /***************************************************************************
- *  ConfigFeature.hpp
+ *  config_feature.hpp
  *
  *  Created: 04 July 2021
  *  Copyright  2021  Ivaylo Doychev
@@ -73,13 +73,9 @@ public:
   ConfigFeature(std::string agent_dir);
   ~ConfigFeature();
 
-  void initialize(const std::string &feature_name) override;
-
   bool clips_context_init(const std::string &env_name,
                           LockSharedPtr<clips::Environment> &clips) override;
   bool clips_context_destroyed(const std::string &env_name) override;
-
-  std::string getFeatureName() const;
 
 private:
   void clips_config_load(clips::Environment *env, const std::string &file,
@@ -97,8 +93,6 @@ private:
                         clips::Environment *env);
 
 private:
-  std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
-
   std::string agent_dir_;
 };
 

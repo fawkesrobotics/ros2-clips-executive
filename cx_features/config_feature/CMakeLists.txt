@@ -35,7 +35,7 @@ include_directories(include)
 pluginlib_export_plugin_description_file(cx_feature config_feature_plugin.xml)
 
 # END OF PLUGINS REGISTRATION
-add_library(${PROJECT_NAME} SHARED src/ConfigFeature.cpp)
+add_library(${PROJECT_NAME} SHARED src/config_feature.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
