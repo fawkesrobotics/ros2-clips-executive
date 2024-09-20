@@ -1,28 +1,8 @@
 // Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
-/***************************************************************************
- *  Plansys2Feature.cpp
- *
- *  Created: 02 September 2021
- *  Copyright  2021  Ivaylo Doychev
- ****************************************************************************/
-
-/*  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
- *
- *  Read the full text in the LICENSE.GPL file in the doc directory.
- */
-
 #include <string>
 
-#include "cx_plansys2_feature/Plansys2Feature.hpp"
+#include "cx_plansys2_feature/plansys2_feature.hpp"
 
 #include "plansys2_domain_expert/DomainExpertClient.hpp"
 #include "plansys2_planner/PlannerClient.hpp"
@@ -38,19 +18,11 @@ Plansys2Feature::Plansys2Feature() {}
 
 Plansys2Feature::~Plansys2Feature() {}
 
-std::string Plansys2Feature::getFeatureName() const {
-  return clips_feature_name;
-}
-
-void Plansys2Feature::initialize(const std::string &feature_name) {
-  clips_feature_name = feature_name;
-}
-
 bool Plansys2Feature::clips_context_init(
     const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Initialising context for feature %s",
-              clips_feature_name.c_str());
+  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name),
+               "Initialising context for feature %s",
+               clips_feature_name.c_str());
 
   envs_[env_name] = clips;
   domain_client_ = std::make_shared<plansys2::DomainExpertClient>();
@@ -67,10 +39,10 @@ bool Plansys2Feature::clips_context_init(
         clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &name);
         clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &type);
 
-        instance->addProblemInstance(name.lexemeValue->contents,
-                                     type.lexemeValue->contents);
+        instance->add_problem_instance(name.lexemeValue->contents,
+                                       type.lexemeValue->contents);
       },
-      "addProblemInstance", this);
+      "add_problem_instance", this);
 
   clips::AddUDF(
       clips.get_obj().get(), "psys2-add-domain-predicate", "v", 1, 1, ";sy",
@@ -80,18 +52,18 @@ bool Plansys2Feature::clips_context_init(
         clips::UDFValue predicate;
         using namespace clips;
         clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &predicate);
-        instance->addProblemPredicate(predicate.lexemeValue->contents);
+        instance->add_problem_predicate(predicate.lexemeValue->contents);
       },
-      "addProblemPredicate", this);
+      "add_problem_predicate", this);
 
   clips::AddUDF(
       clips.get_obj().get(), "psys2-clear-knowledge", "v", 0, 0, "",
       [](clips::Environment * /*env*/, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         auto *instance = static_cast<Plansys2Feature *>(udfc->context);
-        instance->clearProblemExpertKnowledge();
+        instance->clear_problem_expert_knowledge();
       },
-      "clearProblemExpertKnowledge", this);
+      "clear_problem_expert_knowledge", this);
 
   clips::AddUDF(
       clips.get_obj().get(), "psys2-call-planner", "v", 3, 3, ";sy;sy;sy",
@@ -105,11 +77,11 @@ bool Plansys2Feature::clips_context_init(
         clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &plan);
         clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &domain);
         clips::UDFNthArgument(udfc, 3, LEXEME_BITS, &problem);
-        instance->planWithPlansys2(env, plan.lexemeValue->contents,
-                                   domain.lexemeValue->contents,
-                                   problem.lexemeValue->contents);
+        instance->plan_with_plansys2(env, plan.lexemeValue->contents,
+                                     domain.lexemeValue->contents,
+                                     problem.lexemeValue->contents);
       },
-      "planWithPlansys2", this);
+      "plan_with_plansys2", this);
 
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name), "Initialised context!");
   return true;
@@ -130,8 +102,8 @@ bool Plansys2Feature::clips_context_destroyed(const std::string &env_name) {
   return true;
 }
 
-void Plansys2Feature::addProblemInstance(const std::string &name,
-                                         const std::string &type) {
+void Plansys2Feature::add_problem_instance(const std::string &name,
+                                           const std::string &type) {
   const std::string log_name = "PSYS2CLIPS";
 
   RCLCPP_INFO(rclcpp::get_logger(log_name),
@@ -149,7 +121,7 @@ void Plansys2Feature::addProblemInstance(const std::string &name,
   }
 }
 
-void Plansys2Feature::addProblemPredicate(const std::string &pred) {
+void Plansys2Feature::add_problem_predicate(const std::string &pred) {
   const std::string log_name = "PSYS2CLIPS";
   RCLCPP_INFO(rclcpp::get_logger(log_name),
               "Trying to add predicate: %s to problem expert", pred.c_str());
@@ -165,19 +137,19 @@ void Plansys2Feature::addProblemPredicate(const std::string &pred) {
   }
 }
 
-void Plansys2Feature::clearProblemExpertKnowledge() {
+void Plansys2Feature::clear_problem_expert_knowledge() {
   const std::string log_name = "PSYS2CLIPS";
   RCLCPP_INFO(rclcpp::get_logger(log_name),
               "Clearing problem expert knowledge!");
   problem_client_->clearKnowledge();
 }
 
-void Plansys2Feature::planWithPlansys2(clips::Environment *env,
-                                       const std::string &goal_id,
-                                       const std::string &goal,
-                                       const std::string &plan_id) {
+void Plansys2Feature::plan_with_plansys2(clips::Environment *env,
+                                         const std::string &goal_id,
+                                         const std::string &goal,
+                                         const std::string &plan_id) {
   const std::string log_name = "PSYS2CLIPS";
-  RCLCPP_INFO(rclcpp::get_logger(log_name), "planWithPlansys2 called! id: %s",
+  RCLCPP_INFO(rclcpp::get_logger(log_name), "plan_with_plansys2 called! id: %s",
               plan_id.c_str());
 
   call_planner(env, goal_id, goal, plan_id);

@@ -37,7 +37,7 @@ include_directories(include)
 
 pluginlib_export_plugin_description_file(cx_feature plansys2_feature_plugin.xml)
 
-add_library(${PROJECT_NAME} SHARED src/Plansys2Feature.cpp)
+add_library(${PROJECT_NAME} SHARED src/plansys2_feature.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
