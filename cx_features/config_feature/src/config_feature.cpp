@@ -36,9 +36,9 @@ ConfigFeature::~ConfigFeature() {}
 
 bool ConfigFeature::clips_context_init(
     const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Initialising context for feature %s",
-              clips_feature_name.c_str());
+  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name),
+               "Initialising context for feature %s",
+               clips_feature_name.c_str());
 
   envs_[env_name] = clips;
   clips::Eval(clips.get_obj().get(), "(path-load \"ff-config.clp\")", NULL);
@@ -65,9 +65,9 @@ bool ConfigFeature::clips_context_init(
 
 bool ConfigFeature::clips_context_destroyed(const std::string &env_name) {
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Destroying clips context for feature %s!",
-              clips_feature_name.c_str());
+  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name),
+               "Destroying clips context for feature %s!",
+               clips_feature_name.c_str());
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "config-load");
   envs_.erase(env_name);
   return true;
@@ -278,7 +278,6 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
           //             path.c_str(), escaped_quotes.str().c_str());
 
         } else {
-          RCLCPP_INFO(rclcpp::get_logger(logger_name), "MAP AGAIN");
           sequenceIterator(item3.second, logger_name, cfg_prefix, env);
         }
       }
