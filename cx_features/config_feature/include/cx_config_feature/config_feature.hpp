@@ -70,7 +70,7 @@ namespace cx {
 
 class ConfigFeature : public ClipsFeature {
 public:
-  ConfigFeature(std::string agent_dir);
+  ConfigFeature();
   ~ConfigFeature();
 
   bool clips_context_init(const std::string &env_name,
@@ -91,9 +91,6 @@ private:
   void sequenceIterator(const YAML::Node &input_node,
                         const std::string &logger_name, std::string &cfg_prefix,
                         clips::Environment *env);
-
-private:
-  std::string agent_dir_;
 };
 
 } // namespace cx

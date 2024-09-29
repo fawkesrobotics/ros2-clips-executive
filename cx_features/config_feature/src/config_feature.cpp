@@ -30,15 +30,15 @@
 #include "cx_config_feature/config_feature.hpp"
 
 namespace cx {
-ConfigFeature::ConfigFeature(std::string agent_dir) : agent_dir_(agent_dir) {}
+ConfigFeature::ConfigFeature() {}
 
 ConfigFeature::~ConfigFeature() {}
 
 bool ConfigFeature::clips_context_init(
     const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name),
+  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_),
                "Initialising context for feature %s",
-               clips_feature_name.c_str());
+               clips_feature_name_.c_str());
 
   envs_[env_name] = clips;
   std::string clips_path =
@@ -72,9 +72,9 @@ bool ConfigFeature::clips_context_init(
 
 bool ConfigFeature::clips_context_destroyed(const std::string &env_name) {
 
-  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name),
+  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_),
                "Destroying clips context for feature %s!",
-               clips_feature_name.c_str());
+               clips_feature_name_.c_str());
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "config-load");
   clips::Deftemplate *curr_tmpl =
       clips::FindDeftemplate(envs_[env_name].get_obj().get(), "conval");
@@ -328,3 +328,7 @@ std::string ConfigFeature::getScalarType(const YAML::Node &input_node) {
 }
 
 } // namespace cx
+
+#include "pluginlib/class_list_macros.hpp"
+
+PLUGINLIB_EXPORT_CLASS(cx::ConfigFeature, cx::ClipsFeature)
