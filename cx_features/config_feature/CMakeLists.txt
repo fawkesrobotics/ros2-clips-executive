@@ -48,6 +48,11 @@ install(
 )
 
 install(
+  DIRECTORY clips/
+  DESTINATION clips/${PROJECT_NAME}
+)
+
+install(
   FILES config_feature_plugin.xml
   DESTINATION share/${PROJECT_NAME}
 )

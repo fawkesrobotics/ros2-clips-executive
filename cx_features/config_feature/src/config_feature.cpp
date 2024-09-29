@@ -41,7 +41,14 @@ bool ConfigFeature::clips_context_init(
                clips_feature_name.c_str());
 
   envs_[env_name] = clips;
-  clips::Eval(clips.get_obj().get(), "(path-load \"ff-config.clp\")", NULL);
+  std::string clips_path =
+      ament_index_cpp::get_package_share_directory("cx_config_feature") +
+      "/clips/";
+
+  clips::Eval(clips.get_obj().get(),
+              std::format("(path-add \"{}\")", clips_path).c_str(), NULL);
+  clips::Eval(clips.get_obj().get(),
+              "(path-load \"cx_config_feature/ff-config.clp\")", NULL);
   clips::AddUDF(
       clips.get_obj().get(), "config-load", "v", 2, 2, ";sy;sy",
       [](clips::Environment *env, clips::UDFContext *udfc,
@@ -69,6 +76,9 @@ bool ConfigFeature::clips_context_destroyed(const std::string &env_name) {
                "Destroying clips context for feature %s!",
                clips_feature_name.c_str());
   clips::RemoveUDF(envs_[env_name].get_obj().get(), "config-load");
+  clips::Deftemplate *curr_tmpl =
+      clips::FindDeftemplate(envs_[env_name].get_obj().get(), "conval");
+  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
   envs_.erase(env_name);
   return true;
 }

@@ -1,11 +1,4 @@
-
-;---------------------------------------------------------------------------
-;  config.clp - CLIPS agent configuration tools
-;
-;  Created: Wed Dec 19 20:45:53 2012 (Train from Munich to Freiburg)
-;  Copyright  2012  Tim Niemueller [www.niemueller.de]
-;  Licensed under GPLv2+ license, cf. LICENSE file
-;---------------------------------------------------------------------------
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
 (deftemplate confval
   (slot path (type STRING))
