@@ -40,6 +40,8 @@ namespace cx {
  * Inherit from this class and export your class as plugin via pluginlib.
  */
 class ClipsFeature {
+  friend class ClipsFeaturesManager;
+
 public:
   ClipsFeature();
   virtual ~ClipsFeature();
@@ -47,7 +49,7 @@ public:
   using Ptr = std::shared_ptr<cx::ClipsFeature>;
 
   /// Called once for each feature when it is loaded.
-  virtual void initialize();
+  virtual void initialize(const std::string &feature_name);
 
   /// Called after initialize once for every managed Clips environment.
   /**
@@ -86,6 +88,7 @@ private:
   /// \internal pass name and params to the feature.
   void initialize(const std::string &feature_name,
                   std::map<std::string, rclcpp::Parameter> &parameters);
+};
 
 } // namespace cx
 

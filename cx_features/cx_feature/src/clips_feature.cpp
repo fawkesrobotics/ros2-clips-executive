@@ -32,9 +32,10 @@ std::string ClipsFeature::get_feature_name() const {
   return clips_feature_name_;
 }
 
-bool clips_context_init(const std::string &env_name,
-                        LockSharedPtr<clips::Environment> &clips) {
+bool ClipsFeature::clips_context_init(
+    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
   envs_[env_name] = clips;
+  return true;
 }
 
 void ClipsFeature::initialize(const std::string &feature_name) {

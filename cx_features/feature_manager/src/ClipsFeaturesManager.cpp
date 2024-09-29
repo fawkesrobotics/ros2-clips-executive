@@ -164,12 +164,7 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
         cx::ClipsFeature::Ptr feature =
             pg_loader_.createUniqueInstance(features_types_[i]);
 
-        // Call the feature initialisation
-        if (feature_parameters.size() > 0) {
-          feature->initialize(feat_name, feature_param_map);
-        } else {
-          feature->initialize(feat_name);
-        }
+        feature->initialize(feat_name, feature_param_map);
 
         RCLCPP_INFO(get_logger(), "Created feature : %s of type %s",
                     feat_name.c_str(), features_types_[i].c_str());
@@ -188,7 +183,7 @@ ClipsFeaturesManager::on_configure(const rclcpp_lifecycle::State &state) {
   }
   // populate the vector of feature names
   for (auto &feat : features_) {
-    feature_names_vector_.emplace_back(feat.second->getFeatureName());
+    feature_names_vector_.emplace_back(feat.second->get_feature_name());
   }
   RCLCPP_INFO(get_logger(), "Sending features to Clips Environment Manager");
   // Send all available features to the env manager!
@@ -323,6 +318,7 @@ void ClipsFeaturesManager::feature_init_context(
     if (!success) {
       RCLCPP_ERROR(get_logger(), "Error by context initialisation: feature %s",
                    feature_name.c_str());
+      features_[feature_name]->clips_context_destroyed(env_name);
     }
   } else {
     RCLCPP_ERROR(get_logger(), "%s is not registered!", feature_name.c_str());
@@ -357,8 +353,9 @@ void ClipsFeaturesManager::feature_destroy_context_callback(
 void ClipsFeaturesManager::addGeneralFeatures() {
   std::string agent_dir;
   get_parameter("agent_dir", agent_dir);
-  auto configFeature = std::make_shared<cx::ConfigFeature>(agent_dir);
-  configFeature->initialize("config_feature");
+  auto configFeature = std::make_shared<cx::ConfigFeature>();
+  std::map<std::string, rclcpp::Parameter> feature_param_map{};
+  configFeature->initialize("config_feature", feature_param_map);
   RCLCPP_INFO(get_logger(), "Created feature config_feature");
 
   features_.insert({"config_feature", configFeature});
