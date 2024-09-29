@@ -35,7 +35,7 @@ set(dependencies
 )
 
 set(CX_FEATURES_SOURCES
-  src/cx_features/ClipsFeaturesManager.cpp
+  src/cx_features/clips_feature_manager.cpp
 )
 
 include_directories(include)

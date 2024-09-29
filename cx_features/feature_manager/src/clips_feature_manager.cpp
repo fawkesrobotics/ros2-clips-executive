@@ -25,7 +25,7 @@
 #include <string>
 #include <utility>
 
-#include "cx_feature_manager/ClipsFeaturesManager.hpp"
+#include "cx_feature_manager/clips_feature_manager.hpp"
 
 #include "cx_feature/clips_feature.hpp"
 #include "cx_msgs/srv/clips_feature_context.hpp"
