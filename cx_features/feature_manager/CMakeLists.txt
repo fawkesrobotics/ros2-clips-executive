@@ -16,7 +16,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(pluginlib REQUIRED)
-find_package(cx_core REQUIRED)
+find_package(cx_feature REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_config_feature REQUIRED)
 find_package(cx_utils REQUIRED)
@@ -27,7 +27,7 @@ set(dependencies
   ament_cmake
   rclcpp
   rclcpp_lifecycle
-  cx_core
+  cx_feature
   cx_clips
   cx_utils
   cx_config_feature
@@ -35,7 +35,7 @@ set(dependencies
 )
 
 set(CX_FEATURES_SOURCES
-  src/cx_features/ClipsFeaturesManager.cpp
+  src/cx_features/clips_feature_manager.cpp
 )
 
 include_directories(include)
@@ -60,20 +60,6 @@ install(TARGETS
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
-
-if(BUILD_TESTING)
-  find_package(ament_lint_auto)
-
-  if(ament_lint_auto_FOUND)
-    ament_lint_auto_find_test_dependencies()
-    find_package(ament_cmake_gtest)
-    find_package(cx_clips_executive REQUIRED)
-
-    if(ament_cmake_gtest)
-      add_subdirectory(test)
-    endif()
-  endif()
-endif()
 
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})

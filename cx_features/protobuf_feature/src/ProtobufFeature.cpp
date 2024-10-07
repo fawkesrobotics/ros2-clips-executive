@@ -26,7 +26,7 @@
 
 #include <clips_protobuf/communicator.h>
 
-#include "cx_core/ClipsFeature.hpp"
+#include "cx_feature/clips_feature.hpp"
 #include "cx_protobuf_feature/ProtobufFeature.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 
@@ -42,7 +42,7 @@ std::string ProtobufFeature::getFeatureName() const {
   return clips_feature_name;
 }
 
-void ProtobufFeature::initialise(const std::string &feature_name) {
+void ProtobufFeature::initialize(const std::string &feature_name) {
   clips_feature_name = feature_name;
 }
 
@@ -53,8 +53,8 @@ bool ProtobufFeature::clips_context_init(
               clips_feature_name.c_str());
 
   envs_[env_name] = clips;
-  std::vector<std::string> path = {parameters["agent_dir"].as_string() + "/" +
-                                   parameters["protobuf_path"].as_string()};
+  std::vector<std::string> path = {parameters_["agent_dir"].as_string() + "/" +
+                                   parameters_["protobuf_path"].as_string()};
   RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
               "Loading protobuf files from: %s", path[0].c_str());
   protobuf_communicator =
