@@ -1,7 +1,9 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (deffunction plan-assert-action (?name $?param-values)
 " Assert an action with a unique id."
 	(bind ?id-sym (gensym*))
-	(bind ?id-str (sub-string 4 (length$ ?id-sym) (str-cat ?id-sym)))
+	(bind ?id-str (sub-string 4 (str-length ?id-sym) (str-cat ?id-sym)))
 	(assert (plan-action (id (string-to-field ?id-str)) (action-name ?name) (robot "robot1") (param-values $?param-values)))
 )
 

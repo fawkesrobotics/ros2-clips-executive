@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  SkillExecutionMaster.cpp
  *
@@ -30,6 +32,7 @@
   https://github.com/IntelligentRoboticsLabs/ros2_planning_system/blob/master/plansys2_executor/src/plansys2_executor/ActionExecutor.cpp
 */
 
+#include <format>
 #include <memory>
 #include <string>
 
@@ -51,7 +54,7 @@ SkillExecutionMaster::SkillExecutionMaster(
     const std::string &action_name, const std::string &mapped_action,
     const std::string &action_parameters, const std::string &robot_id,
     const std::string &executor_id,
-    cx::LockSharedPtr<CLIPS::Environment> &clips, const std::string &ns,
+    cx::LockSharedPtr<clips::Environment> &clips, const std::string &ns,
     const rclcpp::NodeOptions &options)
     : rclcpp::Node(node_name, ns, options), skill_id_(skill_id),
       action_name_(action_name), mapped_action_(mapped_action),
@@ -157,13 +160,17 @@ void SkillExecutionMaster::skill_board_cb(
   // update the clips environment
 
   std::lock_guard<std::mutex> guard(*(clips_.get_mutex_instance()));
-  clips_->assert_fact_f(
-      "(skill-feedback (skill-id %s) (robot \"%s\") (executor \"%s\") (status "
-      "%s) (error "
-      "\"%s\") (time (now)))",
-      exec_info_.skill_id.c_str(), exec_info_.robot_id.c_str(),
-      exec_info_.executor_id.c_str(), exec_info_.string_status.c_str(),
-      exec_info_.error_msg.c_str());
+  clips::AssertString(clips_.get_obj().get(),
+                      std::format("(skill-feedback (skill-id {}) (robot "
+                                  "\"{}\") (executor \"{}\") (status "
+                                  "{}) (error "
+                                  "\"{}\") (time (now)))",
+                                  exec_info_.skill_id.c_str(),
+                                  exec_info_.robot_id.c_str(),
+                                  exec_info_.executor_id.c_str(),
+                                  exec_info_.string_status.c_str(),
+                                  exec_info_.error_msg.c_str())
+                          .c_str());
 }
 
 void SkillExecutionMaster::request_skill_execution() {

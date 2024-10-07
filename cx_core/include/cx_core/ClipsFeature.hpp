@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  ClipsFeature.hpp
  *
@@ -21,7 +23,7 @@
 #ifndef _CX_CORE_CLIPS_FEATURE_HPP
 #define _CX_CORE_CLIPS_FEATURE_HPP
 
-#include <clipsmm.h>
+#include <clips_ns/clips.h>
 #include <map>
 #include <string>
 
@@ -42,13 +44,22 @@ public:
                           std::map<std::string, rclcpp::Parameter> &parameters);
   // Provides feature functionality to CLIPS.
   virtual bool clips_context_init(const std::string &env_name,
-                                  LockSharedPtr<CLIPS::Environment> &clips) = 0;
+                                  LockSharedPtr<clips::Environment> &clips) = 0;
   virtual bool clips_context_destroyed(const std::string &env_name) = 0;
   std::string getFeatureName() const;
 
 protected:
   std::string clips_feature_name;
   std::map<std::string, rclcpp::Parameter> parameters;
+
+  // ContextWrapper template for passing env name to CLIPS UDFs
+  template <typename T> struct ContextWrapper {
+    std::string env_name;
+    T *instance;
+
+    ContextWrapper(const std::string &env, T *inst)
+        : env_name(env), instance(inst) {}
+  };
 };
 
 } // namespace cx

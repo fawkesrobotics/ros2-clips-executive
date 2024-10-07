@@ -1,0 +1,7 @@
+<class_libraries>
+  <library path="cx_protobuf_feature">
+    <class type="cx::ProtobufFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing Protobuf-based communication</description>
+    </class>
+  </library>
+</class_libraries>

@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  CLIPSEnvManagerClient.cpp
  *
@@ -48,7 +50,7 @@ CLIPSEnvManagerClient::CLIPSEnvManagerClient(const std::string &node_name) {
   assert_can_remove_features_client_ =
       node_->create_client<cx_msgs::srv::ClipsRemoveFeatures>(
           "clips_manager/assert_can_remove_features",
-          rmw_qos_profile_services_default, callback_group_);
+          rclcpp::QoS(rclcpp::ServicesQoS()), callback_group_);
 
   remove_features_client_ =
       node_->create_client<cx_msgs::srv::ClipsRemoveFeatures>(

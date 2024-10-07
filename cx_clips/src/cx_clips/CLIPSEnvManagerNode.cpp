@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  CLIPSEnvManagerNode.cpp
  *
@@ -19,11 +21,12 @@
  */
 
 #include <chrono>
+#include <format>
 #include <map>
 #include <memory>
 #include <spdlog/sinks/basic_file_sink.h>
-#include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
 #include <string>
 #include <utility>
 
@@ -48,7 +51,8 @@ namespace cx {
 /// @cond INTERNALS
 class CLIPSLogger {
 public:
-  explicit CLIPSLogger(const char *component, bool log_to_file) : component_(strdup(component)) {
+  explicit CLIPSLogger(const char *component, bool log_to_file)
+      : component_(strdup(component)) {
     auto now = std::chrono::system_clock::now();
     std::time_t now_time = std::chrono::system_clock::to_time_t(now);
 
@@ -56,15 +60,17 @@ public:
     oss << std::put_time(std::localtime(&now_time), "%Y-%m-%d-%H-%M-%S");
 
     std::string formatted_time = oss.str();
-    if(log_to_file) {
-    clips_logger_= spdlog::basic_logger_st(
-      (component_ ? (std::string)component_ : "CLIPS"),
-      (rclcpp::get_logging_directory().string() + "/" +
-       (component_ ? (std::string)component_ : "clips") + "_" + formatted_time + ".log"));
+    if (log_to_file) {
+      clips_logger_ = spdlog::basic_logger_st(
+          (component_ ? (std::string)component_ : "CLIPS"),
+          (rclcpp::get_logging_directory().string() + "/" +
+           (component_ ? (std::string)component_ : "clips") + "_" +
+           formatted_time + ".log"));
     } else {
-    // Disable the logger by setting the log level to a level that filters out all messages
-    clips_logger_ =  spdlog::stdout_color_mt("console");
-    clips_logger_->set_level(spdlog::level::off);
+      // Disable the logger by setting the log level to a level that filters out
+      // all messages
+      clips_logger_ = spdlog::stdout_color_mt("console");
+      clips_logger_->set_level(spdlog::level::off);
     }
   }
 
@@ -76,29 +82,29 @@ public:
 
   void log(const char *logical_name, const char *str) {
     size_t i = 0;
-    while(str[i]) {
-          i++;
+    while (str[i]) {
+      i++;
     }
-    if (str[i-1] == '\n') {
-      if(i > 1) {
-          buffer_ += str;
+    if (str[i - 1] == '\n') {
+      if (i > 1) {
+        buffer_ += str;
       }
       if (strcmp(logical_name, "debug") == 0 ||
           strcmp(logical_name, "logdebug") == 0 ||
-          strcmp(logical_name, WTRACE) == 0) {
-        RCLCPP_DEBUG(this->logger_,buffer_.c_str());
+          strcmp(logical_name, clips::STDOUT) == 0) {
+        RCLCPP_DEBUG(this->logger_, buffer_.c_str());
       } else if (strcmp(logical_name, "warn") == 0 ||
                  strcmp(logical_name, "logwarn") == 0 ||
-                 strcmp(logical_name, WWARNING) == 0) {
-        RCLCPP_WARN(this->logger_,buffer_.c_str());
+                 strcmp(logical_name, clips::STDWRN) == 0) {
+        RCLCPP_WARN(this->logger_, buffer_.c_str());
       } else if (strcmp(logical_name, "error") == 0 ||
                  strcmp(logical_name, "logerror") == 0 ||
-                 strcmp(logical_name, WERROR) == 0) {
+                 strcmp(logical_name, clips::STDERR) == 0) {
         RCLCPP_ERROR(this->logger_, buffer_.c_str());
-      } else if (strcmp(logical_name, WDIALOG) == 0) {
+      } else if (strcmp(logical_name, clips::STDIN) == 0) {
         // ignored
       } else {
-        RCLCPP_INFO(this->logger_,buffer_.c_str());
+        RCLCPP_INFO(this->logger_, buffer_.c_str());
       }
       // log any output to a dedicated clips log file
       clips_logger_->info(buffer_.c_str());
@@ -119,7 +125,8 @@ private:
 
 class CLIPSContextMaintainer {
 public:
-  explicit CLIPSContextMaintainer(const char *log_component_name, bool log_to_file)
+  explicit CLIPSContextMaintainer(const char *log_component_name,
+                                  bool log_to_file)
       : logger(log_component_name, log_to_file) {}
 
   ~CLIPSContextMaintainer() {}
@@ -128,55 +135,48 @@ public:
   CLIPSLogger logger;
 };
 
-static int log_router_query(void *env, const char *logical_name) {
-  (void)env; // static cast to avoid warning as we provide same routing to all
-             // envs
+static bool log_router_query(clips::Environment * /*env*/,
+                             const char *logical_name, void * /*context*/) {
+  // envs
   if (strcmp(logical_name, "l") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "info") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "debug") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "warn") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "error") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "loginfo") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "logdebug") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "logwarn") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "logerror") == 0)
-    return TRUE;
+    return true;
   if (strcmp(logical_name, "stdout") == 0)
-    return TRUE;
-  if (strcmp(logical_name, WTRACE) == 0)
-    return TRUE;
-  if (strcmp(logical_name, WDIALOG) == 0)
-    return TRUE;
-  if (strcmp(logical_name, WWARNING) == 0)
-    return TRUE;
-  if (strcmp(logical_name, WERROR) == 0)
-    return TRUE;
-  if (strcmp(logical_name, WDISPLAY) == 0)
-    return TRUE;
-  return FALSE;
+    return true;
+  if (strcmp(logical_name, clips::STDOUT) == 0)
+    return true;
+  if (strcmp(logical_name, clips::STDWRN) == 0)
+    return true;
+  if (strcmp(logical_name, clips::STDERR) == 0)
+    return true;
+  return false;
 }
 
-static int log_router_print(void *env, const char *logical_name,
-                            const char *str) {
-  void *rc = GetEnvironmentRouterContext(env);
-  CLIPSLogger *logger = static_cast<CLIPSLogger *>(rc);
+static void log_router_print(clips::Environment * /*env*/,
+                             const char *logical_name, const char *str,
+                             void *context) {
+  CLIPSLogger *logger = static_cast<CLIPSLogger *>(context);
   logger->log(logical_name, str);
-  return TRUE;
 }
 
-static int log_router_exit(void *env, int exit_code) {
+static void log_router_exit(clips::Environment * /*env*/, int /*exit_code*/,
+                            void * /*context*/) {
   // no particular handling of a closed router necessary
-  (void)env;
-  (void)exit_code;
-  return TRUE;
 }
 
 using namespace std::placeholders;
@@ -201,7 +201,7 @@ CLIPSEnvManagerNode::on_configure(const rclcpp_lifecycle::State &) {
   destroy_feature_context_client =
       create_client<cx_msgs::srv::ClipsFeatureContext>(
           "clips_features_manager/destroy_feature_context",
-          rmw_qos_profile_services_default, callback_group_);
+          rclcpp::QoS(rclcpp::ServicesQoS()), callback_group_);
 
   create_env_service_ = create_service<cx_msgs::srv::CreateClipsEnv>(
       "clips_manager/create_env",
@@ -235,11 +235,6 @@ CLIPSEnvManagerNode::on_configure(const rclcpp_lifecycle::State &) {
     return CallbackReturn::FAILURE;
   }
 
-  // Initialise CLIPS
-  RCLCPP_INFO(get_logger(), "Initialising CLIPS!");
-
-  CLIPS::init();
-
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
 
   return CallbackReturn::SUCCESS;
@@ -264,11 +259,10 @@ void CLIPSEnvManagerNode::create_env_callback(
                  "CLIPS environment '%s' already exists--> Should "
                  "be signaled! (e.g. as exception)",
                  request->env_name.c_str());
-    response->success = FALSE;
+    response->success = false;
     response->error = "Enviroment " + request->env_name + " already exists!";
   } else {
-    LockSharedPtr<CLIPS::Environment> clips =
-        new_env(request->log_name);
+    LockSharedPtr<clips::Environment> clips = new_env(request->log_name);
 
     const std::string &env_name = request->env_name;
 
@@ -285,12 +279,22 @@ void CLIPSEnvManagerNode::create_env_callback(
       guarded_load(env_name, clips_dir_ + "time.clp");
       guarded_load(env_name, clips_dir_ + "path.clp");
 
-      clips->evaluate("(path-add \"" + clips_dir_ + "\")");
-      response->success = true;
+      clips::CLIPSValue *ret = NULL;
+      clips::Eval(clips.get_obj().get(),
+                  ("(path-add \"" + clips_dir_ + "\")").c_str(), ret);
+      if (ret) {
+        RCLCPP_ERROR(
+            get_logger(),
+            "Failed to initialise CLIPS environment '%s', path-add failed.",
+            request->env_name.c_str());
+        response->success = false;
+      } else {
+        response->success = true;
+      }
     } else {
       RCLCPP_ERROR(get_logger(), "Failed to initialise CLIPS environment '%s'",
                    request->env_name.c_str());
-      response->success = FALSE;
+      response->success = false;
       response->error = "Failed to initialize environment " + request->env_name;
     }
   }
@@ -309,12 +313,12 @@ void CLIPSEnvManagerNode::destroy_env_callback(
 
   if (envs_.find(env_name) != envs_.end()) {
 
-    void *env = envs_[env_name].env->cobj();
-    CLIPSContextMaintainer *cm =
-        static_cast<CLIPSContextMaintainer *>(GetEnvironmentContext(env));
+    clips::Environment *env = envs_[env_name].env.get_obj().get();
+    CLIPSContextMaintainer *cm = static_cast<CLIPSContextMaintainer *>(
+        clips::GetEnvironmentContext(env));
 
-    EnvDeleteRouter(env, (char *)ROUTNER_NAME);
-    SetEnvironmentContext(env, NULL);
+    clips::DeleteRouter(env, (char *)ROUTNER_NAME);
+    clips::SetEnvironmentContext(env, NULL);
     delete cm;
 
     for (auto &feat : envs_[env_name].req_feat) {
@@ -331,11 +335,11 @@ void CLIPSEnvManagerNode::destroy_env_callback(
     RCLCPP_WARN(get_logger(), "Deleted '%s' --- Clips Environment!",
                 env_name.c_str());
 
-    response->success = TRUE;
+    response->success = true;
   } else {
     RCLCPP_WARN(get_logger(), "Didn't find the provided env: '%s'!",
                 env_name.c_str());
-    response->success = TRUE;
+    response->success = true;
     // THERE IS CURRENTLY NO ERROR HANDLING --------------
   }
 }
@@ -353,7 +357,7 @@ void CLIPSEnvManagerNode::add_clips_features_callback(
 
     if (features_set.find(feat) != features_set.end()) {
       RCLCPP_ERROR(get_logger(),
-                   "Feature '%s' has already been registered--> Should "
+                   "Feature '%s' has already b/een registered--> Should "
                    "throw exception later",
                    feat.c_str());
       response->failed_features.push_back(feat);
@@ -369,7 +373,8 @@ void CLIPSEnvManagerNode::add_clips_features_callback(
     for (auto &env : envs_) {
       std::lock_guard<std::mutex> guard(*(env.second.env.get_mutex_instance()));
       assert_features(env.second.env, false);
-      env.second.env->assert_fact_f("(ff-feature %s)", feat.c_str());
+      clips::AssertString(env.second.env.get_obj().get(),
+                          std::format("(ff-feature {})", feat).c_str());
     }
   }
   response->success = success;
@@ -421,16 +426,16 @@ void CLIPSEnvManagerNode::remove_features_callback(
 /** Get map of all environments
  * @return map of environment name to a shared lock ptr
  */
-std::map<std::string, LockSharedPtr<CLIPS::Environment>>
+std::map<std::string, LockSharedPtr<clips::Environment>>
 CLIPSEnvManagerNode::getEnvironments() const {
-  std::map<std::string, LockSharedPtr<CLIPS::Environment>> rv;
+  std::map<std::string, LockSharedPtr<clips::Environment>> rv;
   for (const auto &envd : envs_) {
     rv[envd.first] = envd.second.env;
   }
   return rv;
 }
 
-LockSharedPtr<CLIPS::Environment>
+LockSharedPtr<clips::Environment>
 CLIPSEnvManagerNode::getEnvironmentByName(const std::string &env_name) {
   if (envs_.find(env_name) != envs_.end()) {
     // return the environment
@@ -446,7 +451,53 @@ CLIPSEnvManagerNode::getEnvironmentByName(const std::string &env_name) {
 
 // --------------- ALL PRIVATE FUNCTION HELPERS ---------------
 
-LockSharedPtr<CLIPS::Environment>
+// Helper function to convert a string to lowercase
+std::string to_lowercase(const std::string &str) {
+  std::string lower_str = str;
+  std::transform(lower_str.begin(), lower_str.end(), lower_str.begin(),
+                 [](unsigned char c) { return std::tolower(c); });
+  return lower_str;
+}
+
+// Function to map string to clips::WatchItem enum (case-insensitive)
+clips::WatchItem get_watch_item_from_string(const std::string &watch_str) {
+  std::string lower_str = to_lowercase(watch_str);
+
+  if (lower_str == "all")
+    return clips::ALL;
+  if (lower_str == "facts")
+    return clips::FACTS;
+  if (lower_str == "instances")
+    return clips::INSTANCES;
+  if (lower_str == "slots")
+    return clips::SLOTS;
+  if (lower_str == "rules")
+    return clips::RULES;
+  if (lower_str == "activations")
+    return clips::ACTIVATIONS;
+  if (lower_str == "messages")
+    return clips::MESSAGES;
+  if (lower_str == "message_handlers")
+    return clips::MESSAGE_HANDLERS;
+  if (lower_str == "generic_functions")
+    return clips::GENERIC_FUNCTIONS;
+  if (lower_str == "methods")
+    return clips::METHODS;
+  if (lower_str == "deffunctions")
+    return clips::DEFFUNCTIONS;
+  if (lower_str == "compilations")
+    return clips::COMPILATIONS;
+  if (lower_str == "statistics")
+    return clips::STATISTICS;
+  if (lower_str == "globals")
+    return clips::GLOBALS;
+  if (lower_str == "focus")
+    return clips::FOCUS;
+
+  throw std::invalid_argument("Unknown watch item: " + watch_str);
+}
+
+LockSharedPtr<clips::Environment>
 CLIPSEnvManagerNode::new_env(const std::string &log_component_name) {
   RCLCPP_INFO(get_logger(), "Initialising new CLIPS ENVIRONMENT: %s",
               log_component_name.c_str());
@@ -455,34 +506,34 @@ CLIPSEnvManagerNode::new_env(const std::string &log_component_name) {
   struct sigaction oldact;
 
   if (sigaction(SIGINT, NULL, &oldact) == 0) {
-    std::shared_ptr<CLIPS::Environment> new_env =
-        std::make_shared<CLIPS::Environment>();
+    std::shared_ptr<clips::Environment> new_env(clips::CreateEnvironment());
 
-    LockSharedPtr<CLIPS::Environment> clips{std::move(new_env)};
+    LockSharedPtr<clips::Environment> clips{std::move(new_env)};
     // Only place to init the env mutex
     clips.init_mutex();
     // // silent clips by default
-    clips->unwatch("all");
+    clips::Unwatch(clips.get_obj().get(), clips::WatchItem::ALL);
     declare_parameter("log_clips_to_file", true);
     declare_parameter("watch", std::vector<std::string>{"facts", "rules"});
     std::vector<std::string> watch_info;
     get_parameter("watch", watch_info);
-    for( const auto &w : watch_info) {
-        clips->watch(w);
+    for (const auto &w : watch_info) {
+      clips::WatchItem watch_item = get_watch_item_from_string(w);
+      clips::Watch(clips.get_obj().get(), watch_item);
     }
-    bool log_to_file;
+    bool log_to_file = false;
     get_parameter("log_clips_to_file", log_to_file);
 
     CLIPSContextMaintainer *cm =
         new CLIPSContextMaintainer(log_component_name.c_str(), log_to_file);
 
-    void *env = clips->cobj();
+    clips::Environment *env = clips.get_obj().get();
 
-    SetEnvironmentContext(env, cm);
+    clips::SetEnvironmentContext(env, cm);
 
-    EnvAddRouterWithContext(env, (char *)ROUTNER_NAME, /*router priority*/
-                            40, log_router_query, log_router_print, NULL, NULL,
-                            log_router_exit, &cm->logger);
+    clips::AddRouter(env, (char *)ROUTNER_NAME, /*router priority*/
+                     40, log_router_query, log_router_print, NULL, NULL,
+                     log_router_exit, &cm->logger);
 
     sigaction(SIGINT, &oldact, NULL);
 
@@ -493,13 +544,13 @@ CLIPSEnvManagerNode::new_env(const std::string &log_component_name) {
     RCLCPP_ERROR(
         get_logger(),
         ("CLIPS: Unable to backup --- SIGINT sigaction for restoration."));
-    LockSharedPtr<CLIPS::Environment> clips{};
+    LockSharedPtr<clips::Environment> clips{};
     return clips;
   }
 }
 
 void CLIPSEnvManagerNode::assert_features(
-    LockSharedPtr<CLIPS::Environment> &clips, bool immediate_assert) {
+    LockSharedPtr<clips::Environment> &clips, bool immediate_assert) {
 
   // deffact so it survives a reset
   std::string deffacts = "(deffacts ff-features-available";
@@ -507,13 +558,17 @@ void CLIPSEnvManagerNode::assert_features(
   for (const auto &feat : features_set) {
     deffacts += " (ff-feature " + feat + ")";
     if (immediate_assert) {
-      clips->assert_fact_f("(ff-feature %s)", feat.c_str());
+      clips::AssertString(clips.get_obj().get(),
+                          std::format("(ff-feature {})", feat).c_str());
     }
   }
   deffacts += ")";
 
-  if (!clips->build(deffacts)) {
-    RCLCPP_WARN(get_logger(), "Failed to build deffacts ff-features-available");
+  clips::BuildError res = clips::Build(clips.get_obj().get(), deffacts.c_str());
+  if (res != clips::BuildError::BE_NO_ERROR) {
+    RCLCPP_WARN(get_logger(),
+                "Failed to build deffacts ff-features-available (error %i)",
+                static_cast<int>(res));
   }
   RCLCPP_INFO(get_logger(), "Asserted features!");
 }
@@ -527,23 +582,15 @@ void CLIPSEnvManagerNode::guarded_load(const std::string &env_name,
                  env_name.c_str());
   }
 
-  LockSharedPtr<CLIPS::Environment> &clips = envs_[env_name].env;
+  LockSharedPtr<clips::Environment> &clips = envs_[env_name].env;
 
-  int load_rv = 0;
-  if ((load_rv = clips->load(filename)) != 1) {
-    if (load_rv == 0) {
-      // destroy_env(env_name);
-      RCLCPP_ERROR(get_logger(),
-                   "guarded_load: %s can't find %s --> Should "
-                   "throw exception later",
-                   env_name.c_str(), filename.c_str());
-    } else {
-      // destroy_env(env_name);
-      RCLCPP_ERROR(get_logger(),
-                   "guarded_load: %s: CLIPS code error in %s --> Should "
-                   "throw exception later",
-                   env_name.c_str(), filename.c_str());
-    }
+  clips::LoadError res = clips::Load(clips.get_obj().get(), filename.c_str());
+  if (res != clips::LoadError::LE_NO_ERROR) {
+    // destroy_env(env_name);
+    RCLCPP_ERROR(get_logger(),
+                 "guarded_load: %s can't find %s --> Should "
+                 "throw exception later",
+                 env_name.c_str(), filename.c_str());
   } else {
     RCLCPP_INFO(get_logger(), "guarded_load: Loaded file %s for environment %s",
                 filename.c_str(), env_name.c_str());
@@ -551,12 +598,30 @@ void CLIPSEnvManagerNode::guarded_load(const std::string &env_name,
 }
 
 void CLIPSEnvManagerNode::add_functions(const std::string &env_name) {
-  getEnvironmentByName(env_name)->add_function(
-      "now",
-      sigc::slot<double>(sigc::mem_fun(*this, &CLIPSEnvManagerNode::clips_now)));
-  getEnvironmentByName(env_name)->add_function(
-      "now-systime", sigc::slot<CLIPS::Values>(sigc::mem_fun(
-                         *this, &CLIPSEnvManagerNode::clips_now_systime)));
+  clips::Environment *env = getEnvironmentByName(env_name).get_obj().get();
+  clips::AddUDF(
+      env, "now", "d", 0, 0, NULL,
+      [](clips::Environment *env, clips::UDFContext *udfc,
+         clips::UDFValue *out) {
+        CLIPSEnvManagerNode *instance =
+            static_cast<CLIPSEnvManagerNode *>(udfc->context);
+        double currentTime = instance->get_clock()->now().seconds();
+        out->floatValue = clips::CreateFloat(env, currentTime);
+      },
+      "clips_now", this);
+
+  clips::AddUDF(
+      env, "now-systime", "d", 0, 0, NULL,
+      [](clips::Environment *env, clips::UDFContext * /*udfc*/,
+         clips::UDFValue *out) {
+        using namespace std::chrono;
+        // get system seconds
+        auto now = time_point_cast<seconds>(system_clock::now());
+
+        out->integerValue =
+            clips::CreateInteger(env, now.time_since_epoch().count());
+      },
+      "clips_now_systime", NULL);
 }
 
 void CLIPSEnvManagerNode::call_feature_context_destroy(
@@ -613,17 +678,6 @@ void CLIPSEnvManagerNode::call_feature_context_destroy(
   // while (finishedWithCode < 0 && rclcpp::ok()) {
   //   std::this_thread::sleep_for(10ms);
   // }
-}
-
-double CLIPSEnvManagerNode::clips_now() { return get_clock()->now().seconds(); }
-
-CLIPS::Values CLIPSEnvManagerNode::clips_now_systime() {
-  CLIPS::Values rv;
-  using namespace std::chrono;
-  // get system seconds
-  auto now = time_point_cast<seconds>(system_clock::now());
-  rv.push_back(now.time_since_epoch().count());
-  return rv;
 }
 
 } // namespace cx

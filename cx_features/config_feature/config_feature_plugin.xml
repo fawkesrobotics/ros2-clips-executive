@@ -1,0 +1,7 @@
+<class_libraries>
+  <library path="cx_config_feature">
+    <class type="cx::ConfigFeature" base_class_type="cx::ClipsFeature">
+      <description>Clips Feature providing yaml configurations</description>
+    </class>
+  </library>
+</class_libraries>

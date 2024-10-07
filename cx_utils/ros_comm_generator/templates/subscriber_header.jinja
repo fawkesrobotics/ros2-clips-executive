@@ -41,24 +41,22 @@ public:
   void initialise(const std::string &feature_name) override;
 
   bool clips_context_init(const std::string &env_name,
-                          LockSharedPtr<CLIPS::Environment> &clips) override;
+                          LockSharedPtr<clips::Environment> &clips) override;
   bool clips_context_destroyed(const std::string &env_name) override;
 
   std::string getFeatureName() const;
 
 private:
-  std::map<std::string, LockSharedPtr<CLIPS::Environment>> envs_;
+  std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
   std::thread spin_thread_;
   std::map<std::string,
            std::map<std::string,
                     rclcpp::Subscription<{{message_type}}>::SharedPtr>>
       subscriptions_;
 
-  void subscribe_to_topic(const std::string &env_name,
-                          const std::string &topic_name);
+  void subscribe_to_topic(clips::Environment *env, const std::string &topic_name);
 
-  void unsubscribe_from_topic(const std::string &env_name,
-                              const std::string &topic_name);
+  void unsubscribe_from_topic(clips::Environment *env, const std::string &topic_name);
 
   void topic_callback(const {{message_type}}::SharedPtr msg,
                       std::string topic_name, std::string env_name);

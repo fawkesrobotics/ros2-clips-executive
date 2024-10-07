@@ -1,23 +1,17 @@
 clips_features_manager:
   ros__parameters:
-    clips_features_list: ["clips_pddl_parser", "skill_execution", "clips_protobuf",  "ros_topic_publisher", "ros_topic_subscriber", "ros_service_requester"]
+    clips_features_list: ["clips_pddl_parser", "skill_execution", "clips_protobuf"]
     clips_features:
       mock_feature:
         plugin: "cx::MockFeature"
       plansys2:
         plugin: "cx::Plansys2Feature"
       clips_pddl_parser:
-        plugin: "cx::ClipsPddlParserFeature"
+        plugin: "cx::PddlParserFeature"
       skill_execution:
         plugin: "cx::SkillExecutionFeature"
-      ros_topic_publisher:
-        plugin: "cx::RosTopicPublisherFeature"
-      ros_topic_subscriber:
-        plugin: "cx::RosTopicSubscriberFeature"
-      ros_service_requester:
-        plugin: "cx::RosServiceRequesterFeature"
       clips_protobuf:
-        plugin: "cx::ClipsProtobufFeature"
+        plugin: "cx::ProtobufFeature"
         feature_parameters: ["protobuf_path"]
         protobuf_path:
           # This path assumes relativeness to agent_dir

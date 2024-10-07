@@ -17,7 +17,7 @@ find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
 find_package(plansys2_planner REQUIRED)
 find_package(plansys2_lifecycle_manager REQUIRED)
-find_package(cx_features REQUIRED)
+find_package(cx_feature_manager REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_clips_executive REQUIRED)
 find_package(PkgConfig REQUIRED)
@@ -29,7 +29,7 @@ set(dependencies
   plansys2_problem_expert
   plansys2_planner
   plansys2_lifecycle_manager
-  cx_features
+  cx_feature_manager
   cx_clips
   cx_clips_executive
   PkgConfig
@@ -44,9 +44,6 @@ set(dependencies_psys2
   PkgConfig
 )
 
-# import clipsmm via pkg-config
-pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
-
 add_executable(plansys_node
   src/plansys2_node.cpp
 )
@@ -59,7 +56,7 @@ target_compile_definitions(plansys_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIO
 
 ament_target_dependencies(cx_node ${dependencies})
 target_compile_definitions(cx_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
-target_link_libraries(cx_node PkgConfig::CLIPSMM)
+target_link_libraries(cx_node ClipsNS::libclips_ns)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

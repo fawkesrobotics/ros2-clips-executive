@@ -14,24 +14,25 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-find_package(PkgConfig REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(clips_vendor REQUIRED)
+find_package(clips REQUIRED)
 
 set(dependencies
   ament_cmake
   rclcpp
   rclcpp_action
   rclcpp_lifecycle
-  PkgConfig
   lifecycle_msgs
   cx_clips
   cx_utils
   yaml-cpp
   std_msgs
+  clips
 )
 
 include_directories(include)
@@ -41,22 +42,17 @@ set(CLIPS_EXECUTIVE_SOURCES
 #   src/cx_clips_executive/
 )
 
-#import clipsmm via pkg-config
-pkg_check_modules(CLIPSMM REQUIRED IMPORTED_TARGET clipsmm-1.0)
-
-
 add_library(${PROJECT_NAME} SHARED ${CLIPS_EXECUTIVE_SOURCES})
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
-target_link_libraries(${PROJECT_NAME} PkgConfig::CLIPSMM)
+target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
 
 add_executable(clips_executive_node src/clips_executive_node.cpp)
 
 ament_target_dependencies(clips_executive_node ${dependencies})
 target_link_libraries(clips_executive_node ${PROJECT_NAME})
-target_link_libraries(clips_executive_node PkgConfig::CLIPSMM)
+target_link_libraries(clips_executive_node ClipsNS::libclips_ns)
 target_link_libraries(clips_executive_node yaml-cpp)
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -87,6 +83,5 @@ install(TARGETS
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 ament_export_dependencies(${dependencies})
-
 
 ament_package()
