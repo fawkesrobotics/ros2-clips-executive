@@ -16,7 +16,6 @@
   <depend>cx_utils</depend>
   <depend>cx_skill_execution</depend>
   <depend>clips_vendor</depend>
-  <depend>clipsmm</depend>
   <depend>pluginlib</depend>
 
 

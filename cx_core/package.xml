@@ -12,7 +12,7 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>PkgConfig</depend>
+  <depend>pkg-config</depend>
   <depend>cx_utils</depend>
   <depend>cx_msgs</depend>
   <depend>clips_vendor</depend>

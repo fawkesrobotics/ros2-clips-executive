@@ -4,9 +4,9 @@
   <name>cx_clips</name>
   <version>0.0.0</version>
   <description>Manager unit for CLIPS environments and its client wrapper for ease of use</description>
-   
+
   <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
-  
+
   <license>GPLv2+ license</license>
 
 
@@ -15,8 +15,8 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_action</depend>
   <depend>rclcpp_lifecycle</depend>
-  <depend>PkgConfig</depend>
-  <depend>clipsmm</depend>
+  <depend>pkg-config</depend>
+  <depend>clips_vendor</depend>
   <depend>lifecycle_msgs</depend>
   <depend>cx_msgs</depend>
   <depend>cx_core</depend>

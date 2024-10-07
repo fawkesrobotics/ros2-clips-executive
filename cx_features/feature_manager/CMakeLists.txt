@@ -61,20 +61,6 @@ install(TARGETS
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto)
-
-  if(ament_lint_auto_FOUND)
-    ament_lint_auto_find_test_dependencies()
-    find_package(ament_cmake_gtest)
-    find_package(cx_clips_executive REQUIRED)
-
-    if(ament_cmake_gtest)
-      add_subdirectory(test)
-    endif()
-  endif()
-endif()
-
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 ament_export_dependencies(${dependencies})

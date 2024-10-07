@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  {{name_camel}}.hpp
  *
@@ -16,7 +18,7 @@
  *
  *  Read the full text in the LICENSE.GPL file in the doc directory.
  */
-
+// clang-format off
 #ifndef CX_FEATURES__{{name_upper}}_HPP_
 #define CX_FEATURES__{{name_upper}}_HPP_
 
@@ -49,28 +51,39 @@ public:
 private:
   std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
   std::thread spin_thread_;
-  std::map<
-      std::string,
-      std::map<std::string, rclcpp::Client<{{message_type}}>::SharedPtr>>
-      request_clients_;
-  std::map<
-      std::string,
-      std::map<std::string, std::shared_ptr<{{message_type}}::Request>>>
-      requests_;
-  void create_request(clips::Environment *env, const std::string &service_name);
+  std::map<std::string,
+           std::map<std::string,
+                    rclcpp::Publisher<{{message_type}}>::SharedPtr>>
+      publishers_;
+  std::map<std::string,
+           std::map<std::string,
+                    rclcpp::Subscription<{{message_type}}>::SharedPtr>>
+      subscriptions_;
+  std::unordered_map<void*, std::shared_ptr<{{message_type}}>> messages_;
+  std::unordered_set<std::string> function_names_;
 
-  void set_field_request(clips::Environment *env, const std::string &service_name,
-                         const std::string &field_name, clips::UDFValue value);
+{% set template_part = "declaration" %}
+{% set template_type = "" %}
+{% include 'get_field.jinja.cpp' with context %}
+{% include 'set_field.jinja.cpp' with context %}
 
-  void set_array_request(clips::Environment *env, const std::string &service_name,
-                         const std::string &field_name, clips::UDFValue values,
-                         clips::UDFContext *udfc);
+clips::UDFValue create_message(clips::Environment *env);
 
-  void request_from_node(clips::Environment *env, const std::string &service_name);
+  void publish_to_topic(clips::Environment *env, {{message_type}} *msg, const std::string &topic_name);
 
-  void service_callback(
-      rclcpp::Client<{{message_type}}>::SharedFuture response,
-      std::string service_name, std::string env_name);
+  void create_new_publisher(clips::Environment *env, const std::string &topic_name);
+
+  void destroy_publisher(clips::Environment *env, const std::string &topic_name);
+
+  void destroy_msg({{message_type}} *msg);
+
+  void subscribe_to_topic(clips::Environment *env, const std::string &topic_name);
+
+  void unsubscribe_from_topic(clips::Environment *env, const std::string &topic_name);
+
+  void topic_callback(const {{message_type}}::SharedPtr msg,
+                      std::string topic_name, std::string env_name);
 };
+
 } // namespace cx
 #endif // !CX_FEATURES__{{name_upper}}_HPP_

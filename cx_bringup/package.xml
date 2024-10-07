@@ -21,7 +21,7 @@
   <depend>cx_feature_manager</depend>
   <depend>cx_clips</depend>
   <depend>cx_clips_executive</depend>
-  <depend>PkgConfig</depend>
+  <depend>pkg-config</depend>
 
   <exec_depend>launch_ros</exec_depend>
 

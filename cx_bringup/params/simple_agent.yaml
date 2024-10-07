@@ -55,6 +55,7 @@ clips_executive:
       - name: refbox-comm
         files:
           - simple_agent/refbox-comm-init.clp
+          - simple_agent/ros-comm-init.clp
     # Map plan actions to skill strings.
     action_mapping:
       gowait:
