@@ -8,6 +8,8 @@
 #include "plansys2_planner/PlannerClient.hpp"
 #include "plansys2_problem_expert/ProblemExpertClient.hpp"
 
+#include <cx_utils/clips_env_context.hpp>
+
 // To export as plugin
 #include "pluginlib/class_list_macros.hpp"
 
@@ -18,20 +20,19 @@ Plansys2Feature::Plansys2Feature() {}
 
 Plansys2Feature::~Plansys2Feature() {}
 
-bool Plansys2Feature::clips_context_init(
-    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name),
-               "Initialising context for feature %s",
-               clips_feature_name.c_str());
+bool Plansys2Feature::clips_env_init(LockSharedPtr<clips::Environment> &env) {
+  RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
+               "Initializing context for feature %s", feature_name_.c_str());
 
-  envs_[env_name] = clips;
-  domain_client_ = std::make_shared<plansys2::DomainExpertClient>();
-  problem_client_ = std::make_shared<plansys2::ProblemExpertClient>();
-  planner_client_ = std::make_shared<plansys2::PlannerClient>();
+  auto context = CLIPSEnvContext::get_context(env.get_obj().get());
+  std::string env_name = context->env_name_;
+  domain_client_[env_name] = std::make_unique<plansys2::DomainExpertClient>();
+  problem_client_[env_name] = std::make_unique<plansys2::ProblemExpertClient>();
+  planner_client_[env_name] = std::make_unique<plansys2::PlannerClient>();
 
   clips::AddUDF(
-      clips.get_obj().get(), "psys2-add-domain-instance", "v", 2, 2, ";sy;sy",
-      [](clips::Environment * /*env*/, clips::UDFContext *udfc,
+      env.get_obj().get(), "psys2-add-domain-instance", "v", 2, 2, ";sy;sy",
+      [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         auto *instance = static_cast<Plansys2Feature *>(udfc->context);
         clips::UDFValue name, type;
@@ -39,34 +40,34 @@ bool Plansys2Feature::clips_context_init(
         clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &name);
         clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &type);
 
-        instance->add_problem_instance(name.lexemeValue->contents,
+        instance->add_problem_instance(env, name.lexemeValue->contents,
                                        type.lexemeValue->contents);
       },
       "add_problem_instance", this);
 
   clips::AddUDF(
-      clips.get_obj().get(), "psys2-add-domain-predicate", "v", 1, 1, ";sy",
-      [](clips::Environment * /*env*/, clips::UDFContext *udfc,
+      env.get_obj().get(), "psys2-add-domain-predicate", "v", 1, 1, ";sy",
+      [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         auto *instance = static_cast<Plansys2Feature *>(udfc->context);
         clips::UDFValue predicate;
         using namespace clips;
         clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &predicate);
-        instance->add_problem_predicate(predicate.lexemeValue->contents);
+        instance->add_problem_predicate(env, predicate.lexemeValue->contents);
       },
       "add_problem_predicate", this);
 
   clips::AddUDF(
-      clips.get_obj().get(), "psys2-clear-knowledge", "v", 0, 0, "",
-      [](clips::Environment * /*env*/, clips::UDFContext *udfc,
+      env.get_obj().get(), "psys2-clear-knowledge", "v", 0, 0, "",
+      [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         auto *instance = static_cast<Plansys2Feature *>(udfc->context);
-        instance->clear_problem_expert_knowledge();
+        instance->clear_problem_expert_knowledge(env);
       },
       "clear_problem_expert_knowledge", this);
 
   clips::AddUDF(
-      clips.get_obj().get(), "psys2-call-planner", "v", 3, 3, ";sy;sy;sy",
+      env.get_obj().get(), "psys2-call-planner", "v", 3, 3, ";sy;sy;sy",
       [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         auto *instance = static_cast<Plansys2Feature *>(udfc->context);
@@ -83,33 +84,36 @@ bool Plansys2Feature::clips_context_init(
       },
       "plan_with_plansys2", this);
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name), "Initialised context!");
+  RCLCPP_INFO(rclcpp::get_logger(feature_name_), "Initialised context!");
   return true;
 }
 
-bool Plansys2Feature::clips_context_destroyed(const std::string &env_name) {
+bool Plansys2Feature::clips_env_destroyed(
+    LockSharedPtr<clips::Environment> &env) {
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Destroying clips context!");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(),
-                   "psys2-add-domain-instance");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(),
-                   "psys2-add-domain-predicate");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(), "psys2-clear-knowledge");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(), "psys2-call-planner");
-  envs_.erase(env_name);
-
+  RCLCPP_INFO(rclcpp::get_logger(feature_name_), "Destroying clips context!");
+  clips::RemoveUDF(env.get_obj().get(), "psys2-add-domain-instance");
+  clips::RemoveUDF(env.get_obj().get(), "psys2-add-domain-predicate");
+  clips::RemoveUDF(env.get_obj().get(), "psys2-clear-knowledge");
+  clips::RemoveUDF(env.get_obj().get(), "psys2-call-planner");
+  auto context = CLIPSEnvContext::get_context(env.get_obj().get());
+  domain_client_.erase(context->env_name_);
+  problem_client_.erase(context->env_name_);
+  planner_client_.erase(context->env_name_);
   return true;
 }
 
-void Plansys2Feature::add_problem_instance(const std::string &name,
+void Plansys2Feature::add_problem_instance(clips::Environment *env,
+                                           const std::string &name,
                                            const std::string &type) {
   const std::string log_name = "PSYS2CLIPS";
 
   RCLCPP_INFO(rclcpp::get_logger(log_name),
               "Trying to add instance: %s - %s to problem expert", name.c_str(),
               type.c_str());
-  bool success = problem_client_->addInstance(plansys2::Instance(name, type));
+  auto context = CLIPSEnvContext::get_context(env);
+  bool success = problem_client_[context->env_name_]->addInstance(
+      plansys2::Instance(name, type));
   if (success) {
     RCLCPP_INFO(rclcpp::get_logger(log_name),
                 "Successfully added instance: %s - %s to problem expert",
@@ -121,11 +125,14 @@ void Plansys2Feature::add_problem_instance(const std::string &name,
   }
 }
 
-void Plansys2Feature::add_problem_predicate(const std::string &pred) {
+void Plansys2Feature::add_problem_predicate(clips::Environment *env,
+                                            const std::string &pred) {
   const std::string log_name = "PSYS2CLIPS";
   RCLCPP_INFO(rclcpp::get_logger(log_name),
               "Trying to add predicate: %s to problem expert", pred.c_str());
-  bool success = problem_client_->addPredicate(plansys2::Predicate(pred));
+  auto context = CLIPSEnvContext::get_context(env);
+  bool success = problem_client_[context->env_name_]->addPredicate(
+      plansys2::Predicate(pred));
   if (success) {
     RCLCPP_INFO(rclcpp::get_logger(log_name),
                 "Successfully added predicate: %s to problem expert",
@@ -137,11 +144,12 @@ void Plansys2Feature::add_problem_predicate(const std::string &pred) {
   }
 }
 
-void Plansys2Feature::clear_problem_expert_knowledge() {
+void Plansys2Feature::clear_problem_expert_knowledge(clips::Environment *env) {
   const std::string log_name = "PSYS2CLIPS";
   RCLCPP_INFO(rclcpp::get_logger(log_name),
               "Clearing problem expert knowledge!");
-  problem_client_->clearKnowledge();
+  auto context = CLIPSEnvContext::get_context(env);
+  problem_client_[context->env_name_]->clearKnowledge();
 }
 
 void Plansys2Feature::plan_with_plansys2(clips::Environment *env,
@@ -161,19 +169,20 @@ void Plansys2Feature::call_planner(clips::Environment *env,
                                    const std::string &plan_id) {
   const std::string log_name = "PSYS2CLIPS";
 
-  if (!problem_client_->setGoal(plansys2::Goal(goal))) {
+  auto context = CLIPSEnvContext::get_context(env);
+  if (!problem_client_[context->env_name_]->setGoal(plansys2::Goal(goal))) {
     RCLCPP_ERROR(rclcpp::get_logger(log_name),
                  "Couldn't set goal '%s' with id %s for problem expert",
                  goal.c_str(), goal_id.c_str());
     return;
   }
-  auto domain = domain_client_->getDomain();
-  auto problem = problem_client_->getProblem();
+  auto domain = domain_client_[context->env_name_]->getDomain();
+  auto problem = problem_client_[context->env_name_]->getProblem();
 
   RCLCPP_ERROR(rclcpp::get_logger(log_name),
                "Calling plan for goal '%s' with id %s", goal.c_str(),
                goal_id.c_str());
-  auto plan = planner_client_->getPlan(domain, problem);
+  auto plan = planner_client_[context->env_name_]->getPlan(domain, problem);
   // std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
 
   if (!plan.has_value()) {

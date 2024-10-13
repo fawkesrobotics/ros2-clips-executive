@@ -13,10 +13,16 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(fmt REQUIRED)
+find_package(clips_vendor REQUIRED)
+find_package(clips REQUIRED)
 
 set(dependencies
   ament_cmake
   rclcpp
+  spdlog
+  fmt
 )
 
 include_directories(include)
@@ -25,10 +31,13 @@ set(CX_UTILS_SOURCES
   src/LockSharedPtr.cpp
   src/NodeThread.cpp
   src/map_skill.cpp
+  src/clips_env_context.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${CX_UTILS_SOURCES})
-ament_target_dependencies(${PROJECT_NAME} ${dependencies})
+ament_target_dependencies(${PROJECT_NAME} PUBLIC ${dependencies})
+target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog ClipsNS::libclips_ns)
+target_link_libraries(${PROJECT_NAME} INTERFACE spdlog::spdlog ClipsNS::libclips_ns)
 
 install(
   DIRECTORY include/

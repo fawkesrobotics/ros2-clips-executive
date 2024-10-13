@@ -24,7 +24,9 @@
 #include <string>
 
 #include "cx_skill_execution/SkillExecutionMaster.hpp"
-#include "cx_skill_execution_feature/SkillExecutionFeature.hpp"
+#include "cx_skill_execution_feature/skill_execution_feature.hpp"
+
+#include <cx_utils/clips_env_context.hpp>
 
 // To export as plugin
 #include "pluginlib/class_list_macros.hpp"
@@ -38,27 +40,17 @@ SkillExecutionFeature::SkillExecutionFeature() {}
 
 SkillExecutionFeature::~SkillExecutionFeature() {}
 
-std::string SkillExecutionFeature::getFeatureName() const {
-  return clips_feature_name;
-}
+bool SkillExecutionFeature::clips_env_init(
+    LockSharedPtr<clips::Environment> &env) {
+  RCLCPP_INFO(rclcpp::get_logger(feature_name_),
+              "Initializing context for feature %s", feature_name_.c_str());
 
-void SkillExecutionFeature::initialize(const std::string &feature_name) {
-  clips_feature_name = feature_name;
-}
-
-bool SkillExecutionFeature::clips_context_init(
-    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Initialising context for feature %s",
-              clips_feature_name.c_str());
-
-  envs_[env_name] = clips;
   node_ = rclcpp::Node::make_shared("skill_execution_feature");
   // spin node
   thread_ = std::make_unique<cx::NodeThread>(node_->get_node_base_interface());
 
   clips::AddUDF(
-      clips.get_obj().get(), "call-skill-execution", "v", 6, 6,
+      env.get_obj().get(), "call-skill-execution", "v", 6, 6,
       ";sy;sy;sy;sy;sy;sy",
       [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
@@ -85,7 +77,7 @@ bool SkillExecutionFeature::clips_context_init(
       "request_skill_execution", this);
 
   clips::AddUDF(
-      clips.get_obj().get(), "call-skill-cancel", "v", 2, 2, ";sy;sy",
+      env.get_obj().get(), "call-skill-cancel", "v", 2, 2, ";sy;sy",
       [](clips::Environment * /*env*/, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         SkillExecutionFeature *instance =
@@ -102,19 +94,16 @@ bool SkillExecutionFeature::clips_context_init(
       },
       "cancel_skill", this);
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name), "Initialised context!");
+  RCLCPP_INFO(rclcpp::get_logger(feature_name_), "Initialized context!");
   return true;
 }
 
-bool SkillExecutionFeature::clips_context_destroyed(
-    const std::string &env_name) {
+bool SkillExecutionFeature::clips_env_destroyed(
+    LockSharedPtr<clips::Environment> &env) {
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
-              "Destroying clips context!");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(), "call-skill-execution");
-  clips::RemoveUDF(envs_[env_name].get_obj().get(), "call-skill-cancel");
-  envs_.erase(env_name);
-
+  RCLCPP_INFO(rclcpp::get_logger(feature_name_), "Destroying clips context!");
+  clips::RemoveUDF(env.get_obj().get(), "call-skill-execution");
+  clips::RemoveUDF(env.get_obj().get(), "call-skill-cancel");
   return true;
 }
 
@@ -125,22 +114,6 @@ void SkillExecutionFeature::request_skill_execution(
     const std::string &executor_id) {
 
   std::pair<std::string, std::string> id{robot_id, executor_id};
-
-  bool found_env = false;
-  std::string curr_env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      curr_env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(node_->get_logger(),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
 
   // If there is currently running skill, which is unlikely to happen
   auto old_entry = skill_master_map_.find(id);
@@ -164,6 +137,7 @@ void SkillExecutionFeature::request_skill_execution(
       // Abort skill execution for the same agent id
     }
   }
+  auto context = CLIPSEnvContext::get_context(env);
   RCLCPP_INFO(node_->get_logger(),
               "Requesting skill (%s, %s) with mapped_action %s for robot %s "
               "and executor %s for %s ",
@@ -173,7 +147,7 @@ void SkillExecutionFeature::request_skill_execution(
   auto skill_master = std::make_shared<cx::SkillExecutionMaster>(
       /*name the master as the provided skill id*/ skill_id, skill_id,
       action_name, mapped_action, action_params, robot_id, executor_id,
-      envs_[curr_env_name]);
+      context->env_lock_ptr_);
 
   auto skill_master_st = SkillMasterSt();
   skill_master_st.skill_master = skill_master;

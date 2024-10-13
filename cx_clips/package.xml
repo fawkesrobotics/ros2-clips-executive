@@ -19,9 +19,8 @@
   <depend>clips_vendor</depend>
   <depend>lifecycle_msgs</depend>
   <depend>cx_msgs</depend>
-  <depend>cx_core</depend>
+  <depend>cx_feature_manager</depend>
   <depend>spdlog</depend>
-  <!-- <depend>cx_features</depend> -->
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

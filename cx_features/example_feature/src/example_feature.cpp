@@ -3,6 +3,7 @@
 #include <string>
 
 #include "cx_example_feature/example_feature.hpp"
+#include <cx_utils/clips_env_context.hpp>
 
 // To export as plugin
 #include "pluginlib/class_list_macros.hpp"
@@ -13,22 +14,22 @@ ExampleFeature::ExampleFeature() {}
 
 ExampleFeature::~ExampleFeature() {}
 
-bool ExampleFeature::clips_context_init(
-    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name_),
-              "Initialising context for feature %s",
-              clips_feature_name_.c_str());
+void ExampleFeature::initialize() {
+  logger_ = std::make_unique<rclcpp::Logger>(rclcpp::get_logger(feature_name_));
+}
 
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name_),
-              "Initialised the context for env %s!", env_name.c_str());
-  (void)clips;
+bool ExampleFeature::clips_env_init(LockSharedPtr<clips::Environment> &env) {
+  auto context = CLIPSEnvContext::get_context(env.get_obj().get());
+  RCLCPP_INFO(*logger_, "Initializing feature for environment %s",
+              context->env_name_.c_str());
   return true;
 }
 
-bool ExampleFeature::clips_context_destroyed(const std::string &env_name) {
-
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name_),
-              "Destroying clips context for env %s!", env_name.c_str());
+bool ExampleFeature::clips_env_destroyed(
+    LockSharedPtr<clips::Environment> &env) {
+  auto context = CLIPSEnvContext::get_context(env.get_obj().get());
+  RCLCPP_INFO(*logger_, "Destroying feature for environment %s",
+              context->env_name_.c_str());
   return true;
 }
 } // namespace cx

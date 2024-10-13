@@ -37,20 +37,21 @@ public:
   ProtobufFeature();
   ~ProtobufFeature();
 
-  void initialize(const std::string &feature_name) override;
+  void initialize() override;
 
-  bool clips_context_init(const std::string &env_name,
-                          LockSharedPtr<clips::Environment> &clips) override;
-  bool clips_context_destroyed(const std::string &env_name) override;
+  bool clips_env_init(LockSharedPtr<clips::Environment> &env) override;
+  bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
   std::string getFeatureName() const;
 
 private:
   std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
   std::mutex mm;
+  std::vector<std::string> path_;
   clips::Environment *maintained_env_;
-  std::unique_ptr<protobuf_clips::ClipsProtobufCommunicator>
-      protobuf_communicator;
+  std::unordered_map<std::string,
+                     std::unique_ptr<protobuf_clips::ClipsProtobufCommunicator>>
+      protobuf_communicator_;
 
 private:
 };

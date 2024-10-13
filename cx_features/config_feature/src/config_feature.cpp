@@ -34,23 +34,26 @@ ConfigFeature::ConfigFeature() {}
 
 ConfigFeature::~ConfigFeature() {}
 
-bool ConfigFeature::clips_context_init(
-    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_),
-               "Initialising context for feature %s",
-               clips_feature_name_.c_str());
+void ConfigFeature::initialize() {
+  logger_ = std::make_unique<rclcpp::Logger>(rclcpp::get_logger(feature_name_));
+}
 
-  envs_[env_name] = clips;
+bool ConfigFeature::clips_env_init(LockSharedPtr<clips::Environment> &env) {
+  RCLCPP_DEBUG(*logger_, "Initialising context");
+
   std::string clips_path =
       ament_index_cpp::get_package_share_directory("cx_config_feature") +
-      "/clips/";
+      "/clips/cx_config_feature/ff-config.clp";
 
-  clips::Eval(clips.get_obj().get(),
-              std::format("(path-add \"{}\")", clips_path).c_str(), NULL);
-  clips::Eval(clips.get_obj().get(),
-              "(path-load \"cx_config_feature/ff-config.clp\")", NULL);
+  if (!clips::BatchStar(env.get_obj().get(), clips_path.c_str())) {
+    RCLCPP_ERROR(*logger_,
+                 "Failed to initialize CLIPS environment, "
+                 "batch file '%s' failed!, aborting...",
+                 clips_path.c_str());
+    return false;
+  }
   clips::AddUDF(
-      clips.get_obj().get(), "config-load", "v", 2, 2, ";sy;sy",
+      env.get_obj().get(), "config-load", "v", 2, 2, ";sy;sy",
       [](clips::Environment *env, clips::UDFContext *udfc,
          clips::UDFValue * /*out*/) {
         ConfigFeature *instance = static_cast<ConfigFeature *>(udfc->context);
@@ -63,49 +66,45 @@ bool ConfigFeature::clips_context_init(
                                     cfg_prefix.lexemeValue->contents);
       },
       "clips_config_load", this);
-
-  clips::RefreshAllAgendas(clips.get_obj().get());
-  clips::Run(clips.get_obj().get(), -1);
-
   return true;
 }
 
-bool ConfigFeature::clips_context_destroyed(const std::string &env_name) {
+bool ConfigFeature::clips_env_destroyed(
+    LockSharedPtr<clips::Environment> &env) {
 
-  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_),
-               "Destroying clips context for feature %s!",
-               clips_feature_name_.c_str());
-  clips::RemoveUDF(envs_[env_name].get_obj().get(), "config-load");
+  RCLCPP_DEBUG(*logger_, "Destroying clips context");
+
+  clips::RemoveUDF(env.get_obj().get(), "config-load");
   clips::Deftemplate *curr_tmpl =
-      clips::FindDeftemplate(envs_[env_name].get_obj().get(), "conval");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  envs_.erase(env_name);
+      clips::FindDeftemplate(env.get_obj().get(), "conval");
+  if (curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  }
   return true;
 }
+
 void ConfigFeature::clips_config_load(clips::Environment *env,
                                       const std::string &file,
                                       const std::string &cfg_prefix) {
-  const std::string name = "ClipsConfig";
   const std::string cfg_main_node = cfg_prefix.substr(1, cfg_prefix.size() - 1);
 
   try {
     YAML::Node config = YAML::LoadFile(file);
 
-    iterateThroughYamlRecuresively(config[cfg_main_node], name, cfg_prefix,
-                                   env);
+    iterateThroughYamlRecuresively(config[cfg_main_node], cfg_prefix, env);
 
   } catch (const std::exception &e) {
-    RCLCPP_ERROR_STREAM(rclcpp::get_logger(name), e.what());
-    RCLCPP_WARN(rclcpp::get_logger(name), "Abroting config loading...");
+    RCLCPP_ERROR_STREAM(*logger_, e.what());
+    RCLCPP_WARN(*logger_, "Abroting config loading...");
   }
 }
 
 void ConfigFeature::iterateThroughYamlRecuresively(
-    const YAML::Node &current_level_node, const std::string &logger_name,
-    std::string cfg_prefix, clips::Environment *env) {
+    const YAML::Node &current_level_node, std::string cfg_prefix,
+    clips::Environment *env) {
 
   std::string config_path = cfg_prefix;
-  // RCLCPP_INFO(rclcpp::get_logger(logger_name), "CFG PATH: %s",
+  // RCLCPP_INFO(*logger_, "CFG PATH: %s",
   //             config_path.c_str());
 
   for (const auto &item : current_level_node) {
@@ -115,11 +114,11 @@ void ConfigFeature::iterateThroughYamlRecuresively(
     switch (item.second.Type()) {
     // If it is a NullNode
     case YAML::NodeType::Undefined: {
-      RCLCPP_ERROR(rclcpp::get_logger(logger_name), "Undefined YAML KEY");
+      RCLCPP_ERROR(*logger_, "Undefined YAML KEY");
       break;
     }
     case YAML::NodeType::Null: {
-      RCLCPP_ERROR(rclcpp::get_logger(logger_name), "NULL YAML KEY");
+      RCLCPP_ERROR(*logger_, "NULL YAML KEY");
       break;
     }
 
@@ -132,7 +131,7 @@ void ConfigFeature::iterateThroughYamlRecuresively(
       if (type == "STRING") {
         std::stringstream escaped_quotes;
         escaped_quotes << std::quoted(item.second.as<std::string>());
-        // RCLCPP_INFO(rclcpp::get_logger(logger_name),
+        // RCLCPP_INFO(*logger_,
         //             "(confval (path \"%s\") (type %s) (value %s))",
         //             path.c_str(), type.c_str(),
         //             escaped_quotes.str().c_str());
@@ -143,7 +142,7 @@ void ConfigFeature::iterateThroughYamlRecuresively(
                              escaped_quotes.str().c_str())
                      .c_str());
       } else {
-        // RCLCPP_INFO(rclcpp::get_logger(logger_name),
+        // RCLCPP_INFO(*logger_,
         //             "(confval (path \"%s\") (type %s) (value %s))",
         //             path.c_str(), type.c_str(),
         //             item.second.as<std::string>().c_str());
@@ -174,7 +173,7 @@ void ConfigFeature::iterateThroughYamlRecuresively(
       const YAML::Node &nested_node = item.second;
       path = config_path + "/" + item.first.as<std::string>();
 
-      sequenceIterator(nested_node, logger_name, path, env);
+      sequenceIterator(nested_node, path, env);
 
       break;
     }
@@ -185,8 +184,7 @@ void ConfigFeature::iterateThroughYamlRecuresively(
       } else {
         path = config_path;
       }
-      iterateThroughYamlRecuresively(current_level_node[item.first],
-                                     logger_name, path, env);
+      iterateThroughYamlRecuresively(current_level_node[item.first], path, env);
       break;
     }
     }
@@ -194,7 +192,6 @@ void ConfigFeature::iterateThroughYamlRecuresively(
 }
 
 void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
-                                     const std::string &logger_name,
                                      std::string &cfg_prefix,
                                      clips::Environment *env) {
 
@@ -216,7 +213,7 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
                                "(is-list TRUE) (list-value {}))",
                                cfg_prefix.c_str(), list_values.c_str())
                        .c_str());
-          // RCLCPP_INFO(rclcpp::get_logger(logger_name),
+          // RCLCPP_INFO(*logger_,
           //             "(confval (path \"%s\") (type STRING) "
           //             "(is-list TRUE) (list-value%s))",
           //             cfg_prefix.c_str(), list_values.c_str());
@@ -246,7 +243,7 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
                   item3.second.as<std::string>().c_str())
                   .c_str());
 
-          // RCLCPP_INFO(rclcpp::get_logger(logger_name),
+          // RCLCPP_INFO(*logger_,
           //             "(confval (path \"%s\") (is-list FALSE) (type %s)
           //             (value "
           //             "\"%s\"))",
@@ -282,18 +279,18 @@ void ConfigFeature::sequenceIterator(const YAML::Node &input_node,
                                "(is-list TRUE) (list-value {}))",
                                path.c_str(), escaped_quotes.str().c_str())
                        .c_str());
-          // RCLCPP_INFO(rclcpp::get_logger(logger_name),
+          // RCLCPP_INFO(*logger_,
           //             "(confval (path \"%s\") (type STRING) "
           //             "(is-list TRUE) (list-value%s))",
           //             path.c_str(), escaped_quotes.str().c_str());
 
         } else {
-          sequenceIterator(item3.second, logger_name, cfg_prefix, env);
+          sequenceIterator(item3.second, cfg_prefix, env);
         }
       }
       sequenceIndex++;
     } else {
-      RCLCPP_ERROR(rclcpp::get_logger(logger_name),
+      RCLCPP_ERROR(*logger_,
                    "Something went wrong while trying to iterate through the "
                    "yaml file!");
     }

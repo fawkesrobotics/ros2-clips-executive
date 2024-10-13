@@ -33,7 +33,7 @@ include_directories(include)
 
 pluginlib_export_plugin_description_file(cx_feature protobuf_feature_plugin.xml)
 
-add_library(${PROJECT_NAME} SHARED src/ProtobufFeature.cpp)
+add_library(${PROJECT_NAME} SHARED src/protobuf_feature.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} ClipsProtobuf::clips_protobuf)
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)

@@ -34,7 +34,7 @@ include_directories(include)
 
 pluginlib_export_plugin_description_file(cx_feature skill_execution_feature_plugin.xml)
 
-add_library(${PROJECT_NAME} SHARED src/SkillExecutionFeature.cpp)
+add_library(${PROJECT_NAME} SHARED src/skill_execution_feature.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 

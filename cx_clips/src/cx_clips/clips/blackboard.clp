@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  blackboard.clp - CLIPS blackboard feature code
 ;

@@ -28,26 +28,16 @@ namespace cx {
 ClipsFeature::ClipsFeature() {}
 ClipsFeature::~ClipsFeature() {}
 
-std::string ClipsFeature::get_feature_name() const {
-  return clips_feature_name_;
-}
+std::string ClipsFeature::get_feature_name() const { return feature_name_; }
 
-bool ClipsFeature::clips_context_init(
-    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  envs_[env_name] = clips;
-  return true;
-}
-
-void ClipsFeature::initialize(const std::string &feature_name) {
-  (void)feature_name;
-}
+void ClipsFeature::initialize() {}
 
 void ClipsFeature::initialize(
-    const std::string &feature_name,
-    std::map<std::string, rclcpp::Parameter> &parameter_args) {
-  parameters_ = parameter_args;
-  clips_feature_name_ = feature_name;
-  initialize(feature_name);
+    const rclcpp_lifecycle::LifecycleNode::WeakPtr parent,
+    const std::string &feature_name) {
+  parent_ = parent;
+  feature_name_ = feature_name;
+  initialize();
 }
 
 } // namespace cx

@@ -40,13 +40,8 @@ public:
   SkillExecutionFeature();
   ~SkillExecutionFeature();
 
-  void initialize(const std::string &feature_name) override;
-
-  bool clips_context_init(const std::string &env_name,
-                          LockSharedPtr<clips::Environment> &clips) override;
-  bool clips_context_destroyed(const std::string &env_name) override;
-
-  std::string getFeatureName() const;
+  bool clips_env_init(LockSharedPtr<clips::Environment> &env) override;
+  bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
 private:
   void request_skill_execution(clips::Environment *env,

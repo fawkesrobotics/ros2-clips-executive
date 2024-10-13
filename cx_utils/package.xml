@@ -7,12 +7,13 @@
   <description>Utilities for the ROS2 Clips-Executive</description>
 
   <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
-  
+
   <license>GPLv2+ license</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclcpp</depend>
+  <depend>spdlog</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

@@ -15,11 +15,13 @@ public:
   ExampleFeature();
   ~ExampleFeature();
 
-  bool clips_context_init(const std::string &env_name,
-                          LockSharedPtr<clips::Environment> &clips) override;
-  bool clips_context_destroyed(const std::string &env_name) override;
+  void initialize();
+
+  bool clips_env_init(LockSharedPtr<clips::Environment> &env) override;
+  bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
 private:
+  std::unique_ptr<rclcpp::Logger> logger_;
 };
 } // namespace cx
 

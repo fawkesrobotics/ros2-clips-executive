@@ -30,6 +30,8 @@
 #include "cx_pddl_parser_feature/pddl_parser_feature.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 
+#include <cx_utils/clips_env_context.hpp>
+
 // To export as plugin
 #include "pluginlib/class_list_macros.hpp"
 
@@ -38,29 +40,26 @@ namespace cx {
 PddlParserFeature::PddlParserFeature() {}
 PddlParserFeature::~PddlParserFeature() {}
 
-bool PddlParserFeature::clips_context_init(
-    const std::string &env_name, LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_),
-               "Initializing context for feature %s",
-               clips_feature_name_.c_str());
+bool PddlParserFeature::clips_env_init(LockSharedPtr<clips::Environment> &env) {
+  RCLCPP_DEBUG(rclcpp::get_logger(feature_name_), "Initializing feature %s",
+               feature_name_.c_str());
+  auto context = CLIPSEnvContext::get_context(env.get_obj().get());
+  std::string env_name = context->env_name_;
 
-  envs_[env_name] = clips;
   pddl_parsers_[env_name] =
       std::make_unique<clips_pddl_parser::ClipsPddlParser>(
-          envs_[env_name].get_obj().get(),
-          *(envs_[env_name].get_mutex_instance()), false);
-
-  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_), "Initialized context!");
+          env.get_obj().get(), *(env.get_mutex_instance()), false);
   return true;
 }
 
-bool PddlParserFeature::clips_context_destroyed(const std::string &env_name) {
+bool PddlParserFeature::clips_env_destroyed(
+    LockSharedPtr<clips::Environment> &env) {
+  auto context = CLIPSEnvContext::get_context(env.get_obj().get());
+  std::string env_name = context->env_name_;
 
-  RCLCPP_DEBUG(rclcpp::get_logger(clips_feature_name_),
-               "Destroying clips context!");
+  RCLCPP_DEBUG(rclcpp::get_logger(feature_name_), "Destroying clips context!");
 
   pddl_parsers_.erase(env_name);
-  envs_.erase(env_name);
   return true;
 }
 } // namespace cx

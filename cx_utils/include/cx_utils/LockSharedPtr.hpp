@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  LockSharedPtr.hpp
  *
@@ -44,6 +46,7 @@ public:
   operator bool() const;
   std::mutex *get_mutex_instance();
   std::shared_ptr<T> get_obj();
+  void set_obj(std::shared_ptr<T> new_obj);
   // Called from instances to lock the mutex for the current scope
 
 private:
@@ -61,7 +64,7 @@ template <class T> LockSharedPtr<T>::LockSharedPtr() {
 
 template <class T> LockSharedPtr<T>::~LockSharedPtr() {
   RCLCPP_DEBUG(rclcpp::get_logger("SharedPtrC"), "Destroying %i",
-              LockSharedPtr::numbers);
+               LockSharedPtr::numbers);
   LockSharedPtr::numbers--;
 }
 
@@ -125,14 +128,17 @@ template <class T> LockSharedPtr<T>::operator bool() const {
   return (obj != nullptr);
 }
 
-template <class T>
-std::mutex* LockSharedPtr<T>::get_mutex_instance() {
+template <class T> std::mutex *LockSharedPtr<T>::get_mutex_instance() {
   auto mutex = objmutex.get();
   return mutex;
 }
 
 template <class T> std::shared_ptr<T> LockSharedPtr<T>::get_obj() {
   return obj;
+}
+
+template <class T> void LockSharedPtr<T>::set_obj(std::shared_ptr<T> new_obj) {
+  obj = new_obj;
 }
 
 template <class T> void LockSharedPtr<T>::init_mutex() {

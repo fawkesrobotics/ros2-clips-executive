@@ -73,9 +73,10 @@ public:
   ConfigFeature();
   ~ConfigFeature();
 
-  bool clips_context_init(const std::string &env_name,
-                          LockSharedPtr<clips::Environment> &clips) override;
-  bool clips_context_destroyed(const std::string &env_name) override;
+  void initialize() override;
+
+  bool clips_env_init(LockSharedPtr<clips::Environment> &env) override;
+  bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
 private:
   void clips_config_load(clips::Environment *env, const std::string &file,
@@ -84,13 +85,13 @@ private:
   std::string getScalarType(const YAML::Node &input_node);
 
   void iterateThroughYamlRecuresively(const YAML::Node &current_level_node,
-                                      const std::string &logger_name,
                                       std::string cfg_prefix,
                                       clips::Environment *env);
 
-  void sequenceIterator(const YAML::Node &input_node,
-                        const std::string &logger_name, std::string &cfg_prefix,
+  void sequenceIterator(const YAML::Node &input_node, std::string &cfg_prefix,
                         clips::Environment *env);
+
+  std::unique_ptr<rclcpp::Logger> logger_;
 };
 
 } // namespace cx
