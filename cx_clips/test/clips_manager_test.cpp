@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  clips_manager_test.cpp
  *
@@ -87,7 +89,6 @@ TEST(clips_manager, create_clips_env) {
   ASSERT_TRUE(manager_client->assertCanRemoveClipsFeatures(features));
 
   ASSERT_TRUE(manager_client->removeClipsFeatures(features));
-
 
   RCLCPP_INFO(testing_node->get_logger(), "TESTING-NODE-END");
 

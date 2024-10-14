@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 #ifndef CX_UTILS__NODETHREAD_HPP_
 #define CX_UTILS__NODETHREAD_HPP_
 

@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  CLIPSEnvManagerClient.hpp
  *
@@ -38,7 +40,7 @@ namespace cx {
 
 class CLIPSEnvManagerClient {
 public:
-  CLIPSEnvManagerClient(const std::string& node_name);
+  CLIPSEnvManagerClient(const std::string &node_name);
   // ~CLIPSEnvManagerClient();
 
   bool createNewClipsEnvironment(const std::string &env_name,

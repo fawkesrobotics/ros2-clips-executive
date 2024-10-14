@@ -20,6 +20,7 @@ find_package(plansys2_lifecycle_manager REQUIRED)
 find_package(cx_feature_manager REQUIRED)
 find_package(cx_clips REQUIRED)
 find_package(cx_clips_executive REQUIRED)
+find_package(cx_ros_comm_gen REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 set(dependencies
@@ -57,6 +58,14 @@ target_compile_definitions(plansys_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIO
 ament_target_dependencies(cx_node ${dependencies})
 target_compile_definitions(cx_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 target_link_libraries(cx_node ClipsNS::libclips_ns)
+
+# generate bindings to interface with ROS messages, such as std_msgs::msg::String
+cx_generate_msg_bindings("std_msgs" "String")
+
+# generate bindings to interface with ROS services, such as std_srvs::srv::SetBool
+cx_generate_srv_bindings("std_srvs" "SetBool")
+# generate bindings to interface with ROS services, such as example_interfaces::action::Fibonacci
+cx_generate_action_bindings("example_interfaces" "Fibonacci")
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

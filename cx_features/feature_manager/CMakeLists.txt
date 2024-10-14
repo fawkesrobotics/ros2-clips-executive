@@ -16,10 +16,9 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(pluginlib REQUIRED)
-find_package(cx_core REQUIRED)
-find_package(cx_clips REQUIRED)
-find_package(cx_config_feature REQUIRED)
+find_package(cx_feature REQUIRED)
 find_package(cx_utils REQUIRED)
+find_package(cx_msgs REQUIRED)
 find_package(clips_vendor REQUIRED)
 find_package(clips REQUIRED)
 
@@ -27,26 +26,22 @@ set(dependencies
   ament_cmake
   rclcpp
   rclcpp_lifecycle
-  cx_core
-  cx_clips
+  cx_feature
   cx_utils
-  cx_config_feature
+  cx_msgs
   pluginlib
 )
 
 set(CX_FEATURES_SOURCES
-  src/cx_features/ClipsFeaturesManager.cpp
+  src/cx_features/clips_feature_manager.cpp
 )
 
 include_directories(include)
 
-add_library(${PROJECT_NAME} SHARED src/ClipsFeaturesManager.cpp)
+add_library(${PROJECT_NAME} SHARED src/clips_feature_manager.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
-
-add_executable(features_node src/features_node.cpp)
-target_link_libraries(features_node ${PROJECT_NAME})
 
 install(
   DIRECTORY include/
@@ -54,26 +49,11 @@ install(
 )
 
 install(TARGETS
-  features_node
   ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
-
-if(BUILD_TESTING)
-  find_package(ament_lint_auto)
-
-  if(ament_lint_auto_FOUND)
-    ament_lint_auto_find_test_dependencies()
-    find_package(ament_cmake_gtest)
-    find_package(cx_clips_executive REQUIRED)
-
-    if(ament_cmake_gtest)
-      add_subdirectory(test)
-    endif()
-  endif()
-endif()
 
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})

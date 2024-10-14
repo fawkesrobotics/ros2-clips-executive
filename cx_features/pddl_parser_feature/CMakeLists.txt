@@ -14,7 +14,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(pluginlib REQUIRED)
-find_package(cx_core REQUIRED)
+find_package(cx_feature REQUIRED)
 find_package(ClipsPddlParser REQUIRED)
 find_package(clips_vendor REQUIRED)
 find_package(clips REQUIRED)
@@ -22,7 +22,7 @@ find_package(clips REQUIRED)
 set(dependencies
   ament_cmake
   rclcpp
-  cx_core
+  cx_feature
   cx_utils
   ClipsPddlParser
   pluginlib
@@ -30,14 +30,14 @@ set(dependencies
   clips
 )
 
-add_library(${PROJECT_NAME} SHARED src/PddlParserFeature.cpp)
+add_library(${PROJECT_NAME} SHARED src/pddl_parser_feature.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 target_link_libraries(${PROJECT_NAME} ClipsPddlParser::clips_pddl_parser
                                       ClipsNS::libclips_ns)
 
 include_directories(include)
 
-pluginlib_export_plugin_description_file(cx_core pddl_parser_feature_plugin.xml)
+pluginlib_export_plugin_description_file(cx_feature pddl_parser_feature_plugin.xml)
 
 # END OF PLUGINS REGISTRATION
 target_compile_definitions(${PROJECT_NAME} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
