@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(cx_clips_executive)
+project(cx_goal_reasoning)
 
 # Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
@@ -18,11 +18,6 @@ set(dependencies
 )
 
 include_directories(include)
-
-set(CLIPS_EXECUTIVE_SOURCES
-  src/cx_clips_executive/ClipsExecutive.cpp
-#   src/cx_clips_executive/
-)
 
 install(DIRECTORY clips DESTINATION share/${PROJECT_NAME}/)
 ament_package()
