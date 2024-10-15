@@ -9,7 +9,7 @@
 
 #include "rclcpp/logging.hpp"
 
-#include "cx_clips_env_manager/CLIPSEnvManagerNode.h"
+#include "cx_clips_env_manager/clips_env_manager.h"
 
 #include "cx_utils/clips_env_context.hpp"
 #include "cx_utils/param_utils.hpp"
@@ -83,7 +83,7 @@ static void log_router_exit(clips::Environment * /*env*/, int /*exit_code*/,
 
 using namespace std::placeholders;
 
-CLIPSEnvManagerNode::CLIPSEnvManagerNode()
+CLIPSEnvManager::CLIPSEnvManager()
     : rclcpp_lifecycle::LifecycleNode("clips_manager") {
   envs_.init_mutex();
   RCLCPP_INFO(get_logger(), "Initialising [%s]...", get_name());
@@ -92,18 +92,17 @@ CLIPSEnvManagerNode::CLIPSEnvManagerNode()
 using CallbackReturn =
     rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-CallbackReturn
-CLIPSEnvManagerNode::on_configure(const rclcpp_lifecycle::State &) {
+CallbackReturn CLIPSEnvManager::on_configure(const rclcpp_lifecycle::State &) {
 
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   create_env_service_ = create_service<cx_msgs::srv::CreateClipsEnv>(
       "clips_manager/create_env",
-      std::bind(&CLIPSEnvManagerNode::create_env_callback, this, _1, _2, _3));
+      std::bind(&CLIPSEnvManager::create_env_callback, this, _1, _2, _3));
 
   destroy_env_service_ = create_service<cx_msgs::srv::DestroyClipsEnv>(
       "clips_manager/destroy_env",
-      std::bind(&CLIPSEnvManagerNode::destroy_env_callback, this, _1, _2, _3));
+      std::bind(&CLIPSEnvManager::destroy_env_callback, this, _1, _2, _3));
 
   std::shared_ptr<EnvsMap> envs = std::make_shared<EnvsMap>();
 
@@ -126,7 +125,7 @@ CLIPSEnvManagerNode::on_configure(const rclcpp_lifecycle::State &) {
 }
 
 CallbackReturn
-CLIPSEnvManagerNode::on_activate(const rclcpp_lifecycle::State &state) {
+CLIPSEnvManager::on_activate(const rclcpp_lifecycle::State &state) {
   // no action on activate for now
   (void)state;
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
@@ -143,7 +142,7 @@ CLIPSEnvManagerNode::on_activate(const rclcpp_lifecycle::State &state) {
 }
 
 CallbackReturn
-CLIPSEnvManagerNode::on_deactivate(const rclcpp_lifecycle::State &state) {
+CLIPSEnvManager::on_deactivate(const rclcpp_lifecycle::State &state) {
   // no action on activate for now
   (void)state;
   {
@@ -164,22 +163,21 @@ CLIPSEnvManagerNode::on_deactivate(const rclcpp_lifecycle::State &state) {
 }
 
 CallbackReturn
-CLIPSEnvManagerNode::on_shutdown(const rclcpp_lifecycle::State &state) {
+CLIPSEnvManager::on_shutdown(const rclcpp_lifecycle::State &state) {
   // no action on activate for now
   (void)state;
   RCLCPP_INFO(get_logger(), "Shut down [%s]...", get_name());
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn
-CLIPSEnvManagerNode::on_error(const rclcpp_lifecycle::State &state) {
+CallbackReturn CLIPSEnvManager::on_error(const rclcpp_lifecycle::State &state) {
   // no action on activate for now
   (void)state;
   RCLCPP_INFO(get_logger(), "Error [%s]...", get_name());
   return CallbackReturn::SUCCESS;
 }
 
-void CLIPSEnvManagerNode::create_env_callback(
+void CLIPSEnvManager::create_env_callback(
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<cx_msgs::srv::CreateClipsEnv::Request> request,
     const std::shared_ptr<cx_msgs::srv::CreateClipsEnv::Response> response) {
@@ -211,7 +209,7 @@ void CLIPSEnvManagerNode::create_env_callback(
   }
 }
 
-void CLIPSEnvManagerNode::destroy_env_callback(
+void CLIPSEnvManager::destroy_env_callback(
     const std::shared_ptr<rmw_request_id_t> request_header,
     const std::shared_ptr<cx_msgs::srv::DestroyClipsEnv::Request> request,
     const std::shared_ptr<cx_msgs::srv::DestroyClipsEnv::Response> response) {
@@ -228,7 +226,7 @@ void CLIPSEnvManagerNode::destroy_env_callback(
 //  * @return map of environment name to a shared lock ptr
 //  */
 // std::map<std::string, LockSharedPtr<clips::Environment>>
-// CLIPSEnvManagerNode::getEnvironments() const {
+// CLIPSEnvManager::getEnvironments() const {
 //   std::map<std::string, LockSharedPtr<clips::Environment>> rv;
 //   for (const auto &envd : envs_) {
 //     rv[envd.first] = envd.second.env;
@@ -237,7 +235,7 @@ void CLIPSEnvManagerNode::destroy_env_callback(
 // }
 //
 // LockSharedPtr<clips::Environment>
-// CLIPSEnvManagerNode::getEnvironmentByName(const std::string &env_name) {
+// CLIPSEnvManager::getEnvironmentByName(const std::string &env_name) {
 //   if (envs_.find(env_name) != envs_.end()) {
 //     // return the environment
 //     return envs_[env_name].env;
@@ -252,7 +250,7 @@ void CLIPSEnvManagerNode::destroy_env_callback(
 
 // --------------- ALL PRIVATE FUNCTION HELPERS ---------------
 
-bool CLIPSEnvManagerNode::delete_env(const std::string &env_name) {
+bool CLIPSEnvManager::delete_env(const std::string &env_name) {
   RCLCPP_WARN(get_logger(), "Deleting '%s' --- Clips Environment...",
               env_name.c_str());
 
@@ -324,7 +322,7 @@ clips::WatchItem get_watch_item_from_string(const std::string &watch_str) {
 }
 
 cx::LockSharedPtr<clips::Environment>
-CLIPSEnvManagerNode::new_env(const std::string &env_name) {
+CLIPSEnvManager::new_env(const std::string &env_name) {
 
   std::shared_ptr<clips::Environment> new_env(clips::CreateEnvironment());
 
@@ -365,61 +363,10 @@ CLIPSEnvManagerNode::new_env(const std::string &env_name) {
   clips::AddRouter(env, (char *)ROUTER_NAME, /*router priority*/
                    40, log_router_query, log_router_print, NULL, NULL,
                    log_router_exit, &context->logger_);
-  // add generic functions
-  // add_functions(env_name);
-
-  // guarded_load(clips, clips_dir_ + "utils.clp");
-  // guarded_load(clips, clips_dir_ + "time.clp");
-  // guarded_load(clips, clips_dir_ + "path.clp");
-
-  // clips::CLIPSValue *ret = NULL;
-  // clips::Eval(clips.get_obj().get(),
-  //             ("(path-add \"" + clips_dir_ + "\")").c_str(), ret);
 
   RCLCPP_INFO(get_logger(), "Initialisied new CLIPS environment: %s",
               env_name.c_str());
   return clips;
 }
 
-// Bool CLIPSEnvManagerNode::guarded_load(LockSharedPtr<clips::Environment>
-// &env,
-//                                        const std::string &filename) {
-//
-//   clips::LoadError res = clips::Load(env.get_obj().get(), filename.c_str());
-//   bool success = (res == clips::LoadError::LE_NO_ERROR);
-//   if (!succeess) {
-//     // destroy_env(env_name);
-//     RCLCPP_ERROR(get_logger(),
-//                  "guarded_load: can't find %s --> Should "
-//                  "throw exception later", filename.c_str());
-//   }
-//   return success;
-// }
-
-// void CLIPSEnvManagerNode::add_functions(const std::string &env_name) {
-//   clips::Environment *env = getEnvironmentByName(env_name).get_obj().get();
-//   clips::AddUDF(
-//       env, "now", "d", 0, 0, NULL,
-//       [](clips::Environment *env, clips::UDFContext *udfc,
-//          clips::UDFValue *out) {
-//         CLIPSEnvManagerNode *instance =
-//             static_cast<CLIPSEnvManagerNode *>(udfc->context);
-//         double currentTime = instance->get_clock()->now().seconds();
-//         out->floatValue = clips::CreateFloat(env, currentTime);
-//       },
-//       "clips_now", this);
-//
-//   clips::AddUDF(
-//       env, "now-systime", "d", 0, 0, NULL,
-//       [](clips::Environment *env, clips::UDFContext * /*udfc*/,
-//          clips::UDFValue *out) {
-//         using namespace std::chrono;
-//         // get system seconds
-//         auto now = time_point_cast<seconds>(system_clock::now());
-//
-//         out->integerValue =
-//             clips::CreateInteger(env, now.time_since_epoch().count());
-//       },
-//       "clips_now_systime", NULL);
-// }
 } // namespace cx

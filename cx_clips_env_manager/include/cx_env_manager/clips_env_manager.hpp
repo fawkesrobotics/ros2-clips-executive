@@ -1,7 +1,7 @@
 // Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
-#ifndef CX_CLIPS__CLIPSENVMANAGERNODE_H_
-#define CX_CLIPS__CLIPSENVMANAGERNODE_H_
+#ifndef CX_CLIPS__CLIPSENVMANAGER_H_
+#define CX_CLIPS__CLIPSENVMANAGER_H_
 
 #include <algorithm>
 #include <list>
@@ -29,13 +29,13 @@ namespace cx {
 class ClipsFeatureManager;
 class ClipsExecutive;
 
-class CLIPSEnvManagerNode : public rclcpp_lifecycle::LifecycleNode {
+class CLIPSEnvManager : public rclcpp_lifecycle::LifecycleNode {
   friend ClipsFeatureManager;
   friend ClipsExecutive;
 
 public:
-  CLIPSEnvManagerNode();
-  // ~CLIPSEnvManagerNode();
+  CLIPSEnvManager();
+  // ~CLIPSEnvManager();
   using CallbackReturn =
       rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
   // using EnvsMap = std::unordered_map<std::string,
@@ -85,4 +85,4 @@ private:
 };
 } // namespace cx
 
-#endif // !CX_CLIPS__CLIPSENVMANAGERNODE_H_
+#endif // !CX_CLIPS__CLIPSENVMANAGER_H_
