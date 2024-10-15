@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 #ifndef CX_CLIPS__CLIPSENVMANAGERNODE_H_
 #define CX_CLIPS__CLIPSENVMANAGERNODE_H_
 

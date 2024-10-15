@@ -37,7 +37,7 @@ set(dependencies
 include_directories(include)
 
 set(CLIPS_SOURCES
-  src/cx_clips/CLIPSEnvManagerNode.cpp
+  src/cx_clips/clips_env_manager.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${CLIPS_SOURCES})
