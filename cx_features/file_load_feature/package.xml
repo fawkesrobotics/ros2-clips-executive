@@ -1,25 +1,24 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>cx_utils</name>
-  <version>0.0.0</version>
+  <name>cx_file_load_feature</name>
+  <version>0.1.0</version>
+  <description>CLIPS feature that can load clips code via batch*.</description>
 
-  <description>Utilities for the ROS2 Clips-Executive</description>
-
-  <maintainer email="doychev@kbsg.rwth-aachen.de">Ivaylo Doychev</maintainer>
+  <maintainer email="viehmann@kbsg.rwth-aachen.de">Tarik Viehmann</maintainer>
 
   <license>GPLv2+ license</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclcpp</depend>
-  <depend>spdlog</depend>
+  <depend>pluginlib</depend>
+  <depend>cx_feature</depend>
+  <depend>cx_utils</depend>
   <depend>clips_vendor</depend>
-
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
+    <cx_feature plugin="${prefix}/file_load_feature_plugin.xml"/>
   </export>
 </package>

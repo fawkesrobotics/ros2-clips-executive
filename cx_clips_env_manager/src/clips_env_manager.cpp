@@ -9,7 +9,7 @@
 
 #include "rclcpp/logging.hpp"
 
-#include "cx_clips_env_manager/clips_env_manager.h"
+#include "cx_clips_env_manager/clips_env_manager.hpp"
 
 #include "cx_utils/clips_env_context.hpp"
 #include "cx_utils/param_utils.hpp"
@@ -97,11 +97,11 @@ CallbackReturn CLIPSEnvManager::on_configure(const rclcpp_lifecycle::State &) {
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   create_env_service_ = create_service<cx_msgs::srv::CreateClipsEnv>(
-      get_name() + "/create_env",
+      std::string(get_name()) + "/create_env",
       std::bind(&CLIPSEnvManager::create_env_callback, this, _1, _2, _3));
 
   destroy_env_service_ = create_service<cx_msgs::srv::DestroyClipsEnv>(
-      get_name() + "/destroy_env",
+      std::string(get_name()) + "/destroy_env",
       std::bind(&CLIPSEnvManager::destroy_env_callback, this, _1, _2, _3));
 
   std::shared_ptr<EnvsMap> envs = std::make_shared<EnvsMap>();

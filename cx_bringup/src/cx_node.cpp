@@ -28,7 +28,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-#include "cx_clips_env_manager/clips_env_manager.h"
+#include "cx_clips_env_manager/clips_env_manager.hpp"
 
 std::shared_ptr<cx::CLIPSEnvManager> clips_env_manager_node;
 std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exe;
