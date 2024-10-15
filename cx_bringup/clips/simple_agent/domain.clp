@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (defrule load-domain
   (executive-init)
   (not (domain-loaded))

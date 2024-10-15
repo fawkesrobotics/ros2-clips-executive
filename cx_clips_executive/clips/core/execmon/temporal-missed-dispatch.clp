@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  temporal-missed-dispatch.clp -
 ;  Check for missed dispatch times in temporal plan execution

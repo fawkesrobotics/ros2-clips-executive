@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  SkillExecution.cpp
  *
@@ -50,7 +52,7 @@ SkillExecution::SkillExecution(const std::string &node_name,
                                const rclcpp::NodeOptions &options,
                                const std::string &namespace_)
     : rclcpp_lifecycle::LifecycleNode(node_name, namespace_, options),
-       exec_rate_(exec_rate), robot_id_(""), executor_id_(node_name) {
+      exec_rate_(exec_rate), robot_id_(""), executor_id_(node_name) {
 
   RCLCPP_INFO(get_logger(), "Initialising executor %s for robot %s",
               node_name.c_str(), robot_id_.c_str());
@@ -113,8 +115,8 @@ void SkillExecution::skill_board_cb(
   case SkillExecutionMsg::REQUEST:
     if (get_current_state().id() ==
             lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE &&
-        !commited_to_skill_ &&
-        robot_id_ == msg->robot_id && executor_id_ == msg->executor_id) {
+        !commited_to_skill_ && robot_id_ == msg->robot_id &&
+        executor_id_ == msg->executor_id) {
       commited_to_skill_ = true;
       send_response(msg);
     }
@@ -122,8 +124,8 @@ void SkillExecution::skill_board_cb(
   case SkillExecutionMsg::CONFIRM:
     if (get_current_state().id() ==
             lifecycle_msgs::msg::State::PRIMARY_STATE_INACTIVE &&
-        commited_to_skill_ &&
-        msg->robot_id == robot_id_ && msg->executor_id == executor_id_) {
+        commited_to_skill_ && msg->robot_id == robot_id_ &&
+        msg->executor_id == executor_id_) {
       action_name_ = msg->action;
       action_parameters_ = msg->action_parameters;
       mapped_action_ = msg->mapped_action;
@@ -133,7 +135,8 @@ void SkillExecution::skill_board_cb(
     }
     break;
   case SkillExecutionMsg::REJECT:
-    if (msg->node_id == get_name() && msg->robot_id == robot_id_ && msg->executor_id == executor_id_) {
+    if (msg->node_id == get_name() && msg->robot_id == robot_id_ &&
+        msg->executor_id == executor_id_) {
       commited_to_skill_ = false;
     }
     break;
@@ -146,8 +149,7 @@ void SkillExecution::skill_board_cb(
     }
     break;
   default:
-    RCLCPP_ERROR(get_logger(), "Message type: %d not recognized!",
-                 msg->type);
+    RCLCPP_ERROR(get_logger(), "Message type: %d not recognized!", msg->type);
     break;
   }
 }
@@ -187,7 +189,7 @@ void SkillExecution::finish_execution(bool success, float progress,
   msg.node_id = get_name();
   msg.action = action_name_;
   msg.action_parameters = action_parameters_;
-  msg.mapped_action + mapped_action_;
+  msg.mapped_action = mapped_action_;
   msg.progress = progress;
   msg.status = status;
   msg.success = success;

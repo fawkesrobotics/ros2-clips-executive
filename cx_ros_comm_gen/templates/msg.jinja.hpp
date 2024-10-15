@@ -26,7 +26,7 @@
 #include <memory>
 #include <string>
 
-#include "cx_core/ClipsFeature.hpp"
+#include "cx_feature/clips_feature.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 #include "cx_utils/NodeThread.hpp"
 
@@ -40,16 +40,15 @@ public:
   {{name_camel}}();
   ~{{name_camel}}();
 
-  void initialise(const std::string &feature_name) override;
+  void initialize() override;
+  void finalize() override;
 
-  bool clips_context_init(const std::string &env_name,
-                          LockSharedPtr<clips::Environment> &clips) override;
-  bool clips_context_destroyed(const std::string &env_name) override;
-
-  std::string getFeatureName() const;
+  bool clips_env_init(LockSharedPtr<clips::Environment> &env) override;
+  bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
 private:
-  std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
+  rclcpp::executors::MultiThreadedExecutor executor_;
+  rclcpp::CallbackGroup::SharedPtr cb_group_;
   std::thread spin_thread_;
   std::map<std::string,
            std::map<std::string,
@@ -82,7 +81,7 @@ clips::UDFValue create_message(clips::Environment *env);
   void unsubscribe_from_topic(clips::Environment *env, const std::string &topic_name);
 
   void topic_callback(const {{message_type}}::SharedPtr msg,
-                      std::string topic_name, std::string env_name);
+                      std::string topic_name, clips::Environment *env);
 };
 
 } // namespace cx

@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;****************************************************************************
 ;  rcll_domain_production.pddl: RoboCup Logistics League Production Model
 ;

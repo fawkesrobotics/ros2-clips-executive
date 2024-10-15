@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  pddl.clp - Interface to a PDDL planner plansys2 planner
 ;
@@ -34,7 +36,7 @@
 
 (deffunction plan-with-psys2 (?goal-id ?goal ?plan-id)
   "Add all available domain objects/facts and then
-   Call the Plansys PDDL planner Client for the given 
+   Call the Plansys PDDL planner Client for the given
    goal-id with the goal given as string."
   (do-for-all-facts ((?d domain-object))
     TRUE
@@ -42,7 +44,7 @@
   )
   (do-for-all-facts ((?f domain-fact))
     TRUE
-    (bind ?pred (str-cat "(" ?f:name)) 
+    (bind ?pred (str-cat "(" ?f:name))
     (foreach ?param-value ?f:param-values
       (printout t "Param-value:" ?param-value crlf)
       (bind ?pred (str-cat ?pred " " ?param-value))
@@ -64,9 +66,9 @@
 
 (defrule pddl-call
   ?g <- (goal (id ?goal-id))
-  ?p <-(pddl-plan 
-          (status NOT-STARTED) 
-          (goal-id ?goal-id) 
+  ?p <-(pddl-plan
+          (status NOT-STARTED)
+          (goal-id ?goal-id)
           (plan-id ?plan-id)
           (goal ?goal)
         )
@@ -81,8 +83,8 @@
   "Check whether the planner finished but has not found a plan."
   ?g <- (goal (id ?goal-id))
   ?pf <- (pddl-plan-feedback (status PLAN-FAILED) (plan-id ?plan-id))
-  ?p <- (pddl-plan 
-          ; (goal-id ?goal-id) 
+  ?p <- (pddl-plan
+          ; (goal-id ?goal-id)
           (plan-id ?plan-id)
         )
   =>
@@ -124,72 +126,3 @@
   (do-for-all-facts ((?a plan-action)) (> ?a:id ?i) (bind ?i ?a:id))
   (return ?i)
 )
-
-
-; (deffunction pddl-call (?goal-id ?goal)
-;   "Call the PDDL planner for the given goal-id with the goal given as string."
-;   (bind ?m
-;     (blackboard-create-msg "PddlGenInterface::pddl-gen" "GenerateMessage")
-;   )
-;   (blackboard-set-msg-field ?m "goal" ?goal)
-;   (printout info "Calling PDDL planner for goal '" ?goal "'" crlf)
-;   (bind ?gen-id (blackboard-send-msg ?m))
-;   (assert (pddl-plan
-;     (goal-id ?goal-id) (goal ?goal) (status GEN-PENDING) (gen-id ?gen-id))
-;   )
-; )
-
-; (defrule pdll-call-psys2
-;   (using-psys2)
-;   =>
-;   (printout t "Calling psys2" crlf)
-;   (plan-with-psys2 TESTGOAL "(and (robot_talk ivo message1 francisco))")
-; )
-
-; (defrule pddl-check-if-generation-running
-;   "Check whether the PDDL generator started."
-;   ?p <- (pddl-plan (status GEN-PENDING) (gen-id ?gen-id))
-;   (PddlGenInterface (id "pddl-gen") (msg_id ?gen-id))
-;   =>
-;   (printout t "PDDL problem generation started for ID " ?gen-id crlf)
-;   (modify ?p (status GEN-RUNNING))
-; )
-
-; (defrule pddl-check-if-generation-finished
-;   "Check whether the PDDL generator finished."
-;   ?p <- (pddl-plan (status GEN-RUNNING) (gen-id ?gen-id))
-;   (PddlGenInterface (id "pddl-gen") (msg_id ?gen-id) (final TRUE))
-;   =>
-;   (printout t "PDDL problem generation finished for ID " ?gen-id crlf)
-;   (modify ?p (status GENERATED))
-; )
-
-; (defrule pddl-start-planner
-;   "Start the actual planner after generating the PDDL problem."
-;   ?p <- (pddl-plan (status GENERATED) (gen-id ?gen-id))
-;   =>
-;   (printout t "Starting to plan " ?gen-id crlf)
-;   (bind ?m
-;     (blackboard-create-msg "PddlPlannerInterface::pddl-planner" "PlanMessage")
-;   )
-;   (bind ?plan-id (blackboard-send-msg ?m))
-;   (modify ?p (plan-id ?plan-id) (status PENDING))
-; )
-
-; (defrule pddl-check-if-planner-running
-;   "Check whether the planner started to plan."
-;   ?p <- (pddl-plan (status PENDING) (plan-id ?plan-id))
-;   (PddlPlannerInterface (id "pddl-planner") (msg_id ?plan-id))
-;   =>
-;   (modify ?p (status RUNNING))
-; )
-
-; (defrule pddl-check-if-planner-finished
-;   "Check whether the planner finished planning."
-;   ?p <- (pddl-plan (status RUNNING) (plan-id ?plan-id))
-;   (PddlPlannerInterface (id "pddl-planner") (msg_id ?plan-id) (final TRUE)
-;     (success TRUE))
-;   =>
-;   (modify ?p (status PLANNED))
-; )
-

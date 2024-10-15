@@ -32,6 +32,8 @@ std::string ClipsFeature::get_feature_name() const { return feature_name_; }
 
 void ClipsFeature::initialize() {}
 
+void ClipsFeature::finalize() {}
+
 void ClipsFeature::initialize(
     const rclcpp_lifecycle::LifecycleNode::WeakPtr parent,
     const std::string &feature_name) {

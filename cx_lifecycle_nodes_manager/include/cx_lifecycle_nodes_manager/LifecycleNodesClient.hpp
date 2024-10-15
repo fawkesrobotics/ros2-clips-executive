@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  LifecycleNodesClient.hpp
  *
@@ -44,7 +46,8 @@ public:
                                 const std::string &managed_node_name);
   ~LifecycleNodesClient();
   uint8_t get_node_state(seconds timeout = seconds(5));
-  bool change_node_state(std::uint8_t transition, seconds timeout = seconds(10));
+  bool change_node_state(std::uint8_t transition,
+                         seconds timeout = seconds(10));
 
 private:
   std::shared_ptr<rclcpp::Client<lifecycle_msgs::srv::GetState>>

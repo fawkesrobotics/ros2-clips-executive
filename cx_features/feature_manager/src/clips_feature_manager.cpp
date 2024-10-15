@@ -2,6 +2,7 @@
 
 #include <map>
 #include <memory>
+#include <ranges>
 #include <string>
 #include <utility>
 
@@ -20,9 +21,7 @@ namespace cx {
 ClipsFeatureManager::ClipsFeatureManager()
     : pg_loader_("cx_feature", "cx::ClipsFeature") {}
 
-ClipsFeatureManager::~ClipsFeatureManager() {
-  RCLCPP_INFO(logger_, "COUNT OF FEATURES: %li", features_.size());
-}
+ClipsFeatureManager::~ClipsFeatureManager() {}
 
 void ClipsFeatureManager::configure(
     const rclcpp_lifecycle::LifecycleNode::WeakPtr &parent,
@@ -140,16 +139,21 @@ void ClipsFeatureManager::deactivate() {
     auto node = parent_.lock();
     node->get_parameter(f.first + ".plugin", feature_plugin);
     loaded_plugin_types.push_back(feature_plugin);
+    f.second->finalize();
   }
   features_.clear();
   for (const auto &f2 : loaded_plugin_types) {
     pg_loader_.unloadLibraryForClass(f2);
   }
+  load_plugin_service_.reset();
+  unload_plugin_service_.reset();
+  list_plugin_service_.reset();
 }
 
 void ClipsFeatureManager::deactivate_env(
     const std::string &env_name, LockSharedPtr<clips::Environment> &env) {
-  for (const auto &plugin : loaded_plugins_[env_name]) {
+  for (const auto &plugin :
+       std::ranges::reverse_view(loaded_plugins_[env_name])) {
     features_[plugin]->clips_env_destroyed(env);
     RCLCPP_INFO(logger_, "[%s] Deactivated!", plugin.c_str());
   }

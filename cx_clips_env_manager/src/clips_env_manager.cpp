@@ -97,11 +97,11 @@ CallbackReturn CLIPSEnvManager::on_configure(const rclcpp_lifecycle::State &) {
   RCLCPP_INFO(get_logger(), "Configuring [%s]...", get_name());
 
   create_env_service_ = create_service<cx_msgs::srv::CreateClipsEnv>(
-      "clips_manager/create_env",
+      get_name() + "/create_env",
       std::bind(&CLIPSEnvManager::create_env_callback, this, _1, _2, _3));
 
   destroy_env_service_ = create_service<cx_msgs::srv::DestroyClipsEnv>(
-      "clips_manager/destroy_env",
+      get_name() + "/destroy_env",
       std::bind(&CLIPSEnvManager::destroy_env_callback, this, _1, _2, _3));
 
   std::shared_ptr<EnvsMap> envs = std::make_shared<EnvsMap>();
@@ -344,7 +344,7 @@ CLIPSEnvManager::new_env(const std::string &env_name) {
       this, env_name + ".log_clips_to_file", rclcpp::ParameterValue(true));
   cx::cx_utils::declare_parameter_if_not_declared(
       this, env_name + ".watch",
-      rclcpp::ParameterValue(std::vector<std::string>{"facts", "rules"}));
+      rclcpp::ParameterValue(std::vector<std::string>{}));
   std::vector<std::string> watch_info;
   get_parameter(env_name + ".watch", watch_info);
   for (const auto &w : watch_info) {

@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ;---------------------------------------------------------------------------
 ;  refbox-comm-init.clp - Initialize RefBox communication
 ;
@@ -19,6 +21,13 @@
 ;
 ; Read the full text in the LICENSE.GPL file in the doc directory.
 ;
+
+(deftemplate timer
+  (slot name)
+  (slot time (type FLOAT))
+  (slot seq (type INTEGER) (default 1))
+)
+
 
 (defrule refbox-init
   "Initialization of refbox related facts."

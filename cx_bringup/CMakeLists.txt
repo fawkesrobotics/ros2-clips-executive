@@ -45,19 +45,18 @@ set(dependencies_psys2
   PkgConfig
 )
 
-add_executable(plansys_node
-  src/plansys2_node.cpp
-)
+# add_executable(plansys_node
+#   src/plansys2_node.cpp
+# )
 
 add_executable(cx_node
   src/cx_node.cpp
 )
-ament_target_dependencies(plansys_node ${dependencies_psys2})
-target_compile_definitions(plansys_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
+# ament_target_dependencies(plansys_node ${dependencies_psys2})
+# target_compile_definitions(plansys_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 ament_target_dependencies(cx_node ${dependencies})
-target_compile_definitions(cx_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
-target_link_libraries(cx_node ClipsNS::libclips_ns)
+target_link_libraries(cx_node ClipsNS::libclips_ns spdlog::spdlog)
 
 # generate bindings to interface with ROS messages, such as std_msgs::msg::String
 cx_generate_msg_bindings("std_msgs" "String")
@@ -75,7 +74,7 @@ endif()
 install(DIRECTORY launch params clips proto DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
-  plansys_node
+  # plansys_node
   cx_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

@@ -1,7 +1,7 @@
 // Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
 /***************************************************************************
- *  ClipsFeature.hpp
+ *  clips_feature.hpp
  *
  *  Created: 14 July 2021
  *  Copyright  2021  Ivaylo Doychev

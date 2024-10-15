@@ -54,7 +54,7 @@ macro(cx_generate_bindings package msg_name type)
   add_library(${feature_name} SHARED ${feature_name}.cpp)
   set_property(TARGET ${feature_name} PROPERTY CXX_STANDARD 20)
   target_link_libraries(${feature_name} ClipsNS::libclips_ns)
-  ament_target_dependencies(${feature_name} cx_core pluginlib ${package} ${extra_deps})
+  ament_target_dependencies(${feature_name} cx_feature pluginlib ${package} ${extra_deps})
   install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/${feature_name}.hpp
     DESTINATION include/
@@ -75,7 +75,7 @@ macro(cx_generate_bindings package msg_name type)
   # this is just the relevant part from
   # pluginlib_export_plugin_description_file without checking for existence of the file as it checks in src dir only.
   # As the macro generates the xml file, it is located in build dir instead
-  set(plugin_category cx_core)
+  set(plugin_category cx_feature)
   set(relative_filename ${feature_name}_plugin.xml)
   set(relative_dir "")
   set(__PLUGINLIB_CATEGORY_CONTENT__${plugin_category}

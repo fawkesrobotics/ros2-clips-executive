@@ -23,9 +23,10 @@
 #include <memory>
 #include <string>
 
-#include "cx_core/ClipsFeature.hpp"
+#include "cx_feature/clips_feature.hpp"
 #include "{{name_snake}}.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
+#include "cx_utils/clips_env_context.hpp"
 
 // To export as plugin
 #include "pluginlib/class_list_macros.hpp"
@@ -36,45 +37,75 @@ namespace cx {
 
 {{name_camel}}::{{name_camel}}()
     : Node("{{name_snake}}_msg_feature_node") {}
-{{name_camel}}::~{{name_camel}}() {}
-
-std::string {{name_camel}}::getFeatureName() const {
-  return clips_feature_name;
+{{name_camel}}::~{{name_camel}}() {
 }
 
-void {{name_camel}}::initialise(const std::string &feature_name) {
-  clips_feature_name = feature_name;
+void {{name_camel}}::finalize() {
+  if(subscriptions_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li subscription(s), cleaning up ...", subscriptions_.size());
+    subscriptions_.clear();
+  }
+  if(publishers_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li publisher(s), cleaning up ...", publishers_.size());
+    publishers_.clear();
+  }
+  executor_.remove_node(this->get_node_base_interface());
+  if(messages_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li message(s), cleaning up ...", messages_.size());
+    messages_.clear();
+  }
 
-  spin_thread_ =
-      std::thread([this]() { rclcpp::spin(this->get_node_base_interface()); });
+  // Stop the spin thread and join it
+  if (spin_thread_.joinable()) {
+      executor_.cancel();
+      spin_thread_.join();
+  }
 }
 
-bool {{name_camel}}::clips_context_destroyed(
-    const std::string &env_name) {
 
-  RCLCPP_INFO(get_logger(),
+void {{name_camel}}::initialize() {
+   cb_group_ = this->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
+  executor_.add_node(this->get_node_base_interface());
+  spin_thread_ = std::thread([this]() {
+      executor_.spin();
+    });
+}
+
+bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env) {
+
+  RCLCPP_DEBUG(get_logger(),
               "Destroying clips context!");
   for(const auto& fun : function_names_) {
-     clips::RemoveUDF(envs_[env_name].get_obj().get(), fun.c_str());
+     clips::RemoveUDF(env.get_obj().get(), fun.c_str());
   }
-  clips::Deftemplate *curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-subscriber");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-publisher");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-msg");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  envs_.erase(env_name);
-
+  clips::Deftemplate *curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-subscriber");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-subscriber cant be undefined");
+  }
+  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-publisher");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-publisher cant be undefined");
+  }
+  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-msg");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-msg cant be undefined");
+  }
   return true;
 }
 
-bool {{name_camel}}::clips_context_init(const std::string &env_name,
-    LockSharedPtr<clips::Environment> &clips) {
-  RCLCPP_INFO(get_logger(),
-              "Initialising context for feature %s",
-              clips_feature_name.c_str());
-
-  envs_[env_name] = clips;
+bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
+  RCLCPP_DEBUG(get_logger(),
+              "Initializing context for feature %s",
+              feature_name_.c_str());
 
 {% set template_part = "registration" %}
 {% set template_type = "" %}
@@ -86,7 +117,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-msg-create";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "e", 0, 0, "",
+    env.get_obj().get(), fun_name.c_str(), "e", 0, 0, "",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue *out) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -98,7 +129,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-create-publisher";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";sy",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";sy",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -113,7 +144,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-destroy-publisher";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";sy",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";sy",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -128,7 +159,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-publish";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;sy",
+    env.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;sy",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -144,7 +175,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-msg-destroy";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";e",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";e",
     [](clips::Environment */*env*/, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -159,7 +190,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-create-subscriber";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
     [](clips::Environment *env, clips::UDFContext *udfc, clips::UDFValue * /*out*/) {
         auto *instance = static_cast<{{name_camel}} *>(udfc->context);
         clips::UDFValue topic;
@@ -173,7 +204,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-destroy-subscriber";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
     [](clips::Environment *env, clips::UDFContext *udfc, clips::UDFValue * /*out*/) {
         auto *instance = static_cast<{{name_camel}} *>(udfc->context);
         clips::UDFValue topic;
@@ -186,11 +217,11 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
 
 
   // add fact templates
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-subscriber \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-subscriber \
             (slot topic (type STRING)))");
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-publisher \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-publisher \
             (slot topic (type STRING)))");
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-msg \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-msg \
             (slot topic (type STRING) ) \
             (slot msg-ptr (type EXTERNAL-ADDRESS)) \
             )");
@@ -206,63 +237,21 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
 {% include 'set_field.jinja.cpp' with context %}
 
 void {{name_camel}}::publish_to_topic(clips::Environment *env, {{message_type}} *msg, const std::string &topic_name) {
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(get_logger(),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
-  publishers_[env_name][topic_name]->publish(*msg);
+  auto context = CLIPSEnvContext::get_context(env);
+  publishers_[context->env_name_][topic_name]->publish(*msg);
 }
 
 void {{name_camel}}::create_new_publisher(clips::Environment *env, const std::string &topic_name) {
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(get_logger(),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
-  publishers_[env_name][topic_name] =
+  auto context = CLIPSEnvContext::get_context(env);
+  publishers_[context->env_name_][topic_name] =
       this->create_publisher<{{message_type}}>(topic_name, 10);
-    clips::AssertString(envs_[env_name].get_obj().get(), ("({{name_kebab}}-publisher (topic \"" +
+    clips::AssertString(env, ("({{name_kebab}}-publisher (topic \"" +
                                  topic_name + "\"))").c_str());
 }
 
 void {{name_camel}}::destroy_publisher(clips::Environment *env, const std::string &topic_name) {
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(get_logger(),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
-
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
   auto outer_it = publishers_.find(env_name);
   if (outer_it != publishers_.end()) {
       // Check if topic_name exists in the inner map
@@ -281,64 +270,40 @@ void {{name_camel}}::destroy_publisher(clips::Environment *env, const std::strin
 
 void {{name_camel}}::subscribe_to_topic(clips::Environment *env,
     const std::string &topic_name) {
-  RCLCPP_INFO(rclcpp::get_logger(clips_feature_name), "Subscribing to topic %s",
+  RCLCPP_DEBUG(rclcpp::get_logger(feature_name_), "Subscribing to topic %s",
               topic_name.c_str());
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(rclcpp::get_logger(clips_feature_name),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
 
   auto it = subscriptions_[env_name].find(topic_name);
 
   if (it != subscriptions_[env_name].end()) {
-    RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+    RCLCPP_WARN(rclcpp::get_logger(feature_name_),
                 "Already subscribed to topic %s", topic_name.c_str());
   } else {
-    RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
                 "Creating subscription to topic %s", topic_name.c_str());
+	auto options = rclcpp::SubscriptionOptions();
+	options.callback_group = cb_group_;
     subscriptions_[env_name][topic_name] =
         this->create_subscription<{{message_type}}>(
-            topic_name, 10, [this,topic_name, env_name](const {{message_type}}::SharedPtr msg) {
-              topic_callback(msg, topic_name, env_name);
-            });
-    clips::AssertString(envs_[env_name].get_obj().get(), ("({{name_kebab}}-subscriber (topic \"" +
+            topic_name, 10, [this,topic_name,env](const {{message_type}}::SharedPtr msg) {
+              topic_callback(msg, topic_name, env);
+            }, options);
+    clips::AssertString(env, ("({{name_kebab}}-subscriber (topic \"" +
                                  topic_name + "\"))").c_str());
   }
 }
 
 void {{name_camel}}::unsubscribe_from_topic(clips::Environment *env,
     const std::string &topic_name) {
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(rclcpp::get_logger(clips_feature_name),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
 
   auto it = subscriptions_[env_name].find(topic_name);
 
   if (it != subscriptions_[env_name].end()) {
-    RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
                 "Unsubscribing from topic %s", topic_name.c_str());
     subscriptions_[env_name].erase(topic_name);
   }
@@ -347,9 +312,9 @@ void {{name_camel}}::unsubscribe_from_topic(clips::Environment *env,
 }
 
 void {{name_camel}}::topic_callback(
-    const {{message_type}}::SharedPtr msg, std::string topic_name,
-    std::string env_name) {
-  cx::LockSharedPtr<clips::Environment> &clips = envs_[env_name];
+    const {{message_type}}::SharedPtr msg, std::string topic_name, clips::Environment *env) {
+  auto context = CLIPSEnvContext::get_context(env);
+  cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
   std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
   messages_[msg.get()] = msg;
 

@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ; The SUCCEED-SECOND-TRY fails on the first try, and succeeds
 ; on the second. It keeps number of tries in meta slot.
 

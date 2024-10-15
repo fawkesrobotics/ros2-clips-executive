@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (deftemplate goal-meta
 	(slot goal-id (type SYMBOL))
 	(slot num-tries (type INTEGER))

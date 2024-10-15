@@ -25,9 +25,10 @@
 #include <memory>
 #include <string>
 
-#include "cx_core/ClipsFeature.hpp"
+#include <cx_feature/clips_feature.hpp>
 #include "{{name_snake}}.hpp"
-#include "cx_utils/LockSharedPtr.hpp"
+#include <cx_utils/LockSharedPtr.hpp>
+#include <cx_utils/clips_env_context.hpp>
 
 // To export as plugin
 #include "pluginlib/class_list_macros.hpp"
@@ -43,7 +44,10 @@ namespace cx {
       std::function<void()> task;
       {
           std::unique_lock<std::mutex> lock(queue_mutex_);
-          cv_.wait(lock, [&] { return !task_queue_.empty(); });
+          cv_.wait(lock, [&] { return !task_queue_.empty() || stop_flag_; });
+          if(stop_flag_) {
+            continue;
+          }
           task = std::move(task_queue_.front());
           task_queue_.pop();
       }
@@ -52,57 +56,120 @@ namespace cx {
 }
 
 {{name_camel}}::~{{name_camel}}() {
+}
+
+void {{name_camel}}::finalize() {
   stop_flag_ = true;
   cv_.notify_all();
 
   if (clips_worker_thread_.joinable()) {
       clips_worker_thread_.join();
   }
+  if(clients_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li client(s), cleaning up ...", clients_.size());
+    clients_.clear();
+  }
+  if(servers_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li server(s), cleaning up ...", servers_.size());
+    servers_.clear();
+  }
+  executor_.remove_node(this->get_node_base_interface());
+  if(results_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li result(s), cleaning up ...", results_.size());
+    results_.clear();
+  }
+  if(feedbacks_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li feedback(s), cleaning up ...", feedbacks_.size());
+    feedbacks_.clear();
+  }
+  if(const_feedbacks_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li const feedback(s), cleaning up ...", const_feedbacks_.size());
+  }
+  if(goals_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li goal(s), cleaning up ...", goals_.size());
+    goals_.clear();
+  }
+  if(client_goal_handles_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li client_goal_handle(s), cleaning up ...", client_goal_handles_.size());
+    client_goal_handles_.clear();
+  }
+  if(server_goal_handles_.size() > 0) {
+    RCLCPP_WARN(get_logger(), "Found %li server_goal_handle(s), cleaning up ...", server_goal_handles_.size());
+    server_goal_handles_.clear();
+  }
+
+  // Stop the spin thread and join it
+  if (spin_thread_.joinable()) {
+      executor_.cancel();
+      spin_thread_.join();
+  }
 }
 
-std::string {{name_camel}}::getFeatureName() const {
-  return clips_feature_name;
+
+void {{name_camel}}::initialize() {
+   cb_group_ = this->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
+  executor_.add_node(this->get_node_base_interface());
+  spin_thread_ = std::thread([this]() {
+      executor_.spin();
+    });
 }
 
-void {{name_camel}}::initialise(const std::string &feature_name) {
-  clips_feature_name = feature_name;
+bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env) {
 
-  spin_thread_ =
-      std::thread([this]() { rclcpp::spin(this->get_node_base_interface()); });
-}
-
-bool {{name_camel}}::clips_context_destroyed(
-    const std::string &env_name) {
-
-  RCLCPP_INFO(get_logger(),
+  RCLCPP_DEBUG(get_logger(),
               "Destroying clips context!");
   for(const auto& fun : function_names_) {
-     clips::RemoveUDF(envs_[env_name].get_obj().get(), fun.c_str());
+     clips::RemoveUDF(env.get_obj().get(), fun.c_str());
   }
-  clips::Deftemplate *curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-client");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-server");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-goal-response");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-goal-feedback");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-wrapped-result");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  curr_tmpl = clips::FindDeftemplate(envs_[env_name].get_obj().get(), "{{name_kebab}}-accepted-goal");
-  clips::Undeftemplate(curr_tmpl, envs_[env_name].get_obj().get());
-  envs_.erase(env_name);
-
+  clips::Deftemplate *curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-client");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-client can not be undefined");
+  }
+  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-server");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-server can not be undefined");
+  }
+  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-goal-response");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-goal-response can not be undefined");
+  }
+  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-goal-feedback");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-goal-feedback can not be undefined");
+  }
+  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-wrapped-result");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-wrapped-result can not be undefined");
+  }
+  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-accepted-goal");
+  if(curr_tmpl) {
+    clips::Undeftemplate(curr_tmpl, env.get_obj().get());
+  } else {
+    RCLCPP_WARN(get_logger(),
+              "{{name_kebab}}-accepted-goal can not be undefined");
+  }
   return true;
 }
 
-bool {{name_camel}}::clips_context_init(const std::string &env_name,
-    LockSharedPtr<clips::Environment> &clips) {
+bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   RCLCPP_INFO(get_logger(),
               "Initialising context for feature %s",
-              clips_feature_name.c_str());
-
-  envs_[env_name] = clips;
+              feature_name_.c_str());
 
 {% set template_part = "registration" %}
 {% set template_type = "Goal" %}
@@ -125,7 +192,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-create-server";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";sy",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";sy",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -140,7 +207,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-destroy-server";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";sy",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";sy",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -155,7 +222,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-create-client";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
     [](clips::Environment *env, clips::UDFContext *udfc, clips::UDFValue * /*out*/) {
         auto *instance = static_cast<{{name_camel}} *>(udfc->context);
         clips::UDFValue server_name;
@@ -169,7 +236,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-destroy-client";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
+    env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
     [](clips::Environment *env, clips::UDFContext *udfc, clips::UDFValue * /*out*/) {
         auto *instance = static_cast<{{name_camel}} *>(udfc->context);
         clips::UDFValue server_name;
@@ -183,7 +250,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-send-goal";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;sy",
+    env.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;sy",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -199,7 +266,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-server-goal-handle-abort";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;e",
+    env.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;e",
     [](clips::Environment * /*env*/, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -219,7 +286,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-server-goal-handle-succeed";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;e",
+    env.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;e",
     [](clips::Environment * /*env*/, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -239,7 +306,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-server-goal-handle-canceled";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;e",
+    env.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;e",
     [](clips::Environment * /*env*/, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -259,7 +326,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-server-goal-handle-get-goal";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "e", 1, 1, ";e",
+    env.get_obj().get(), fun_name.c_str(), "e", 1, 1, ";e",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue *out) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -277,7 +344,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-server-goal-handle-get-goal-id";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "m", 1, 1, ";e",
+    env.get_obj().get(), fun_name.c_str(), "m", 1, 1, ";e",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue *out) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -315,7 +382,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-server-goal-handle-publish-feedback";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;e",
+    env.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;e",
     [](clips::Environment * /*env*/, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -334,7 +401,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-client-goal-handle-get-goal-id";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "m", 1, 1, ";e",
+    env.get_obj().get(), fun_name.c_str(), "m", 1, 1, ";e",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue *out) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -352,7 +419,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-client-goal-handle-get-goal-stamp";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "d", 1, 1, ";e",
+    env.get_obj().get(), fun_name.c_str(), "d", 1, 1, ";e",
     [](clips::Environment *env, clips::UDFContext *udfc,
        clips::UDFValue *out) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -370,7 +437,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-client-goal-handle-destroy";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "d", 1, 1, ";e",
+    env.get_obj().get(), fun_name.c_str(), "d", 1, 1, ";e",
     [](clips::Environment */*env*/, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -385,7 +452,7 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
   fun_name = "{{name_kebab}}-server-goal-handle-destroy";
   function_names_.insert(fun_name);
   clips::AddUDF(
-    clips.get_obj().get(), fun_name.c_str(), "d", 1, 1, ";e",
+    env.get_obj().get(), fun_name.c_str(), "d", 1, 1, ";e",
     [](clips::Environment */*env*/, clips::UDFContext *udfc,
        clips::UDFValue * /*out*/) {
       auto *instance = static_cast<{{name_camel}} *>(udfc->context);
@@ -398,26 +465,26 @@ bool {{name_camel}}::clips_context_init(const std::string &env_name,
     "server_goal_handle_destroy", this);
 
   // add fact templates
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-client \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-client \
             (slot server (type STRING)))");
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-server \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-server \
             (slot name (type STRING)))");
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-goal-response \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-goal-response \
             (slot server (type STRING) ) \
             (slot client-goal-handle-ptr (type EXTERNAL-ADDRESS)) \
             )");
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-goal-feedback \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-goal-feedback \
             (slot server (type STRING) ) \
             (slot client-goal-handle-ptr (type EXTERNAL-ADDRESS)) \
             (slot feedback-ptr (type EXTERNAL-ADDRESS)) \
             )");
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-wrapped-result \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-wrapped-result \
             (slot server (type STRING) ) \
             (slot goal-id (type STRING)) \
             (slot code (type SYMBOL)) \
             (slot result-ptr (type EXTERNAL-ADDRESS)) \
             )");
-  clips::Build(clips.get_obj().get(),"(deftemplate {{name_kebab}}-accepted-goal \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-accepted-goal \
             (slot server (type STRING) ) \
             (slot server-goal-handle-ptr (type EXTERNAL-ADDRESS)) \
             )");
@@ -459,32 +526,26 @@ void {{name_camel}}::feedback_destroy({{message_type}}::Feedback *fb) {
 
 void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *goal, const std::string &server_name) {
   using namespace std::chrono_literals;
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(get_logger(),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
-
    // Handle the request asynchronously to not block clips engine potentially endlessly
-  std::thread([this, goal, server_name, env_name]() {
+  std::thread([this, env, goal, server_name]() {
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
+  bool print_warning = true;
   while (!clients_[env_name][server_name]->wait_for_action_server(1s)) {
     if (!rclcpp::ok()) {
       RCLCPP_ERROR(get_logger(), "Interrupted while waiting for the server. Exiting.");
       return;
     }
-    RCLCPP_INFO(get_logger(), "server %s not available, waiting again...", server_name.c_str());
+    if(print_warning) {
+      RCLCPP_WARN(get_logger(), "server %s not available, start waiting", server_name.c_str());
+      print_warning = false;
+    }
+    RCLCPP_DEBUG(get_logger(), "server %s not available, waiting again...", server_name.c_str());
   }
-  cx::LockSharedPtr<clips::Environment> &clips = envs_[env_name];
+  if(!print_warning) {
+      RCLCPP_INFO(get_logger(), "server %s is finally reachable", server_name.c_str());
+  }
+  cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
    auto send_goal_options = rclcpp_action::Client<{{message_type}}>::SendGoalOptions();
   send_goal_options.goal_response_callback = [this, &clips, server_name](const std::shared_ptr<rclcpp_action::ClientGoalHandle<{{message_type}}>> &goal_handle) {
     task_queue_.push([this, &clips, server_name, goal_handle]() {
@@ -509,7 +570,6 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
     std::lock_guard<std::mutex> lock(queue_mutex_);
     task_queue_.push([this, &clips, server_name, goal_handle, feedback]() {
       // Enqueue the task to avoid directly locking the handle_mutex_ in a callback
-    std::lock_guard<std::mutex> lock(queue_mutex_);
       std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
       const_feedbacks_.try_emplace(const_cast<void *>(static_cast<const void*>(feedback.get())), feedback);
       client_goal_handles_.try_emplace(goal_handle.get(), goal_handle);
@@ -550,24 +610,12 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
 }
 
 void {{name_camel}}::create_new_server(clips::Environment *env, const std::string &server_name) {
-  bool found_env = false;
-  std::string env_name;
 
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(get_logger(),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
-  auto handle_goal = [this, env_name, server_name](const rclcpp_action::GoalUUID & uuid,
+  auto handle_goal = [this, env, server_name](const rclcpp_action::GoalUUID & uuid,
       std::shared_ptr<const {{message_type}}::Goal> goal) {
-    cx::LockSharedPtr<clips::Environment> &clips = envs_[env_name];
+    auto context = CLIPSEnvContext::get_context(env);
+    std::string env_name = context->env_name_;
+    cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     clips::Deffunction *dec_fun = clips::FindDeffunction(clips.get_obj().get(),"{{name_kebab}}-handle-goal-callback");
     if(!dec_fun) {
@@ -584,9 +632,10 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     clips::FCBDispose(fcb);
     return static_cast<rclcpp_action::GoalResponse>(ret.integerValue->contents);
   };
-  auto handle_cancel = [this, env_name, server_name](const std::shared_ptr<rclcpp_action::ServerGoalHandle<{{message_type}}>> goal_handle) {
-
-    cx::LockSharedPtr<clips::Environment> &clips = envs_[env_name];
+  auto handle_cancel = [this, env, server_name](const std::shared_ptr<rclcpp_action::ServerGoalHandle<{{message_type}}>> goal_handle) {
+    auto context = CLIPSEnvContext::get_context(env);
+    std::string env_name = context->env_name_;
+    cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     clips::Deffunction *dec_fun = clips::FindDeffunction(clips.get_obj().get(),"{{name_kebab}}-cancel-goal-callback");
     if(!dec_fun) {
@@ -606,8 +655,10 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     return static_cast<rclcpp_action::CancelResponse>(ret.integerValue->contents);
   };
 
-  auto handle_accepted = [this, env_name, server_name](const std::shared_ptr<rclcpp_action::ServerGoalHandle<{{message_type}}>> goal_handle) {
-    cx::LockSharedPtr<clips::Environment> &clips = envs_[env_name];
+  auto handle_accepted = [this, env, server_name](const std::shared_ptr<rclcpp_action::ServerGoalHandle<{{message_type}}>> goal_handle) {
+    auto context = CLIPSEnvContext::get_context(env);
+    std::string env_name = context->env_name_;
+    cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     // store the goal handle to ensure it is not cleaned up implicitly
     server_goal_handles_.try_emplace(goal_handle.get(),goal_handle);
@@ -617,26 +668,15 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     clips::FBAssert(fact_builder);
     clips::FBDispose(fact_builder);
   };
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
   servers_[env_name][server_name] =
       rclcpp_action::create_server<{{message_type}}>(this, server_name, handle_goal, handle_cancel, handle_accepted);
 }
 
 void {{name_camel}}::destroy_server(clips::Environment *env, const std::string &server_name) {
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(get_logger(),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
 
   auto outer_it = servers_.find(env_name);
   if (outer_it != servers_.end()) {
@@ -658,58 +698,32 @@ void {{name_camel}}::destroy_server(clips::Environment *env, const std::string &
 
 void {{name_camel}}::create_new_client(clips::Environment *env,
     const std::string &server_name) {
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(rclcpp::get_logger(clips_feature_name),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
 
   auto it = clients_[env_name].find(server_name);
 
   if (it != clients_[env_name].end()) {
-    RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+    RCLCPP_WARN(rclcpp::get_logger(feature_name_),
                 "There already exists a client for server %s", server_name.c_str());
   } else {
-    RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
                 "Creating client for server %s", server_name.c_str());
     clients_[env_name][server_name] =
         rclcpp_action::create_client<{{message_type}}>(this,server_name);
-    clips::AssertString(envs_[env_name].get_obj().get(), ("({{name_kebab}}-client (server \"" + server_name + "\"))").c_str());
+    clips::AssertString(env, ("({{name_kebab}}-client (server \"" + server_name + "\"))").c_str());
   }
 }
 
 void {{name_camel}}::destroy_client(clips::Environment *env,
     const std::string &server_name) {
-  bool found_env = false;
-  std::string env_name;
-
-  for (auto &entry : envs_) {
-    if (entry.second.get_obj().get() == env) {
-      env_name = entry.first;
-      found_env = true;
-      break;
-    }
-  }
-  if (!found_env) {
-    RCLCPP_ERROR(rclcpp::get_logger(clips_feature_name),
-                 "Unable to determine environment from raw pointer");
-    return;
-  }
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
 
   auto it = clients_[env_name].find(server_name);
 
   if (it != clients_[env_name].end()) {
-    RCLCPP_INFO(rclcpp::get_logger(clips_feature_name),
+    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
                 "Destroying client for server %s", server_name.c_str());
     clients_[env_name].erase(server_name);
   }

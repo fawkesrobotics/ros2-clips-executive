@@ -31,6 +31,8 @@ public:
 
   /// Called once for each feature when it is loaded.
   virtual void initialize();
+  /// Called once for each feature when it is unloaded.
+  virtual void finalize();
 
   /// Called after initialize once for every managed Clips environment.
   /**

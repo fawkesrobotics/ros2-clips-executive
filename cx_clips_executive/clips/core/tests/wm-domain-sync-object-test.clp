@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 ; Start with echo "(batch wm-domain-sync-object-test.clp)" | clips | less
 
 (load* "../../../clips/clips/utils.clp")

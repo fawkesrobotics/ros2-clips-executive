@@ -1,4 +1,6 @@
 
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (defrule action-selection-select
 	?pa <- (plan-action (plan-id ?plan-id) (id ?id) (state FORMULATED)
 											(action-name ?action-name))

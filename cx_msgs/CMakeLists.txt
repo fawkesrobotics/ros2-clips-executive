@@ -28,6 +28,9 @@ set(SERVICES
   "srv/ClipsRemoveFeatures.srv"
   "srv/PddlGenInterfaceSrv.srv"
   "srv/OpenInterface.srv"
+  "srv/LoadCLIPSPlugin.srv"
+  "srv/ListCLIPSPlugin.srv"
+  "srv/UnloadCLIPSPlugin.srv"
 )
 
 # set(ACTIONS

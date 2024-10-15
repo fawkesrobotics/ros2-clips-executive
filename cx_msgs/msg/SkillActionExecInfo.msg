@@ -18,4 +18,3 @@ string error_msg
 
 builtin_interfaces/Time start_stamp
 builtin_interfaces/Time status_stamp
-

@@ -1,3 +1,5 @@
+; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 (deffacts blocksworld
   "A simple blocksworld domain"
   (domain-object-type (name block) (super-type object))
