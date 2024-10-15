@@ -19,7 +19,7 @@
   <depend>rosidl_default_generators</depend>
   <depend>cx_msgs</depend>
   <depend>cx_utils</depend>
-  <depend>cx_clips</depend>
+  <depend>cx_clips_env_manager</depend>
   <depend>clips_vendor</depend>
 
   <test_depend>ament_lint_common</test_depend>

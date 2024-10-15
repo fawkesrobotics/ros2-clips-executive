@@ -9,7 +9,7 @@
 
 #include "rclcpp/logging.hpp"
 
-#include "cx_clips/CLIPSEnvManagerNode.h"
+#include "cx_clips_env_manager/CLIPSEnvManagerNode.h"
 
 #include "cx_utils/clips_env_context.hpp"
 #include "cx_utils/param_utils.hpp"

@@ -4,7 +4,7 @@ This package offers a lifecycle node that handles the dynamic loading of CLIPS f
 ## Usage
 A feature manager node is configured through it's parameters that specify the registered features that should be loaded.
 
-It is tightly coupled with the CLIPS environment manager from the *cx_clips* package.
+It is tightly coupled with the CLIPS environment manager from the *cx_clips_env_manager* package.
 The feature manager is responsible for loading and unloading of features as well as providing interfaces to load and unload features. These interfaces are provided to the environments provided by the environment manager.
 
 Create an environment manager first, then create the feature manager and pass a pointer to the environment manager to it using the `pre_configure()` function:

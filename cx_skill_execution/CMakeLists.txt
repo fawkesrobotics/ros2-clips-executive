@@ -19,7 +19,7 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
-find_package(cx_clips REQUIRED)
+find_package(cx_clips_env_manager REQUIRED)
 find_package(clips_vendor REQUIRED)
 find_package(clips REQUIRED)
 
@@ -29,7 +29,7 @@ set(dependencies
   rclcpp_action
   rclcpp_lifecycle
   lifecycle_msgs
-  cx_clips
+  cx_clips_env_manager
   cx_msgs
   cx_utils
 )

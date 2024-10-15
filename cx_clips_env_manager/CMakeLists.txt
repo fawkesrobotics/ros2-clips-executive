@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(cx_clips)
+project(cx_clips_env_manager)
 
 # Default to C++20
 if(NOT CMAKE_CXX_STANDARD)
@@ -37,7 +37,7 @@ set(dependencies
 include_directories(include)
 
 set(CLIPS_SOURCES
-  src/cx_clips/clips_env_manager.cpp
+  src/cx_clips_env_manager/clips_env_manager.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${CLIPS_SOURCES})

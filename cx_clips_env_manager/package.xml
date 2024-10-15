@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>cx_clips</name>
+  <name>cx_clips_env_manager</name>
   <version>0.1.0</version>
-  <description>Manager node for CLIPS environments.</description>
+  <description>Lifecycle node for managing CLIPS environments.</description>
 
   <maintainer email="viehmann@kbsg.rwth-aachen.de">Tarik Viehmann</maintainer>
 

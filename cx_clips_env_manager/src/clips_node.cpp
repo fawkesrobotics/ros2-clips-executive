@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "cx_clips/CLIPSEnvManagerNode.h"
+#include "cx_clips_env_manager/clips_env_manager.h"
 #include "rclcpp/rclcpp.hpp"
 
 int main(int argc, const char **argv) {

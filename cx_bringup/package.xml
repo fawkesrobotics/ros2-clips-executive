@@ -19,7 +19,7 @@
   <depend>plansys2_planner</depend>
   <depend>plansys2_lifecycle_manager</depend>
   <depend>cx_feature_manager</depend>
-  <depend>cx_clips</depend>
+  <depend>cx_clips_env_manager</depend>
   <depend>cx_clips_executive</depend>
   <depend>pkg-config</depend>
 
