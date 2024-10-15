@@ -78,3 +78,11 @@
 	(if (> (str-length ?str) 0) then (bind ?rv (append$ ?rv ?str)))
 	(return ?rv)
 )
+
+(deffunction time-diff (?t1 ?t2)
+  (return (- ?t1 ?t2))
+)
+
+(deffunction timeout (?now ?time ?timeout)
+  (return (> (time-diff ?now ?time) ?timeout))
+)

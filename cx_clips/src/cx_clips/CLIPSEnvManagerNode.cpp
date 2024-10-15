@@ -7,8 +7,6 @@
 #include <string>
 #include <utility>
 
-#include <ament_index_cpp/get_package_share_directory.hpp>
-
 #include "rclcpp/logging.hpp"
 
 #include "cx_clips/CLIPSEnvManagerNode.h"
@@ -148,7 +146,19 @@ CallbackReturn
 CLIPSEnvManagerNode::on_deactivate(const rclcpp_lifecycle::State &state) {
   // no action on activate for now
   (void)state;
+  {
+    std::scoped_lock envs_lock(*(envs_.get_mutex_instance()));
+    for (auto &env : *(envs_.get_obj())) {
+      std::scoped_lock env_lock(*(env.second.get_mutex_instance()));
+      clips::AssertString(env.second.get_obj().get(), "(executive-finalize)");
+
+      clips::RefreshAllAgendas(env.second.get_obj().get());
+      clips::Run(env.second.get_obj().get(), -1);
+    }
+  }
   feature_manager_.deactivate();
+  create_env_service_.reset();
+  destroy_env_service_.reset();
   RCLCPP_INFO(get_logger(), "Deactivated [%s]...", get_name());
   return CallbackReturn::SUCCESS;
 }

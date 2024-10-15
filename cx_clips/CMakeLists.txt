@@ -12,11 +12,8 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(ament_index_cpp REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
-find_package(PkgConfig REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 find_package(cx_msgs REQUIRED)
 find_package(cx_utils REQUIRED)
@@ -31,19 +28,15 @@ set(dependencies
   rclcpp
   rclcpp_action
   rclcpp_lifecycle
-  PkgConfig
   lifecycle_msgs
   cx_msgs
   cx_utils
   cx_feature_manager
-
-  # cx_features
 )
 
 include_directories(include)
 
 set(CLIPS_SOURCES
-  src/cx_clips/CLIPSEnvManagerClient.cpp
   src/cx_clips/CLIPSEnvManagerNode.cpp
 )
 
@@ -57,25 +50,10 @@ ament_target_dependencies(clips_node ${dependencies})
 target_link_libraries(clips_node ${PROJECT_NAME})
 target_link_libraries(clips_node spdlog::spdlog ClipsNS::libclips_ns)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto)
-
-  if(ament_lint_auto_FOUND)
-    ament_lint_auto_find_test_dependencies()
-    find_package(ament_cmake_gtest)
-
-    if(ament_cmake_gtest)
-      add_subdirectory(test)
-    endif()
-  endif()
-endif()
-
 install(
   DIRECTORY include/
   DESTINATION include/
 )
-
-install(DIRECTORY src/${PROJECT_NAME}/clips DESTINATION share/${PROJECT_NAME})
 
 install(TARGETS
   ${PROJECT_NAME}
