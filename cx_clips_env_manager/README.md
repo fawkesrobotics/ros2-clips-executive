@@ -1,15 +1,6 @@
 # cx_clips_env_manager
 This is the central package of the CLIPS-Executive that provides the CLIPS Environment Manager.
 
-[CLIPS](https://clipsrules.net/) (C Language Integrated Production System) is a rule-based programming language designed for building expert systems. It was developed in the 1980s by NASA to provide a portable, efficient, and easy-to-use environment for developing knowledge-based applications.
-CLIPS uses a production rule system, where knowledge is represented as if-then rules. These rules operate on facts, which represent data or conditions in the system. The inference engine matches rules against facts and executes the applicable rules based on a conflict resolution strategy.
-
-The ROS 2 CLIPS-Executive is a wrapper to integrate CLIPS with the ROS 2 ecosystem.
-
-The documentation assumes basic understanding regarding the usage of CLIPS. If you never worked with CLIPS before, check out the documentation of CLIPS and get familiar with the functionalities first using the documentation at [clipsrules.net](https://clipsrules.net/).
-
-The [clips_vendor](https://github.com/carologistics/clips_vendor) package provides a packaged version of CLIPS suitable for the ROS ecosystem (and is also used by the CLIPS-Executive).
-
 ## Responsibilities
 The CLIPS Environment Manager is the central component that allows to:
  - dynamically create and destroy CLIPS environments
@@ -24,7 +15,13 @@ The CLIPS Environment Manager is the central component that allows to:
  Similarly, each dynamically created environment goes through the same steps  as on activateion and each dynamically destroyed environment goes through the same steps as on deactivation.
 
 ## Usage
+To just launch a bare unconfigured node, just run the following command:
+```bash
+ros2 run cx_clips_env_manager clips_node
+```
+
 The environment manager node can be configured via ROS parameters to automatically setup environments on startup.
+
 Additionally, it provides services to create and destroy environments dynamically at runtime and to load and unload plugins into environments.
 
 ### Parameters
@@ -75,5 +72,3 @@ Plugins are specializations of of the *cx_plugin* base class and are handled as 
  - Before an environment is destroyed, all plugins are **unloaded in reverse order** of loading.
  - On destruction of a plugin, the `finalize()` function is called exactly once.
  - Before a plugin is destroyed, it is unloaded from all environments.
-
- The CLIPS-Executive provides a number of useful plugins (see the **cx_feature** package for an exhaustive list), it also provides generators to interface with ROS topics, services and actions (see the **cx_ros_comm_gen** package.
