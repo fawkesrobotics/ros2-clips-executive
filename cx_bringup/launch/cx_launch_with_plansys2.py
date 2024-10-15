@@ -20,7 +20,7 @@ def generate_launch_description():
 
     clips_executive_params_file = LaunchConfiguration("clips_executive_params_file")
 
-    lc_nodes = ["domain_expert", "problem_expert", "planner", "clips_features_manager", "clips_executive"]
+    lc_nodes = ["domain_expert", "problem_expert", "planner", "clips_plugins_manager", "clips_executive"]
 
     stdout_linebuf_envvar = SetEnvironmentVariable("RCUTILS_CONSOLE_STDOUT_LINE_BUFFERED", "1")
 

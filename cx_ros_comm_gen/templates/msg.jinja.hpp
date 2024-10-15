@@ -19,14 +19,14 @@
  *  Read the full text in the LICENSE.GPL file in the doc directory.
  */
 // clang-format off
-#ifndef CX_FEATURES__{{name_upper}}_HPP_
-#define CX_FEATURES__{{name_upper}}_HPP_
+#ifndef CX_PLUGINS__{{name_upper}}_HPP_
+#define CX_PLUGINS__{{name_upper}}_HPP_
 
 #include <map>
 #include <memory>
 #include <string>
 
-#include "cx_feature/clips_feature.hpp"
+#include "cx_plugin/clips_plugin.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 #include "cx_utils/NodeThread.hpp"
 
@@ -35,7 +35,7 @@
 
 namespace cx {
 
-class {{name_camel}} : public ClipsFeature, public rclcpp::Node {
+class {{name_camel}} : public ClipsPlugin, public rclcpp::Node {
 public:
   {{name_camel}}();
   ~{{name_camel}}();
@@ -85,4 +85,4 @@ clips::UDFValue create_message(clips::Environment *env);
 };
 
 } // namespace cx
-#endif // !CX_FEATURES__{{name_upper}}_HPP_
+#endif // !CX_PLUGINS__{{name_upper}}_HPP_

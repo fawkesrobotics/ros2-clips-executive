@@ -117,7 +117,7 @@ CallbackReturn CLIPSEnvManager::on_configure(const rclcpp_lifecycle::State &) {
 
   envs_.set_obj(envs);
 
-  feature_manager_.configure(node, "ClipsFeatureManager", envs_);
+  plugin_manager_.configure(node, "ClipsPluginManager", envs_);
 
   RCLCPP_INFO(get_logger(), "Configured [%s]!", get_name());
 
@@ -129,7 +129,7 @@ CLIPSEnvManager::on_activate(const rclcpp_lifecycle::State &state) {
   // no action on activate for now
   (void)state;
   RCLCPP_INFO(get_logger(), "Activating [%s]...", get_name());
-  feature_manager_.activate();
+  plugin_manager_.activate();
   std::scoped_lock envs_lock(*(envs_.get_mutex_instance()));
   for (auto &env : *(envs_.get_obj())) {
     std::scoped_lock env_lock(*(env.second.get_mutex_instance()));
@@ -155,7 +155,7 @@ CLIPSEnvManager::on_deactivate(const rclcpp_lifecycle::State &state) {
       clips::Run(env.second.get_obj().get(), -1);
     }
   }
-  feature_manager_.deactivate();
+  plugin_manager_.deactivate();
   create_env_service_.reset();
   destroy_env_service_.reset();
   RCLCPP_INFO(get_logger(), "Deactivated [%s]...", get_name());
@@ -198,7 +198,7 @@ void CLIPSEnvManager::create_env_callback(
 
     if (clips) {
       envs_->insert({env_name, clips});
-      feature_manager_.activate_env(env_name, clips);
+      plugin_manager_.activate_env(env_name, clips);
       response->success = true;
     } else {
       RCLCPP_ERROR(get_logger(), "Failed to initialize CLIPS environment '%s'",
@@ -257,7 +257,7 @@ bool CLIPSEnvManager::delete_env(const std::string &env_name) {
   if (envs_->find(env_name) != envs_->end()) {
 
     clips::Environment *env = envs_->at(env_name).get_obj().get();
-    feature_manager_.deactivate_env(env_name, envs_->at(env_name));
+    plugin_manager_.deactivate_env(env_name, envs_->at(env_name));
 
     clips::DeleteRouter(env, (char *)ROUTER_NAME);
     clips::DestroyEnvironment(env);

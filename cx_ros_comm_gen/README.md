@@ -4,11 +4,11 @@ This package offers a convenient generator that allows to interface with ros nod
 ## Usage
 The usage involves a few steps:
 1. Generating the bindings
-2. Loading the generated bindings as CLIPS Executive features
+2. Loading the generated bindings as CLIPS Executive plugins
 3. Using the generated functions and templates
 
 ### Generating Bindings
-The *cx_ros_comm_gen* feature provides cmake functions to generate bindings for ros messages, services and actions via the following macros:
+The *cx_ros_comm_gen* plugin provides cmake functions to generate bindings for ros messages, services and actions via the following macros:
 ```cmake
 cx_generate_msg_bindings(package msg_name)
 
@@ -39,23 +39,23 @@ find_package(rclcpp_action REQUIRED) # only if action bindings are generated
 ```
 Invoking these macros causes the following effects:
 1. A cmake `custom_command` is created that invokes the *generator.py* script of this package
-2. A shared library for the feature is created using the generated c++ files from the custom command
-3. A plugin description file is installed so the feature becomes available via pluginlib
+2. A shared library for the plugin is created using the generated c++ files from the custom command
+3. A plugin description file is installed so the plugin becomes available via pluginlib
 
 ### Registering Bindings
-Register the generated features with the feature manager from the *cx_feature_manager* package via it's configuration file.
+Register the generated plugins with the plugin manager from the *cx_plugin_manager* package via it's configuration file.
 For the example above, the configuration is depicted below (the snippet from the *cx_bringup* package):
 ```yaml
-clips_features_manager:
+clips_plugins_manager:
 ros__parameters:
-clips_features_list: ["cx_std_msgs_string_feature", "cx_std_srvs_set_bool_feature", "cx_example_interfaces_fibonacci_feature"]
-clips_features:
-  cx_std_msgs_string_feature:
-    plugin: "cx::CXStdMsgsStringFeature"
-  cx_std_srvs_set_bool_feature:
-    plugin: "cx::CXStdSrvsSetBoolFeature"
-  cx_example_interfaces_fibonacci_feature:
-    plugin: "cx::CXExampleInterfacesFibonacciFeature"
+clips_plugins_list: ["cx_std_msgs_string_plugin", "cx_std_srvs_set_bool_plugin", "cx_example_interfaces_fibonacci_plugin"]
+clips_plugins:
+  cx_std_msgs_string_plugin:
+    plugin: "cx::CXStdMsgsStringPlugin"
+  cx_std_srvs_set_bool_plugin:
+    plugin: "cx::CXStdSrvsSetBoolPlugin"
+  cx_example_interfaces_fibonacci_plugin:
+    plugin: "cx::CXExampleInterfacesFibonacciPlugin"
 ```
 ### Using the Bindings in CLIPS
 Given a package (e.g., "std_msgs") and a message (e.g., "String") all deftemplates and functions are named using Kebab-case (as expected in CLIPS) and are are prefixed by `<package-kebab>-<message-kebab>-` (e.g., "std-msgs-string-").

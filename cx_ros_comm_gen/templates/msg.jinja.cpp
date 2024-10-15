@@ -23,7 +23,7 @@
 #include <memory>
 #include <string>
 
-#include "cx_feature/clips_feature.hpp"
+#include "cx_plugin/clips_plugin.hpp"
 #include "{{name_snake}}.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 #include "cx_utils/clips_env_context.hpp"
@@ -36,7 +36,7 @@ using std::placeholders::_1;
 namespace cx {
 
 {{name_camel}}::{{name_camel}}()
-    : Node("{{name_snake}}_msg_feature_node") {}
+    : Node("{{name_snake}}_msg_plugin_node") {}
 {{name_camel}}::~{{name_camel}}() {
 }
 
@@ -104,8 +104,8 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
 
 bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   RCLCPP_DEBUG(get_logger(),
-              "Initializing context for feature %s",
-              feature_name_.c_str());
+              "Initializing context for plugin %s",
+              plugin_name_.c_str());
 
 {% set template_part = "registration" %}
 {% set template_type = "" %}
@@ -270,7 +270,7 @@ void {{name_camel}}::destroy_publisher(clips::Environment *env, const std::strin
 
 void {{name_camel}}::subscribe_to_topic(clips::Environment *env,
     const std::string &topic_name) {
-  RCLCPP_DEBUG(rclcpp::get_logger(feature_name_), "Subscribing to topic %s",
+  RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_), "Subscribing to topic %s",
               topic_name.c_str());
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
@@ -278,10 +278,10 @@ void {{name_camel}}::subscribe_to_topic(clips::Environment *env,
   auto it = subscriptions_[env_name].find(topic_name);
 
   if (it != subscriptions_[env_name].end()) {
-    RCLCPP_WARN(rclcpp::get_logger(feature_name_),
+    RCLCPP_WARN(rclcpp::get_logger(plugin_name_),
                 "Already subscribed to topic %s", topic_name.c_str());
   } else {
-    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
+    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "Creating subscription to topic %s", topic_name.c_str());
 	auto options = rclcpp::SubscriptionOptions();
 	options.callback_group = cb_group_;
@@ -303,7 +303,7 @@ void {{name_camel}}::unsubscribe_from_topic(clips::Environment *env,
   auto it = subscriptions_[env_name].find(topic_name);
 
   if (it != subscriptions_[env_name].end()) {
-    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
+    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "Unsubscribing from topic %s", topic_name.c_str());
     subscriptions_[env_name].erase(topic_name);
   }
@@ -342,4 +342,4 @@ void {{name_camel}}::destroy_msg({{message_type}} *msg) {
 }
 
 } // namespace cx
-PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsFeature)
+PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsPlugin)

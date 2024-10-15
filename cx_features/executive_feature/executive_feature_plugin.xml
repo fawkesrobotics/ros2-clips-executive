@@ -1,7 +1,0 @@
-<class_libraries>
-  <library path="cx_executive_feature">
-    <class type="cx::ExecutiveFeature" base_class_type="cx::ClipsFeature">
-      <description>Executive feature for continuously running environments</description>
-    </class>
-  </library>
-</class_libraries>

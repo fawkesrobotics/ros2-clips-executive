@@ -16,7 +16,8 @@
   <depend>clips_vendor</depend>
   <depend>lifecycle_msgs</depend>
   <depend>cx_msgs</depend>
-  <depend>cx_feature_manager</depend>
+  <depend>cx_plugin</depend>
+  <depend>pluginlib</depend>
 
 
   <export>

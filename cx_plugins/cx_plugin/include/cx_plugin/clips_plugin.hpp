@@ -1,0 +1,73 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
+#ifndef _CX_PLUGIN_CLIPS_PLUGIN_HPP
+#define _CX_PLUGIN_CLIPS_PLUGIN_HPP
+
+#include <clips_ns/clips.h>
+#include <map>
+#include <string>
+
+#include "cx_utils/LockSharedPtr.hpp"
+
+#include "pluginlib/class_loader.hpp"
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
+
+namespace cx {
+
+/// Clips Plugin
+/**
+ * This base class provides the interface for clips plugins that are managed
+ * by the ClipsPluginManager.
+ *
+ * Inherit from this class and export your class as plugin via pluginlib.
+ */
+class ClipsPlugin {
+  friend class ClipsPluginManager;
+  using Ptr = pluginlib::UniquePtr<cx::ClipsPlugin>;
+
+public:
+  ClipsPlugin();
+  virtual ~ClipsPlugin();
+
+  /// Called once for each plugin when it is loaded.
+  virtual void initialize();
+  /// Called once for each plugin when it is unloaded.
+  virtual void finalize();
+
+  /// Called after initialize once for every managed Clips environment.
+  /**
+   * Register your user-defined functions here and store the references
+   * of the environment for usage.
+   * The clips environment should not be locked in this function as the plugin
+   * manager takes care of that. Only lock the Clips environment when accessing
+   * it from separate threads, such as callbacks.
+   *
+   * \param[in] env_name Name of the Clips environment
+   * \param[in] clips a pointer to a Clips environment including a mutex to lock
+   * before usage in other threads.
+   *
+   * \return true iff the initialization succeeded
+   */
+  virtual bool clips_env_init(LockSharedPtr<clips::Environment> &clips) = 0;
+
+  /// Called once for every managed Clips environment on shutting down the
+  /// environment.
+  virtual bool
+  clips_env_destroyed(LockSharedPtr<clips::Environment> &clips) = 0;
+
+  std::string get_plugin_name() const;
+
+protected:
+  std::string plugin_name_;
+
+  rclcpp_lifecycle::LifecycleNode::WeakPtr parent_;
+
+private:
+  /// \internal pass name and params to the plugin.
+  void initialize(const rclcpp_lifecycle::LifecycleNode::WeakPtr parent,
+                  const std::string &plugin_name);
+};
+
+} // namespace cx
+
+#endif // !_CX_PLUGIN_CLIPS_PLUGIN_HPP

@@ -166,8 +166,8 @@ def main():
     time_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     short_class_name = to_camel_case(args.package) + args.name
-    class_name = "CX" + short_class_name + "Feature"
-    file_name = "cx_" + to_snake_case(args.package) + "_" + to_snake_case(args.name) + "_feature"
+    class_name = "CX" + short_class_name + "Plugin"
+    file_name = "cx_" + to_snake_case(args.package) + "_" + to_snake_case(args.name) + "_plugin"
     include_header = "<" + args.package + "/" + args.type + "/" + to_snake_case(args.name) + ".hpp>"
     cpp_msg_type = args.package + "::" + args.type + "::" + args.name
     msg_type_str = args.package + "/" + args.type + "/" + args.name
@@ -256,9 +256,7 @@ def main():
             name_snake=to_snake_case(class_name),
         )
         header_file.write(out)
-    with open(file_name + "_plugin.xml", "w") as plugin_file, open(
-        package_dir + "/templates/" + "feature_plugin.jinja.xml"
-    ) as pl:
+    with open(file_name + ".xml", "w") as plugin_file, open(package_dir + "/templates/" + "plugin.jinja.xml") as pl:
         tmpl = Template(pl.read())
         out = tmpl.render(
             message_type=cpp_msg_type,

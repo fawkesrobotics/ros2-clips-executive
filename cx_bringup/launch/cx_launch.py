@@ -37,7 +37,7 @@ def generate_launch_description():
 
     declare_cx_params_file = DeclareLaunchArgument(
         "cx_params_file",
-        default_value=os.path.join(bringup_dir, "params", "clips_features_manager.yaml"),
+        default_value=os.path.join(bringup_dir, "params", "clips_plugins_manager.yaml"),
         description="Path to the ROS2 cx_params.yaml file",
     )
 
@@ -58,7 +58,7 @@ def generate_launch_description():
             clips_executive_params_file,
             {"agent_dir": bringup_dir},
             {"clips_executive_config": clips_executive_params_file},
-            {"clips_features_manager_config": cx_params_file},
+            {"clips_plugins_manager_config": cx_params_file},
         ],
         arguments=["--ros-args", "--log-level", log_level],
     )

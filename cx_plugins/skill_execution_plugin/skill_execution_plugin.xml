@@ -1,0 +1,7 @@
+<class_libraries>
+  <library path="cx_skill_execution_plugin">
+    <class type="cx::SkillExecutionPlugin" base_class_type="cx::ClipsPlugin">
+      <description>Clips Plugin providing skill execution possibilities to the Clips Environment</description>
+    </class>
+  </library>
+</class_libraries>

@@ -17,7 +17,7 @@
 #include "lifecycle_msgs/msg/state.hpp"
 #include "lifecycle_msgs/msg/transition.hpp"
 
-#include "cx_feature_manager/clips_feature_manager.hpp"
+#include "cx_clips_env_manager/clips_plugin_manager.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
 
 #include "cx_msgs/srv/create_clips_env.hpp"
@@ -26,11 +26,11 @@
 #include <spdlog/spdlog.h>
 
 namespace cx {
-class ClipsFeatureManager;
+class ClipsPluginManager;
 class ClipsExecutive;
 
 class CLIPSEnvManager : public rclcpp_lifecycle::LifecycleNode {
-  friend ClipsFeatureManager;
+  friend ClipsPluginManager;
   friend ClipsExecutive;
 
 public:
@@ -67,7 +67,7 @@ private:
   LockSharedPtr<clips::Environment> new_env(const std::string &env_name);
 
   bool delete_env(const std::string &env_name);
-  // void assert_features(LockSharedPtr<clips::Environment> &clips,
+  // void assert_plugins(LockSharedPtr<clips::Environment> &clips,
   //                     bool immediate_assert);
   // void add_functions(const std::string &env_name);
   // bool guarded_load(LockSharedPtr<clips::Environment> &env, const std::string
@@ -79,7 +79,7 @@ private:
       destroy_env_service_;
 
 private:
-  ClipsFeatureManager feature_manager_;
+  ClipsPluginManager plugin_manager_;
 
   cx::LockSharedPtr<EnvsMap> envs_;
 };

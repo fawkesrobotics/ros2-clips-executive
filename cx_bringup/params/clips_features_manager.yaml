@@ -1,24 +1,24 @@
-clips_feature_manager:
+clips_plugin_manager:
   ros__parameters:
-    clips_feature_list: ["clips_pddl_parser", "skill_execution", "clips_protobuf", "cx_std_msgs_string_feature", "cx_std_srvs_set_bool_feature", "cx_example_interfaces_fibonacci_feature"]
-    clips_features:
-      mock_feature:
-        plugin: "cx::MockFeature"
+    clips_plugin_list: ["clips_pddl_parser", "skill_execution", "clips_protobuf", "cx_std_msgs_string_plugin", "cx_std_srvs_set_bool_plugin", "cx_example_interfaces_fibonacci_plugin"]
+    clips_plugins:
+      mock_plugin:
+        plugin: "cx::MockPlugin"
       plansys2:
-        plugin: "cx::Plansys2Feature"
+        plugin: "cx::Plansys2Plugin"
       clips_pddl_parser:
-        plugin: "cx::PddlParserFeature"
+        plugin: "cx::PddlParserPlugin"
       skill_execution:
-        plugin: "cx::SkillExecutionFeature"
-      cx_std_msgs_string_feature:
-        plugin: "cx::CXStdMsgsStringFeature"
-      cx_std_srvs_set_bool_feature:
-        plugin: "cx::CXStdSrvsSetBoolFeature"
-      cx_example_interfaces_fibonacci_feature:
-        plugin: "cx::CXExampleInterfacesFibonacciFeature"
+        plugin: "cx::SkillExecutionPlugin"
+      cx_std_msgs_string_plugin:
+        plugin: "cx::CXStdMsgsStringPlugin"
+      cx_std_srvs_set_bool_plugin:
+        plugin: "cx::CXStdSrvsSetBoolPlugin"
+      cx_example_interfaces_fibonacci_plugin:
+        plugin: "cx::CXExampleInterfacesFibonacciPlugin"
       clips_protobuf:
-        plugin: "cx::ProtobufFeature"
-        feature_parameters: ["protobuf_path"]
+        plugin: "cx::ProtobufPlugin"
+        plugin_parameters: ["protobuf_path"]
         protobuf_path:
           # This path assumes relativeness to agent_dir
           value: "proto"

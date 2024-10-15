@@ -15,7 +15,7 @@ endfunction()
 macro(cx_generate_bindings package msg_name type)
   cx_helper_to_snake_case(${package} snake_case_package)
   cx_helper_to_snake_case(${msg_name} snake_case_msg_name)
-  set(feature_name cx_${snake_case_package}_${snake_case_msg_name}_feature)
+  set(plugin_name cx_${snake_case_package}_${snake_case_msg_name}_plugin)
   message(STATUS "Generate bindings for ${package}/${type}/${msg_name}")
 
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
@@ -35,38 +35,38 @@ macro(cx_generate_bindings package msg_name type)
       message(FATAL_ERROR "Python script ${GENERATOR_SCRIPT} does not exist")
   endif()
   add_custom_command(
-      OUTPUT  ${feature_name}.cpp ${feature_name}.hpp ${feature_name}_plugin.xml
+      OUTPUT  ${plugin_name}.cpp ${plugin_name}.hpp ${plugin_name}_plugin.xml
       COMMAND ${Python3_EXECUTABLE} ${GENERATOR_SCRIPT} ${type} ${package} ${msg_name}
       DEPENDS ${GENERATOR_SCRIPT}
               ${TEMPLATES_DIR}/${type}.jinja.cpp
               ${TEMPLATES_DIR}/${type}.jinja.hpp
-              ${TEMPLATES_DIR}/feature_plugin.jinja.xml
+              ${TEMPLATES_DIR}/plugin.jinja.xml
               ${TEMPLATES_DIR}/set_field.jinja.cpp
               ${TEMPLATES_DIR}/get_field.jinja.cpp
               ${TEMPLATES_DIR}/create.jinja.cpp
               ${TEMPLATES_DIR}/destroy.jinja.cpp
               ${TEMPLATES_DIR}/ret_fun.jinja.cpp
               ${TEMPLATES_DIR}/void_fun.jinja.cpp
-      COMMENT "Generate cx feature for ${package} ${msg_name}"
+      COMMENT "Generate cx plugin for ${package} ${msg_name}"
   )
 
   # Build plugin from library
-  add_library(${feature_name} SHARED ${feature_name}.cpp)
-  set_property(TARGET ${feature_name} PROPERTY CXX_STANDARD 20)
-  target_link_libraries(${feature_name} ClipsNS::libclips_ns)
-  ament_target_dependencies(${feature_name} cx_feature pluginlib ${package} ${extra_deps})
+  add_library(${plugin_name} SHARED ${plugin_name}.cpp)
+  set_property(TARGET ${plugin_name} PROPERTY CXX_STANDARD 20)
+  target_link_libraries(${plugin_name} ClipsNS::libclips_ns)
+  ament_target_dependencies(${plugin_name} cx_plugin pluginlib ${package} ${extra_deps})
   install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${feature_name}.hpp
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/${plugin_name}.hpp
     DESTINATION include/
   )
   file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/include)
   install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${feature_name}_plugin.xml
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/${plugin_name}_plugin.xml
     DESTINATION share/${PROJECT_NAME}
   )
-  # install library and register the feature plugin
+  # install library and register the plugin plugin
   install(TARGETS
-    ${feature_name}
+    ${plugin_name}
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
     RUNTIME DESTINATION lib/${PROJECT_NAME}
@@ -75,8 +75,8 @@ macro(cx_generate_bindings package msg_name type)
   # this is just the relevant part from
   # pluginlib_export_plugin_description_file without checking for existence of the file as it checks in src dir only.
   # As the macro generates the xml file, it is located in build dir instead
-  set(plugin_category cx_feature)
-  set(relative_filename ${feature_name}_plugin.xml)
+  set(plugin_category cx_plugin)
+  set(relative_filename ${plugin_name}_plugin.xml)
   set(relative_dir "")
   set(__PLUGINLIB_CATEGORY_CONTENT__${plugin_category}
     "${__PLUGINLIB_CATEGORY_CONTENT__${plugin_category}}share/${PROJECT_NAME}/${relative_filename}\n")

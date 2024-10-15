@@ -1,7 +1,0 @@
-<class_libraries>
-  <library path="cx_file_load_feature">
-    <class type="cx::FileLoadFeature" base_class_type="cx::ClipsFeature">
-      <description>File load feature to run user-defined clips code.</description>
-    </class>
-  </library>
-</class_libraries>

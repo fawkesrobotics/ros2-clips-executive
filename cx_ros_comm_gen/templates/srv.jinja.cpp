@@ -24,7 +24,7 @@
 #include <memory>
 #include <string>
 
-#include <cx_feature/clips_feature.hpp>
+#include <cx_plugin/clips_plugin.hpp>
 #include "{{name_snake}}.hpp"
 #include <cx_utils/LockSharedPtr.hpp>
 #include <cx_utils/clips_env_context.hpp>
@@ -37,7 +37,7 @@ using std::placeholders::_1;
 namespace cx {
 
 {{name_camel}}::{{name_camel}}()
-    : Node("{{name_snake}}_msg_feature_node") {}
+    : Node("{{name_snake}}_msg_plugin_node") {}
 {{name_camel}}::~{{name_camel}}() {}
 
 void {{name_camel}}::finalize() {
@@ -109,8 +109,8 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
 
 bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   RCLCPP_DEBUG(get_logger(),
-              "Initialising context for feature %s",
-              feature_name_.c_str());
+              "Initialising context for plugin %s",
+              plugin_name_.c_str());
 
 {% set template_part = "registration" %}
 {% set template_type = "Request" %}
@@ -302,7 +302,7 @@ void {{name_camel}}::destroy_service(clips::Environment *env, const std::string 
 
 void {{name_camel}}::create_new_client(clips::Environment *env,
     const std::string &service_name) {
-  RCLCPP_DEBUG(rclcpp::get_logger(feature_name_), "Creating client for serive %s",
+  RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_), "Creating client for serive %s",
               service_name.c_str());
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
@@ -310,10 +310,10 @@ void {{name_camel}}::create_new_client(clips::Environment *env,
   auto it = clients_[env_name].find(service_name);
 
   if (it != clients_[env_name].end()) {
-    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
+    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "There already exists a client for service %s", service_name.c_str());
   } else {
-    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
+    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "Creating client for service %s", service_name.c_str());
     clients_[env_name][service_name] =
         this->create_client<{{message_type}}>(service_name);
@@ -329,7 +329,7 @@ void {{name_camel}}::destroy_client(clips::Environment *env,
   auto it = clients_[env_name].find(service_name);
 
   if (it != clients_[env_name].end()) {
-    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
+    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "Destroying client for service %s", service_name.c_str());
     clients_[env_name].erase(service_name);
   }
@@ -361,4 +361,4 @@ void {{name_camel}}::service_callback(const std::shared_ptr<{{message_type}}::Re
 }
 
 } // namespace cx
-PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsFeature)
+PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsPlugin)

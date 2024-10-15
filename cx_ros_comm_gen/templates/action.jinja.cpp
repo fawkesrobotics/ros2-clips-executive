@@ -25,7 +25,7 @@
 #include <memory>
 #include <string>
 
-#include <cx_feature/clips_feature.hpp>
+#include <cx_plugin/clips_plugin.hpp>
 #include "{{name_snake}}.hpp"
 #include <cx_utils/LockSharedPtr.hpp>
 #include <cx_utils/clips_env_context.hpp>
@@ -38,7 +38,7 @@ using std::placeholders::_1;
 namespace cx {
 
 {{name_camel}}::{{name_camel}}()
-    : Node("{{name_snake}}_msg_feature_node") {
+    : Node("{{name_snake}}_msg_plugin_node") {
     clips_worker_thread_ = std::thread([this] () {
   while (!stop_flag_) {
       std::function<void()> task;
@@ -168,8 +168,8 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
 
 bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   RCLCPP_INFO(get_logger(),
-              "Initialising context for feature %s",
-              feature_name_.c_str());
+              "Initialising context for plugin %s",
+              plugin_name_.c_str());
 
 {% set template_part = "registration" %}
 {% set template_type = "Goal" %}
@@ -704,10 +704,10 @@ void {{name_camel}}::create_new_client(clips::Environment *env,
   auto it = clients_[env_name].find(server_name);
 
   if (it != clients_[env_name].end()) {
-    RCLCPP_WARN(rclcpp::get_logger(feature_name_),
+    RCLCPP_WARN(rclcpp::get_logger(plugin_name_),
                 "There already exists a client for server %s", server_name.c_str());
   } else {
-    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
+    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "Creating client for server %s", server_name.c_str());
     clients_[env_name][server_name] =
         rclcpp_action::create_client<{{message_type}}>(this,server_name);
@@ -723,7 +723,7 @@ void {{name_camel}}::destroy_client(clips::Environment *env,
   auto it = clients_[env_name].find(server_name);
 
   if (it != clients_[env_name].end()) {
-    RCLCPP_DEBUG(rclcpp::get_logger(feature_name_),
+    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "Destroying client for server %s", server_name.c_str());
     clients_[env_name].erase(server_name);
   }
@@ -895,4 +895,4 @@ void {{name_camel}}::server_goal_handle_destroy(void *g) {
 
 
 } // namespace cx
-PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsFeature)
+PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsPlugin)
