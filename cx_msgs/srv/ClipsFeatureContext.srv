@@ -1,5 +1,0 @@
-string env_name
-string feature_name
----
-bool success
-string error
