@@ -15,4 +15,4 @@ As CLIPS plugins are realized via [pluginlib](https://docs.ros.org/en/rolling/Tu
 2. Export the plugin via `PLUGINLIB_EXPORT_CLASS`.
 3. Export a plugin description via cmake `pluginlib_export_plugin_description_file` with base class package `cx_plugin`.
 
-As an example package that can serve as a boilerplate, please have a look at the *cx_example_plugin*.
+As an example package that can serve as a boilerplate, please have a look at the **cx_example_plugin** package.

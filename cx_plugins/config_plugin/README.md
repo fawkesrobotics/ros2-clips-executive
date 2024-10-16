@@ -1,14 +1,23 @@
 # cx_config_plugin
-This package offers a CLIPS plugin to read config values from yaml(https://plansys2.github.io/index.html).
+This package offers the `cx::ConfigPlugin` CLIPS plugin to read config values from yaml.
 
 ## Usage
 The usage involves two steps:
-1. Loading the generated bindings as CLIPS Executive plugins
+1. Loading this CLIPS-Executive plugin via the **cx_clips_env_manager** package
 2. Using the functions and templates
 
 ### Registering Bindings
-Register the generated plugins with the plugin manager from the *cx_plugin_manager* package via it's configuration file.
+The config plugin does not need any additional configuration:
+```
+clips_manager:
+  ros__parameters:
+    environments: ["main"]
+    main:
+      plugins: ["config"]
 
+    config:
+      plugin: "cx::ConfigPlugin"
+```
 ### Using the Bindings in CLIPS
 
 ##### Deftemplates

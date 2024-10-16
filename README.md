@@ -44,14 +44,23 @@ Lastly, the **cx_goal_reasoning** package contains useful CLIPS source code for 
 ## Build
 This assumes you have a basic ROS 2 installation already, otherwise consult the official documentation for that.
 
-All dependencies are listed in the dependency.repos file of this repository. Hence, a workspace can be setup using vcstool:
+All dependencies are listed in the dependency.repos file of this repository. Hence, a dependency workspace can be setup using vcstool.
+Assuming the CLIPS-Executive was cloned into `~/clips_executive_ws/src` and the dependencies shouldbe built in the workspace `~/deps_clips_executive_ws/`:
 ```bash
-mkdir -p ~/clips_executive_ws/src
-cd ~/clips_executive_ws/src
-vcs import < dependency_repos.repos
-cd ~/clips_executive_ws
+mkdir -p ~/deps_clips_executive_ws/src
+cd ~/deps_clips_executive_ws/src
+vcs import < ~/clips_executive_ws/src/ros2-clips-executive/dependency_repos.repos
+cd ~/deps_clips_executive_ws
 colcon build --sym --cmake-args -DBUILD_TESTING=OFF
 ```
+Then you can proceed by sourcing the workspace containing the dependencies and building the CLIPS-Executive:
+```bash
+source ~/deps_clips_executive_ws/install/setup.bash
+cd ~/clips_executive_ws/
+colcon build --sym
+source ~/clips_executive_ws/install/setup.bash
+```
+
 
 ## Getting Started
 The **cx_bringup** package provides examplary configurations of the CLIPS -Executive that serve as a good starting point to get familiar with the system.

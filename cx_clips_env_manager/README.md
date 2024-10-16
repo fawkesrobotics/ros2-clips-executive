@@ -12,7 +12,7 @@ The CLIPS Environment Manager is the central component that allows to:
  - On being activated, it first loads all requested plugins, before calling **(reset)**  in the environments, refreshing all agendas and calling **(run)** to start rule execution.
  - On being deactivated, it first asserts a `(executie-finalize)` before refreshing all agendas and calling **(run)** one more time to allow cleanup routines to execute before shutdown.
 
- Similarly, each dynamically created environment goes through the same steps  as on activateion and each dynamically destroyed environment goes through the same steps as on deactivation.
+ Similarly, each dynamically created environment goes through the same steps  as on activation and each dynamically destroyed environment goes through the same steps as on deactivation.
 
 ## Usage
 To just launch a bare unconfigured node, just run the following command:
@@ -65,7 +65,7 @@ These services are provided by each environment manager node:
 
 ## Plugins
 Plugins are specializations of of the *cx_plugin* base class and are handled as follows:
- - Each plugin is initialized exactly once before usage by calling it's `initialize()` function.
+ - Each plugin is initialized exactly once before it is loaded into environments by calling it's `initialize()` function.
  - When an environment is loaded, all specified plugins are **loaded in order** of the respective plugins parameter.
  - Whenever an environment needs to load a plugin, it's `clips_env_init()` function is called once. Loading the same plugin again before unloading it first, results in an error (and the function is not called again).
  - Whenever an environment needs to unload a plugin, it's `clips_env_destroyed()` is called once. Unloading the same plugin again before loading it first, results in an error (and the function is not called again).
