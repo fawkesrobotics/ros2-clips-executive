@@ -10,7 +10,6 @@ clips_manager:
                 "std_srvs_set_bool",
                 "example_interfaces_fibonacci",
                 "clips_pddl_parser",
-                "skill_execution",
                 "config",
                 "protobuf",
                 "files"]
@@ -25,8 +24,6 @@ clips_manager:
       plugin: "cx::ConfigPlugin"
     clips_pddl_parser:
       plugin: "cx::PddlParserPlugin"
-    skill_execution:
-      plugin: "cx::SkillExecutionPlugin"
     std_string_msg:
       plugin: "cx::CXStdMsgsStringPlugin"
     std_srvs_set_bool:
@@ -40,17 +37,15 @@ clips_manager:
       refresh_rate: 10
     files:
       plugin: "cx::FileLoadPlugin"
-      pkg_share_dirs: ["cx_bringup", "cx_clips_executive"]
+      pkg_share_dirs: ["cx_bringup", "cx_goal_reasoning"]
       files: [
-        "clips/core/saliences.clp",
-        "clips/core/utils.clp",
-        "clips/core/plan.clp",
-        "clips/core/goal.clp",
-        "clips/core/domain.clp",
-        "clips/core/skills.clp",
-        "clips/core/worldmodel.clp",
-        "clips/core/wm-domain-sync.clp",
-        "clips/core/skills-actions.clp",
+        "clips/cx_goal_reasoning/saliences.clp",
+        "clips/cx_goal_reasoning/utils.clp",
+        "clips/cx_goal_reasoning/plan.clp",
+        "clips/cx_goal_reasoning/goal.clp",
+        "clips/cx_goal_reasoning/domain.clp",
+        "clips/cx_goal_reasoning/worldmodel.clp",
+        "clips/cx_goal_reasoning/wm-domain-sync.clp",
         "clips/simple_agent/domain.clp",
         "clips/simple_agent/goal-reasoner.clp",
         "clips/simple_agent/fixed-sequence.clp",
