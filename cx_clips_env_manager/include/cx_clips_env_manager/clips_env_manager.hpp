@@ -35,7 +35,7 @@ class CLIPSEnvManager : public rclcpp_lifecycle::LifecycleNode {
 
 public:
   CLIPSEnvManager();
-  // ~CLIPSEnvManager();
+  ~CLIPSEnvManager();
   using CallbackReturn =
       rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
   // using EnvsMap = std::unordered_map<std::string,

@@ -89,6 +89,13 @@ CLIPSEnvManager::CLIPSEnvManager()
   RCLCPP_INFO(get_logger(), "Initialising [%s]...", get_name());
 }
 
+CLIPSEnvManager::~CLIPSEnvManager() {
+  {
+    std::scoped_lock envs_lock(*(envs_.get_mutex_instance()));
+    envs_.get_obj()->clear();
+  }
+}
+
 using CallbackReturn =
     rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
@@ -114,8 +121,10 @@ CallbackReturn CLIPSEnvManager::on_configure(const rclcpp_lifecycle::State &) {
   for (const auto &env_name : config_envs) {
     envs->insert({env_name, new_env(env_name)});
   }
-
-  envs_.set_obj(envs);
+  {
+    std::scoped_lock envs_lock(*(envs_.get_mutex_instance()));
+    envs_.set_obj(envs);
+  }
 
   plugin_manager_.configure(node, "ClipsPluginManager", envs_);
 
@@ -183,8 +192,12 @@ void CLIPSEnvManager::create_env_callback(
     const std::shared_ptr<cx_msgs::srv::CreateClipsEnv::Response> response) {
   (void)request_header; // the request header is not used in this callback
 
-  std::scoped_lock lock(*envs_.get_mutex_instance());
-  if (envs_->find(request->env_name) != envs_->end()) {
+  bool env_exists = false;
+  {
+    std::scoped_lock lock(*envs_.get_mutex_instance());
+    env_exists = (envs_->find(request->env_name) != envs_->end());
+  }
+  if (env_exists) {
     RCLCPP_ERROR(get_logger(),
                  "CLIPS environment '%s' already exists--> Should "
                  "be signaled! (e.g. as exception)",
@@ -197,7 +210,10 @@ void CLIPSEnvManager::create_env_callback(
     const std::string &env_name = request->env_name;
 
     if (clips) {
-      envs_->insert({env_name, clips});
+      {
+        std::scoped_lock lock(*envs_.get_mutex_instance());
+        envs_->insert({env_name, clips});
+      }
       plugin_manager_.activate_env(env_name, clips);
       response->success = true;
     } else {
@@ -215,38 +231,12 @@ void CLIPSEnvManager::destroy_env_callback(
     const std::shared_ptr<cx_msgs::srv::DestroyClipsEnv::Response> response) {
 
   (void)request_header; // the request header is not used in this callback
-  std::scoped_lock lock(*envs_.get_mutex_instance());
   const std::string &env_name = request->env_name;
   response->success = delete_env(env_name);
   if (!response->success) {
     response->error = "unknown Environment name";
   }
 }
-// /** Get map of all environments
-//  * @return map of environment name to a shared lock ptr
-//  */
-// std::map<std::string, LockSharedPtr<clips::Environment>>
-// CLIPSEnvManager::getEnvironments() const {
-//   std::map<std::string, LockSharedPtr<clips::Environment>> rv;
-//   for (const auto &envd : envs_) {
-//     rv[envd.first] = envd.second.env;
-//   }
-//   return rv;
-// }
-//
-// LockSharedPtr<clips::Environment>
-// CLIPSEnvManager::getEnvironmentByName(const std::string &env_name) {
-//   if (envs_.find(env_name) != envs_.end()) {
-//     // return the environment
-//     return envs_[env_name].env;
-//   } else {
-//     RCLCPP_ERROR(get_logger(),
-//                  "CLIPS environment '%s' does not exists--> Should "
-//                  "be signaled! (e.g. as exception)",
-//                  env_name.c_str());
-//     throw std::runtime_error("Wrong access to environment: " + env_name);
-//   }
-// }
 
 // --------------- ALL PRIVATE FUNCTION HELPERS ---------------
 
@@ -254,15 +244,29 @@ bool CLIPSEnvManager::delete_env(const std::string &env_name) {
   RCLCPP_WARN(get_logger(), "Deleting '%s' --- Clips Environment...",
               env_name.c_str());
 
-  if (envs_->find(env_name) != envs_->end()) {
+  bool env_exists = false;
+  {
+    std::scoped_lock lock(*envs_.get_mutex_instance());
+    env_exists = (envs_->find(env_name) != envs_->end());
+  }
+  if (env_exists) {
 
-    clips::Environment *env = envs_->at(env_name).get_obj().get();
-    plugin_manager_.deactivate_env(env_name, envs_->at(env_name));
+    LockSharedPtr<clips::Environment> env;
+    {
+      std::scoped_lock lock(*envs_.get_mutex_instance());
+      env = envs_->at(env_name);
+    }
+    plugin_manager_.deactivate_env(env_name, env);
+    {
+      std::scoped_lock env_lock(*env.get_mutex_instance());
+      clips::DeleteRouter(env.get_obj().get(), (char *)ROUTER_NAME);
+      clips::DestroyEnvironment(env.get_obj().get());
+    }
 
-    clips::DeleteRouter(env, (char *)ROUTER_NAME);
-    clips::DestroyEnvironment(env);
-
-    envs_->erase(env_name);
+    {
+      std::scoped_lock lock(*envs_.get_mutex_instance());
+      envs_->erase(env_name);
+    }
 
     RCLCPP_WARN(get_logger(), "Deleted '%s' --- Clips Environment!",
                 env_name.c_str());
@@ -330,7 +334,8 @@ CLIPSEnvManager::new_env(const std::string &env_name) {
   clips::Environment *env = clips.get_obj().get();
   // Only place to init the env mutex
   clips.init_mutex();
-  // // silent clips by default
+  // no locking needed, as env is not shared yet
+  // silent clips by default
   clips::Unwatch(env, clips::WatchItem::ALL);
   if (!clips::AllocateEnvironmentData(env, USER_ENVIRONMENT_DATA,
                                       sizeof(CLIPSEnvContext), NULL)) {
