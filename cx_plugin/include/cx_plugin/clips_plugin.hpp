@@ -42,28 +42,33 @@ public:
    * manager takes care of that. Only lock the Clips environment when accessing
    * it from separate threads, such as callbacks.
    *
-   * \param[in] env_name Name of the Clips environment
-   * \param[in] clips a pointer to a Clips environment including a mutex to lock
+   * \param[in] env a pointer to a Clips environment including a mutex to lock
    * before usage in other threads.
    *
    * \return true iff the initialization succeeded
    */
-  virtual bool clips_env_init(LockSharedPtr<clips::Environment> &clips) = 0;
+  virtual bool clips_env_init(LockSharedPtr<clips::Environment> &env) = 0;
 
   /// Called once for every managed Clips environment on shutting down the
   /// environment.
-  virtual bool
-  clips_env_destroyed(LockSharedPtr<clips::Environment> &clips) = 0;
+  /**
+   * \param[in] env a pointer to a Clips environment including a mutex to lock
+   * before usage in other threads.
+   * \return true iff the initialization succeeded
+   */
+  virtual bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) = 0;
 
   std::string get_plugin_name() const;
 
 protected:
+  /// Configured name of the plugin
   std::string plugin_name_;
 
+  /// Reference to parent node in case ROS interaction is needed
   rclcpp_lifecycle::LifecycleNode::WeakPtr parent_;
 
 private:
-  /// \internal pass name and params to the plugin.
+  /// \internal pass parent and name to the instance.
   void initialize(const rclcpp_lifecycle::LifecycleNode::WeakPtr parent,
                   const std::string &plugin_name);
 };
