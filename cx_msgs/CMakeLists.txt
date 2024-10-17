@@ -9,25 +9,9 @@ find_package(std_srvs REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(action_msgs REQUIRED)
 
-set(MSGS
-  "msg/ClipsEnvironment.msg"
-  "msg/ClipsFeature.msg"
-  "msg/ClipsContext.msg"
-  "msg/PddlGenInterface.msg"
-  "msg/PddlGenerateMessage.msg"
-  "msg/PddlGenInterfaceMessages.msg"
-  "msg/SkillExecution.msg"
-  "msg/SkillActionExecInfo.msg"
-)
-
 set(SERVICES
   "srv/DestroyClipsEnv.srv"
   "srv/CreateClipsEnv.srv"
-  "srv/AddClipsFeatures.srv"
-  "srv/ClipsFeatureContext.srv"
-  "srv/ClipsRemoveFeatures.srv"
-  "srv/PddlGenInterfaceSrv.srv"
-  "srv/OpenInterface.srv"
   "srv/LoadCLIPSPlugin.srv"
   "srv/ListCLIPSPlugin.srv"
   "srv/UnloadCLIPSPlugin.srv"
@@ -37,7 +21,6 @@ set(SERVICES
 
 # )
 rosidl_generate_interfaces(${PROJECT_NAME}
-  ${MSGS}
   ${SERVICES}
 
   # ${actions}
