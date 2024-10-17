@@ -35,7 +35,7 @@ macro(cx_generate_bindings package msg_name type)
       message(FATAL_ERROR "Python script ${GENERATOR_SCRIPT} does not exist")
   endif()
   add_custom_command(
-      OUTPUT  ${plugin_name}.cpp ${plugin_name}.hpp ${plugin_name}_plugin.xml
+      OUTPUT  ${plugin_name}.cpp ${plugin_name}.hpp ${plugin_name}.xml
       COMMAND ${Python3_EXECUTABLE} ${GENERATOR_SCRIPT} ${type} ${package} ${msg_name}
       DEPENDS ${GENERATOR_SCRIPT}
               ${TEMPLATES_DIR}/${type}.jinja.cpp
@@ -61,7 +61,7 @@ macro(cx_generate_bindings package msg_name type)
   )
   file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/include)
   install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${plugin_name}_plugin.xml
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/${plugin_name}.xml
     DESTINATION share/${PROJECT_NAME}
   )
   # install library and register the plugin plugin
@@ -76,7 +76,7 @@ macro(cx_generate_bindings package msg_name type)
   # pluginlib_export_plugin_description_file without checking for existence of the file as it checks in src dir only.
   # As the macro generates the xml file, it is located in build dir instead
   set(plugin_category cx_plugin)
-  set(relative_filename ${plugin_name}_plugin.xml)
+  set(relative_filename ${plugin_name}.xml)
   set(relative_dir "")
   set(__PLUGINLIB_CATEGORY_CONTENT__${plugin_category}
     "${__PLUGINLIB_CATEGORY_CONTENT__${plugin_category}}share/${PROJECT_NAME}/${relative_filename}\n")

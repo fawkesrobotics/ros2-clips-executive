@@ -81,7 +81,6 @@ bool ExecutivePlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
     clips_agenda_refresh_pub_->on_activate();
   }
   {
-    std::scoped_lock<std::mutex> guard(*(env.get_mutex_instance()));
     clips::AddUDF(
         env.get_obj().get(), "now", "d", 0, 0, NULL,
         [](clips::Environment *env, clips::UDFContext *udfc,
