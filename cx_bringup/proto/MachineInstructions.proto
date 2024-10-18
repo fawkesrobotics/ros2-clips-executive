@@ -100,4 +100,3 @@ message ResetMachine {
   // Machine name which to instruct
   required string machine = 2;
 }
-

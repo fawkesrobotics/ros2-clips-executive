@@ -80,5 +80,3 @@ message FinishedTask{
 	required uint32 TaskId = 1; // the specific task thats been done
 	required bool successful = 2; // the result of the task thats been done
 }
-
-

@@ -1,3 +1,5 @@
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 #include <memory>
 
 #include "cx_utils/NodeThread.hpp"
@@ -14,7 +16,6 @@ NodeThread::NodeThread(
     executor_->spin();
     executor_->remove_node(node_);
   });
-
 }
 
 NodeThread::~NodeThread() {

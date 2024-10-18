@@ -1,6 +1,0 @@
-cx_msgs/PddlGenInterface interface
-cx_msgs/PddlGenInterfaceMessages messages
----
-cx_msgs/PddlGenInterface interface
-bool success
-string error 
