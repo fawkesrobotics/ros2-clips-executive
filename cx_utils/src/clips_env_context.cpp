@@ -58,49 +58,80 @@ void CLIPSLogger::log(const char *logical_name, const char *str) {
       buffer_ += str;
     }
     if (strcmp(logical_name, "red") == 0) {
-      RCLCPP_INFO(this->logger_,
-                  (std::string(cx::RED) + buffer_ + cx::RESET).c_str());
+      RCLCPP_INFO(
+          this->logger_,
+          (std::string(cx::RED) + terminal_buffer_ + cx::RESET).c_str());
+    } else if (strcmp(logical_name, "bold") == 0) {
+      RCLCPP_INFO(
+          this->logger_,
+          (std::string(cx::BOLD) + terminal_buffer_ + cx::RESET).c_str());
     } else if (strcmp(logical_name, "green") == 0) {
-      RCLCPP_INFO(this->logger_,
-                  (std::string(cx::GREEN) + buffer_ + cx::RESET).c_str());
+      RCLCPP_INFO(
+          this->logger_,
+          (std::string(cx::GREEN) + terminal_buffer_ + cx::RESET).c_str());
     } else if (strcmp(logical_name, "yellow") == 0) {
-      RCLCPP_INFO(this->logger_,
-                  (std::string(cx::YELLOW) + buffer_ + cx::RESET).c_str());
+      RCLCPP_INFO(
+          this->logger_,
+          (std::string(cx::YELLOW) + terminal_buffer_ + cx::RESET).c_str());
     } else if (strcmp(logical_name, "blue") == 0) {
-      RCLCPP_INFO(this->logger_,
-                  (std::string(cx::BLUE) + buffer_ + cx::RESET).c_str());
+      RCLCPP_INFO(
+          this->logger_,
+          (std::string(cx::BLUE) + terminal_buffer_ + cx::RESET).c_str());
     } else if (strcmp(logical_name, "magenta") == 0) {
-      RCLCPP_INFO(this->logger_,
-                  (std::string(cx::MAGENTA) + buffer_ + cx::RESET).c_str());
+      RCLCPP_INFO(
+          this->logger_,
+          (std::string(cx::MAGENTA) + terminal_buffer_ + cx::RESET).c_str());
     } else if (strcmp(logical_name, "cyan") == 0) {
-      RCLCPP_INFO(this->logger_,
-                  (std::string(cx::CYAN) + buffer_ + cx::RESET).c_str());
+      RCLCPP_INFO(
+          this->logger_,
+          (std::string(cx::CYAN) + terminal_buffer_ + cx::RESET).c_str());
     } else if (strcmp(logical_name, "white") == 0) {
-      RCLCPP_INFO(this->logger_,
-                  (std::string(cx::WHITE) + buffer_ + cx::RESET).c_str());
+      RCLCPP_INFO(
+          this->logger_,
+          (std::string(cx::WHITE) + terminal_buffer_ + cx::RESET).c_str());
     } else if (strcmp(logical_name, "debug") == 0 ||
                strcmp(logical_name, "logdebug") == 0 ||
                strcmp(logical_name, clips::STDOUT) == 0) {
-      RCLCPP_DEBUG(this->logger_, buffer_.c_str());
+      RCLCPP_DEBUG(this->logger_, terminal_buffer_.c_str());
     } else if (strcmp(logical_name, "warn") == 0 ||
                strcmp(logical_name, "logwarn") == 0 ||
                strcmp(logical_name, clips::STDWRN) == 0) {
-      RCLCPP_WARN(this->logger_, buffer_.c_str());
+      RCLCPP_WARN(this->logger_, terminal_buffer_.c_str());
     } else if (strcmp(logical_name, "error") == 0 ||
                strcmp(logical_name, "logerror") == 0 ||
                strcmp(logical_name, clips::STDERR) == 0) {
-      RCLCPP_ERROR(this->logger_, buffer_.c_str());
+      RCLCPP_ERROR(this->logger_, terminal_buffer_.c_str());
     } else if (strcmp(logical_name, clips::STDIN) == 0) {
       // ignored
     } else {
-      RCLCPP_INFO(this->logger_, buffer_.c_str());
+      RCLCPP_INFO(this->logger_, terminal_buffer_.c_str());
     }
     // log any output to a dedicated clips log file
     clips_logger_->info(buffer_.c_str());
     clips_logger_->flush();
     buffer_.clear();
+    terminal_buffer_.clear();
 
   } else {
+    if (strcmp(logical_name, "red") == 0) {
+      terminal_buffer_ += std::string(cx::RED) + str + cx::RESET;
+    } else if (strcmp(logical_name, "bold") == 0) {
+      terminal_buffer_ += std::string(cx::BOLD) + str + cx::RESET;
+    } else if (strcmp(logical_name, "green") == 0) {
+      terminal_buffer_ += std::string(cx::GREEN) + str + cx::RESET;
+    } else if (strcmp(logical_name, "yellow") == 0) {
+      terminal_buffer_ += std::string(cx::YELLOW) + str + cx::RESET;
+    } else if (strcmp(logical_name, "blue") == 0) {
+      terminal_buffer_ += std::string(cx::BLUE) + str + cx::RESET;
+    } else if (strcmp(logical_name, "magenta") == 0) {
+      terminal_buffer_ += std::string(cx::MAGENTA) + str + cx::RESET;
+    } else if (strcmp(logical_name, "cyan") == 0) {
+      terminal_buffer_ += std::string(cx::CYAN) + str + cx::RESET;
+    } else if (strcmp(logical_name, "white") == 0) {
+      terminal_buffer_ += std::string(cx::WHITE) + str + cx::RESET;
+    } else {
+      terminal_buffer_ += str;
+    }
     buffer_ += str;
   }
 }

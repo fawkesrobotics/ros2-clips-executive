@@ -23,6 +23,7 @@ private:
   const rclcpp::Logger logger_;
   std::shared_ptr<spdlog::logger> clips_logger_;
   std::string buffer_;
+  std::string terminal_buffer_;
 };
 
 class CLIPSEnvContext {
