@@ -34,6 +34,9 @@ std::shared_ptr<cx::CLIPSEnvManager> clips_env_manager_node;
 std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exe;
 
 void custom_signal_handler(int /*signum*/) {
+  if (exe) {
+    exe->cancel();
+  }
   if (clips_env_manager_node) {
     auto current_state = clips_env_manager_node->get_current_state();
     const std::chrono::seconds timeout_duration(5);
@@ -85,9 +88,6 @@ void custom_signal_handler(int /*signum*/) {
   }
   if (exe && clips_env_manager_node) {
     exe->remove_node(clips_env_manager_node->get_node_base_interface());
-  }
-  if (exe) {
-    exe->cancel();
   }
   exe.reset();
   rclcpp::shutdown();
