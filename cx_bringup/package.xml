@@ -19,7 +19,7 @@
   <depend>plansys2_planner</depend>
   <depend>plansys2_lifecycle_manager</depend>
   <depend>cx_clips_env_manager</depend>
-  <depend>cx_clips_executive</depend>
+  <depend>cx_goal_reasoning</depend>
   <depend>pkg-config</depend>
 
   <exec_depend>launch_ros</exec_depend>

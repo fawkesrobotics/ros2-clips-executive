@@ -18,7 +18,6 @@ find_package(plansys2_problem_expert REQUIRED)
 find_package(plansys2_planner REQUIRED)
 find_package(plansys2_lifecycle_manager REQUIRED)
 find_package(cx_clips_env_manager REQUIRED)
-find_package(cx_clips_executive REQUIRED)
 find_package(cx_ros_comm_gen REQUIRED)
 find_package(PkgConfig REQUIRED)
 
@@ -30,7 +29,6 @@ set(dependencies
   plansys2_planner
   plansys2_lifecycle_manager
   cx_clips_env_manager
-  cx_clips_executive
   PkgConfig
 )
 set(dependencies_psys2
