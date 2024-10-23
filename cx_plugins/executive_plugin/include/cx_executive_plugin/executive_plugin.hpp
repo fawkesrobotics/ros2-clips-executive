@@ -18,6 +18,7 @@ public:
   ~ExecutivePlugin();
 
   void initialize() override;
+  void finalize() override;
 
   bool clips_env_init(LockSharedPtr<clips::Environment> &clips) override;
   bool clips_env_destroyed(LockSharedPtr<clips::Environment> &clips) override;

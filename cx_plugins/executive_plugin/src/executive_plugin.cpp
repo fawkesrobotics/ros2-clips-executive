@@ -20,6 +20,14 @@ ExecutivePlugin::~ExecutivePlugin() {
     agenda_refresh_timer_->cancel();
   }
 }
+void ExecutivePlugin::finalize() {
+  agenda_refresh_timer_->cancel();
+  {
+    std::scoped_lock<std::mutex> set_guard(envs_mutex_);
+    managed_envs.clear();
+  }
+  clips_agenda_refresh_pub_.reset();
+}
 
 void ExecutivePlugin::initialize() {
   logger_ = std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
