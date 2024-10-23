@@ -13,6 +13,8 @@
 #include <rosidl_typesupport_introspection_cpp/message_introspection.hpp>
 
 #include <rcutils/types/uint8_array.h>
+#include <unicode/ucnv.h>
+#include <unicode/unistr.h>
 
 // To export as plugin
 #include "pluginlib/class_list_macros.hpp"
@@ -56,12 +58,13 @@ void RosMsgsPlugin::finalize() {
                 messages_.size());
     messages_.clear();
   }
+  sub_messages_.clear();
 }
 
 bool RosMsgsPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   auto context = CLIPSEnvContext::get_context(env.get_obj().get());
-  RCLCPP_INFO(*logger_, "Initializing plugin for environment %s",
-              context->env_name_.c_str());
+  RCLCPP_DEBUG(*logger_, "Initializing plugin for environment %s",
+               context->env_name_.c_str());
 
   std::string fun_name = "ros-msgs-get-field";
   function_names_.insert(fun_name);
@@ -161,7 +164,7 @@ bool RosMsgsPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
       },
       "publish_to_topic", this);
 
-  fun_name = "ros-msgs-destroy";
+  fun_name = "ros-msgs-destroy-message";
   function_names_.insert(fun_name);
   clips::AddUDF(
       env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";e",
@@ -254,13 +257,14 @@ bool RosMsgsPlugin::clips_env_destroyed(
 void RosMsgsPlugin::subscribe_to_topic(clips::Environment *env,
                                        const std::string &topic_name,
                                        const std::string &topic_type) {
-  RCLCPP_INFO(*logger_, "Subscribing to topic %s %s", topic_name.c_str(),
-              topic_type.c_str());
+  RCLCPP_DEBUG(*logger_, "Subscribing to topic %s %s", topic_name.c_str(),
+               topic_type.c_str());
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
   auto node = parent_.lock();
   if (!node) {
     RCLCPP_ERROR(*logger_, "Invalid reference to parent node");
+    return;
   }
 
   auto it = subscriptions_[env_name].find(topic_name);
@@ -279,14 +283,6 @@ void RosMsgsPlugin::subscribe_to_topic(clips::Environment *env,
     if (!type_support_cache_.contains(topic_type)) {
       type_support_cache_[topic_type] = rclcpp::get_message_typesupport_handle(
           topic_type, "rosidl_typesupport_cpp", *libs_[topic_type]);
-    }
-    if (!introspection_info_cache_.contains(topic_type)) {
-      auto *introspection_type_support = get_message_typesupport_handle(
-          type_support_cache_[topic_type],
-          rosidl_typesupport_introspection_cpp::typesupport_identifier);
-      introspection_info_cache_[topic_type] = static_cast<
-          const rosidl_typesupport_introspection_cpp::MessageMembers *>(
-          introspection_type_support->data);
     }
 
     subscriptions_[env_name][topic_name] = node->create_generic_subscription(
@@ -328,40 +324,16 @@ void RosMsgsPlugin::unsubscribe_from_topic(clips::Environment *env,
               NULL);
 }
 
-std::shared_ptr<void>
-RosMsgsPlugin::create_deserialized_msg(const std::string &topic_type) {
-  auto *introspection_info = introspection_info_cache_[topic_type];
-
-  // Allocate memory for the message
-  std::shared_ptr<void> default_msg = std::shared_ptr<void>(
-      malloc(introspection_info->size_of_), // Allocate memory for the message
-      [this, introspection_info](
-          void *ptr) { // Custom deleter to finalize and free memory
-        if (introspection_info->fini_function) {
-          introspection_info->fini_function(
-              ptr); // Call the fini function to clean up
-        }
-        free(ptr); // Free the allocated memory
-      });
-
-  // Initialize the message with default values
-  if (introspection_info->init_function) {
-    introspection_info->init_function(
-        default_msg.get(),
-        rosidl_runtime_cpp::MessageInitialization::ALL // Use the ALL flag for
-                                                       // full initialization
-    );
-  }
-  return default_msg;
+std::shared_ptr<RosMsgsPlugin::MessageInfo>
+RosMsgsPlugin::create_deserialized_msg(const std::string &msg_type) {
+  auto *introspection_info = get_msg_members(msg_type);
+  return std::make_shared<RosMsgsPlugin::MessageInfo>(introspection_info);
 }
 
-void RosMsgsPlugin::topic_callback(
+std::shared_ptr<RosMsgsPlugin::MessageInfo> RosMsgsPlugin::deserialize_msg(
     std::shared_ptr<const rclcpp::SerializedMessage> msg,
-    const std::string &topic_name, const std::string &topic_type,
-    clips::Environment *env) {
-  std::shared_ptr<void> deserialized_msg = create_deserialized_msg(topic_type);
-
-  // Deserialize the message
+    const std::string &msg_type) {
+  // Prepare meta data for deserialization
   rcutils_uint8_array_t serialized_data;
   serialized_data.buffer =
       const_cast<uint8_t *>(msg->get_rcl_serialized_message().buffer);
@@ -371,26 +343,40 @@ void RosMsgsPlugin::topic_callback(
       msg->get_rcl_serialized_message().buffer_capacity;
 
   // Perform the deserialization
+  std::shared_ptr<MessageInfo> deserialized_msg =
+      create_deserialized_msg(msg_type);
   rmw_ret_t result =
-      rmw_deserialize(&serialized_data, type_support_cache_[topic_type],
-                      deserialized_msg.get());
+      rmw_deserialize(&serialized_data, type_support_cache_[msg_type],
+                      deserialized_msg->msg_ptr);
 
   if (result != RMW_RET_OK) {
-    RCLCPP_ERROR(*logger_,
-                 "ros-msgs: failed to deserialize message on callback");
+    return std::shared_ptr<MessageInfo>();
+  }
+  return deserialized_msg;
+}
+
+void RosMsgsPlugin::topic_callback(
+    std::shared_ptr<const rclcpp::SerializedMessage> msg,
+    const std::string &topic_name, const std::string &msg_type,
+    clips::Environment *env) {
+  std::shared_ptr<MessageInfo> deserialized_msg =
+      deserialize_msg(msg, msg_type);
+  if (!deserialized_msg) {
+    RCLCPP_ERROR(*logger_, "failed to process msg (topic: %s type: %s)",
+                 topic_name.c_str(), msg_type.c_str());
     return;
   }
+
   auto context = CLIPSEnvContext::get_context(env);
   cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
   std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-  messages_[deserialized_msg.get()] =
-      std::make_pair(deserialized_msg, topic_type);
+  messages_[deserialized_msg.get()] = deserialized_msg;
 
   // assert the newest message
   clips::FactBuilder *fact_builder =
       clips::CreateFactBuilder(clips.get_obj().get(), "ros-msgs-message");
   clips::FBPutSlotString(fact_builder, "topic", topic_name.c_str());
-  clips::FBPutSlotString(fact_builder, "type", topic_type.c_str());
+  clips::FBPutSlotString(fact_builder, "type", msg_type.c_str());
   clips::FBPutSlotCLIPSExternalAddress(
       fact_builder, "msg-ptr",
       clips::CreateCExternalAddress(clips.get_obj().get(),
@@ -452,71 +438,142 @@ void RosMsgsPlugin::destroy_publisher(clips::Environment *env,
   }
 }
 
+rclcpp::SerializedMessage
+RosMsgsPlugin::serialize_msg(std::shared_ptr<MessageInfo> msg_info,
+                             const std::string &msg_type) {
+  rmw_serialized_message_t serialized_msg =
+      rmw_get_zero_initialized_serialized_message();
+
+  const size_t initial_capacity = msg_info->members->size_of_;
+  ;
+  rcutils_allocator_t allocator = rcutils_get_default_allocator();
+  rmw_serialized_message_init(&serialized_msg, initial_capacity, &allocator);
+
+  // Use the RMW API to serialize the message
+  rmw_ret_t ret = rmw_serialize(msg_info->msg_ptr,
+                                type_support_cache_[msg_type], &serialized_msg);
+
+  rclcpp::SerializedMessage typed_serialized_msg;
+  if (ret != RMW_RET_OK) {
+    // Handle serialization failure
+    RCLCPP_ERROR(*logger_, "Failed to serialize message: %s\n",
+                 rmw_get_error_string().str);
+    return typed_serialized_msg;
+  }
+  typed_serialized_msg.reserve(serialized_msg.buffer_capacity);
+  typed_serialized_msg.get_rcl_serialized_message().buffer =
+      serialized_msg.buffer;
+  typed_serialized_msg.get_rcl_serialized_message().buffer_capacity =
+      serialized_msg.buffer_capacity;
+  typed_serialized_msg.get_rcl_serialized_message().buffer_length =
+      serialized_msg.buffer_length;
+  return typed_serialized_msg;
+}
+
 void RosMsgsPlugin::publish_to_topic(clips::Environment *env,
                                      void *deserialized_msg,
                                      const std::string &topic_name) {
   auto context = CLIPSEnvContext::get_context(env);
 
   if (!messages_.contains(deserialized_msg)) {
-  }
-  std::string message_type = messages_[deserialized_msg].second;
-
-  rmw_serialized_message_t serialized_msg =
-      rmw_get_zero_initialized_serialized_message();
-
-  const size_t initial_capacity =
-      introspection_info_cache_[message_type]->size_of_;
-  ;
-  rcutils_allocator_t allocator = rcutils_get_default_allocator();
-  rmw_serialized_message_init(&serialized_msg, initial_capacity, &allocator);
-
-  // Use the RMW API to serialize the message
-  rmw_ret_t ret = rmw_serialize(
-      deserialized_msg, type_support_cache_[message_type], &serialized_msg);
-
-  rclcpp::SerializedMessage ros2_serialized_msg;
-  ros2_serialized_msg.reserve(serialized_msg.buffer_capacity);
-  ros2_serialized_msg.get_rcl_serialized_message().buffer =
-      serialized_msg.buffer;
-  ros2_serialized_msg.get_rcl_serialized_message().buffer_capacity =
-      serialized_msg.buffer_capacity;
-  ros2_serialized_msg.get_rcl_serialized_message().buffer_length =
-      serialized_msg.buffer_length;
-
-  if (ret != RMW_RET_OK) {
-    // Handle serialization failure
-    RCLCPP_ERROR(*logger_, "Failed to serialize message: %s\n",
-                 rmw_get_error_string().str);
+    RCLCPP_ERROR(*logger_, "Failed to publish invalid msg pointer");
     return;
   }
-  publishers_[context->env_name_][topic_name]->publish(ros2_serialized_msg);
+  std::shared_ptr<MessageInfo> msg_info = messages_[deserialized_msg];
+  std::string msg_type = get_msg_type(msg_info->members);
+  rclcpp::SerializedMessage serialized_msg = serialize_msg(msg_info, msg_type);
+  if (serialized_msg.capacity() == 0) {
+    RCLCPP_ERROR(*logger_, "Failed to publish due to serialization error");
+  }
+  publishers_[context->env_name_][topic_name]->publish(serialized_msg);
 }
 
 clips::UDFValue RosMsgsPlugin::create_message(clips::Environment *env,
                                               const std::string &type) {
-  std::shared_ptr<void> ptr = create_deserialized_msg(type);
-  messages_[ptr.get()] = {ptr, type};
+  std::shared_ptr<MessageInfo> ptr = create_deserialized_msg(type);
+  messages_[ptr.get()] = ptr;
   clips::UDFValue res;
-  res.externalAddressValue = clips::CreateCExternalAddress(env, ptr.get());
+  res.externalAddressValue =
+      clips::CreateCExternalAddress(env, (void *)ptr.get());
   return res;
 }
 
 void RosMsgsPlugin::destroy_msg(void *msg) {
+  auto sub_it = sub_messages_.find(msg);
+  if (sub_it != sub_messages_.end()) {
+    for (const auto &sub_msg : sub_it->second) {
+      messages_.erase(sub_msg);
+    }
+  }
   auto it = messages_.find(msg);
   if (it != messages_.end()) {
     messages_.erase(it);
   }
 }
+const rosidl_typesupport_introspection_cpp::MessageMembers *
+RosMsgsPlugin::get_msg_members(const std::string &msg_type) {
+  if (type_support_cache_.contains(msg_type)) {
+    auto *introspection_type_support = get_message_typesupport_handle(
+        type_support_cache_[msg_type],
+        rosidl_typesupport_introspection_cpp::typesupport_identifier);
+    return static_cast<
+        const rosidl_typesupport_introspection_cpp::MessageMembers *>(
+        introspection_type_support->data);
+  }
+  RCLCPP_ERROR(*logger_, "type support information for type %s missing",
+               msg_type.c_str());
+  return nullptr;
+}
 
-clips::UDFValue RosMsgsPlugin::ros_message_member_to_udf_value(
-    clips::Environment *env, void *deserialized_msg,
+std::string RosMsgsPlugin::get_msg_type(
+    const rosidl_typesupport_introspection_cpp::MessageMembers *members) {
+  // Get the members of the nested message
+  std::string message_type =
+      std::string(members->message_namespace_) + "::" + members->message_name_;
+  size_t start_pos = 0;
+  while ((start_pos = message_type.find("::", start_pos)) !=
+         std::string::npos) {
+    message_type.replace(start_pos, 2, "/");
+    start_pos += 1;
+  }
+  return message_type;
+}
+
+std::shared_ptr<RosMsgsPlugin::MessageInfo> RosMsgsPlugin::process_nested_msg(
+    void *nested_msg,
     const rosidl_typesupport_introspection_cpp::MessageMember &member) {
+  // Access the type support of the nested message
+  const rosidl_message_type_support_t *type_support = member.members_;
+  if (type_support) {
+    // Get the members of the nested message
+    const rosidl_typesupport_introspection_cpp::MessageMembers *nested_members =
+        static_cast<
+            const rosidl_typesupport_introspection_cpp::MessageMembers *>(
+            type_support->data);
+    std::string message_type = get_msg_type(nested_members);
+    if (!libs_.contains(message_type)) {
+      libs_[message_type] = rclcpp::get_typesupport_library(
+          message_type, "rosidl_typesupport_cpp");
+    }
+    if (!type_support_cache_.contains(message_type)) {
+      type_support_cache_[message_type] =
+          rclcpp::get_message_typesupport_handle(
+              message_type, "rosidl_typesupport_cpp", *libs_[message_type]);
+    }
+    return std::make_shared<MessageInfo>(nested_members, nested_msg);
+  }
+  return std::shared_ptr<MessageInfo>();
+}
+
+clips::UDFValue RosMsgsPlugin::ros_msg_member_to_udf_value(
+    clips::Environment *env, std::shared_ptr<MessageInfo> &msg_info,
+    const rosidl_typesupport_introspection_cpp::MessageMember &member) {
+  void *deserialized_msg = msg_info->msg_ptr;
   clips::UDFValue res;
   res.begin = 0;
   res.range = -1;
-  // Check if the member is an array
+  // If member is an array, create a multifield
   if (member.is_array_) {
-    // Determine the size of the array
     size_t array_size = member.array_size_;
     void *member_loc =
         reinterpret_cast<uint8_t *>(deserialized_msg) + member.offset_;
@@ -528,15 +585,27 @@ clips::UDFValue RosMsgsPlugin::ros_message_member_to_udf_value(
         clips::CreateMultifieldBuilder(env, array_size);
     clips::Multifield *mf;
 
-    // Iterate over each element in the array
     for (size_t i = 0; i < array_size; ++i) {
       void *element = member.get_function(member_loc, i);
       if (!element) {
-        RCLCPP_ERROR(*logger_, "Failed to retreive element");
+        RCLCPP_ERROR(*logger_, "Failed to retrieve element");
         continue; // Skip if the element is null
       }
       clips::CLIPSValue elem =
           ros_to_clips_value(env, element, member.type_id_);
+      // properly store nested message and ensure the CLIPS value reflects that
+      if (member.type_id_ ==
+          rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE) {
+        std::shared_ptr<MessageInfo> sub_msg_info =
+            process_nested_msg(elem.externalAddressValue->contents, member);
+        if (sub_msg_info) {
+          sub_messages_[msg_info.get()].push_back(sub_msg_info.get());
+          messages_[sub_msg_info.get()] = sub_msg_info;
+          elem.externalAddressValue->contents = sub_msg_info.get();
+        } else {
+          RCLCPP_ERROR(*logger_, "Error while processing nested message");
+        }
+      }
       clips::MBAppend(mb, &elem);
     }
     mf = clips::MBCreate(mb);
@@ -546,6 +615,19 @@ clips::UDFValue RosMsgsPlugin::ros_message_member_to_udf_value(
     void *value =
         reinterpret_cast<void *>((uint8_t *)deserialized_msg + member.offset_);
     clips::CLIPSValue elem = ros_to_clips_value(env, value, member.type_id_);
+    // properly store nested message and ensure the CLIPS value reflects that
+    if (member.type_id_ ==
+        rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE) {
+      std::shared_ptr<MessageInfo> sub_msg_info =
+          process_nested_msg(elem.externalAddressValue->contents, member);
+      if (sub_msg_info) {
+        sub_messages_[msg_info.get()].push_back(sub_msg_info.get());
+        messages_[sub_msg_info.get()] = sub_msg_info;
+        elem.externalAddressValue->contents = sub_msg_info.get();
+      } else {
+        RCLCPP_ERROR(*logger_, "Error while processing nested message");
+      }
+    }
     res.value = elem.value;
   }
   return res;
@@ -561,16 +643,13 @@ clips::CLIPSValue RosMsgsPlugin::ros_to_clips_value(clips::Environment *env,
     res.value = clips::CreateBoolean(env, *bool_value);
     break;
   }
-  case rosidl_typesupport_introspection_cpp::ROS_TYPE_BYTE: {
-    int8_t *byte_value = reinterpret_cast<int8_t *>(val);
-    res.value = clips::CreateInteger(env, *byte_value);
-    break;
-  }
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT8: {
     int8_t *int8_value = reinterpret_cast<int8_t *>(val);
     res.value = clips::CreateInteger(env, *int8_value);
     break;
   }
+  // case rosidl_typesupport_introspection_cpp::ROS_TYPE_BYTE:
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_OCTET:
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT8: {
     uint8_t *uint8_value = reinterpret_cast<uint8_t *>(val);
     res.value = clips::CreateInteger(env, *uint8_value);
@@ -606,19 +685,57 @@ clips::CLIPSValue RosMsgsPlugin::ros_to_clips_value(clips::Environment *env,
     res.value = clips::CreateInteger(env, *uint64_value);
     break;
   }
+  // case rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT32:
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT: {
     float *float_value = reinterpret_cast<float *>(val);
     res.value = clips::CreateFloat(env, *float_value);
     break;
   }
+  // case rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT64:
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_DOUBLE: {
-    double *double_value = reinterpret_cast<double *>(val);
+    double *double_value = static_cast<double *>(val);
     res.value = clips::CreateFloat(env, *double_value);
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_LONG_DOUBLE: {
+    long double *long_double_value = reinterpret_cast<long double *>(val);
+    res.value =
+        clips::CreateFloat(env, static_cast<double>(*long_double_value));
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_CHAR: {
+    unsigned char *char_value = reinterpret_cast<unsigned char *>(val);
+    std::string str_value = std::string(1, *char_value);
+    res.value = clips::CreateString(env, str_value.c_str());
     break;
   }
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_STRING: {
     std::string *str_value = reinterpret_cast<std::string *>(val);
     res.value = clips::CreateString(env, str_value->c_str());
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_WCHAR: {
+    char16_t *char16_t_value = reinterpret_cast<char16_t *>(val);
+    std::u16string u16_str = std::u16string(1, *char16_t_value);
+    icu::UnicodeString unicode_str(
+        reinterpret_cast<const UChar *>(u16_str.data()), u16_str.length());
+    std::string utf8_str;
+    unicode_str.toUTF8String(utf8_str);
+    res.value = clips::CreateString(env, utf8_str.c_str());
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_WSTRING: {
+    std::u16string *u16string_value = reinterpret_cast<std::u16string *>(val);
+    icu::UnicodeString unicode_str(
+        reinterpret_cast<const UChar *>(u16string_value->data()),
+        u16string_value->length());
+    std::string utf8_str;
+    unicode_str.toUTF8String(utf8_str);
+    res.value = clips::CreateString(env, utf8_str.c_str());
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE: {
+    res.value = clips::CreateCExternalAddress(env, val);
     break;
   }
   default:
@@ -641,23 +758,19 @@ clips::UDFValue RosMsgsPlugin::get_field(clips::Environment *env,
     clips::UDFThrowError(udfc);
     return res;
   }
-  if (!messages_.contains(deserialized_msg)) {
-  }
-  std::string message_type = messages_[deserialized_msg].second;
-
+  std::shared_ptr<MessageInfo> info = messages_[deserialized_msg];
   const rosidl_typesupport_introspection_cpp::MessageMembers *members =
-      introspection_info_cache_[message_type];
-
-  if (!members) {
-  }
+      info->members;
+  std::string message_type = get_msg_type(members);
 
   // Search for the field in the message
   for (size_t i = 0; i < members->member_count_; ++i) {
     const auto &member = members->members_[i];
     if (field == member.name_) {
-      return ros_message_member_to_udf_value(env, deserialized_msg, member);
+      return ros_msg_member_to_udf_value(env, info, member);
     }
   }
+
   RCLCPP_ERROR(*logger_, "Failed to retrieve field %s", field.c_str());
   return res;
 }
@@ -667,29 +780,24 @@ void RosMsgsPlugin::set_field(clips::Environment *env, void *deserialized_msg,
                               clips::UDFContext *udfc) {
 
   if (!deserialized_msg || !messages_.contains(deserialized_msg)) {
-    RCLCPP_ERROR(*logger_, "ros-msgs-get-field: Invalid pointer ");
+    RCLCPP_ERROR(*logger_, "ros-msgs-set-field: Invalid pointer ");
     clips::UDFThrowError(udfc);
     return;
   }
-  if (!messages_.contains(deserialized_msg)) {
-  }
-  std::string message_type = messages_[deserialized_msg].second;
-
+  std::shared_ptr<MessageInfo> info = messages_[deserialized_msg];
   const rosidl_typesupport_introspection_cpp::MessageMembers *members =
-      introspection_info_cache_[message_type];
-
-  if (!members) {
-  }
+      info->members;
+  std::string message_type = get_msg_type(members);
 
   // Search for the field in the message
   for (size_t i = 0; i < members->member_count_; ++i) {
     const auto &member = members->members_[i];
     if (field == member.name_) {
-      udf_value_to_ros_message_member(env, deserialized_msg, member, val);
+      udf_value_to_ros_message_member(env, info->msg_ptr, member, val);
       return;
     }
   }
-  RCLCPP_ERROR(*logger_, "Failed to retrieve field %s", field.c_str());
+  RCLCPP_ERROR(*logger_, "Failed to set field %s", field.c_str());
 }
 
 void RosMsgsPlugin::udf_value_to_ros_message_member(
@@ -727,12 +835,13 @@ void RosMsgsPlugin::clips_to_ros_value(
     *bool_field = (strcmp(val.lexemeValue->contents, "TRUE") == 0);
     break;
   }
-  case rosidl_typesupport_introspection_cpp::ROS_TYPE_BYTE:
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT8: {
     int8_t *int8_field = reinterpret_cast<int8_t *>(field_ptr);
     *int8_field = static_cast<int8_t>(val.integerValue->contents);
     break;
   }
+  // case rosidl_typesupport_introspection_cpp::ROS_TYPE_BYTE:
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_OCTET:
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT8: {
     uint8_t *uint8_field = reinterpret_cast<uint8_t *>(field_ptr);
     *uint8_field = static_cast<uint8_t>(val.integerValue->contents);
@@ -768,20 +877,59 @@ void RosMsgsPlugin::clips_to_ros_value(
     *uint64_field = static_cast<uint64_t>(val.integerValue->contents);
     break;
   }
+
+  // case rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT32:
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT: {
     float *float_field = reinterpret_cast<float *>(field_ptr);
     *float_field = static_cast<float>(val.floatValue->contents);
     break;
   }
+  // case rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT64:
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_DOUBLE: {
     double *double_field = reinterpret_cast<double *>(field_ptr);
     *double_field = static_cast<double>(val.floatValue->contents);
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_LONG_DOUBLE: {
+    long double *long_double_field = reinterpret_cast<long double *>(field_ptr);
+    *long_double_field = static_cast<double>(val.floatValue->contents);
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_CHAR: {
+    unsigned char *char_field = reinterpret_cast<unsigned char *>(field_ptr);
+    *char_field = static_cast<unsigned char>(val.lexemeValue->contents[0]);
     break;
   }
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_STRING: {
     std::string *string_field = reinterpret_cast<std::string *>(field_ptr);
     const char *clips_string = val.lexemeValue->contents;
     *string_field = std::string(clips_string);
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_WCHAR: {
+    char16_t *char16_t_field = reinterpret_cast<char16_t *>(field_ptr);
+    std::string utf8_str = std::string(val.lexemeValue->contents);
+    icu::UnicodeString unicode_str = icu::UnicodeString::fromUTF8(utf8_str);
+    std::u16string u16_str(
+        reinterpret_cast<const char16_t *>(unicode_str.getBuffer()),
+        unicode_str.length());
+    *char16_t_field = u16_str[0];
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_WSTRING: {
+    std::u16string *u16string_field =
+        reinterpret_cast<std::u16string *>(field_ptr);
+    std::string utf8_str = std::string(val.lexemeValue->contents);
+    icu::UnicodeString unicode_str = icu::UnicodeString::fromUTF8(utf8_str);
+    std::u16string u16_str(
+        reinterpret_cast<const char16_t *>(unicode_str.getBuffer()),
+        unicode_str.length());
+    *u16string_field = u16_str;
+    break;
+  }
+  case rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE: {
+    void **target = reinterpret_cast<void **>(field_ptr);
+    *target = val.externalAddressValue->contents;
     break;
   }
   default:

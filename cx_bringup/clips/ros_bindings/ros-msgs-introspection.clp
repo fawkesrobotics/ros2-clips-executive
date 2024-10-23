@@ -41,7 +41,7 @@
   (bind ?msg (ros-msgs-create-msg "std_msgs/msg/String"))
   (ros-msgs-set-field ?msg "data" "Hello world!")
   (ros-msgs-publish ?msg ?topic)
-  (ros-msgs-destroy ?msg)
+  (ros-msgs-destroy-message ?msg)
 )
 
 (defrule ros-msgs-sub-init
@@ -60,7 +60,7 @@
   =>
   (bind ?recv (ros-msgs-get-field ?inc-msg "data"))
   (printout blue "Recieved via " ?sub ": " ?recv crlf)
-  (ros-msgs-destroy ?inc-msg)
+  (ros-msgs-destroy-message ?inc-msg)
   (retract ?msg-f)
 )
 
@@ -87,6 +87,6 @@
   (executive-finalize)
   ?msg-f <- (ros-msgs-message (msg-ptr ?ptr))
 =>
-  (ros-msgs-destroy ?ptr)
+  (ros-msgs-destroy-message ?ptr)
   (retract ?msg-f)
 )

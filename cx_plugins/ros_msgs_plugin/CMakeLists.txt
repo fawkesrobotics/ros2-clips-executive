@@ -19,9 +19,11 @@ find_package(cx_plugin REQUIRED)
 find_package(cx_utils REQUIRED)
 find_package(clips_vendor REQUIRED)
 find_package(clips REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(rosidl_typesupport_cpp REQUIRED)
 find_package(rosidl_typesupport_introspection_cpp REQUIRED)
 find_package(rcutils REQUIRED)
+find_package(ICU REQUIRED COMPONENTS uc i18n)
 
 set(dependencies
   ament_cmake
@@ -34,13 +36,14 @@ set(dependencies
   rosidl_typesupport_cpp
   rosidl_typesupport_introspection_cpp
   rcutils
+  ICU
 )
 include_directories(include)
 
 pluginlib_export_plugin_description_file(cx_plugin ros_msgs_plugin.xml)
 
 add_library(${PROJECT_NAME} SHARED src/ros_msgs_plugin.cpp)
-target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
+target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns  ICU::uc ICU::i18n)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)

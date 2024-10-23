@@ -19,6 +19,8 @@
   <depend>rosidl_typesupport_cpp</depend>
   <depend>rosidl_typesupport_introspection_cpp</depend>
   <depend>rcutils</depend>
+  <!-- for unicode support -->
+  <depend>libicu-dev</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
