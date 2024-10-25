@@ -100,7 +100,7 @@ bool RosMsgsPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
       },
       "set_field", this);
 
-  fun_name = "ros-msgs-create-msg";
+  fun_name = "ros-msgs-create-message";
   function_names_.insert(fun_name);
   clips::AddUDF(
       env.get_obj().get(), fun_name.c_str(), "e", 1, 1, ";sy",
@@ -326,6 +326,14 @@ void RosMsgsPlugin::unsubscribe_from_topic(clips::Environment *env,
 
 std::shared_ptr<RosMsgsPlugin::MessageInfo>
 RosMsgsPlugin::create_deserialized_msg(const std::string &msg_type) {
+  if (!libs_.contains(msg_type)) {
+    RCLCPP_DEBUG(*logger_,
+                 "Create new message information on message creation");
+    libs_[msg_type] =
+        rclcpp::get_typesupport_library(msg_type, "rosidl_typesupport_cpp");
+    type_support_cache_[msg_type] = rclcpp::get_message_typesupport_handle(
+        msg_type, "rosidl_typesupport_cpp", *libs_[msg_type]);
+  }
   auto *introspection_info = get_msg_members(msg_type);
   return std::make_shared<RosMsgsPlugin::MessageInfo>(introspection_info);
 }
@@ -780,7 +788,7 @@ void RosMsgsPlugin::set_field(clips::Environment *env, void *deserialized_msg,
                               clips::UDFContext *udfc) {
 
   if (!deserialized_msg || !messages_.contains(deserialized_msg)) {
-    RCLCPP_ERROR(*logger_, "ros-msgs-set-field: Invalid pointer ");
+    RCLCPP_ERROR(*logger_, "ros-msgs-set-field: Invalid pointer");
     clips::UDFThrowError(udfc);
     return;
   }
@@ -928,14 +936,442 @@ void RosMsgsPlugin::clips_to_ros_value(
     break;
   }
   case rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE: {
-    void **target = reinterpret_cast<void **>(field_ptr);
-    *target = val.externalAddressValue->contents;
+    void *target = reinterpret_cast<void *>(field_ptr);
+    if (messages_.contains(val.externalAddressValue->contents)) {
+      std::shared_ptr<MessageInfo> msg_info =
+          messages_[val.externalAddressValue->contents];
+      move_field_to_parent(target, &member, msg_info->msg_ptr);
+    } else {
+      RCLCPP_ERROR(*logger_, "Failed to set unknown message");
+    }
     break;
   }
   default:
     clips::Writeln(env, "Unsupported field type for setting value");
     // clips::UDFThrowError(udfc);
     throw std::runtime_error("Unsupported field type for setting value.");
+  }
+}
+
+void RosMsgsPlugin::move_field_to_parent(
+    void *parent_msg,
+    const rosidl_typesupport_introspection_cpp::MessageMember *parent_member,
+    void *source_msg) {
+
+  // Access the submessage in the parent at the specified offset
+  void *target_submsg =
+      reinterpret_cast<uint8_t *>(parent_msg) + parent_member->offset_;
+
+  // Obtain introspection information for the type of the submessage
+  const rosidl_typesupport_introspection_cpp::MessageMembers *sub_members =
+      static_cast<const rosidl_typesupport_introspection_cpp::MessageMembers *>(
+          parent_member->members_->data);
+
+  // Move fields from the source sub-message to the target sub-message in parent
+  for (uint32_t i = 0; i < sub_members->member_count_; ++i) {
+    const rosidl_typesupport_introspection_cpp::MessageMember *sub_member =
+        &sub_members->members_[i];
+
+    // Calculate the offset for the source and target members
+    void *source_field_ptr =
+        reinterpret_cast<uint8_t *>(source_msg) + sub_member->offset_;
+    void *target_field_ptr =
+        reinterpret_cast<uint8_t *>(target_submsg) + sub_member->offset_;
+
+    switch (sub_member->type_id_) {
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_BOOL: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of bool (std::vector<bool>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<bool> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<bool> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(bool));
+        }
+      } else {
+        // Single bool
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(bool));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT8: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int8 (std::vector<int8_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<int8_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<int8_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(int8_t));
+        }
+      } else {
+        // Single int8
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(int8_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT8:
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_OCTET: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of uint8 (std::vector<uint8_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<uint8_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<uint8_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(uint8_t));
+        }
+      } else {
+        // Single uint8
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(uint8_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT16: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int16 (std::vector<int16_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<int16_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<int16_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(int16_t));
+        }
+      } else {
+        // Single int16
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(int16_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT16: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of uint16 (std::vector<uint16_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<uint16_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<uint16_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(uint16_t));
+        }
+      } else {
+        // Single uint16
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(uint16_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT32: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int32 (std::vector<int32_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<int32_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<int32_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(int32_t));
+        }
+      } else {
+        // Single int32
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(int32_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT32: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int32 (std::vector<uint32_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<uint32_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<uint32_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(uint32_t));
+        }
+      } else {
+        // Single int32
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(uint32_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_INT64: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int64 (std::vector<int64_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<int64_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<int64_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(int64_t));
+        }
+      } else {
+        // Single int64
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(int64_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_UINT64: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int64 (std::vector<uint64_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<uint64_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<uint64_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(uint64_t));
+        }
+      } else {
+        // Single int64
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(uint64_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_FLOAT: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int64 (std::vector<float>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<float> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<float> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(float));
+        }
+      } else {
+        // Single int64
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(float));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_DOUBLE: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int64 (std::vector<double>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<double> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<double> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(double));
+        }
+      } else {
+        // Single int64
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(double));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_LONG_DOUBLE: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of int64 (std::vector<long double>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<long double> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<long double> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(long double));
+        }
+      } else {
+        // Single int64
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(long double));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_STRING: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array of strings (std::vector<std::string>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<std::string> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<std::string> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array of strings
+          auto source_array = reinterpret_cast<std::string *>(source_field_ptr);
+          auto target_array = reinterpret_cast<std::string *>(target_field_ptr);
+          for (size_t i = 0; i < sub_member->array_size_; ++i) {
+            target_array[i] = std::move(source_array[i]);
+          }
+        }
+      } else {
+        // Single string (std::string)
+        auto *source_str = reinterpret_cast<std::string *>(source_field_ptr);
+        auto *target_str = reinterpret_cast<std::string *>(target_field_ptr);
+        *target_str = std::move(*source_str);
+      }
+      break;
+    }
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_CHAR: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array (std::vector<char>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<char> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<char> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(char));
+        }
+      } else {
+        // Single char
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(char));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_WCHAR: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array (std::vector<wchar_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<wchar_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<wchar_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(wchar_t));
+        }
+      } else {
+        // Single wchar_t
+        std::memcpy(target_field_ptr, source_field_ptr, sizeof(wchar_t));
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_WSTRING: {
+      if (sub_member->is_array_) {
+        if (!sub_member->is_upper_bound_) {
+          // Dynamically-sized array (std::vector<wchar_t>)
+          auto *source_vector =
+              reinterpret_cast<std::vector<wchar_t> *>(source_field_ptr);
+          auto *target_vector =
+              reinterpret_cast<std::vector<wchar_t> *>(target_field_ptr);
+          *target_vector = std::move(*source_vector);
+        } else {
+          // Fixed-size array
+          std::memcpy(target_field_ptr, source_field_ptr,
+                      sub_member->array_size_ * sizeof(wchar_t));
+        }
+      } else {
+        // Single wstring (using std::wstring)
+        auto *source_string =
+            reinterpret_cast<std::wstring *>(source_field_ptr);
+        auto *target_string =
+            reinterpret_cast<std::wstring *>(target_field_ptr);
+        *target_string = std::move(*source_string);
+      }
+      break;
+    }
+
+    case rosidl_typesupport_introspection_cpp::ROS_TYPE_MESSAGE: {
+      const auto *sub_members = static_cast<
+          const rosidl_typesupport_introspection_cpp::MessageMembers *>(
+          parent_member->members_->data);
+
+      if (parent_member->is_array_) {
+        if (!parent_member->is_upper_bound_) {
+          // Dynamically-sized array of sub-messages
+          auto *source_vector =
+              reinterpret_cast<std::vector<void *> *>(source_msg);
+          auto *target_vector =
+              reinterpret_cast<std::vector<void *> *>(target_field_ptr);
+          target_vector->resize(source_vector->size());
+
+          for (size_t i = 0; i < source_vector->size(); ++i) {
+            // Iterate over each member in the nested message
+            for (size_t j = 0; j < sub_members->member_count_; ++j) {
+              const auto &sub_member = sub_members->members_[j];
+              move_field_to_parent(target_vector->at(i), &sub_member,
+                                   source_vector->at(i));
+            }
+          }
+        } else {
+          // Fixed-size array of sub-messages
+          auto source_array = reinterpret_cast<void **>(source_msg);
+          auto target_array = reinterpret_cast<void **>(target_field_ptr);
+
+          for (size_t i = 0; i < parent_member->array_size_; ++i) {
+            for (size_t j = 0; j < sub_members->member_count_; ++j) {
+              const auto &sub_member = sub_members->members_[j];
+              move_field_to_parent(target_array[i], &sub_member,
+                                   source_array[i]);
+            }
+          }
+        }
+      } else {
+        // Single nested sub-message
+        for (size_t j = 0; j < sub_members->member_count_; ++j) {
+          const auto &sub_member = sub_members->members_[j];
+          move_field_to_parent(target_field_ptr, &sub_member, source_msg);
+        }
+      }
+      break;
+    }
+
+    default:
+      throw std::runtime_error("Unsupported field type.");
+    }
   }
 }
 

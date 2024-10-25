@@ -140,6 +140,11 @@ private:
   rclcpp::SerializedMessage serialize_msg(std::shared_ptr<MessageInfo> msg_info,
                                           const std::string &msg_type);
 
+  void move_field_to_parent(
+      void *parent_msg,
+      const rosidl_typesupport_introspection_cpp::MessageMember *parent_member,
+      void *source_msg);
+
   std::unique_ptr<rclcpp::Logger> logger_;
 
   rclcpp::CallbackGroup::SharedPtr cb_group_;
