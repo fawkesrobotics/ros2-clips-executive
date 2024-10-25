@@ -78,7 +78,29 @@ Instead, object lifetimes need to be managed more explicitly through the usage o
 It is advised to clean up all objects as soon as they are not needed anymore in order to free up memory.
 
 Note that when processing nested messages, the message obtained via **ros-msgs-get-field** is not allocating new memory, but rather points to the memory of the parent message.
-Calling **ros-msgs-destroy-message** is not necessary, as sub-messages retrieved via **ros-msgs-get-field** only hold a shallow reference and are cleaned up when the parent message is destroyed.
+Calling **ros-msgs-destroy-message** is not necessary, as sub-messages retrieved via **ros-msgs-get-field** only hold a shallow reference and are cleaned up when the parent message is destroyed. Calling it anyways, will only invalidate this shallow reference.
 
-The same does not hold when explicitly creating a sub-message via **ros-msgs-create-message**, where new memory is allocated.
-When the created message is used in **ros-msgs-set-field**, it's content is copied, hence explicit cleanup is required, whenever using **ros-msgs-create-message**.
+When creating a new message via **ros-msgs-create-message**, new memory is allocated.
+When using **ros-msgs-set-field** to set a nested message, dynamic memory from the sub-message is moved to the parent message, hence the nested message loses all dynamicly allocated data (e.g., unbound arrays, strings).
+See the example below:
+```lisp
+(bind ?new-msg (ros-msgs-create-message "geometry_msgs/msg/Twist"))
+(bind ?sub-msg (ros-msgs-create-message "geometry_msgs/msg/Vector3"))
+(ros-msgs-set-field ?sub-msg "x" 5.5)
+(ros-msgs-set-field ?new-msg "linear" ?sub-msg)
+; now all dynamicly allocated members of ?sub-msg are reset,
+; as they are moved to the parent message.
+```
+In particular, obtaining a nested message from one message `?source` and setting it as a member to another message `?sink` will cause `?source` to lose all dynamic data within it's sub-message, as the sub-message obtained is actually pointing to memory within `?source`:
+
+```lisp
+(bind ?source (ros-msgs-create-message "geometry_msgs/msg/Twist"))
+(bind ?sub-msg (ros-msgs-create-message "geometry_msgs/msg/Vector3"))
+(ros-msgs-set-field ?sub-msg "x" 5.5)
+(ros-msgs-set-field ?source "linear" ?sub-msg)
+(bind ?sink (ros-msgs-create-message "geometry_msgs/msg/Twist"))
+(bind ?source-sub-msg (ros-msgs-get-field ?source "linear"))
+(ros-msgs-set-field ?sink "linear" ?source-sub-msg)
+; now all dynamicly allocated members of the sub message in ?source are reset,
+; as they are moved to ?sink.
+```
