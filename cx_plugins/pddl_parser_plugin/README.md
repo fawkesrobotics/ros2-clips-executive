@@ -1,6 +1,7 @@
 # cx_config_plugin
 This package offers the `cx::PddlParserPlugin` CLIPS plugin to use PDDL with CLIPS.
 
+At the moment this plugin only supports STRIPS-style PDDL domains.
 ## Usage
 Register this plugin with the plugin manager. It requires no additional configuration, an example setup is shown below:
 
@@ -16,7 +17,6 @@ clips_manager:
 ```
 ## CLIPS Features
 This plugin adds deftemplates and deffunctions as listed below:
-
 ##### Deftemplates
 ```lisp
 (deftemplate domain-object-type

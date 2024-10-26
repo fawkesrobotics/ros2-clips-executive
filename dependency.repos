@@ -3,10 +3,6 @@ repositories:
     type: git
     url: https://github.com/carologistics/clips_vendor
     version: main
-  clips_pddl_parser:
-    type: git
-    url: https://github.com/fawkesrobotics/clips_pddl_parser
-    version: tviehmann/clipsvendor
   pddl_parser:
     type: git
     url: https://github.com/fawkesrobotics/pddl_parser

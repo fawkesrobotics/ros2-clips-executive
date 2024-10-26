@@ -27,7 +27,7 @@
 #include <memory>
 #include <string>
 
-#include <clips_pddl_parser/clips_pddl_parser.h>
+#include <cx_pddl_parser_plugin/clips_pddl_parser.h>
 
 #include "cx_plugin/clips_plugin.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
@@ -39,6 +39,8 @@ public:
   PddlParserPlugin();
   ~PddlParserPlugin();
 
+  void initialize() override;
+
   bool clips_env_init(LockSharedPtr<clips::Environment> &env) override;
   bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
@@ -46,7 +48,9 @@ private:
   std::map<std::string, std::unique_ptr<clips_pddl_parser::ClipsPddlParser>>
       pddl_parsers_;
 
-private:
+  std::unique_ptr<rclcpp::Logger> logger_;
+
+  std::string plugin_path_;
 };
 
 } // namespace cx

@@ -14,7 +14,7 @@
   <depend>rclcpp</depend>
   <depend>cx_plugin</depend>
   <depend>cx_utils</depend>
-  <depend>clips_pddl_parser</depend>
+  <depend>pddl_parser</depend>
   <depend>pluginlib</depend>
   <depend>clips_vendor</depend>
 
