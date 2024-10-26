@@ -106,11 +106,10 @@ bool ExecutivePlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
         [](clips::Environment *env, clips::UDFContext * /*udfc*/,
            clips::UDFValue *out) {
           using namespace std::chrono;
-          // get system seconds
-          auto now = time_point_cast<seconds>(system_clock::now());
+          auto now = time_point_cast<duration<double>>(system_clock::now());
 
-          out->integerValue =
-              clips::CreateInteger(env, now.time_since_epoch().count());
+          out->floatValue =
+              clips::CreateFloat(env, now.time_since_epoch().count());
         },
         "clips_now_systime", NULL);
     std::vector<std::string> files{plugin_path_ +
