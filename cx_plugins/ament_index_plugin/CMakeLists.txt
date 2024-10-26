@@ -37,7 +37,6 @@ pluginlib_export_plugin_description_file(cx_plugin ament_index_plugin.xml)
 add_library(${PROJECT_NAME} SHARED src/ament_index_plugin.cpp)
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
-
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${CMAKE_CXX_STANDARD})
 
 # END OF PLUGINS REGISTRATION
