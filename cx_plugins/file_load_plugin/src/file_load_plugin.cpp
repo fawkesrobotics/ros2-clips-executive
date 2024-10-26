@@ -72,7 +72,7 @@ void FileLoadPlugin::initialize() {
   std::vector<std::string> batch_files;
   std::vector<std::string> cleanup_files;
   node->get_parameter(plugin_name_ + ".pkg_share_dirs", share_dirs);
-  node->get_parameter(plugin_name_ + ".files", files);
+  node->get_parameter(plugin_name_ + ".load", files);
   node->get_parameter(plugin_name_ + ".batch", batch_files);
   node->get_parameter(plugin_name_ + ".cleanup_batch", cleanup_files);
   resolve_files(files, share_dirs, init_files_);

@@ -1,5 +1,5 @@
 # cx_file_load_plugin
-This package allows to load files into CLIPS using batch* and load*.
+This package offers the `cx::FileLoadPlugin' that allows to load files into CLIPS using batch* and load*.
 
 When just defining constructs, it is recommended to use load* over batch*, as it provides better error output.
 When arbitrary commands should be executed, batch* should be used.
