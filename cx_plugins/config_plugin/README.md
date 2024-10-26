@@ -30,6 +30,61 @@ clips_manager:
 
 ##### Functions
 ```lisp
-; load all config values from a file (absolute path) given a prefix
-(config-load ?file-lex ?prefix-lex)
+; Load all config values from a file (absolute path) given a prefix and store tjhem into (confval) facts.
+; The prefix determines tha resulting path in the confval facts.
+(config-load ?file ?prefix)
+```
+## Example
+Assuming a yaml file at path `/home/<user>/test.yaml`:
+```yaml
+root:
+  branch:
+        val1: true
+        val2: [test1, test2]
+  branch2:
+        val1: false
+```
+Calling the function with different prefixes yields the following results:
+### Parsing Everyting
+```lisp
+(config-load "/home/<user>/test.yaml" "/")
+(confval
+  (path "/root/branch/val1")
+  (type BOOL)
+  (value TRUE)
+  (is-list FALSE)
+  (list-value)
+)
+(confval
+  (path "/root/branch/val2")
+  (type STRING)
+  (value nil)
+  (is-list TRUE)
+  (list-value "test1" "test2")
+)
+(confval
+  (path "/root/branch2/val1")
+  (type BOOL)
+  (value FALSE)
+  (is-list FLASE)
+  (list-value)
+)
+```
+### Parsing Only "branch"
+```lisp
+(config-load "/home/<user>/test.yaml" "/root/branch")
+(confval
+  (path "/root/branch/val1")
+  (type BOOL)
+  (value TRUE)
+  (is-list FALSE)
+  (list-value)
+)
+(confval
+  (path "/root/branch/val2")
+  (type STRING)
+  (value nil)
+  (is-list TRUE)
+  (list-value "test1" "test2")
+)
 ```

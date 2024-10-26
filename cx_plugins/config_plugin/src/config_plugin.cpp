@@ -85,16 +85,35 @@ bool ConfigPlugin::clips_env_destroyed(LockSharedPtr<clips::Environment> &env) {
 void ConfigPlugin::clips_config_load(clips::Environment *env,
                                      const std::string &file,
                                      const std::string &cfg_prefix) {
-  const std::string cfg_main_node = cfg_prefix.substr(1, cfg_prefix.size() - 1);
-
   try {
+    std::string sanitized_cfg_prefix = cfg_prefix;
+    if (sanitized_cfg_prefix.size() > 0) {
+      if (!sanitized_cfg_prefix.starts_with('/')) {
+        sanitized_cfg_prefix = '/' + prefix_sanitized;
+      }
+      if (sanitized_cfg_prefix.ends_with('/')) {
+        sanitized_cfg_prefix.pop_back();
+      }
+    }
     YAML::Node config = YAML::LoadFile(file);
-
-    iterateThroughYamlRecuresively(config[cfg_main_node], cfg_prefix, env);
+    YAML::Node config_main = config;
+    std::istringstream path_stream(sanitized_cfg_prefix);
+    std::string segment;
+    while (std::getline(path_stream, segment, '/')) {
+      if (!segment.empty()) {
+        config_main = config_main[segment];
+        if (!config_main) {
+          RCLCPP_ERROR(*logger_, "Segment '%s' not found in YAML file.",
+                       segment.c_str());
+          break;
+        }
+      }
+    }
+    iterateThroughYamlRecuresively(config_main, prefix_sanitized, env);
 
   } catch (const std::exception &e) {
     RCLCPP_ERROR_STREAM(*logger_, e.what());
-    RCLCPP_WARN(*logger_, "Abroting config loading...");
+    RCLCPP_WARN(*logger_, "Aborting config loading...");
   }
 }
 
@@ -178,11 +197,7 @@ void ConfigPlugin::iterateThroughYamlRecuresively(
     }
     // If it is a MapNode
     case YAML::NodeType::Map: {
-      if (item.first.as<std::string>() != "ros__parameters") {
-        path = config_path + "/" + item.first.as<std::string>();
-      } else {
-        path = config_path;
-      }
+      path = config_path + "/" + item.first.as<std::string>();
       iterateThroughYamlRecuresively(current_level_node[item.first], path, env);
       break;
     }
