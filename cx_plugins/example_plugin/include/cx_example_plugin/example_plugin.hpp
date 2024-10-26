@@ -1,7 +1,7 @@
 // Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
-#ifndef CX_PLUGINS__MOCKPLUGIN_HPP_
-#define CX_PLUGINS__MOCKPLUGIN_HPP_
+#ifndef CX_PLUGINS__EXAMPLE_PLUGIN_HPP_
+#define CX_PLUGINS__EXAMPLE_PLUGIN_HPP_
 
 #include <string>
 
@@ -25,4 +25,4 @@ private:
 };
 } // namespace cx
 
-#endif // !CX_PLUGINS__MOCKPLUGIN_HPP_
+#endif // !CX_PLUGINS__EXAMPLE_PLUGIN_HPP_

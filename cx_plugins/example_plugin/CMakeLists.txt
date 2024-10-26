@@ -6,7 +6,6 @@ if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
 endif()
 
-# set(ryml_DIR /home/userin4o/rapidyaml/install/lib/cmake/ryml)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -37,8 +36,9 @@ add_library(${PROJECT_NAME} SHARED src/example_plugin.cpp)
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${CMAKE_CXX_STANDARD})
+
 # END OF PLUGINS REGISTRATION
-target_compile_definitions(${PROJECT_NAME} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 install(
   DIRECTORY include/
