@@ -2,13 +2,9 @@
 This package offers the `cx::ConfigPlugin` CLIPS plugin to read config values from yaml.
 
 ## Usage
-The usage involves two steps:
-1. Loading this CLIPS-Executive plugin via the **cx_clips_env_manager** package
-2. Using the functions and templates
+Register this plugin with the plugin manager. It requires no additional configuration, an example setup is shown below:
 
-### Registering Bindings
-The config plugin does not need any additional configuration:
-```
+```yaml
 clips_manager:
   ros__parameters:
     environments: ["main"]
@@ -18,11 +14,18 @@ clips_manager:
     config:
       plugin: "cx::ConfigPlugin"
 ```
-### Using the Bindings in CLIPS
+## CLIPS Features
 
 ##### Deftemplates
 ```lisp
-(confval (path ?path-str) (type ?type-sym) (value ?val) (is-list ?is-list-sym) (list-value ?list-val))
+; Asserted by the config-load function for each configuration value in the parsed yaml file.
+(deftemplate confval
+  (slot path (type STRING))
+  (slot type (type SYMBOL) (allowed-values FLOAT UINT INT BOOL STRING))
+  (slot value)
+  (slot is-list (type SYMBOL) (allowed-values TRUE FALSE) (default FALSE))
+  (multislot list-value)
+)
 ```
 
 ##### Functions
