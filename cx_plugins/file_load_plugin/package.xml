@@ -3,7 +3,7 @@
 <package format="3">
   <name>cx_file_load_plugin</name>
   <version>0.1.0</version>
-  <description>CLIPS plugin that can load clips code via batch*.</description>
+  <description>CLIPS plugin that can load clips code via load* and batch*.</description>
 
   <maintainer email="viehmann@kbsg.rwth-aachen.de">Tarik Viehmann</maintainer>
 

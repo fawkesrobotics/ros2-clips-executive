@@ -59,18 +59,24 @@ void FileLoadPlugin::initialize() {
       node, plugin_name_ + ".pkg_share_dirs",
       rclcpp::ParameterValue(std::vector<std::string>()));
   cx::cx_utils::declare_parameter_if_not_declared(
-      node, plugin_name_ + ".files",
+      node, plugin_name_ + ".load",
       rclcpp::ParameterValue(std::vector<std::string>()));
   cx::cx_utils::declare_parameter_if_not_declared(
-      node, plugin_name_ + ".cleanup_files",
+      node, plugin_name_ + ".batch",
+      rclcpp::ParameterValue(std::vector<std::string>()));
+  cx::cx_utils::declare_parameter_if_not_declared(
+      node, plugin_name_ + ".cleanup_batch",
       rclcpp::ParameterValue(std::vector<std::string>()));
   std::vector<std::string> share_dirs;
   std::vector<std::string> files;
+  std::vector<std::string> batch_files;
   std::vector<std::string> cleanup_files;
   node->get_parameter(plugin_name_ + ".pkg_share_dirs", share_dirs);
   node->get_parameter(plugin_name_ + ".files", files);
-  node->get_parameter(plugin_name_ + ".cleanup_files", cleanup_files);
+  node->get_parameter(plugin_name_ + ".batch", batch_files);
+  node->get_parameter(plugin_name_ + ".cleanup_batch", cleanup_files);
   resolve_files(files, share_dirs, init_files_);
+  resolve_files(batch_files, share_dirs, init_batch_files_);
   resolve_files(cleanup_files, share_dirs, cleanup_files_);
 }
 
@@ -79,6 +85,18 @@ bool FileLoadPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   RCLCPP_INFO(*logger_, "Initializing plugin for environment %s",
               context->env_name_.c_str());
   for (const auto &f : init_files_) {
+
+    if (clips::EE_NO_ERROR != clips::Eval(env.get_obj().get(),
+                                          std::format("(load* {})", f).c_str(),
+                                          NULL)) {
+      clips::Writeln(env.get_obj().get(),
+                     std::format("Failed to load file {}", f).c_str());
+      RCLCPP_ERROR(*logger_, "Failed to load file '%s' failed!, aborting...",
+                   f.c_str());
+      return false;
+    }
+  }
+  for (const auto &f : init_batch_files_) {
 
     if (!clips::BatchStar(env.get_obj().get(), f.c_str())) {
       clips::Writeln(

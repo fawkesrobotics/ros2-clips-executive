@@ -3,10 +3,9 @@ project(cx_file_load_plugin)
 
 # Default to C++20
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD20)
+  set(CMAKE_CXX_STANDARD 20)
 endif()
 
-# set(ryml_DIR /home/userin4o/rapidyaml/install/lib/cmake/ryml)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -36,6 +35,7 @@ pluginlib_export_plugin_description_file(cx_plugin file_load_plugin.xml)
 add_library(${PROJECT_NAME} SHARED src/file_load_plugin.cpp)
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${CMAKE_CXX_STANDARD})
 
 install(
   DIRECTORY include/
@@ -53,8 +53,6 @@ install(TARGETS
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
-
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})

@@ -24,6 +24,7 @@ private:
   std::unique_ptr<rclcpp::Logger> logger_;
 
   std::vector<std::string> init_files_;
+  std::vector<std::string> init_batch_files_;
   std::vector<std::string> cleanup_files_;
 
   void resolve_files(const std::vector<std::string> &files_in,
