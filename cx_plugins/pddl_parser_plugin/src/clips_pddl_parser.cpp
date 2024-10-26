@@ -50,14 +50,6 @@
 using namespace std;
 using namespace pddl_parser;
 
-namespace {
-#ifdef SHAREDIR
-const std::filesystem::path sharedir(SHAREDIR);
-#else
-const std::filesystem::path sharedir{"clips"};
-#endif
-} // namespace
-
 namespace clips_pddl_parser {
 
 /** @class ClipsPddlParser <clips_pddl_parser/communicator.h>
@@ -70,13 +62,10 @@ namespace clips_pddl_parser {
  * @param env CLIPS environment to which to provide the PDDL parsing
  * functionality
  * @param env_mutex mutex to lock when operating on the CLIPS environment.
- * @param load_clips_templates If true, the target CLIPS fact templates are
- *                             loaded to the environment.
  */
-ClipsPddlParser::ClipsPddlParser(clips::Environment *env, std::mutex &env_mutex,
-                                 bool load_clips_templates)
+ClipsPddlParser::ClipsPddlParser(clips::Environment *env, std::mutex &env_mutex)
     : clips_(env), clips_mutex_(env_mutex) {
-  setup_clips(load_clips_templates);
+  setup_clips();
 }
 
 /** Destructor. */
@@ -90,10 +79,8 @@ ClipsPddlParser::~ClipsPddlParser() {
 }
 
 /** Setup CLIPS environment.
- * @param load_clips_templates If true, the target CLIPS fact templates are
- *                             loaded to the environment.
  */
-void ClipsPddlParser::setup_clips(bool load_clips_templates) {
+void ClipsPddlParser::setup_clips() {
   clips::AddUDF(
       clips_, "parse-pddl-domain", "v", 1, 1, ";sy",
       [](clips::Environment * /*env*/, clips::UDFContext *udfc,
@@ -122,9 +109,6 @@ void ClipsPddlParser::setup_clips(bool load_clips_templates) {
                                 id.lexemeValue->contents);
       },
       "parse_pddl_formula", this);
-  if (load_clips_templates) {
-    clips::BatchStar(clips_, (sharedir / "domain.clp").string().c_str());
-  }
 }
 /** CLIPS function to parse a PDDL domain.
  * This parses the given domain and asserts domain facts for all parts of the

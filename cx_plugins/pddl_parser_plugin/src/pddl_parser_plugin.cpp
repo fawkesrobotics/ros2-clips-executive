@@ -54,7 +54,7 @@ bool PddlParserPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
 
   pddl_parsers_[env_name] =
       std::make_unique<clips_pddl_parser::ClipsPddlParser>(
-          env.get_obj().get(), *(env.get_mutex_instance()), false);
+          env.get_obj().get(), *(env.get_mutex_instance()));
   std::vector<std::string> files{plugin_path_ +
                                  "/clips/cx_pddl_parser_plugin/domain.clp"};
   for (const auto &f : files) {
