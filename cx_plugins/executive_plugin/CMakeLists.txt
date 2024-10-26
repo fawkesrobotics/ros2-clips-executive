@@ -38,9 +38,7 @@ pluginlib_export_plugin_description_file(cx_plugin executive_plugin.xml)
 add_library(${PROJECT_NAME} SHARED src/executive_plugin.cpp)
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
-
-# END OF PLUGINS REGISTRATION
-target_compile_definitions(${PROJECT_NAME} PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${CMAKE_CXX_STANDARD})
 
 install(
   DIRECTORY include/
