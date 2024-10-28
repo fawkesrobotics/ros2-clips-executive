@@ -3,6 +3,8 @@
 #ifndef CX_UTILS__PARAMSUTILS_HPP
 #define CX_UTILS__PARAMSUTILS_HPP
 
+#include <rclcpp/rclcpp.hpp>
+#include <string>
 namespace cx {
 namespace cx_utils {
 /// Declares static ROS2 parameter and sets it to a given value if it was not
@@ -81,6 +83,9 @@ std::string get_plugin_type_param(NodeT node, const std::string &plugin_name) {
 
   return plugin_type;
 }
+void resolve_files(const std::vector<std::string> &files_in,
+                   const std::vector<std::string> &share_dirs,
+                   std::vector<std::string> &files_out);
 } // namespace cx_utils
 } // namespace cx
 

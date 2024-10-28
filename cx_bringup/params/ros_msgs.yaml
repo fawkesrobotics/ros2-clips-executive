@@ -8,8 +8,6 @@ clips_manager:
       log_clips_to_file: true
       watch: ["facts", "rules"]
 
-    skill_execution:
-      plugin: "cx::SkillExecutionPlugin"
     ros_msg:
       plugin: "cx::RosMsgsPlugin"
     executive:

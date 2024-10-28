@@ -26,10 +26,6 @@ private:
   std::vector<std::string> init_files_;
   std::vector<std::string> init_batch_files_;
   std::vector<std::string> cleanup_files_;
-
-  void resolve_files(const std::vector<std::string> &files_in,
-                     const std::vector<std::string> &share_dirs,
-                     std::vector<std::string> &files_out);
 };
 } // namespace cx
 

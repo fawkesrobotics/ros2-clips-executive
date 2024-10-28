@@ -53,7 +53,7 @@ PreconditionToCLIPSFactVisitor::PreconditionToCLIPSFactVisitor(
  * @return An empty vector.
  */
 vector<string>
-PreconditionToCLIPSFactVisitor::operator()(QuantifiedFormula &q) const {
+PreconditionToCLIPSFactVisitor::operator()(QuantifiedFormula &) const {
   throw PddlParserException(
       "QuantifiedFormulas are not supported in CLIPS yet.");
   return vector<string>();

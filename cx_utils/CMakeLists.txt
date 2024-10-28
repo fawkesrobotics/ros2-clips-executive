@@ -17,12 +17,14 @@ find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
 find_package(clips_vendor REQUIRED)
 find_package(clips REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 
 set(dependencies
   ament_cmake
   rclcpp
   spdlog
   fmt
+  ament_index_cpp
 )
 
 include_directories(include)
@@ -32,6 +34,7 @@ set(CX_UTILS_SOURCES
   src/NodeThread.cpp
   src/map_skill.cpp
   src/clips_env_context.cpp
+  src/param_utils.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${CX_UTILS_SOURCES})

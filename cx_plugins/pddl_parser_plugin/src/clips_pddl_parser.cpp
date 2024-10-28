@@ -109,6 +109,7 @@ void ClipsPddlParser::setup_clips() {
                                 id.lexemeValue->contents);
       },
       "parse_pddl_formula", this);
+  functions_.push_back("parse-pddl-formula");
 }
 /** CLIPS function to parse a PDDL domain.
  * This parses the given domain and asserts domain facts for all parts of the

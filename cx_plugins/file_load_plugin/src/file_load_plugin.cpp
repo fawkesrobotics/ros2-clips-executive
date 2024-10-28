@@ -16,38 +16,6 @@ FileLoadPlugin::FileLoadPlugin() {}
 
 FileLoadPlugin::~FileLoadPlugin() {}
 
-void FileLoadPlugin::resolve_files(const std::vector<std::string> &files_in,
-                                   const std::vector<std::string> &share_dirs,
-                                   std::vector<std::string> &files_out) {
-  // Try to resolve files
-  for (const auto &file : files_in) {
-    bool found = false;
-    std::filesystem::path file_path(file);
-    // Check if the path is absolute and exists
-    if (file_path.is_absolute() && std::filesystem::exists(file_path)) {
-      files_out.push_back(file_path);
-      found = true;
-    } else {
-      // Otherwise check in the respective share directories
-      for (const auto &package : share_dirs) {
-        std::string dir_path =
-            ament_index_cpp::get_package_share_directory(package);
-        std::filesystem::path share_dir_path(dir_path);
-
-        std::filesystem::path potential_path = share_dir_path / file_path;
-        if (std::filesystem::exists(potential_path)) {
-          files_out.push_back(potential_path);
-          found = true;
-          break;
-        }
-      }
-    }
-    if (!found) {
-      RCLCPP_ERROR(*logger_, "Cannot resolve file %s", file.c_str());
-    }
-  }
-}
-
 void FileLoadPlugin::initialize() {
   logger_ = std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
   auto node = parent_.lock();
@@ -75,9 +43,13 @@ void FileLoadPlugin::initialize() {
   node->get_parameter(plugin_name_ + ".load", files);
   node->get_parameter(plugin_name_ + ".batch", batch_files);
   node->get_parameter(plugin_name_ + ".cleanup_batch", cleanup_files);
-  resolve_files(files, share_dirs, init_files_);
-  resolve_files(batch_files, share_dirs, init_batch_files_);
-  resolve_files(cleanup_files, share_dirs, cleanup_files_);
+  try {
+    cx_utils::resolve_files(files, share_dirs, init_files_);
+    cx_utils::resolve_files(batch_files, share_dirs, init_batch_files_);
+    cx_utils::resolve_files(cleanup_files, share_dirs, cleanup_files_);
+  } catch (std::exception &e) {
+    RCLCPP_ERROR(*logger_, "%s", e.what());
+  }
 }
 
 bool FileLoadPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {

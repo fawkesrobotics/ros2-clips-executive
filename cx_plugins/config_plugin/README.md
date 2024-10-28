@@ -15,6 +15,7 @@ clips_manager:
       plugin: "cx::ConfigPlugin"
 ```
 ## CLIPS Features
+This plugin adds deftemplates and deffunctions as listed below:
 
 ##### Deftemplates
 ```lisp

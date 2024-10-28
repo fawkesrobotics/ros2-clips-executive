@@ -1,12 +1,39 @@
 ; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
 ;---------------------------------------------------------------------------
-;  domain.clp - Representation of a planning domain
+;  domain.clp - Representation of a planning domain, adapted from fawkes
 ;
 ;  Created: Fri 22 Sep 2017 11:35:49 CEST
 ;  Copyright  2017  Till Hofmann <hofmann@kbsg.rwth-aachen.de>
 ;  Licensed under GPLv2+ license, cf. LICENSE file
 ;---------------------------------------------------------------------------
+(defglobal
+  ?*SALIENCE-FIRST*         =  10000
+  ?*SALIENCE-INIT*          =   9010
+  ?*SALIENCE-INIT-LATE*     =   9000
+  ?*SALIENCE-WM-IDKEY*      =   5200
+  ?*SALIENCE-WM-SYNC-DEL*   =   5100
+  ?*SALIENCE-WM-SYNC-ADD*   =   5000
+  ?*SALIENCE-DOMAIN-GROUND* =   4200
+  ?*SALIENCE-DOMAIN-CHECK*  =   4100
+  ?*SALIENCE-DOMAIN-APPLY*  =   4000
+  ?*SALIENCE-HIGH*          =   1000
+  ?*SALIENCE-MODERATE*      =    500
+	; the following is just informative
+  ;?*SALIENCE-NORMAL*       =      0
+  ?*SALIENCE-LOW*           =  -1000
+  ?*SALIENCE-LAST*          = -10000
+)
+
+
+(deffunction append$ (?list $?items)
+  (insert$ ?list (+ (length$ ?list) 1) ?items)
+)
+
+(deffunction domain-retract-grounding-user-extension (?grounding-id)
+  (return TRUE)
+)
+
 
 (deftemplate domain-object-type
   "A type in the domain. The type obj must be super-type of all types."
@@ -220,7 +247,6 @@
   names and param values."
   (?parent-id ?param-names ?param-values ?grounding-id)
 
-  ;(bind ?grounding-id nil)
   (do-for-all-facts ((?formula pddl-formula)) (eq ?parent-id ?formula:part-of)
     ;if no grounding fact created yet, create one
     (if (eq ?grounding-id nil) then
@@ -243,44 +269,8 @@
   (return ?grounding-id)
 )
 
-(defrule domain-ground-plan-action-precondition
-  "Create grounded pddl formulas for the precondition of a plan-action if it
-  has not been grounded yet and add a reference to the plan-action fact"
-  (declare (salience ?*SALIENCE-DOMAIN-GROUND*))
-  ?p <- (plan-action (id ?action-id) (action-name ?operator-id)
-                     (param-names $?param-names) (param-values $?param-values)
-                     (precondition nil))
-  (domain-operator (name ?operator-id) (param-names $?op-param-names&:(= (length$ ?param-names) (length$ ?op-param-names))))
-  =>
-  (bind ?grounding (ground-pddl-formula ?operator-id ?param-names ?param-values nil))
-  (modify ?p (precondition ?grounding))
-)
-
-(defrule domain-check-if-action-precondition-is-satisfied
-  "Check if there is a referenced precondition formula that is satisfied,
-  if yes make the action executable."
-  (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
-  ?p <- (plan-action (executable FALSE) (id ?id) (precondition ?grounding-id))
-  (grounded-pddl-formula (is-satisfied TRUE) (id ?formula-id) (grounding ?grounding-id))
-  (pddl-grounding (id ?grounding-id))
-  =>
-  (modify ?p (executable TRUE))
-  (printout t "Action " ?id " is executable based on " ?formula-id crlf)
-)
-
-(defrule domain-check-if-action-precondition-is-unsatisfied
-  "Check if all referenced precondition formulas are not satisfied,
-  if yes make the action not executable."
-  (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
-  ?p <- (plan-action (executable TRUE) (id ?id) (precondition ?grounding-id))
-  (not (grounded-pddl-formula (is-satisfied TRUE) (id ?formula-id) (grounding ?grounding-id)))
-  (pddl-grounding (id ?grounding-id))
-  =>
-  (modify ?p (executable FALSE))
-  (printout t "Action " ?id " is no longer executable" crlf)
-)
-
 (defrule domain-check-if-atomic-formula-is-satisfied
+  "An atomic formula is satisfied when its associated predicate is satisfied."
   (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
 
   (pddl-grounding (id ?grounding-id))
@@ -293,10 +283,30 @@
   (and (pddl-predicate (part-of ?parent-base) (id ?child-base))
         (grounded-pddl-predicate (predicate-id ?child-base)
                                 (grounding ?grounding-id)
-                                (is-satisfied FALSE))
+                                (is-satisfied TRUE))
   )
   =>
   (modify ?parent (is-satisfied TRUE))
+)
+
+(defrule domain-check-if-atomic-formula-is-unsatisfied
+  "An atomic formula is unsatisfied when its associated predicate is unsatisfied."
+  (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
+
+  (pddl-grounding (id ?grounding-id))
+  (pddl-formula (id ?parent-base) (type atom))
+  ?parent <- (grounded-pddl-formula (id ?id)
+                                    (formula-id ?parent-base)
+                                    (is-satisfied TRUE)
+                                    (grounding ?grounding-id))
+
+  (and (pddl-predicate (part-of ?parent-base) (id ?child-base))
+        (grounded-pddl-predicate (predicate-id ?child-base)
+                                (grounding ?grounding-id)
+                                (is-satisfied FALSE))
+  )
+  =>
+  (modify ?parent (is-satisfied FALSE))
 )
 
 
@@ -440,9 +450,10 @@
     else
       (bind ?index (member$ ?param ?grounded-names))
       (if (not ?index) then
-        (assert (domain-error (error-type unknown-parameter) (error-msg
-          (str-cat "PDDL Predicate has unknown parameter " ?param)))
-        )
+        (printout error "PDDL Predicate has unknown parameter " ?param " (" ?grounded-names " vs " ?names  ") " crlf)
+        ; (assert (domain-error (error-type unknown-parameter) (error-msg
+        ;   (str-cat "PDDL Predicate has unknown parameter " ?param)))
+        ; )
         (return FALSE)
       else
         (bind ?values
@@ -601,20 +612,6 @@
   (assert (domain-obj-is-of-type ?obj ?super-type))
 )
 
-(defrule domain-amend-action-params
-  "If a plan action has no action-params specified, copy the params from the
-   operator."
-  ?a <- (plan-action
-          (action-name ?op-name)
-          (param-names $?ap-names&:(= (length$ ?ap-names) 0))
-          (param-values $?ap-values&:(> (length$ ?ap-values) 0))
-        )
-  ?op <- (domain-operator (name ?op-name)
-          (param-names $?param-names&:(> (length$ ?param-names) 0)))
-  =>
-  (modify ?a (param-names ?param-names))
-)
-
 (deffunction remove-precondition
   "Remove a sub-formula from its parent and clean up the formula tree.
    If the parent is a disjunction with no other disjunct, simplify it to
@@ -629,17 +626,18 @@
     (if (or (eq (fact-slot-value ?parent type) negation)
             (eq (fact-slot-value ?parent type) atom))then
       (remove-precondition ?parent)
-    )
-    (if (and (eq (fact-slot-value ?parent type) disjunction)
-             (not (any-factp ((?sibling pddl-formula)) (eq (fact-slot-value ?parent id)
-                                                           ?sibling:part-of))
-             )
-             (not (any-factp ((?sibling pddl-predicate)) (eq (fact-slot-value ?parent id)
+    else
+      (if (and (eq (fact-slot-value ?parent type) disjunction)
+               (not (any-factp ((?sibling pddl-formula)) (eq (fact-slot-value ?parent id)
                                                              ?sibling:part-of))
-             )
-        )
-      then
-      (remove-precondition ?parent)
+               )
+               (not (any-factp ((?sibling pddl-predicate)) (eq (fact-slot-value ?parent id)
+                                                               ?sibling:part-of))
+               )
+          )
+        then
+        (remove-precondition ?parent)
+      )
     )
   ))
   then
@@ -648,29 +646,21 @@
                             (type conjunction)
               )
       )
-      (retract ?precond-fact)
   )
   (retract ?precond-fact)
 )
 
 (deffunction domain-retract-grounding
   "Retract all groundings and grounded formulas associated with plan-actions"
-  ()
-  (do-for-all-facts ((?grounding pddl-grounding)) TRUE
-                    (if (any-factp ((?plan-action plan-action))
-                                      (eq ?plan-action:precondition ?grounding:id))
-                      then
-                      (do-for-all-facts ((?precond grounded-pddl-predicate))
-                                        (eq ?precond:grounding ?grounding:id)
-                        (retract ?precond))
-                      (do-for-all-facts ((?precond grounded-pddl-formula))
-                                        (eq ?precond:grounding ?grounding:id)
-                        (retract ?precond))
-                    )
-                    (do-for-all-facts ((?plan-action plan-action))
-                                      (eq ?plan-action:precondition ?grounding:id)
-                      (modify ?plan-action (precondition nil))
-                    )
+  (?grounding-id)
+  (domain-retract-grounding-user-extension ?grounding-id)
+  (do-for-all-facts ((?grounding pddl-grounding)) (eq ?grounding-id ?grounding:id)
+                    (do-for-all-facts ((?precond grounded-pddl-predicate))
+                                      (eq ?precond:grounding ?grounding:id)
+                      (retract ?precond))
+                    (do-for-all-facts ((?precond grounded-pddl-formula))
+                                      (eq ?precond:grounding ?grounding:id)
+                      (retract ?precond))
                     (retract ?grounding)
   )
 )
@@ -729,7 +719,9 @@
                           (predicate ?pred))
   =>
   (remove-precondition ?pre)
-  (domain-retract-grounding)
+  (delayed-do-for-all-facts ((?g pddl-grounding)) TRUE
+    (domain-retract-grounding ?g:id)
+  )
 )
 
 (defrule domain-replace-precond-on-sensed-val-effect-of-exog-action
@@ -776,28 +768,9 @@
   (modify ?pre (part-of ?precond) (id (sym-cat ?precond 1)))
 
   ; If there are any grounded preconditions, we need to recompute them.
-  (domain-retract-grounding)
-)
-
-(defrule domain-ground-effect-precondition
-  "Ground a non-atomic precondition. Grounding here merely means that we
-   duplicate the precondition and tie it to one specific effect-id."
-  (declare (salience ?*SALIENCE-DOMAIN-GROUND*))
-  (goal (id ?g))
-  (plan (id ?p) (goal-id ?g))
-  ?pa <- (plan-action (action-name ?op)
-                      (id ?action-id)
-                      (goal-id ?g)
-                      (plan-id ?p)
-                      (state EXECUTION-SUCCEEDED)
-                      (param-names $?param-names)
-                      (param-values $?param-values)
-                      (precondition nil))
-  (domain-effect (name ?effect-name) (part-of ?op))
-  ?precond <- (pddl-formula (id ?precond-id) (part-of ?effect-name))
-=>
-  (bind ?grounding (ground-pddl-formula ?effect-name ?param-names ?param-values nil))
-  (modify ?pa (precondition ?grounding))
+  (delayed-do-for-all-facts ((?g pddl-grounding)) TRUE
+    (domain-retract-grounding ?g:id)
+  )
 )
 
 (deffunction intersect
@@ -833,117 +806,6 @@
   (return ?values)
 )
 
-(defrule domain-effects-check-for-sensed
-  "Apply effects of an action after it succeeded."
-  (declare (salience ?*SALIENCE-DOMAIN-APPLY*))
-  (goal (id ?g))
-  (plan (id ?p) (goal-id ?g))
-  ?pa <- (plan-action (id ?id) (goal-id ?g) (plan-id ?p) (action-name ?op)
-                      (state EXECUTION-SUCCEEDED)
-                      (param-names $?action-param-names)
-                      (param-values $?action-param-values)
-                      (precondition ?grounding-id))
-  (domain-operator (name ?op))
-  =>
-  (bind ?next-state SENSED-EFFECTS-HOLD)
-  (do-for-all-facts ((?e domain-effect) (?pred domain-predicate))
-    (and ?pred:sensed (eq ?e:part-of ?op) (eq ?e:predicate ?pred:name))
-    ; apply if this effect is unconditional or the condition is satisfied
-    (if (or (not (any-factp ((?cep pddl-formula)) (eq ?cep:part-of ?e:name)))
-            (any-factp ((?cep grounded-pddl-formula))
-                       (and (eq ?cep:part-of ?e:name) ?cep:is-satisfied
-                            (any-factp ((?grounding pddl-grounding))
-                                       (and (eq ?cep:grounding ?grounding:id)
-                                            (eq ?grounding:id ?grounding-id)
-                                       )
-                             )
-                       )
-            )
-        )
-    then
-      (bind ?values
-            (domain-ground-effect ?e:param-names ?e:param-constants
-                                  ?action-param-names ?action-param-values))
-
-      (assert (domain-pending-sensed-fact (name ?pred:name) (action-id ?id) (goal-id ?g) (plan-id ?p)
-                                          (param-values ?values) (type ?e:type)))
-      (bind ?next-state SENSED-EFFECTS-WAIT)
-    )
-  )
-  (modify ?pa (state ?next-state))
-)
-
-(defrule domain-effects-ignore-sensed
-  "Do not wait for sensed effects if the operator is not a waiting operator."
-  (declare (salience ?*SALIENCE-DOMAIN-APPLY*))
-  ?pa <- (plan-action	(id ?id) (action-name ?op) (state SENSED-EFFECTS-WAIT))
-	(domain-operator (name ?op) (wait-sensed FALSE))
-	=>
-	(modify ?pa (state SENSED-EFFECTS-HOLD))
-)
-
-(defrule domain-effects-apply
-  "Apply effects of an action after it succeeded."
-  (declare (salience ?*SALIENCE-DOMAIN-APPLY*))
-  (goal (id ?g))
-  (plan (id ?p) (goal-id ?g))
-  ?pa <- (plan-action	(id ?id) (goal-id ?g) (plan-id ?p) (action-name ?op)
-                      (state SENSED-EFFECTS-HOLD)
-                      (param-names $?action-param-names)
-                      (param-values $?action-param-values)
-                      (precondition ?grounding-id))
-  (domain-operator (name ?op))
-  =>
-  (do-for-all-facts ((?e domain-effect) (?pred domain-predicate))
-    (and (not ?pred:sensed) (eq ?e:part-of ?op) (eq ?e:predicate ?pred:name))
-
-    ; apply if this effect is unconditional or the condition is satisfied
-    (if (or (not (any-factp ((?cep pddl-formula)) (eq ?cep:part-of ?e:name)))
-            (any-factp ((?cep grounded-pddl-formula))
-                       (and (eq ?cep:part-of ?e:name) ?cep:is-satisfied
-                            (any-factp ((?grounding pddl-grounding))
-                                       (and (eq ?cep:grounding ?grounding:id)
-                                            (eq ?grounding:id ?grounding-id)
-                                       )
-                             )
-                       )
-            )
-        )
-    then
-      (bind ?values
-            (domain-ground-effect ?e:param-names ?e:param-constants
-                                  ?action-param-names ?action-param-values))
-
-      (if (eq ?e:type POSITIVE)
-        then
-          (assert (domain-fact (name ?pred:name) (param-values ?values)))
-        else
-          ; Check if there is also a positive effect for the predicate with the
-          ; same values. Only apply the negative effect if no such effect
-          ; exists.
-          ; NOTE: This does NOT work for conditional effects.
-          (if (not (any-factp
-                    ((?oe domain-effect))
-                    (and
-                      (eq ?oe:part-of ?op) (eq ?oe:predicate ?pred:name)
-                      (eq ?oe:type POSITIVE)
-                      (eq ?values
-                          (domain-ground-effect ?oe:param-names
-                            ?oe:param-constants ?action-param-names
-                            ?action-param-values))
-                    )))
-            then
-              (delayed-do-for-all-facts ((?df domain-fact))
-                (and (eq ?df:name ?pred:name) (eq ?df:param-values ?values))
-                (retract ?df)
-              )
-        )
-      )
-    )
-  )
-  (modify ?pa (state EFFECTS-APPLIED))
-)
-
 (defrule domain-effect-sensed-positive-holds
   "Remove a pending sensed positive fact that has been sensed."
   (declare (salience ?*SALIENCE-DOMAIN-APPLY*))
@@ -964,52 +826,6 @@
   (retract ?ef)
 )
 
-(defrule domain-effect-wait-sensed-done
-  "After the effects of an action have been applied, change it to SENSED-EFFECTS-HOLD."
-  (declare (salience ?*SALIENCE-DOMAIN-APPLY*))
-  ?a <- (plan-action (id ?action-id) (state SENSED-EFFECTS-WAIT) (plan-id ?p) (goal-id ?g))
-  (not (domain-pending-sensed-fact (action-id ?action-id) (goal-id ?g) (plan-id ?p)))
-  =>
-  (modify ?a (state SENSED-EFFECTS-HOLD))
-)
-
-(defrule domain-effect-sensed-remove-on-removed-action
-  "Remove domain-pending-sensed-fact when the corresponding action was removed"
-  ?ef <- (domain-pending-sensed-fact (action-id ?action-id) (goal-id ?g) (plan-id ?p))
-  (not (plan-action (id ?action-id) (plan-id ?p) (goal-id ?g)))
-  =>
-  (retract ?ef)
-)
-
-(defrule domain-action-final
-  "After the effects of an action have been applied, change it to FINAL."
-  (declare (salience ?*SALIENCE-DOMAIN-APPLY*))
-  ?a <- (plan-action (id ?action-id) (state EFFECTS-APPLIED))
-  =>
-  (modify ?a (state FINAL))
-  (domain-retract-grounding)
-)
-
-(defrule domain-action-failed
-  "An action has failed."
-  (declare (salience ?*SALIENCE-DOMAIN-APPLY*))
-  ?a <- (plan-action (id ?action-id) (state EXECUTION-FAILED))
-  =>
-  (modify ?a (state FAILED))
-  (domain-retract-grounding)
-)
-
-(defrule domain-check-if-action-is-executable-without-precondition
-  "If the precondition of an action does not exist, the action is alwaysexecutable."
-  (declare (salience ?*SALIENCE-DOMAIN-CHECK*))
-  ?action <- (plan-action (id ?action-id)
-                          (action-name ?action-name)
-                          (executable FALSE)
-                          (precondition nil))
-=>
-  (modify ?action (executable TRUE))
-)
-
 (defrule domain-check-object-types-exist
   "Make sure that each specified type of an object actually exists."
   (domain-object (name ?obj) (type ?type))
@@ -1022,24 +838,12 @@
 
 (defrule domain-check-super-type-exists
   "Make sure that a super-type of any type in the domain actually exists."
-  (printout error "At start" crlf)
   (domain-object-type (name ?type) (super-type ?super-type&~object))
-  (printout error "domain-check-super-type-exists '" ?type crlf)
   (not (domain-object-type (name ?super-type)))
-  (printout error "After not" crlf)
 =>
   (assert (domain-error (error-type super-type-does-not-exist)
     (error-msg (str-cat "Super-type " ?super-type
                         " of type " ?type " does not exist."))))
-)
-
-(defrule domain-check-operator-of-action-exists
-  "Make sure that for each action in a plan, the respective operator exists."
-  (plan-action (action-name ?op))
-  (not (domain-operator (name ?op)))
-  =>
-  (assert (domain-error (error-type operator-of-action-does-not-exist)
-    (error-msg (str-cat "Operator of action " ?op " does not exist"))))
 )
 
 (defrule domain-check-pddl-predicate-has-domain-prediacte
@@ -1119,4 +923,24 @@
     (error-msg (str-cat "Predicate " ?id " is an equality precondition"
                         " but has " (length$ ?param-names) " parameters,"
                         " should be 2."))))
+)
+
+(defrule domain-grounding-cleanup-predicates
+  (grounded-pddl-predicate (grounding ?g))
+  (not (pddl-grounding (id ?g)))
+  =>
+  (do-for-all-facts ((?precond grounded-pddl-predicate))
+                    (eq ?precond:grounding ?g)
+    (retract ?precond)
+  )
+)
+
+(defrule domain-grounding-cleanup-formulas
+  (grounded-pddl-formula (grounding ?g))
+  (not (pddl-grounding (id ?g)))
+  =>
+  (do-for-all-facts ((?precond grounded-pddl-formula))
+                    (eq ?precond:grounding ?g)
+    (retract ?precond)
+  )
 )

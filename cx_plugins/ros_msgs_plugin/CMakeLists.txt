@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.8)
 project(cx_ros_msgs_plugin)
 
-# Default to C++17
+# Uses c++ 20 or above
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 20)
 endif()
 
 # set(ryml_DIR /home/userin4o/rapidyaml/install/lib/cmake/ryml)
@@ -46,7 +46,7 @@ add_library(${PROJECT_NAME} SHARED src/ros_msgs_plugin.cpp)
 target_link_libraries(${PROJECT_NAME} ClipsNS::libclips_ns  ICU::uc ICU::i18n)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${CMAKE_CXX_STANDARD})
 
 install(
   DIRECTORY include/

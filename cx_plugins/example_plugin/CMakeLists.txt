@@ -38,8 +38,6 @@ ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD ${CMAKE_CXX_STANDARD})
 
-# END OF PLUGINS REGISTRATION
-
 install(
   DIRECTORY include/
   DESTINATION include/

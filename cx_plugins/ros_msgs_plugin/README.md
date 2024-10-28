@@ -1,5 +1,5 @@
 # cx_ros_msgs_plugin
-This package offers functions to interface with ros topics of any type.
+This package offers the `cx::RosMsgsPlugin' that provides functions to interface with ros topics of any type.
 It makes use of the ROS introspection API to create generic publishers and subscriptions on-the-fly and to serialize and deserialize ROS messages.
 
 ## Usage
@@ -10,10 +10,10 @@ clips_manager:
   ros__parameters:
     environments: ["main"]
     main:
-      plugins: ["config"]
+      plugins: ["ros_msgs"]
 
-    config:
-      plugin: "cx::ConfigPlugin"
+    ros_msgs:
+      plugin: "cx::RosMsgsPlugin"
 ```
 
 ## CLIPS Features
@@ -21,8 +21,8 @@ This plugin defines deftemplates and user-defined functions that are described b
 
 ##### Deftemplates
 ```lisp
-; Asserted by the respective create-subscription function.
-; Retracted by the respective destroy-subscription function.
+; Asserted by the create-subscription function.
+; Retracted by the destroy-subscription function.
 (deftemplate ros-msgs-subscription
   (slot topic (type STRING)) ; example: "/cx_string_in"
   (slot type (type STRING))  ; example: "std_msgs/msg/String"

@@ -45,38 +45,33 @@ ProtobufPlugin::~ProtobufPlugin() {}
 void ProtobufPlugin::initialize() {
   auto node = parent_.lock();
   if (node) {
-    std::string proto_path, package_share_dir;
+    std::vector<std::string> package_share_dirs, input_proto_paths;
     cx::cx_utils::declare_parameter_if_not_declared(
-        node, plugin_name_ + ".protobuf_path", rclcpp::ParameterValue(""));
-    node->get_parameter(plugin_name_ + ".protobuf_path", proto_path);
+        node, plugin_name_ + ".proto_paths",
+        rclcpp::ParameterValue(std::vector<std::string>()));
+    node->get_parameter(plugin_name_ + ".proto_paths", input_proto_paths);
     cx::cx_utils::declare_parameter_if_not_declared(
-        node, plugin_name_ + ".package_share_dir", rclcpp::ParameterValue(""));
-    node->get_parameter(plugin_name_ + ".package_share_dir", package_share_dir);
-    if (package_share_dir == "") {
-      path_ = {proto_path};
-    } else {
-      try {
-        path_ = {
-            ament_index_cpp::get_package_share_directory(package_share_dir) +
-            "/" + proto_path};
-      } catch (const std::runtime_error &e) {
-        RCLCPP_ERROR(rclcpp::get_logger(plugin_name_),
-                     "Failed to determine proto path %s", e.what());
-      }
+        node, plugin_name_ + ".package_share_dirs",
+        rclcpp::ParameterValue(std::vector<std::string>()));
+    node->get_parameter(plugin_name_ + ".package_share_dirs",
+                        package_share_dirs);
+    logger_ =
+        std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
+    try {
+      cx_utils::resolve_files(input_proto_paths, package_share_dirs, paths_);
+    } catch (std::exception &e) {
+      RCLCPP_ERROR(*logger_, e.what());
     }
   }
 }
 
 bool ProtobufPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
-  RCLCPP_INFO(rclcpp::get_logger(plugin_name_),
-              "Initializing context for plugin %s", plugin_name_.c_str());
-
-  RCLCPP_INFO(rclcpp::get_logger(plugin_name_),
-              "Loading protobuf files from: %s", path_[0].c_str());
+  RCLCPP_DEBUG(*logger_, "Initializing context for plugin %s",
+               plugin_name_.c_str());
   auto context = CLIPSEnvContext::get_context(env.get_obj().get());
   protobuf_communicator_[context->env_name_] =
       std::make_unique<protobuf_clips::ClipsProtobufCommunicator>(
-          env.get_obj().get(), *(env.get_mutex_instance()), path_);
+          env.get_obj().get(), *(env.get_mutex_instance()), paths_);
 
   RCLCPP_INFO(rclcpp::get_logger(plugin_name_), "Initialised context!");
 
