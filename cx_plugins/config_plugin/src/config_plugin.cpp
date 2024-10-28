@@ -89,7 +89,7 @@ void ConfigPlugin::clips_config_load(clips::Environment *env,
     std::string sanitized_cfg_prefix = cfg_prefix;
     if (sanitized_cfg_prefix.size() > 0) {
       if (!sanitized_cfg_prefix.starts_with('/')) {
-        sanitized_cfg_prefix = '/' + prefix_sanitized;
+        sanitized_cfg_prefix = '/' + sanitized_cfg_prefix;
       }
       if (sanitized_cfg_prefix.ends_with('/')) {
         sanitized_cfg_prefix.pop_back();
@@ -109,7 +109,7 @@ void ConfigPlugin::clips_config_load(clips::Environment *env,
         }
       }
     }
-    iterateThroughYamlRecuresively(config_main, prefix_sanitized, env);
+    iterateThroughYamlRecuresively(config_main, sanitized_cfg_prefix, env);
 
   } catch (const std::exception &e) {
     RCLCPP_ERROR_STREAM(*logger_, e.what());
