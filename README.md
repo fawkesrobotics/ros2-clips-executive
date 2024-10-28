@@ -49,7 +49,7 @@ Assuming the CLIPS-Executive was cloned into `~/clips_executive_ws/src` and the 
 ```bash
 mkdir -p ~/deps_clips_executive_ws/src
 cd ~/deps_clips_executive_ws/src
-vcs import < ~/clips_executive_ws/src/ros2-clips-executive/dependency_repos.repos
+vcs import < ~/clips_executive_ws/src/ros2-clips-executive/dependency.repos
 cd ~/deps_clips_executive_ws
 colcon build --sym --cmake-args -DBUILD_TESTING=OFF
 ```
