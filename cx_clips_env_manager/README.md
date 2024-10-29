@@ -10,7 +10,7 @@ The CLIPS Environment Manager is the central component that allows to:
  It provides a clear execution flow guided through the lifecycle:
  - On being configured, it parses all parameters to determine the environmnents and plugins to load. It initializes the environments and plugins.
  - On being activated, it first loads all requested plugins, before calling **(reset)**  in the environments, refreshing all agendas and calling **(run)** to start rule execution.
- - On being deactivated, it first asserts a `(executie-finalize)` before refreshing all agendas and calling **(run)** one more time to allow cleanup routines to execute before shutdown.
+ - On being deactivated, it first asserts a `(executive-finalize)` before refreshing all agendas and calling **(run)** one more time to allow cleanup routines to execute before shutdown.
 
  Similarly, each dynamically created environment goes through the same steps  as on activation and each dynamically destroyed environment goes through the same steps as on deactivation.
 
