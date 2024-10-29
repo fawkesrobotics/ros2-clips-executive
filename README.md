@@ -45,20 +45,24 @@ Lastly, the **cx_goal_reasoning** package contains useful CLIPS source code for 
 This assumes you have a basic ROS 2 installation already, otherwise consult the official documentation for that.
 
 All dependencies are listed in the dependency.repos file of this repository. Hence, a dependency workspace can be setup using vcstool.
+The following steps will set up two workspaces, one for the dependencies of the ROS 2 CLIPS-Executive, and one for the main project.
+Make sure to adapt the target locations as preferred.
+
 Assuming the CLIPS-Executive was cloned into `~/clips_executive_ws/src` and the dependencies shouldbe built in the workspace `~/deps_clips_executive_ws/`:
 ```bash
-mkdir -p ~/deps_clips_executive_ws/src
-cd ~/deps_clips_executive_ws/src
-vcs import < ~/clips_executive_ws/src/ros2-clips-executive/dependency.repos
-cd ~/deps_clips_executive_ws
-colcon build --sym --cmake-args -DBUILD_TESTING=OFF
+mkdir -p ~/ros2/{clips_executive_ws,deps_clips_executive_ws}/src
+git clone -b tviehmann/major-cleanup https://github.com/fawkesrobotics/ros2-clips-executive.git ~/ros2/clips_executive_ws/src/ros2-clips-executive
+cd ~/ros2/deps_clips_executive_ws/src
+vcs import < ~/ros2/clips_executive_ws/src/ros2-clips-executive/dependency.repos
+cd ~/ros2/deps_clips_executive_ws/
+colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF
 ```
 Then you can proceed by sourcing the workspace containing the dependencies and building the CLIPS-Executive:
 ```bash
-source ~/deps_clips_executive_ws/install/setup.bash
-cd ~/clips_executive_ws/
-colcon build --sym
-source ~/clips_executive_ws/install/setup.bash
+source ~/ros2/deps_clips_executive_ws/install/setup.bash
+cd ~/ros2/clips_executive_ws/
+colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF
+source ~/ros2/clips_executive_ws/install/setup.bash
 ```
 
 

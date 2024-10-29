@@ -26,6 +26,8 @@ static bool log_router_query(clips::Environment * /*env*/,
   // envs
   if (strcmp(logical_name, "l") == 0)
     return true;
+  if (strcmp(logical_name, "t") == 0)
+    return true;
   if (strcmp(logical_name, "red") == 0)
     return true;
   if (strcmp(logical_name, "green") == 0)

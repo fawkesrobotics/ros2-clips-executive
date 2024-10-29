@@ -72,3 +72,14 @@ Plugins are specializations of of the *cx_plugin* base class and are handled as 
  - Before an environment is destroyed, all plugins are **unloaded in reverse order** of loading.
  - On destruction of a plugin, the `finalize()` function is called exactly once.
  - Before a plugin is destroyed, it is unloaded from all environments.
+
+## Logging and Routing
+THe CLIPS Environment manager provides a custom CLIPS logger that logs CLIPS output to ROS and also saves CLIPS output of each environment to files if configured so.
+The log files are stored at the ROS logging directory "~/.ros/log/" and are named using the name of the envrionment followed by a timestamp.
+
+For log routing inside CLIPS, the custom loggers accepts the following logical names that log to the file and additionally also in some cases to ROS:
+- "l","t","info","loginfo" log via `RCLCPP_INFO`
+- "green", "blue", "yellow", "magenta" "cyan", "white", "bold" log via RCLCPP_INFO with additional ANSI escape codes for color output (for terminals that support them)
+-  "debug","logdebug","stdout" log via RCLCPP_INFO (note that stdout is logging to debug because otherwise watched rule activations and such would spam the terminal on normal execution)
+- "warn",logwarn","stdwrn" log via RCLCPP_WARN
+- "error","logerror","stderr" log via RCLCPP_ERROR

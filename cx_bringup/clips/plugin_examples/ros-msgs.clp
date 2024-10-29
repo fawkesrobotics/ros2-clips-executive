@@ -1,27 +1,5 @@
 ; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
-; silence time and time-retract from executive plugin
-(unwatch facts time)
-(unwatch rules time-retract)
-
-; print welcome text
-(printout green "---------------- ")
-(printout bold  "ros-msgs-introspection")
-(printout green " ----------------" crlf)
-(printout green "| ")
-(printout blue  "Creates a subscription to /ros_cx_in and a publisher")
-(printout green " |" crlf)
-(printout green "| ")
-(printout  blue "on /ros_cx_out. Whenever a message on /ros_cx_in is ")
-(printout green " |" crlf)
-(printout green "| ")
-(printout  blue "received, a response is published on /ros_cx_out    ")
-(printout green " |" crlf)
-(printout green "| ")
-(printout  blue "with content \"Hello World!\".                        ")
-(printout green " |" crlf)
-(printout green "--------------------------------------------------------" crlf)
-
 (defrule ros-msgs-pub-init
 " Create publisher for ros_cx_out."
   (not (ros-msgs-publisher (topic "ros_cx_out")))
@@ -29,6 +7,23 @@
 =>
   (ros-msgs-create-publisher "ros_cx_out" "std_msgs/msg/String")
   (printout info "Publishing on /ros_cx_out" crlf)
+  ; print welcome text
+  (printout green "---------------- ")
+  (printout bold  "ros-msgs-introspection")
+  (printout green " ----------------" crlf)
+  (printout green "| ")
+  (printout blue  "Creates a subscription to /ros_cx_in and a publisher")
+  (printout green " |" crlf)
+  (printout green "| ")
+  (printout  blue "on /ros_cx_out. Whenever a message on /ros_cx_in is ")
+  (printout green " |" crlf)
+  (printout green "| ")
+  (printout  blue "received, a response is published on /ros_cx_out    ")
+  (printout green " |" crlf)
+  (printout green "| ")
+  (printout  blue "with content \"Hello World!\".                        ")
+  (printout green " |" crlf)
+  (printout green "--------------------------------------------------------" crlf)
 )
 
 (defrule ros-msgs-pub-hello
@@ -38,7 +33,7 @@
   (ros-msgs-message)
   =>
   (printout yellow "Sending Hello World Message!" crlf)
-  (bind ?msg (ros-msgs-create-msg "std_msgs/msg/String"))
+  (bind ?msg (ros-msgs-create-message "std_msgs/msg/String"))
   (ros-msgs-set-field ?msg "data" "Hello world!")
   (ros-msgs-publish ?msg ?topic)
   (ros-msgs-destroy-message ?msg)
