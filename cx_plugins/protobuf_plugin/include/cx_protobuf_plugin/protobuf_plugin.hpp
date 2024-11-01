@@ -43,13 +43,13 @@ public:
   bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
 private:
-  std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
-  std::mutex mm;
   std::vector<std::string> paths_;
   std::unordered_map<std::string,
                      std::unique_ptr<protobuf_clips::ClipsProtobufCommunicator>>
       protobuf_communicator_;
   std::unique_ptr<rclcpp::Logger> logger_;
+
+  std::string plugin_path_;
 };
 
 } // namespace cx

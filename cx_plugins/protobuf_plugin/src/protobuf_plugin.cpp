@@ -24,7 +24,7 @@
 #include <memory>
 #include <string>
 
-#include <clips_protobuf/communicator.h>
+#include <cx_protobuf_plugin/communicator.h>
 
 #include "cx_plugin/clips_plugin.hpp"
 #include "cx_protobuf_plugin/protobuf_plugin.hpp"
@@ -43,6 +43,8 @@ ProtobufPlugin::ProtobufPlugin() {}
 ProtobufPlugin::~ProtobufPlugin() {}
 
 void ProtobufPlugin::initialize() {
+  plugin_path_ =
+      ament_index_cpp::get_package_share_directory("cx_pddl_parser_plugin");
   auto node = parent_.lock();
   if (node) {
     std::vector<std::string> package_share_dirs, input_proto_paths;
@@ -72,6 +74,18 @@ bool ProtobufPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   protobuf_communicator_[context->env_name_] =
       std::make_unique<protobuf_clips::ClipsProtobufCommunicator>(
           env.get_obj().get(), *(env.get_mutex_instance()), paths_);
+
+  std::vector<std::string> files{plugin_path_ +
+                                 "/clips/cx_protobuf_plugin/protobuf.clp"};
+  for (const auto &f : files) {
+    if (!clips::BatchStar(env.get_obj().get(), f.c_str())) {
+      RCLCPP_ERROR(*logger_,
+                   "Failed to initialize CLIPS environment, "
+                   "batch file '%s' failed!, aborting...",
+                   f.c_str());
+      return false;
+    }
+  }
 
   RCLCPP_INFO(rclcpp::get_logger(plugin_name_), "Initialised context!");
 

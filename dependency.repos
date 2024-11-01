@@ -11,10 +11,6 @@ repositories:
     type: git
     url: https://github.com/fawkesrobotics/protobuf_comm
     version: main
-  clips-protobuf:
-    type: git
-    url: https://github.com/fawkesrobotics/clips-protobuf
-    version: tviehmann/clips642vendor
   cascade_lifecycle:
     type: git
     url: https://github.com/fmrico/cascade_lifecycle
