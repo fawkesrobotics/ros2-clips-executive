@@ -15,7 +15,7 @@ public:
   ExamplePlugin();
   ~ExamplePlugin();
 
-  void initialize();
+  void initialize() override;
 
   bool clips_env_init(LockSharedPtr<clips::Environment> &env) override;
   bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
