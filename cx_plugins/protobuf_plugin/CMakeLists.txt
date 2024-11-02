@@ -20,6 +20,7 @@ find_package(Protobuf REQUIRED)
 find_package(ProtobufComm REQUIRED)
 find_package(clips_vendor REQUIRED)
 find_package(clips REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
 
 set(dependencies
   ament_cmake
@@ -38,8 +39,8 @@ add_library(clips_protobuf_comm SHARED src/communicator.cpp)
 target_link_libraries(
   clips_protobuf_comm protobuf::libprotobuf ProtobufComm::protobuf_comm
   ClipsNS::libclips_ns spdlog::spdlog)
-target_include_directories(
-  clips_protobuf_comm PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/> $<INSTALL_INTERFACE:include/>)
+ament_target_dependencies(clips_protobuf_comm rclcpp_lifecycle)
+
 set_property(TARGET clips_protobuf_comm PROPERTY CXX_STANDARD ${CMAKE_CXX_STANDARD})
 
 add_library(${PROJECT_NAME} SHARED src/protobuf_plugin.cpp)

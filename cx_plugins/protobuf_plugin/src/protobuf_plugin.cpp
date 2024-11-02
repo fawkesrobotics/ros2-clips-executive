@@ -44,7 +44,7 @@ ProtobufPlugin::~ProtobufPlugin() {}
 
 void ProtobufPlugin::initialize() {
   plugin_path_ =
-      ament_index_cpp::get_package_share_directory("cx_pddl_parser_plugin");
+      ament_index_cpp::get_package_share_directory("cx_protobuf_plugin");
   auto node = parent_.lock();
   if (node) {
     std::vector<std::string> package_share_dirs, input_proto_paths;
@@ -53,9 +53,9 @@ void ProtobufPlugin::initialize() {
         rclcpp::ParameterValue(std::vector<std::string>()));
     node->get_parameter(plugin_name_ + ".proto_paths", input_proto_paths);
     cx::cx_utils::declare_parameter_if_not_declared(
-        node, plugin_name_ + ".package_share_dirs",
+        node, plugin_name_ + ".pkg_share_dirs",
         rclcpp::ParameterValue(std::vector<std::string>()));
-    node->get_parameter(plugin_name_ + ".package_share_dirs",
+    node->get_parameter(plugin_name_ + ".pkg_share_dirs",
                         package_share_dirs);
     logger_ =
         std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
@@ -73,7 +73,7 @@ bool ProtobufPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   auto context = CLIPSEnvContext::get_context(env.get_obj().get());
   protobuf_communicator_[context->env_name_] =
       std::make_unique<protobuf_clips::ClipsProtobufCommunicator>(
-          env.get_obj().get(), *(env.get_mutex_instance()), paths_);
+          env.get_obj().get(), *(env.get_mutex_instance()), paths_, parent_);
 
   std::vector<std::string> files{plugin_path_ +
                                  "/clips/cx_protobuf_plugin/protobuf.clp"};
