@@ -40,7 +40,7 @@ This plugin defines deftemplates, rules and user-defined functions that are desc
   (multislot rcvd-from                 ; address and port
     (cardinality 2 2)
   )
-  (slot rcvd-at (type FLOAT))          ; ros timestamp in seconds 
+  (slot rcvd-at (type FLOAT))          ; ros timestamp in seconds
   (slot client-type (type SYMBOL)
     (allowed-values SERVER CLIENT PEER)
   )

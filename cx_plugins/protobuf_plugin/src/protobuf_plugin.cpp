@@ -55,8 +55,7 @@ void ProtobufPlugin::initialize() {
     cx::cx_utils::declare_parameter_if_not_declared(
         node, plugin_name_ + ".pkg_share_dirs",
         rclcpp::ParameterValue(std::vector<std::string>()));
-    node->get_parameter(plugin_name_ + ".pkg_share_dirs",
-                        package_share_dirs);
+    node->get_parameter(plugin_name_ + ".pkg_share_dirs", package_share_dirs);
     logger_ =
         std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
     try {

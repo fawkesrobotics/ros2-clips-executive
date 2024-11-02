@@ -1,4 +1,6 @@
 
+// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+
 /***************************************************************************
  *  communicator.cpp - protobuf network communication for CLIPS
  *
@@ -66,9 +68,11 @@ namespace protobuf_clips {
  * @param env CLIPS environment to which to provide the protobuf functionality
  * @param env_mutex mutex to lock when operating on the CLIPS environment.
  */
-ClipsProtobufCommunicator::ClipsProtobufCommunicator(clips::Environment *env,
-                                                     std::mutex &env_mutex, rclcpp_lifecycle::LifecycleNode::WeakPtr parent)
-    : clips_(env), clips_mutex_(env_mutex), next_client_id_(0), parent_(parent) {
+ClipsProtobufCommunicator::ClipsProtobufCommunicator(
+    clips::Environment *env, std::mutex &env_mutex,
+    rclcpp_lifecycle::LifecycleNode::WeakPtr parent)
+    : clips_(env), clips_mutex_(env_mutex), next_client_id_(0),
+      parent_(parent) {
   message_register_ = std::make_unique<MessageRegister>();
   setup_clips();
 }
@@ -80,8 +84,10 @@ ClipsProtobufCommunicator::ClipsProtobufCommunicator(clips::Environment *env,
  */
 ClipsProtobufCommunicator::ClipsProtobufCommunicator(
     clips::Environment *env, std::mutex &env_mutex,
-    std::vector<std::string> &proto_path, rclcpp_lifecycle::LifecycleNode::WeakPtr parent)
-    : clips_(env), clips_mutex_(env_mutex), next_client_id_(0), parent_(parent) {
+    std::vector<std::string> &proto_path,
+    rclcpp_lifecycle::LifecycleNode::WeakPtr parent)
+    : clips_(env), clips_mutex_(env_mutex), next_client_id_(0),
+      parent_(parent) {
   message_register_ = std::make_unique<MessageRegister>(proto_path);
   setup_clips();
 }
@@ -112,7 +118,7 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue full_name;
-        if(!clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &full_name)) {
+        if (!clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &full_name)) {
           SPDLOG_ERROR("pb-register-type: unexpected types, expected addr");
           clips::UDFThrowError(udfc);
           return;
@@ -131,7 +137,8 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr)) {
           SPDLOG_ERROR("pb-field-names: unexpected types, expected addr");
           clips::UDFThrowError(udfc);
           return;
@@ -150,8 +157,9 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr, field_name;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr) ||
-           !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr) ||
+            !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
           SPDLOG_ERROR("pb-field-type: unexpected types, expected addr;lex");
           clips::UDFThrowError(udfc);
           return;
@@ -171,8 +179,9 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr, field_name;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr) ||
-           !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr) ||
+            !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
           SPDLOG_ERROR("pb-has-field: unexpected types, expected addr;lex");
           clips::UDFThrowError(udfc);
           return;
@@ -192,8 +201,9 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr, field_name;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr) ||
-           !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr) ||
+            !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
           SPDLOG_ERROR("pb-field-label: unexpected types, expected addr;lex");
           clips::UDFThrowError(udfc);
           return;
@@ -213,8 +223,9 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr, field_name;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr) ||
-           !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr) ||
+            !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
           SPDLOG_ERROR("pb-field-value: unexpected types, expected addr;lex");
           clips::UDFThrowError(udfc);
           return;
@@ -234,8 +245,9 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr, field_name;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr) ||
-           !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr) ||
+            !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
           SPDLOG_ERROR("pb-field-list: unexpected types, expected addr;lex");
           clips::UDFThrowError(udfc);
           return;
@@ -255,8 +267,9 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr, field_name;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr) ||
-           !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr) ||
+            !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name)) {
           SPDLOG_ERROR("pb-field-is-list: unexpected types, expected addr;lex");
           clips::UDFThrowError(udfc);
           return;
@@ -277,7 +290,7 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue full_name;
-        if(!clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &full_name)) {
+        if (!clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &full_name)) {
           SPDLOG_ERROR("pb-create: unexpected types, expected lex");
           clips::UDFThrowError(udfc);
           return;
@@ -291,11 +304,12 @@ void ClipsProtobufCommunicator::setup_clips() {
   clips::AddUDF(
       clips_, function_name.c_str(), "v", 1, 1, ";e",
       [](clips::Environment * /*env*/, clips::UDFContext *udfc,
-         clips::UDFValue */*out*/) {
+         clips::UDFValue * /*out*/) {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr)) {
           SPDLOG_ERROR("pb-destroy: unexpected types, expected addr");
           clips::UDFThrowError(udfc);
           return;
@@ -313,7 +327,8 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr)) {
           SPDLOG_ERROR("pb-ref: unexpected types, expected addr");
           clips::UDFThrowError(udfc);
           return;
@@ -331,9 +346,10 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr, field_name, value;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr) ||
-           !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name) ||
-           !clips::UDFNthArgument(udfc, 3, ANY_TYPE_BITS, &value)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr) ||
+            !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name) ||
+            !clips::UDFNthArgument(udfc, 3, ANY_TYPE_BITS, &value)) {
           SPDLOG_ERROR("pb-set-field: unexpected types, expected addr;lex;*");
           clips::UDFThrowError(udfc);
           return;
@@ -352,9 +368,10 @@ void ClipsProtobufCommunicator::setup_clips() {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue msgptr, field_name, value;
-        if(!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT, &msgptr) ||
-           !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name) ||
-           !clips::UDFNthArgument(udfc, 3, ANY_TYPE_BITS, &value)) {
+        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
+                                   &msgptr) ||
+            !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &field_name) ||
+            !clips::UDFNthArgument(udfc, 3, ANY_TYPE_BITS, &value)) {
           SPDLOG_ERROR("pb-add-list: unexpected types, expected addr;lex;*");
           clips::UDFThrowError(udfc);
           return;
@@ -401,9 +418,9 @@ void ClipsProtobufCommunicator::setup_clips() {
           clips::UDFThrowError(udfc);
           return;
         }
-        std::string res = instance->clips_pb_tostring(msgptr.externalAddressValue->contents);
-        out->lexemeValue = clips::CreateString(
-            env,res.c_str());
+        std::string res =
+            instance->clips_pb_tostring(msgptr.externalAddressValue->contents);
+        out->lexemeValue = clips::CreateString(env, res.c_str());
       },
       "clips_pb_tostring", this);
 
@@ -470,7 +487,8 @@ void ClipsProtobufCommunicator::setup_clips() {
         if (!clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &address) ||
             !clips::UDFNthArgument(udfc, 2, clips::INTEGER_BIT, &send_port) ||
             !clips::UDFNthArgument(udfc, 3, clips::INTEGER_BIT, &recv_port)) {
-          SPDLOG_ERROR("pb-peer-create-local: unexpected types, expected lex;int;int");
+          SPDLOG_ERROR(
+              "pb-peer-create-local: unexpected types, expected lex;int;int");
           clips::UDFThrowError(udfc);
           return;
         }
@@ -495,7 +513,8 @@ void ClipsProtobufCommunicator::setup_clips() {
             !clips::UDFNthArgument(udfc, 2, clips::INTEGER_BIT, &port) ||
             !clips::UDFNthArgument(udfc, 4, LEXEME_BITS, &crypto_key) ||
             !clips::UDFNthArgument(udfc, 5, LEXEME_BITS, &cipher)) {
-          SPDLOG_ERROR("pb-peer-create-crypto: unexpected types, expected lex;int;lex,lex");
+          SPDLOG_ERROR("pb-peer-create-crypto: unexpected types, expected "
+                       "lex;int;lex,lex");
           clips::UDFThrowError(udfc);
           return;
         }
@@ -515,14 +534,14 @@ void ClipsProtobufCommunicator::setup_clips() {
          clips::UDFValue *out) {
         ClipsProtobufCommunicator *instance =
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
-        clips::UDFValue address, send_port, recv_port, crypto_key,
-            cipher;
+        clips::UDFValue address, send_port, recv_port, crypto_key, cipher;
         if (!clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &address) ||
             !clips::UDFNthArgument(udfc, 2, clips::INTEGER_BIT, &send_port) ||
             !clips::UDFNthArgument(udfc, 3, clips::INTEGER_BIT, &recv_port) ||
             !clips::UDFNthArgument(udfc, 4, LEXEME_BITS, &crypto_key) ||
             !clips::UDFNthArgument(udfc, 5, LEXEME_BITS, &cipher)) {
-            SPDLOG_ERROR("pb-peer-create-local-crypto: unexpected types, expected lex;int;int,lex,lex");
+          SPDLOG_ERROR("pb-peer-create-local-crypto: unexpected types, "
+                       "expected lex;int;int,lex,lex");
           clips::UDFThrowError(udfc);
           return;
         }
@@ -546,7 +565,7 @@ void ClipsProtobufCommunicator::setup_clips() {
             static_cast<ClipsProtobufCommunicator *>(udfc->context);
         clips::UDFValue peer_id;
         if (!clips::UDFNthArgument(udfc, 1, clips::INTEGER_BIT, &peer_id)) {
-            SPDLOG_ERROR("pb-peer-destroy: unexpected types, expected int");
+          SPDLOG_ERROR("pb-peer-destroy: unexpected types, expected int");
           clips::UDFThrowError(udfc);
           return;
         }
@@ -566,7 +585,8 @@ void ClipsProtobufCommunicator::setup_clips() {
         if (!clips::UDFNthArgument(udfc, 1, clips::INTEGER_BIT, &peer_id) ||
             !clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &crypto_key) ||
             !clips::UDFNthArgument(udfc, 3, LEXEME_BITS, &cipher)) {
-            SPDLOG_ERROR("pb-peer-setup-crypto: unexpected types, expected int;lex;lex");
+          SPDLOG_ERROR(
+              "pb-peer-setup-crypto: unexpected types, expected int;lex;lex");
           clips::UDFThrowError(udfc);
           return;
         }
@@ -588,7 +608,7 @@ void ClipsProtobufCommunicator::setup_clips() {
         if (!clips::UDFNthArgument(udfc, 1, clips::INTEGER_BIT, &peer_id) ||
             !clips::UDFNthArgument(udfc, 2, clips::EXTERNAL_ADDRESS_BIT,
                                    &msgptr)) {
-            SPDLOG_ERROR("pb-broadcast: unexpected types, expected int;addr");
+          SPDLOG_ERROR("pb-broadcast: unexpected types, expected int;addr");
           clips::UDFThrowError(udfc);
           return;
         }
@@ -608,7 +628,7 @@ void ClipsProtobufCommunicator::setup_clips() {
         clips::UDFValue host, port;
         if (!clips::UDFNthArgument(udfc, 1, LEXEME_BITS, &host) ||
             !clips::UDFNthArgument(udfc, 2, clips::INTEGER_BIT, &port)) {
-            SPDLOG_ERROR("pb-connect: unexpected types, expected lex;int");
+          SPDLOG_ERROR("pb-connect: unexpected types, expected lex;int");
           clips::UDFThrowError(udfc);
           return;
         }
@@ -643,7 +663,8 @@ void ClipsProtobufCommunicator::setup_clips() {
  */
 void ClipsProtobufCommunicator::enable_server(int port) {
   if ((port > 0) && !server_) {
-    server_ = std::make_unique<protobuf_comm::ProtobufStreamServer>(port, message_register_.get());
+    server_ = std::make_unique<protobuf_comm::ProtobufStreamServer>(
+        port, message_register_.get());
 
     server_->signal_connected().connect(
         boost::bind(&ClipsProtobufCommunicator::handle_server_client_connected,
@@ -661,9 +682,7 @@ void ClipsProtobufCommunicator::enable_server(int port) {
 }
 
 /** Disable protobuf stream server. */
-void ClipsProtobufCommunicator::disable_server() {
-  server_.reset();
-}
+void ClipsProtobufCommunicator::disable_server() { server_.reset(); }
 
 /** Enable protobuf peer.
  * @param address IP address to send messages to
@@ -687,10 +706,10 @@ long int ClipsProtobufCommunicator::clips_pb_peer_create_local_crypto(
     {
       std::lock_guard<std::mutex> lock(map_mutex_);
       peer_id = ++next_client_id_;
-      peers_[peer_id] = std::make_unique<protobuf_comm::ProtobufBroadcastPeer>(address, send_port, recv_port,
-                                                 message_register_.get(), crypto_key,
-                                                 cipher);
-    peer = peers_[peer_id].get();
+      peers_[peer_id] = std::make_unique<protobuf_comm::ProtobufBroadcastPeer>(
+          address, send_port, recv_port, message_register_.get(), crypto_key,
+          cipher);
+      peer = peers_[peer_id].get();
     }
 
     peer->signal_received().connect(
@@ -806,10 +825,11 @@ clips::UDFValue ClipsProtobufCommunicator::clips_pb_ref(void *msgptr) {
       static_cast<std::shared_ptr<google::protobuf::Message> *>(msgptr);
   if (!*m) {
     res.externalAddressValue = clips::CreateCExternalAddress(
-            clips_, new std::shared_ptr<google::protobuf::Message>());
+        clips_, new std::shared_ptr<google::protobuf::Message>());
     return res;
   }
-  res.externalAddressValue = clips::CreateCExternalAddress(clips_, new std::shared_ptr<google::protobuf::Message>(*m));
+  res.externalAddressValue = clips::CreateCExternalAddress(
+      clips_, new std::shared_ptr<google::protobuf::Message>(*m));
   return res;
 }
 
@@ -822,7 +842,7 @@ clips::UDFValue ClipsProtobufCommunicator::clips_pb_field_names(void *msgptr) {
   field_names.begin = 0;
   field_names.range = -1;
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     messages_.erase(msgptr);
     field_names.lexemeValue = clips::CreateBoolean(clips_, false);
     return field_names;
@@ -843,9 +863,9 @@ ClipsProtobufCommunicator::clips_pb_field_type(void *msgptr,
                                                std::string field_name) {
   clips::UDFValue res;
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     messages_.erase(msgptr);
-      res.lexemeValue = clips::CreateBoolean(clips_, false);
+    res.lexemeValue = clips::CreateBoolean(clips_, false);
     return res;
   }
 
@@ -920,9 +940,9 @@ ClipsProtobufCommunicator::clips_pb_has_field(void *msgptr,
                                               std::string field_name) {
   clips::UDFValue res;
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     messages_.erase(msgptr);
-      res.lexemeValue = clips::CreateBoolean(clips_, false);
+    res.lexemeValue = clips::CreateBoolean(clips_, false);
     return res;
   }
 
@@ -936,11 +956,10 @@ ClipsProtobufCommunicator::clips_pb_has_field(void *msgptr,
   const Reflection *refl = msg->GetReflection();
 
   if (field->is_repeated()) {
-    res.lexemeValue = clips::CreateBoolean(
-                               clips_, (refl->FieldSize(*msg, field) > 0));
+    res.lexemeValue =
+        clips::CreateBoolean(clips_, (refl->FieldSize(*msg, field) > 0));
   } else {
-    res.lexemeValue = clips::CreateBoolean(
-                               clips_, refl->HasField(*msg, field));
+    res.lexemeValue = clips::CreateBoolean(clips_, refl->HasField(*msg, field));
   }
   return res;
 }
@@ -950,9 +969,9 @@ ClipsProtobufCommunicator::clips_pb_field_label(void *msgptr,
                                                 std::string field_name) {
   clips::UDFValue res;
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     messages_.erase(msgptr);
-      res.lexemeValue = clips::CreateBoolean(clips_, false);
+    res.lexemeValue = clips::CreateBoolean(clips_, false);
     return res;
   }
 
@@ -983,9 +1002,9 @@ ClipsProtobufCommunicator::clips_pb_field_value(void *msgptr,
                                                 std::string field_name) {
   clips::UDFValue res;
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     messages_.erase(msgptr);
-      res.lexemeValue = clips::CreateBoolean(clips_, false);
+    res.lexemeValue = clips::CreateBoolean(clips_, false);
     return res;
   }
 
@@ -1007,61 +1026,73 @@ ClipsProtobufCommunicator::clips_pb_field_value(void *msgptr,
   }
   switch (field->type()) {
   case FieldDescriptor::TYPE_DOUBLE:
-        res.floatValue = clips::CreateFloat(clips_, refl->GetDouble(*msg, field));
-		return res;
+    res.floatValue = clips::CreateFloat(clips_, refl->GetDouble(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_FLOAT:
-        res.floatValue = clips::CreateFloat(clips_, refl->GetFloat(*msg, field));
-		return res;
+    res.floatValue = clips::CreateFloat(clips_, refl->GetFloat(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_INT64:
-        res.integerValue = clips::CreateInteger(clips_, refl->GetInt64(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, refl->GetInt64(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_UINT64:
-        res.integerValue = clips::CreateInteger(clips_, (long int)refl->GetUInt64(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, (long int)refl->GetUInt64(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_INT32:
-        res.integerValue = clips::CreateInteger(clips_, refl->GetInt32(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, refl->GetInt32(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_FIXED64:
-       res.integerValue = clips::CreateInteger(clips_, (long int)refl->GetUInt64(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, (long int)refl->GetUInt64(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_FIXED32:
-       res.integerValue = clips::CreateInteger(clips_, refl->GetUInt32(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, refl->GetUInt32(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_BOOL:
-       res.lexemeValue = clips::CreateBoolean(clips_, refl->GetBool(*msg, field));
-		return res;
+    res.lexemeValue = clips::CreateBoolean(clips_, refl->GetBool(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_BYTES:
-       res.lexemeValue = clips::CreateString(clips_, (char *)"BYTES");
-		return res;
+    res.lexemeValue = clips::CreateString(clips_, (char *)"BYTES");
+    return res;
   case FieldDescriptor::TYPE_STRING:
-       res.lexemeValue = clips::CreateString(clips_, refl->GetString(*msg, field).c_str());
-		return res;
+    res.lexemeValue =
+        clips::CreateString(clips_, refl->GetString(*msg, field).c_str());
+    return res;
   case FieldDescriptor::TYPE_MESSAGE: {
     const google::protobuf::Message &mfield = refl->GetMessage(*msg, field);
     google::protobuf::Message *mcopy = mfield.New();
     mcopy->CopyFrom(mfield);
     void *ptr = new std::shared_ptr<google::protobuf::Message>(mcopy);
-       res.externalAddressValue = clips::CreateCExternalAddress(clips_, ptr);
-		return res;
+    res.externalAddressValue = clips::CreateCExternalAddress(clips_, ptr);
+    return res;
   }
   case FieldDescriptor::TYPE_UINT32:
-       res.integerValue = clips::CreateInteger(clips_, refl->GetUInt32(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, refl->GetUInt32(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_ENUM:
-       res.lexemeValue = clips::CreateSymbol(clips_, refl->GetEnum(*msg, field)->name().c_str());
-		return res;
+    res.lexemeValue =
+        clips::CreateSymbol(clips_, refl->GetEnum(*msg, field)->name().c_str());
+    return res;
   case FieldDescriptor::TYPE_SFIXED32:
-       res.integerValue = clips::CreateInteger(clips_, refl->GetInt32(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, refl->GetInt32(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_SFIXED64:
-       res.integerValue = clips::CreateInteger(clips_, refl->GetInt64(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, refl->GetInt64(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_SINT32:
-       res.integerValue = clips::CreateInteger(clips_, refl->GetInt32(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, refl->GetInt32(*msg, field));
+    return res;
   case FieldDescriptor::TYPE_SINT64:
-       res.integerValue = clips::CreateInteger(clips_, refl->GetInt64(*msg, field));
-		return res;
+    res.integerValue =
+        clips::CreateInteger(clips_, refl->GetInt64(*msg, field));
+    return res;
   default:
     throw std::logic_error("Unknown protobuf field type encountered");
   }
@@ -1072,7 +1103,7 @@ void ClipsProtobufCommunicator::clips_pb_set_field(void *msgptr,
                                                    std::string field_name,
                                                    clips::UDFValue value) {
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     messages_.erase(msgptr);
     return;
   }
@@ -1108,7 +1139,8 @@ void ClipsProtobufCommunicator::clips_pb_set_field(void *msgptr,
       refl->SetInt32(msg.get(), field, value.integerValue->contents);
       break;
     case FieldDescriptor::TYPE_BOOL:
-      refl->SetBool(msg.get(), field, std::strcmp(value.lexemeValue->contents, "TRUE") == 0);
+      refl->SetBool(msg.get(), field,
+                    std::strcmp(value.lexemeValue->contents, "TRUE") == 0);
       break;
     case FieldDescriptor::TYPE_STRING:
       refl->SetString(msg.get(), field, value.lexemeValue->contents);
@@ -1154,7 +1186,7 @@ void ClipsProtobufCommunicator::clips_pb_add_list(void *msgptr,
                                                   std::string field_name,
                                                   clips::UDFValue value) {
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     messages_.erase(msgptr);
     return;
   }
@@ -1190,14 +1222,16 @@ void ClipsProtobufCommunicator::clips_pb_add_list(void *msgptr,
       refl->AddInt32(msg.get(), field, value.integerValue->contents);
       break;
     case FieldDescriptor::TYPE_BOOL:
-      refl->AddBool(msg.get(), field, std::strcmp(value.lexemeValue->contents, "TRUE") == 0);
+      refl->AddBool(msg.get(), field,
+                    std::strcmp(value.lexemeValue->contents, "TRUE") == 0);
       break;
     case FieldDescriptor::TYPE_STRING:
       refl->AddString(msg.get(), field, value.lexemeValue->contents);
       break;
     case FieldDescriptor::TYPE_MESSAGE: {
-      std::shared_ptr<google::protobuf::Message> mfrom = messages_[value.externalAddressValue->contents];
-      if(!mfrom) {
+      std::shared_ptr<google::protobuf::Message> mfrom =
+          messages_[value.externalAddressValue->contents];
+      if (!mfrom) {
         messages_.erase(value.externalAddressValue->contents);
         return;
       }
@@ -1237,7 +1271,8 @@ long int ClipsProtobufCommunicator::clips_pb_client_connect(std::string host,
   {
     std::lock_guard<std::mutex> lock(map_mutex_);
     client_id = ++next_client_id_;
-    clients_[client_id] = std::make_unique<ProtobufStreamClient>(message_register_.get());
+    clients_[client_id] =
+        std::make_unique<ProtobufStreamClient>(message_register_.get());
     client = clients_[client_id].get();
   }
 
@@ -1299,7 +1334,7 @@ void ClipsProtobufCommunicator::clips_pb_send(long int client_id,
 
 std::string ClipsProtobufCommunicator::clips_pb_tostring(void *msgptr) {
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     SPDLOG_WARN(
         "CLIPS-Protobuf: Cannot convert message to string: invalid message");
     messages_.erase(msgptr);
@@ -1313,7 +1348,7 @@ std::string ClipsProtobufCommunicator::clips_pb_tostring(void *msgptr) {
 void ClipsProtobufCommunicator::clips_pb_broadcast(long int peer_id,
                                                    void *msgptr) {
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     messages_.erase(msgptr);
     return;
   }
@@ -1360,7 +1395,7 @@ ClipsProtobufCommunicator::clips_pb_field_list(void *msgptr,
                                                std::string field_name) {
   clips::UDFValue res;
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     res.lexemeValue = clips::CreateBoolean(clips_, false);
     messages_.erase(msgptr);
     return res;
@@ -1412,7 +1447,8 @@ ClipsProtobufCommunicator::clips_pb_field_list(void *msgptr,
       }
       break;
     case FieldDescriptor::TYPE_STRING:
-      clips::MBAppendString(mb, refl->GetRepeatedString(*msg, field, i).c_str());
+      clips::MBAppendString(mb,
+                            refl->GetRepeatedString(*msg, field, i).c_str());
       break;
     case FieldDescriptor::TYPE_MESSAGE: {
       const google::protobuf::Message &sub_msg =
@@ -1445,7 +1481,7 @@ ClipsProtobufCommunicator::clips_pb_field_list(void *msgptr,
     }
   }
   auto val = clips::MBCreate(mb);
-  res .multifieldValue = val;
+  res.multifieldValue = val;
   MBDispose(mb);
   return res;
 }
@@ -1455,7 +1491,7 @@ ClipsProtobufCommunicator::clips_pb_field_is_list(void *msgptr,
                                                   std::string field_name) {
   clips::UDFValue res;
   auto msg = messages_[msgptr];
-  if(!msg) {
+  if (!msg) {
     res.lexemeValue = clips::CreateBoolean(clips_, false);
     messages_.erase(msgptr);
     return res;
@@ -1483,8 +1519,8 @@ void ClipsProtobufCommunicator::clips_assert_message(
     clips::FBPutSlotSymbol(fact_builder, "rcvd-via",
                            (ct == CT_PEER) ? "BROADCAST" : "STREAM");
     auto node = parent_.lock();
-    clips::FBPutSlotFloat(
-        fact_builder, "rcvd-at",node->get_clock()->now().seconds());
+    clips::FBPutSlotFloat(fact_builder, "rcvd-at",
+                          node->get_clock()->now().seconds());
     clips::FBPutSlotMultifield(
         fact_builder, "rcvd-from",
         clips::StringToMultifield(
@@ -1532,7 +1568,7 @@ void ClipsProtobufCommunicator::handle_server_client_connected(
 
 void ClipsProtobufCommunicator::handle_server_client_disconnected(
     ProtobufStreamServer::ClientID client,
-    const boost::system::error_code &/*error*/) {
+    const boost::system::error_code & /*error*/) {
   long int client_id = -1;
   {
     std::lock_guard<std::mutex> lock(map_mutex_);
@@ -1639,7 +1675,7 @@ void ClipsProtobufCommunicator::handle_client_connected(long int client_id) {
 }
 
 void ClipsProtobufCommunicator::handle_client_disconnected(
-    long int client_id, const boost::system::error_code &/*error*/) {
+    long int client_id, const boost::system::error_code & /*error*/) {
   std::lock_guard<std::mutex> lock(clips_mutex_);
   clips::AssertString(
       clips_,
