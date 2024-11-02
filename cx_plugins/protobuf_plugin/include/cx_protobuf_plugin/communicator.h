@@ -38,8 +38,8 @@
 #ifndef _PROTOBUF_CLIPS_COMMUNICATOR_H_
 #define _PROTOBUF_CLIPS_COMMUNICATOR_H_
 
-#include <protobuf_comm/server.h>
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include <protobuf_comm/server.h>
 
 #include <clips_ns/clips.h>
 #include <list>
@@ -59,9 +59,11 @@ namespace protobuf_clips {
 
 class ClipsProtobufCommunicator {
 public:
-  ClipsProtobufCommunicator(clips::Environment *env, std::mutex &env_mutex, rclcpp_lifecycle::LifecycleNode::WeakPtr parent);
   ClipsProtobufCommunicator(clips::Environment *env, std::mutex &env_mutex,
-                            std::vector<std::string> &proto_path, rclcpp_lifecycle::LifecycleNode::WeakPtr parent);
+                            rclcpp_lifecycle::LifecycleNode::WeakPtr parent);
+  ClipsProtobufCommunicator(clips::Environment *env, std::mutex &env_mutex,
+                            std::vector<std::string> &proto_path,
+                            rclcpp_lifecycle::LifecycleNode::WeakPtr parent);
   ~ClipsProtobufCommunicator();
 
   void enable_server(int port);
@@ -177,8 +179,8 @@ private:
   clips::Environment *clips_;
   std::mutex &clips_mutex_;
 
-  std::unique_ptr<protobuf_comm::MessageRegister>  message_register_;
-	std::unique_ptr<protobuf_comm::ProtobufStreamServer> server_;
+  std::unique_ptr<protobuf_comm::MessageRegister> message_register_;
+  std::unique_ptr<protobuf_comm::ProtobufStreamServer> server_;
 
   boost::signals2::signal<void(protobuf_comm::ProtobufStreamServer::ClientID,
                                std::shared_ptr<google::protobuf::Message>)>
@@ -198,8 +200,10 @@ private:
   typedef std::map<protobuf_comm::ProtobufStreamServer::ClientID, long int>
       RevServerClientMap;
   RevServerClientMap rev_server_clients_;
-  std::map<long int, std::unique_ptr<protobuf_comm::ProtobufStreamClient>> clients_;
-  std::map<long int, std::unique_ptr<protobuf_comm::ProtobufBroadcastPeer>> peers_;
+  std::map<long int, std::unique_ptr<protobuf_comm::ProtobufStreamClient>>
+      clients_;
+  std::map<long int, std::unique_ptr<protobuf_comm::ProtobufBroadcastPeer>>
+      peers_;
 
   std::map<long int, std::pair<std::string, unsigned short>> client_endpoints_;
 
@@ -207,7 +211,8 @@ private:
   /// Reference to parent node to get ros time
   rclcpp_lifecycle::LifecycleNode::WeakPtr parent_;
 
-  std::unordered_map<void*,std::shared_ptr<google::protobuf::Message>> messages_; 
+  std::unordered_map<void *, std::shared_ptr<google::protobuf::Message>>
+      messages_;
 };
 
 } // end namespace protobuf_clips
