@@ -23,6 +23,8 @@
 #ifndef CX_PLUGINS__CLIPSPROTOBUFPLUGIN_HPP_
 #define CX_PLUGINS__CLIPSPROTOBUFPLUGIN_HPP_
 
+#include <cx_protobuf_plugin/communicator.hpp>
+
 #include <map>
 #include <memory>
 #include <string>
