@@ -24,13 +24,14 @@
 #include <memory>
 #include <string>
 
-#include <cx_protobuf_plugin/communicator.h>
-
 #include "cx_plugin/clips_plugin.hpp"
 #include "cx_protobuf_plugin/protobuf_plugin.hpp"
+
 #include <cx_utils/LockSharedPtr.hpp>
 #include <cx_utils/clips_env_context.hpp>
 #include <cx_utils/param_utils.hpp>
+
+#include <cx_protobuf_plugin/communicator.hpp>
 
 #include <ament_index_cpp/get_package_share_directory.hpp>
 
