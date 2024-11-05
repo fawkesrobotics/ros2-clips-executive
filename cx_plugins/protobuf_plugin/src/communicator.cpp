@@ -37,7 +37,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cx_protobuf_plugin/communicator.h>
+#include <cx_protobuf_plugin/communicator.hpp>
 #include <google/protobuf/descriptor.h>
 #include <protobuf_comm/client.h>
 #include <protobuf_comm/peer.h>
