@@ -30,7 +30,7 @@ This plugin defines deftemplates and user-defined functions that are described b
 
 ; Asserted by the ros-msgs-create-publisher function.
 ; Retracted by the respective ros-msgs-destroy-publisher function.
-(ros-msgs-publisher
+(deftemplate-ros-msgs-publisher
   (slot topic (type STRING)) ; example: "/cx_string_out"
   (slot type (type STRING))  ; example: "std_msgs/msg/String"
 )
