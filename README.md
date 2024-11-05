@@ -48,7 +48,6 @@ All dependencies are listed in the dependency.repos file of this repository. Hen
 The following steps will set up two workspaces, one for the dependencies of the ROS 2 CLIPS-Executive, and one for the main project.
 Make sure to adapt the target locations as preferred.
 
-Assuming the CLIPS-Executive was cloned into `~/clips_executive_ws/src` and the dependencies shouldbe built in the workspace `~/deps_clips_executive_ws/`:
 ```bash
 mkdir -p ~/ros2/{clips_executive_ws,deps_clips_executive_ws}/src
 git clone -b tviehmann/major-cleanup https://github.com/fawkesrobotics/ros2-clips-executive.git ~/ros2/clips_executive_ws/src/ros2-clips-executive
