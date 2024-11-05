@@ -45,7 +45,7 @@ The passed environment is wrapped in an object containing a mutex.
 
 Note that it **must not guard the scope within clips_env_init**, as the plugin manager already guards the environment.
 
-It also **must not guard the scope inside of CLIPS user-defined functions, as they are called from within the CLIPS engine, hence are already guarded by the CLIPS-Executive when it calls the `run` command for the environment.
+It also **must not guard the scope inside of CLIPS user-defined functions**, as they are called from within the CLIPS engine, hence are already guarded by the CLIPS-Executive when it calls the `run` command for the environment.
 
 #### Environment Context
 
