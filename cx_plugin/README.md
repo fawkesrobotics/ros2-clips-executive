@@ -47,6 +47,22 @@ Note that it **must not guard the scope within clips_env_init**, as the plugin m
 
 It also **must not guard the scope inside of CLIPS user-defined functions**, as they are called from within the CLIPS engine, hence are already guarded by the CLIPS-Executive when it calls the `run` command for the environment.
 
+Also, be aware that CLIPS will evaluate the LHS of rules any time the fact base changes, which can easily cause deadlocks if not handled properly in multi-threaded plugins.
+Consider this example from **cx_ros_msgs_plugin** which allows interactions with ROS topics:
+1. The asynchronous subscription callbacks adds messages and meta-data to an unordered map, which needs to be guarded by a mutex `map_mtx_` as multiple write operations could occur at the same time when multi-threaded executors and reentrant callback groups are used.
+Additionally, the messages are asserted as facts (holding a reference to the message) in the callback.
+2. The **ros-msgs-get-field** UDF allows to retrieve fields of messages. As fields may contain messages, this again might need to store meta-data, hence it also needs to lock `map_mtx_`.
+
+A simple implementation using a scoped lock for the entire scope of the callback and the entire scope of **ros-msgs-get-field** could cause a deadlock if the ros-msgs-get-field function is called on the left-hand side of a rule, e.g., like this:
+```lisp
+(defrule deadlock-example
+  (ros-msgs-subscription (topic ?sub))
+  ?msg-f <- (ros-msgs-message (topic ?sub) (msg-ptr ?inc-msg))
+  (test (and (= 0 (ros-msgs-get-field ?inc-msg "velocity"))))
+...
+```
+The assertion of the fact in the callback triggers the conditional check in the rule which therefore tries to lock `map_mtx_` blocked by the callback function itself.
+
 #### Environment Context
 
 Each environment also holds an instance of the `CLIPSEnvContext` class from the **cx_utils** package that can be retrieved via a static function:

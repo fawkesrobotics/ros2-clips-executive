@@ -276,23 +276,26 @@ void RosMsgsPlugin::subscribe_to_topic(clips::Environment *env,
                  topic_name.c_str());
     auto options = rclcpp::SubscriptionOptions();
     options.callback_group = cb_group_;
-    if (!libs_.contains(topic_type)) {
-      libs_[topic_type] =
-          rclcpp::get_typesupport_library(topic_type, "rosidl_typesupport_cpp");
-    }
-    if (!type_support_cache_.contains(topic_type)) {
-      type_support_cache_[topic_type] = rclcpp::get_message_typesupport_handle(
-          topic_type, "rosidl_typesupport_cpp", *libs_[topic_type]);
-    }
+    {
+      std::scoped_lock map_lock{map_mtx_};
+      if (!libs_.contains(topic_type)) {
+        libs_[topic_type] = rclcpp::get_typesupport_library(
+            topic_type, "rosidl_typesupport_cpp");
+      }
+      if (!type_support_cache_.contains(topic_type)) {
+        type_support_cache_[topic_type] =
+            rclcpp::get_message_typesupport_handle(
+                topic_type, "rosidl_typesupport_cpp", *libs_[topic_type]);
+      }
 
-    subscriptions_[env_name][topic_name] = node->create_generic_subscription(
-        topic_name, topic_type, rclcpp::QoS(10),
-        [this, env, topic_name,
-         topic_type](std::shared_ptr<const rclcpp::SerializedMessage> msg) {
-          topic_callback(msg, topic_name, topic_type, env);
-        },
-        options);
-
+      subscriptions_[env_name][topic_name] = node->create_generic_subscription(
+          topic_name, topic_type, rclcpp::QoS(10),
+          [this, env, topic_name,
+           topic_type](std::shared_ptr<const rclcpp::SerializedMessage> msg) {
+            topic_callback(msg, topic_name, topic_type, env);
+          },
+          options);
+    }
     clips::AssertString(env, ("(ros-msgs-subscription (topic \"" + topic_name +
                               "\") (type \"" + topic_type + "\"))")
                                  .c_str());
@@ -304,9 +307,11 @@ void RosMsgsPlugin::unsubscribe_from_topic(clips::Environment *env,
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
 
+  map_mtx_.lock();
   auto it = subscriptions_[env_name].find(topic_name);
 
   if (it != subscriptions_[env_name].end()) {
+    map_mtx_.unlock();
     RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                  "Unsubscribing from topic %s", topic_name.c_str());
     subscriptions_[env_name].erase(topic_name);
@@ -316,6 +321,7 @@ void RosMsgsPlugin::unsubscribe_from_topic(clips::Environment *env,
                 topic_name.c_str());
   }
 
+  map_mtx_.unlock();
   clips::Eval(env,
               ("(do-for-all-facts ((?f ros-msgs-subscription)) (eq (str-cat "
                "?f:topic) (str-cat \"" +
@@ -370,16 +376,18 @@ void RosMsgsPlugin::topic_callback(
     clips::Environment *env) {
   auto context = CLIPSEnvContext::get_context(env);
   cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
-  std::scoped_lock scoped_lock{map_mtx_, *clips.get_mutex_instance()};
-  std::shared_ptr<MessageInfo> deserialized_msg =
-      deserialize_msg(msg, msg_type);
-  if (!deserialized_msg) {
-    RCLCPP_ERROR(*logger_, "failed to process msg (topic: %s type: %s)",
-                 topic_name.c_str(), msg_type.c_str());
-    return;
-  }
+  std::shared_ptr<MessageInfo> deserialized_msg;
+  {
+    std::scoped_lock scoped_lock{map_mtx_, *clips.get_mutex_instance()};
+    deserialized_msg = deserialize_msg(msg, msg_type);
+    if (!deserialized_msg) {
+      RCLCPP_ERROR(*logger_, "failed to process msg (topic: %s type: %s)",
+                   topic_name.c_str(), msg_type.c_str());
+      return;
+    }
 
-  messages_[deserialized_msg.get()] = deserialized_msg;
+    messages_[deserialized_msg.get()] = deserialized_msg;
+  }
 
   // assert the newest message
   clips::FactBuilder *fact_builder =
@@ -405,9 +413,15 @@ void RosMsgsPlugin::create_new_publisher(clips::Environment *env,
     RCLCPP_ERROR(*logger_, "Invalid reference to parent node");
   }
 
-  auto it = publishers_[env_name].find(topic_name);
+  std::map<std::__cxx11::basic_string<char>,
+           std::shared_ptr<rclcpp::GenericPublisher>>::iterator it;
+  {
+    map_mtx_.lock();
+    it = publishers_[env_name].find(topic_name);
+  }
 
   if (it != publishers_[env_name].end()) {
+    map_mtx_.unlock();
     RCLCPP_WARN(*logger_, "Already publishing to topic %s", topic_name.c_str());
   } else {
     RCLCPP_DEBUG(*logger_, "Creating publisher to topic %s",
@@ -418,6 +432,7 @@ void RosMsgsPlugin::create_new_publisher(clips::Environment *env,
     publishers_[context->env_name_][topic_name] =
         node->create_generic_publisher(topic_name, topic_type, rclcpp::QoS(10),
                                        options);
+    map_mtx_.unlock();
     clips::AssertString(env, ("(ros-msgs-publisher (topic \"" + topic_name +
                               "\") (type \"" + topic_type + "\"))")
                                  .c_str());
@@ -428,6 +443,7 @@ void RosMsgsPlugin::destroy_publisher(clips::Environment *env,
                                       const std::string &topic_name) {
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
+  map_mtx_.lock();
   auto outer_it = publishers_.find(env_name);
   if (outer_it != publishers_.end()) {
     // Check if topic_name exists in the inner map
@@ -438,11 +454,20 @@ void RosMsgsPlugin::destroy_publisher(clips::Environment *env,
       RCLCPP_DEBUG(*logger_, "Destroying publisher for topic %s",
                    topic_name.c_str());
       inner_map.erase(inner_it);
+      map_mtx_.unlock();
+      clips::Eval(env,
+                  ("(do-for-all-facts ((?f ros-msgs-publisher)) (eq (str-cat "
+                   "?f:topic) (str-cat \"" +
+                   topic_name + "\"))  (retract ?f))")
+                      .c_str(),
+                  NULL);
     } else {
+      map_mtx_.unlock();
       RCLCPP_WARN(*logger_, "Publisher %s not found in environment %s",
                   topic_name.c_str(), env_name.c_str());
     }
   } else {
+    map_mtx_.unlock();
     RCLCPP_WARN(*logger_, "Environment %s not found", env_name.c_str());
   }
 }
