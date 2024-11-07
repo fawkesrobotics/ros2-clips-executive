@@ -27,6 +27,7 @@ private:
     void *msg_ptr;
     const rosidl_typesupport_introspection_cpp::MessageMembers *members;
     bool is_sub_msg;
+    rcutils_allocator_t allocator;
 
     MessageInfo(
         const rosidl_typesupport_introspection_cpp::MessageMembers *members,
@@ -37,7 +38,9 @@ private:
         msg_ptr = parent_ptr;
       } else {
         // Allocate memory for the message
-        msg_ptr = malloc(members->size_of_);
+        allocator = rcutils_get_default_allocator();
+        msg_ptr =
+            allocator.zero_allocate(1, members->size_of_, allocator.state);
         if (members->init_function) {
           members->init_function(
               msg_ptr,
@@ -53,7 +56,7 @@ private:
         if (members && members->fini_function) {
           members->fini_function(msg_ptr);
         }
-        free(msg_ptr);
+        allocator.deallocate(msg_ptr, allocator.state);
       }
     }
 
@@ -164,6 +167,7 @@ private:
   std::unordered_map<std::string, std::shared_ptr<rcpputils::SharedLibrary>>
       libs_;
 
+  std::recursive_mutex map_mtx_;
   // MessageInfo* -> shared_ptr holding the MessageInfo*
   std::unordered_map<void *, std::shared_ptr<MessageInfo>> messages_;
   // parent msg MessageInfo* -> nested msg MessageInfo*
