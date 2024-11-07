@@ -167,7 +167,7 @@ private:
   std::unordered_map<std::string, std::shared_ptr<rcpputils::SharedLibrary>>
       libs_;
 
-  std::recursive_mutex map_mtx_;
+  std::mutex map_mtx_;
   // MessageInfo* -> shared_ptr holding the MessageInfo*
   std::unordered_map<void *, std::shared_ptr<MessageInfo>> messages_;
   // parent msg MessageInfo* -> nested msg MessageInfo*
