@@ -20,6 +20,7 @@
   <depend>plansys2_lifecycle_manager</depend>
   <depend>cx_clips_env_manager</depend>
   <depend>cx_goal_reasoning</depend>
+  <depend>cx_protobuf_plugin</depend>
   <depend>cx_ros_comm_gen</depend>
   <depend>pkg-config</depend>
 
