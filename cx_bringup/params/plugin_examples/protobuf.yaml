@@ -12,7 +12,7 @@ clips_manager:
       assert_time: true
       refresh_rate: 1
     protobuf:
-      plugin: "cx::ProtobufPlugin"
+      plugin: "cx::BringupProtobufPlugin"
       # When specifying relative paths, look at the share directories of the listed packages to resolve them.
       # Attempts to resolve the relative paths in order of the listed packages
       # Defaults to an empty list

@@ -19,6 +19,7 @@ find_package(plansys2_planner REQUIRED)
 find_package(plansys2_lifecycle_manager REQUIRED)
 find_package(cx_clips_env_manager REQUIRED)
 find_package(cx_ros_comm_gen REQUIRED)
+find_package(cx_protobuf_plugin REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 set(dependencies
@@ -61,6 +62,8 @@ cx_generate_msg_bindings("std_msgs" "String")
 cx_generate_srv_bindings("std_srvs" "SetBool")
 # generate bindings to interface with ROS services, such as example_interfaces::action::Fibonacci
 cx_generate_action_bindings("example_interfaces" "Fibonacci")
+
+cx_generate_linked_protobuf_plugin("BringupProtobufPlugin" proto/cx_bringup/SearchRequest.proto)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

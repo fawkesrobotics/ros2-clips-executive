@@ -30,6 +30,10 @@ set(dependencies
   cx_utils
   pluginlib
 )
+install(
+  FILES generator.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 include_directories(include)
 
@@ -57,6 +61,11 @@ install(
 )
 
 install(
+  DIRECTORY templates
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(
   FILES protobuf_plugin.xml
   DESTINATION share/${PROJECT_NAME}
 )
@@ -72,8 +81,13 @@ install(TARGETS
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
+install(FILES cmake/cx_protobuf_sub_plugin.cmake
+        DESTINATION share/${PROJECT_NAME}/cmake)
+
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
 ament_export_dependencies(${dependencies})
 
-ament_package()
+ament_package(
+CONFIG_EXTRAS cmake/cx_protobuf_sub_plugin.cmake
+)
