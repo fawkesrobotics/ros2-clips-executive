@@ -17,6 +17,7 @@ find_package(pluginlib REQUIRED)
 find_package(cx_plugin REQUIRED)
 find_package(clips_vendor REQUIRED)
 find_package(clips REQUIRED)
+find_package(cx_utils REQUIRED)
 find_package(PddlParser REQUIRED)
 
 set(dependencies
@@ -66,14 +67,14 @@ install(
 )
 
 install(TARGETS
-  ${PROJECT_NAME}
+  ${PROJECT_NAME} clips_pddl_parser
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_export_include_directories(include)
-ament_export_libraries(${PROJECT_NAME})
-ament_export_dependencies(${dependencies})
+ament_export_libraries(${PROJECT_NAME} clips_pddl_parser)
+ament_export_dependencies(${dependencies} spdlog pddl_parser)
 
 ament_package()
