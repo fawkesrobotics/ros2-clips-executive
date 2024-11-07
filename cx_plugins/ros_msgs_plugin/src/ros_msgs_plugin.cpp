@@ -358,6 +358,7 @@ std::shared_ptr<RosMsgsPlugin::MessageInfo> RosMsgsPlugin::deserialize_msg(
                       deserialized_msg->msg_ptr);
 
   if (result != RMW_RET_OK) {
+    RCLCPP_ERROR(*logger_, "Error while deserializing message");
     return std::shared_ptr<MessageInfo>();
   }
   return deserialized_msg;
@@ -367,6 +368,9 @@ void RosMsgsPlugin::topic_callback(
     std::shared_ptr<const rclcpp::SerializedMessage> msg,
     const std::string &topic_name, const std::string &msg_type,
     clips::Environment *env) {
+  auto context = CLIPSEnvContext::get_context(env);
+  cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
+  std::scoped_lock scoped_lock{map_mtx_, *clips.get_mutex_instance()};
   std::shared_ptr<MessageInfo> deserialized_msg =
       deserialize_msg(msg, msg_type);
   if (!deserialized_msg) {
@@ -375,9 +379,6 @@ void RosMsgsPlugin::topic_callback(
     return;
   }
 
-  auto context = CLIPSEnvContext::get_context(env);
-  cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
-  std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
   messages_[deserialized_msg.get()] = deserialized_msg;
 
   // assert the newest message
@@ -481,6 +482,7 @@ RosMsgsPlugin::serialize_msg(std::shared_ptr<MessageInfo> msg_info,
 void RosMsgsPlugin::publish_to_topic(clips::Environment *env,
                                      void *deserialized_msg,
                                      const std::string &topic_name) {
+  auto scoped_lock = std::scoped_lock{map_mtx_};
   auto context = CLIPSEnvContext::get_context(env);
 
   if (!messages_.contains(deserialized_msg)) {
@@ -498,6 +500,7 @@ void RosMsgsPlugin::publish_to_topic(clips::Environment *env,
 
 clips::UDFValue RosMsgsPlugin::create_message(clips::Environment *env,
                                               const std::string &type) {
+  auto scoped_lock = std::scoped_lock{map_mtx_};
   std::shared_ptr<MessageInfo> ptr = create_deserialized_msg(type);
   messages_[ptr.get()] = ptr;
   clips::UDFValue res;
@@ -757,6 +760,7 @@ clips::UDFValue RosMsgsPlugin::get_field(clips::Environment *env,
                                          const std::string &field,
                                          clips::UDFContext *udfc) {
 
+  auto scoped_lock = std::scoped_lock{map_mtx_};
   clips::UDFValue res;
   res.begin = 0;
   res.range = -1;
@@ -786,9 +790,9 @@ clips::UDFValue RosMsgsPlugin::get_field(clips::Environment *env,
 void RosMsgsPlugin::set_field(clips::Environment *env, void *deserialized_msg,
                               const std::string &field, clips::UDFValue &val,
                               clips::UDFContext *udfc) {
-
+  auto scoped_lock = std::scoped_lock(map_mtx_);
   if (!deserialized_msg || !messages_.contains(deserialized_msg)) {
-    RCLCPP_ERROR(*logger_, "ros-msgs-set-field: Invalid pointer");
+    RCLCPP_ERROR(*logger_, "ros-msgs-get-field: Invalid pointer");
     clips::UDFThrowError(udfc);
     return;
   }
@@ -959,8 +963,7 @@ void RosMsgsPlugin::move_field_to_parent(
     void *source_msg) {
 
   // Access the submessage in the parent at the specified offset
-  void *target_submsg =
-      reinterpret_cast<uint8_t *>(parent_msg) + parent_member->offset_;
+  void *target_submsg = parent_msg;
 
   // Obtain introspection information for the type of the submessage
   const rosidl_typesupport_introspection_cpp::MessageMembers *sub_members =
@@ -988,6 +991,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<bool> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1009,6 +1013,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<int8_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1031,6 +1036,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<uint8_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1052,6 +1058,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<int16_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1073,6 +1080,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<uint16_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1094,6 +1102,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<int32_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1115,6 +1124,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<uint32_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1136,6 +1146,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<int64_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1157,6 +1168,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<uint64_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1178,6 +1190,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<float> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1199,6 +1212,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<double> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1220,6 +1234,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<long double> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1241,12 +1256,14 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<std::string> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array of strings
           auto source_array = reinterpret_cast<std::string *>(source_field_ptr);
           auto target_array = reinterpret_cast<std::string *>(target_field_ptr);
           for (size_t i = 0; i < sub_member->array_size_; ++i) {
             target_array[i] = std::move(source_array[i]);
+            source_array[i] = {};
           }
         }
       } else {
@@ -1266,6 +1283,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<char> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1287,6 +1305,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<wchar_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1308,6 +1327,7 @@ void RosMsgsPlugin::move_field_to_parent(
           auto *target_vector =
               reinterpret_cast<std::vector<wchar_t> *>(target_field_ptr);
           *target_vector = std::move(*source_vector);
+          *source_vector = {};
         } else {
           // Fixed-size array
           std::memcpy(target_field_ptr, source_field_ptr,
@@ -1320,6 +1340,7 @@ void RosMsgsPlugin::move_field_to_parent(
         auto *target_string =
             reinterpret_cast<std::wstring *>(target_field_ptr);
         *target_string = std::move(*source_string);
+        *source_string = {};
       }
       break;
     }
