@@ -12,7 +12,7 @@ function(cx_helper_to_snake_case input_string output_variable)
     set(${output_variable} "${temp_string}" PARENT_SCOPE)
 endfunction()
 
-macro(cx_generate_linked_protobuf_plugin name PROTO_FILES)
+macro(_cx_generate_linked_protobuf_plugin_base name lib PROTO_FILES)
   cx_helper_to_snake_case(${name} snake_case_name)
 
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
@@ -40,17 +40,28 @@ macro(cx_generate_linked_protobuf_plugin name PROTO_FILES)
                 ${TEMPLATES_DIR}/plugin.jinja.hpp
         COMMENT "Generate sub plugin for protobuf"
     )
-    protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
+    if(NOT DEFINED lib OR lib STREQUAL "")
+      protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
 
-    # Create a shared library for the generated protobuf files
-    add_library(${snake_case_name}_proto_messages SHARED ${PROTO_SRCS} ${PROTO_HDRS})
-    target_link_libraries(${snake_case_name}_proto_messages PUBLIC protobuf::libprotobuf)
-    target_include_directories(${snake_case_name}_proto_messages PUBLIC ${Protobuf_INCLUDE_DIRS})
+      # Create a shared library for the generated protobuf files
+      add_library(${snake_case_name}_proto_messages SHARED ${PROTO_SRCS} ${PROTO_HDRS})
+      target_link_libraries(${snake_case_name}_proto_messages PUBLIC protobuf::libprotobuf)
+      target_include_directories(${snake_case_name}_proto_messages PUBLIC ${Protobuf_INCLUDE_DIRS})
+      install(TARGETS
+        ${snake_case_name}_proto_messages
+        ARCHIVE DESTINATION lib
+        LIBRARY DESTINATION lib
+        RUNTIME DESTINATION lib/${PROJECT_NAME}
+      )
+    endif()
     # Build plugin from library
-    message(WARNING "SNAKE NAME: ${snake_case_name}")
     add_library(${snake_case_name} SHARED ${snake_case_name}.cpp)
     set_property(TARGET ${snake_case_name} PROPERTY CXX_STANDARD 20)
-    target_link_libraries(${snake_case_name} ClipsNS::libclips_ns ${snake_case_name}_proto_messages)
+    if(NOT DEFINED lib OR lib STREQUAL "")
+      target_link_libraries(${snake_case_name} ClipsNS::libclips_ns ${snake_case_name}_proto_messages)
+    else()
+      target_link_libraries(${snake_case_name} ClipsNS::libclips_ns ${lib})
+    endif()
     ament_target_dependencies(${snake_case_name} cx_plugin pluginlib cx_protobuf_plugin)
     install(
       FILES ${CMAKE_CURRENT_BINARY_DIR}/${snake_case_name}.hpp
@@ -81,5 +92,17 @@ macro(cx_generate_linked_protobuf_plugin name PROTO_FILES)
     list(APPEND __PLUGINLIB_PLUGIN_CATEGORIES ${plugin_category})  # duplicates are removes on use
   else()
     message(FATAL_ERROR "Failed to query ament index for packages cx_protobuf_plugin")
+  endif()
+endmacro()
+
+macro(cx_generate_linked_protobuf_plugin_from_proto name PROTO_FILES)
+  _cx_generate_linked_protobuf_plugin_base(${name} "" ${PROTO_FILES})
+endmacro()
+
+macro(cx_generate_linked_protobuf_plugin_from_lib name lib)
+  if(NOT DEFINED lib OR lib STREQUAL "")
+    message(FATAL_ERROR "Failed to query ament index for packages cx_protobuf_plugin")
+  else()
+   _cx_generate_linked_protobuf_plugin_base(${name} ${lib})
   endif()
 endmacro()
