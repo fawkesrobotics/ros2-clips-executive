@@ -63,34 +63,34 @@ Given a package (e.g., "std_msgs") and a message (e.g., "String") all deftemplat
 #### Message Bindings
 ##### Deftemplates
 ```lisp
-; Asserted by the respective create-subscriber function.
-; Retracted by the respective destroy-subscriber function.
-(<package-kebab>-<message-kebab>-subscriber (topic ?topic-name-string))
+; Asserted by the respective create-subscription function.
+; Retracted by the respective destroy-subscription function.
+(<package-kebab>-<message-kebab>-subscription (topic ?topic-name-string))
 
 ; Asserted by the respective create-publisher function.
 ; Retracted by the respective destroy-publisher function.
 (<package-kebab>-<message-kebab>-publisher (topic ?topic-name-string))
 
 ; Asserted by the callback of a subscriber whenever a message arrives.
-; Process the message and then call msg-destroy before retracting!
-(<package-kebab>-<message-kebab>-msg (topic ?topic-name-string) (msg-ptr ?msg-ptr))
+; Process the message and then call destroy-message before retracting!
+(<package-kebab>-<message-kebab>-message (topic ?topic-name-string) (msg-ptr ?msg-ptr))
 ```
 ##### Functions
 ```lisp
 ; Create and destroy publishers and subscribers.
 (<package-kebab>-<message-kebab>-create-publisher ?topic-name)
 (<package-kebab>-<message-kebab>-destroy-publisher ?topic-name)
-(<package-kebab>-<message-kebab>-create-subscriber ?topic-name)
-(<package-kebab>-<message-kebab>-destroy-subscriber ?topic-name)
+(<package-kebab>-<message-kebab>-create-subscription ?topic-name)
+(<package-kebab>-<message-kebab>-destroy-subscription ?topic-name)
 
 ; Publish a given message over a topic.
 ; Requires the publisher to be created first using create-publisher.
 (<package-kebab>-<message-kebab>-publish ?msg-ptr ?topic-name)
 
 ; Create a message and return a pointer to it
-(bind ?msg-ptr (<package-kebab>-<message-kebab>-msg-create))
+(bind ?msg-ptr (<package-kebab>-<message-kebab>-create-message))
 ; Destroy a message, call this after publishing a message or processing an incoming message to prevent it from staying in memory.
-(<package-kebab>-<message-kebab>-msg-destroy ?msg-ptr)
+(<package-kebab>-<message-kebab>-destroy-message ?msg-ptr)
 
 ; Populate the field of a message.
 ; If the field is a message, then pass a pointer to that message (by using that respective messages bindings).

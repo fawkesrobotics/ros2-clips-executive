@@ -41,16 +41,30 @@ namespace cx {
 }
 
 void {{name_camel}}::finalize() {
-  if(subscriptions_.size() > 0) {
-    RCLCPP_WARN(*logger_, "Found %li subscription(s), cleaning up ...", subscriptions_.size());
+  if (subscriptions_.size() > 0) {
+    for (const auto &sub_map : subscriptions_) {
+      for (const auto &sub : sub_map.second) {
+        RCLCPP_WARN(*logger_,
+                    "Environment %s has open %s subscription, cleaning up ...",
+                    sub_map.first.c_str(), sub.first.c_str());
+      }
+    }
     subscriptions_.clear();
   }
-  if(publishers_.size() > 0) {
-    RCLCPP_WARN(*logger_, "Found %li publisher(s), cleaning up ...", publishers_.size());
+  if (publishers_.size() > 0) {
+    for (const auto &pub_map : publishers_) {
+      for (const auto &pub : pub_map.second) {
+        RCLCPP_WARN(*logger_,
+                    "Environment %s has open %s publishers, cleaning up ...",
+                    pub_map.first.c_str(), pub.first.c_str());
+      }
+    }
     publishers_.clear();
   }
-  if(messages_.size() > 0) {
-    RCLCPP_WARN(*logger_, "Found %li message(s), cleaning up ...", messages_.size());
+  cb_group_.reset();
+  if (messages_.size() > 0) {
+    RCLCPP_WARN(*logger_, "Found %li message(s), cleaning up ...",
+                messages_.size());
     messages_.clear();
   }
 }
@@ -69,12 +83,12 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
   for(const auto& fun : function_names_) {
      clips::RemoveUDF(env.get_obj().get(), fun.c_str());
   }
-  clips::Deftemplate *curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-subscriber");
+  clips::Deftemplate *curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-subscription");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
     RCLCPP_WARN(*logger_,
-              "{{name_kebab}}-subscriber cant be undefined");
+              "{{name_kebab}}-subscription cant be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-publisher");
   if(curr_tmpl) {
@@ -83,7 +97,7 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
     RCLCPP_WARN(*logger_,
               "{{name_kebab}}-publisher cant be undefined");
   }
-  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-msg");
+  curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-message");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
@@ -105,7 +119,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
 
   std::string fun_name;
 
-  fun_name = "{{name_kebab}}-msg-create";
+  fun_name = "{{name_kebab}}-create-message";
   function_names_.insert(fun_name);
   clips::AddUDF(
     env.get_obj().get(), fun_name.c_str(), "e", 0, 0, "",
@@ -163,7 +177,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
     },
     "publish_to_topic", this);
 
-  fun_name = "{{name_kebab}}-msg-destroy";
+  fun_name = "{{name_kebab}}-destroy-message";
   function_names_.insert(fun_name);
   clips::AddUDF(
     env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";e",
@@ -178,7 +192,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
     },
     "destroy_msg", this);
 
-  fun_name = "{{name_kebab}}-create-subscriber";
+  fun_name = "{{name_kebab}}-create-subscription";
   function_names_.insert(fun_name);
   clips::AddUDF(
     env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
@@ -192,7 +206,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
     },
     "subscribe_to_topic", this);
 
-  fun_name = "{{name_kebab}}-destroy-subscriber";
+  fun_name = "{{name_kebab}}-destroy-subscription";
   function_names_.insert(fun_name);
   clips::AddUDF(
     env.get_obj().get(), fun_name.c_str(), "v", 1, 1, ";s",
@@ -208,11 +222,11 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
 
 
   // add fact templates
-  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-subscriber \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-subscription \
             (slot topic (type STRING)))");
   clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-publisher \
             (slot topic (type STRING)))");
-  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-msg \
+  clips::Build(env.get_obj().get(),"(deftemplate {{name_kebab}}-message \
             (slot topic (type STRING) ) \
             (slot msg-ptr (type EXTERNAL-ADDRESS)) \
             )");
@@ -283,7 +297,7 @@ void {{name_camel}}::subscribe_to_topic(clips::Environment *env,
             topic_name, 10, [this,topic_name,env](const {{message_type}}::SharedPtr msg) {
               topic_callback(msg, topic_name, env);
             }, options);
-    clips::AssertString(env, ("({{name_kebab}}-subscriber (topic \"" +
+    clips::AssertString(env, ("({{name_kebab}}-subscription (topic \"" +
                                  topic_name + "\"))").c_str());
   }
 }
@@ -301,7 +315,7 @@ void {{name_camel}}::unsubscribe_from_topic(clips::Environment *env,
     subscriptions_[env_name].erase(topic_name);
   }
 
-  clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-subscriber)) (eq (str-cat ?f:topic) (str-cat " + topic_name + "))  (retract ?f))").c_str(), NULL);
+  clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-subscription)) (eq (str-cat ?f:topic) (str-cat " + topic_name + "))  (retract ?f))").c_str(), NULL);
 }
 
 void {{name_camel}}::topic_callback(
@@ -312,7 +326,7 @@ void {{name_camel}}::topic_callback(
   messages_[msg.get()] = msg;
 
   // assert the newest message
-  clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-msg");
+  clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-message");
   clips::FBPutSlotString(fact_builder,"topic",topic_name.c_str());
   clips::FBPutSlotCLIPSExternalAddress(fact_builder,"msg-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), msg.get()));
   clips::FBAssert(fact_builder);
