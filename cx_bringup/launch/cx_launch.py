@@ -7,6 +7,7 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
+from rclpy.logging import get_logger
 
 
 def launch_with_context(context, *args, **kwargs):
@@ -15,6 +16,11 @@ def launch_with_context(context, *args, **kwargs):
     namespace = LaunchConfiguration("namespace")
     manager_config = LaunchConfiguration("manager_config")
     manager_config_file = os.path.join(bringup_dir, "params", manager_config.perform(context))
+    # re-issue warning as it is not colored otherwise ...
+    if not os.path.isfile(manager_config_file):
+        logger = get_logger("cx_bringup_launch")
+        logger.warning(f"Parameter file path is not a file: {manager_config_file}")
+
     log_level = LaunchConfiguration("log_level")
     cx_node = Node(
         package="cx_bringup",
