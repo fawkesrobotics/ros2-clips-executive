@@ -37,8 +37,7 @@ using std::placeholders::_1;
 
 namespace cx {
 
-{{name_camel}}::{{name_camel}}()
-    : Node("{{name_snake}}_msg_plugin_node") {
+{{name_camel}}::{{name_camel}}() {
     clips_worker_thread_ = std::thread([this] () {
   while (!stop_flag_) {
       std::function<void()> task;
@@ -66,57 +65,48 @@ void {{name_camel}}::finalize() {
       clips_worker_thread_.join();
   }
   if(clients_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li client(s), cleaning up ...", clients_.size());
+    RCLCPP_WARN(*logger_, "Found %li client(s), cleaning up ...", clients_.size());
     clients_.clear();
   }
   if(servers_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li server(s), cleaning up ...", servers_.size());
+    RCLCPP_WARN(*logger_, "Found %li server(s), cleaning up ...", servers_.size());
     servers_.clear();
   }
-  executor_.remove_node(this->get_node_base_interface());
   if(results_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li result(s), cleaning up ...", results_.size());
+    RCLCPP_WARN(*logger_, "Found %li result(s), cleaning up ...", results_.size());
     results_.clear();
   }
   if(feedbacks_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li feedback(s), cleaning up ...", feedbacks_.size());
+    RCLCPP_WARN(*logger_, "Found %li feedback(s), cleaning up ...", feedbacks_.size());
     feedbacks_.clear();
   }
   if(const_feedbacks_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li const feedback(s), cleaning up ...", const_feedbacks_.size());
+    RCLCPP_WARN(*logger_, "Found %li const feedback(s), cleaning up ...", const_feedbacks_.size());
   }
   if(goals_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li goal(s), cleaning up ...", goals_.size());
+    RCLCPP_WARN(*logger_, "Found %li goal(s), cleaning up ...", goals_.size());
     goals_.clear();
   }
   if(client_goal_handles_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li client_goal_handle(s), cleaning up ...", client_goal_handles_.size());
+    RCLCPP_WARN(*logger_, "Found %li client_goal_handle(s), cleaning up ...", client_goal_handles_.size());
     client_goal_handles_.clear();
   }
   if(server_goal_handles_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li server_goal_handle(s), cleaning up ...", server_goal_handles_.size());
+    RCLCPP_WARN(*logger_, "Found %li server_goal_handle(s), cleaning up ...", server_goal_handles_.size());
     server_goal_handles_.clear();
-  }
-
-  // Stop the spin thread and join it
-  if (spin_thread_.joinable()) {
-      executor_.cancel();
-      spin_thread_.join();
   }
 }
 
 
 void {{name_camel}}::initialize() {
-   cb_group_ = this->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
-  executor_.add_node(this->get_node_base_interface());
-  spin_thread_ = std::thread([this]() {
-      executor_.spin();
-    });
+   logger_ = std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
+   auto node = parent_.lock();
+   cb_group_ = node->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
 }
 
 bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env) {
 
-  RCLCPP_DEBUG(get_logger(),
+  RCLCPP_DEBUG(*logger_,
               "Destroying clips context!");
   for(const auto& fun : function_names_) {
      clips::RemoveUDF(env.get_obj().get(), fun.c_str());
@@ -125,50 +115,50 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-client can not be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-server");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-server can not be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-goal-response");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-goal-response can not be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-goal-feedback");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-goal-feedback can not be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-wrapped-result");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-wrapped-result can not be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-accepted-goal");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-accepted-goal can not be undefined");
   }
   return true;
 }
 
 bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
-  RCLCPP_INFO(get_logger(),
-              "Initialising context for plugin %s",
+  RCLCPP_INFO(*logger_,
+              "Initializing context for plugin %s",
               plugin_name_.c_str());
 
 {% set template_part = "registration" %}
@@ -278,7 +268,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
        try {
         instance->server_goal_handle_abort(goal_handle.externalAddressValue->contents, result.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown goal handle or result pointer %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown goal handle or result pointer %s", e.what());
        }
     },
     "server_goal_handle_abort", this);
@@ -298,7 +288,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
        try {
         instance->server_goal_handle_succeed(goal_handle.externalAddressValue->contents, result.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown goal handle or result pointer %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown goal handle or result pointer %s", e.what());
        }
     },
     "server_goal_handle_succeed", this);
@@ -318,7 +308,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
        try {
         instance->server_goal_handle_canceled(goal_handle.externalAddressValue->contents, result.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown goal handle or result pointer %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown goal handle or result pointer %s", e.what());
        }
     },
     "server_goal_handle_canceled", this);
@@ -336,7 +326,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
        try {
         *out = instance->server_goal_handle_get_goal(env, goal_handle.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown goal handle %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown goal handle %s", e.what());
        }
     },
     "server_goal_handle_get_goal", this);
@@ -354,7 +344,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
        try {
          *out = instance->server_goal_handle_get_goal_id(env, goal_handle.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown goal handle %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown goal handle %s", e.what());
        }
     },
     "server_goal_handle_get_goal_id", this);
@@ -393,7 +383,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
        try {
         instance->server_goal_handle_publish_feedback(goal_handle.externalAddressValue->contents, feedback.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown goal handle or feedback %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown goal handle or feedback %s", e.what());
        }
     },
     "server_goal_handle_publish_feedback", this);
@@ -411,7 +401,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
        try {
         *out = instance->client_goal_handle_get_goal_id(env, goal_handle.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown goal handle %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown goal handle %s", e.what());
        }
     },
     "client_goal_handle_get_goal_id", this);
@@ -429,7 +419,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
        try {
         *out = instance->client_goal_handle_get_goal_stamp(env, goal_handle.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown goal handle %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown goal handle %s", e.what());
        }
     },
     "client_goal_handle_get_goal_stamp", this);
@@ -533,17 +523,17 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
   bool print_warning = true;
   while (!clients_[env_name][server_name]->wait_for_action_server(1s)) {
     if (!rclcpp::ok()) {
-      RCLCPP_ERROR(get_logger(), "Interrupted while waiting for the server. Exiting.");
+      RCLCPP_ERROR(*logger_, "Interrupted while waiting for the server. Exiting.");
       return;
     }
     if(print_warning) {
-      RCLCPP_WARN(get_logger(), "server %s not available, start waiting", server_name.c_str());
+      RCLCPP_WARN(*logger_, "server %s not available, start waiting", server_name.c_str());
       print_warning = false;
     }
-    RCLCPP_DEBUG(get_logger(), "server %s not available, waiting again...", server_name.c_str());
+    RCLCPP_DEBUG(*logger_, "server %s not available, waiting again...", server_name.c_str());
   }
   if(!print_warning) {
-      RCLCPP_INFO(get_logger(), "server %s is finally reachable", server_name.c_str());
+      RCLCPP_INFO(*logger_, "server %s is finally reachable", server_name.c_str());
   }
   cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
    auto send_goal_options = rclcpp_action::Client<{{message_type}}>::SendGoalOptions();
@@ -619,7 +609,7 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     clips::Deffunction *dec_fun = clips::FindDeffunction(clips.get_obj().get(),"{{name_kebab}}-handle-goal-callback");
     if(!dec_fun) {
-      RCLCPP_INFO(get_logger(), "Accepting goal per default");
+      RCLCPP_INFO(*logger_, "Accepting goal per default");
       return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
     }
     clips::FunctionCallBuilder *fcb = clips::CreateFunctionCallBuilder(clips.get_obj().get(),3);
@@ -639,7 +629,7 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     clips::Deffunction *dec_fun = clips::FindDeffunction(clips.get_obj().get(),"{{name_kebab}}-cancel-goal-callback");
     if(!dec_fun) {
-      RCLCPP_INFO(get_logger(), "Accepting goal cancellation per default");
+      RCLCPP_INFO(*logger_, "Accepting goal cancellation per default");
       return rclcpp_action::CancelResponse::ACCEPT;
     }
     // store the goal handle to ensure it is not cleaned up implicitly
@@ -669,9 +659,10 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     clips::FBDispose(fact_builder);
   };
   auto context = CLIPSEnvContext::get_context(env);
+  auto node = parent_.lock();
   std::string env_name = context->env_name_;
   servers_[env_name][server_name] =
-      rclcpp_action::create_server<{{message_type}}>(this, server_name, handle_goal, handle_cancel, handle_accepted);
+      rclcpp_action::create_server<{{message_type}}>(node, server_name, handle_goal, handle_cancel, handle_accepted);
 }
 
 void {{name_camel}}::destroy_server(clips::Environment *env, const std::string &server_name) {
@@ -687,10 +678,10 @@ void {{name_camel}}::destroy_server(clips::Environment *env, const std::string &
           // Remove the server_name entry from the inner map
           inner_map.erase(inner_it);
       } else {
-          RCLCPP_WARN(this->get_logger(), "Service %s not found in environment %s", server_name.c_str(), env_name.c_str());
+          RCLCPP_WARN(*logger_, "Service %s not found in environment %s", server_name.c_str(), env_name.c_str());
       }
   } else {
-      RCLCPP_WARN(this->get_logger(), "Environment %s not found", env_name.c_str());
+      RCLCPP_WARN(*logger_, "Environment %s not found", env_name.c_str());
   }
 
   clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-server)) (eq (str-cat ?f:name) (str-cat " + server_name + "))  (retract ?f))").c_str(), NULL);
@@ -704,13 +695,14 @@ void {{name_camel}}::create_new_client(clips::Environment *env,
   auto it = clients_[env_name].find(server_name);
 
   if (it != clients_[env_name].end()) {
-    RCLCPP_WARN(rclcpp::get_logger(plugin_name_),
+    RCLCPP_WARN(*logger_,
                 "There already exists a client for server %s", server_name.c_str());
   } else {
-    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
+    RCLCPP_DEBUG(*logger_,
                 "Creating client for server %s", server_name.c_str());
+    auto node = parent_.lock();
     clients_[env_name][server_name] =
-        rclcpp_action::create_client<{{message_type}}>(this,server_name);
+        rclcpp_action::create_client<{{message_type}}>(node, server_name);
     clips::AssertString(env, ("({{name_kebab}}-client (server \"" + server_name + "\"))").c_str());
   }
 }
@@ -723,7 +715,7 @@ void {{name_camel}}::destroy_client(clips::Environment *env,
   auto it = clients_[env_name].find(server_name);
 
   if (it != clients_[env_name].end()) {
-    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
+    RCLCPP_DEBUG(*logger_,
                 "Destroying client for server %s", server_name.c_str());
     clients_[env_name].erase(server_name);
   }
@@ -735,13 +727,13 @@ void {{name_camel}}::destroy_client(clips::Environment *env,
 void {{name_camel}}::server_goal_handle_abort(void *goal_handle_raw, void *result_raw, clips::UDFContext *udfc) {
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-abort: Invalid pointer to ServerGoalHandle");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-abort: Invalid pointer to ServerGoalHandle");
     clips::UDFThrowError(udfc);
     return;
   }
   auto result = results_.at(result_raw);
   if(!result) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-abort: Invalid pointer to Result");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-abort: Invalid pointer to Result");
     clips::UDFThrowError(udfc);
     return;
   }
@@ -751,13 +743,13 @@ void {{name_camel}}::server_goal_handle_abort(void *goal_handle_raw, void *resul
 void {{name_camel}}::server_goal_handle_succeed(void *goal_handle_raw, void *result_raw, clips::UDFContext *udfc) {
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-succeed: Invalid pointer to ServerGoalHandle");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-succeed: Invalid pointer to ServerGoalHandle");
     clips::UDFThrowError(udfc);
     return;
   }
   auto result = results_.at(result_raw);
   if(!result) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-succeed: Invalid pointer to Result");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-succeed: Invalid pointer to Result");
     clips::UDFThrowError(udfc);
     return;
   }
@@ -767,13 +759,13 @@ void {{name_camel}}::server_goal_handle_succeed(void *goal_handle_raw, void *res
 void {{name_camel}}::server_goal_handle_canceled(void *goal_handle_raw, void *result_raw, clips::UDFContext *udfc) {
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-canceled: Invalid pointer to ServerGoalHandle");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-canceled: Invalid pointer to ServerGoalHandle");
     clips::UDFThrowError(udfc);
     return;
   }
   auto result = results_.at(result_raw);
   if(!result) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-canceled: Invalid pointer to Result");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-canceled: Invalid pointer to Result");
     clips::UDFThrowError(udfc);
     return;
   }
@@ -784,7 +776,7 @@ clips::UDFValue {{name_camel}}::server_goal_handle_get_goal(clips::Environment *
   clips::UDFValue res;
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-get-goal: Invalid pointer to ServerGoalHandle");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-get-goal: Invalid pointer to ServerGoalHandle");
     clips::UDFThrowError(udfc);
     return res;
   }
@@ -797,7 +789,7 @@ clips::UDFValue {{name_camel}}::server_goal_handle_get_goal_id(clips::Environmen
   clips::UDFValue res;
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-get-goal-id: Invalid pointer to ServerGoalHandle");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-get-goal-id: Invalid pointer to ServerGoalHandle");
     clips::UDFThrowError(udfc);
     return res;
   }
@@ -831,19 +823,19 @@ clips::UDFValue {{name_camel}}::server_goal_handle_get_goal_id(clips::Environmen
 void {{name_camel}}::server_goal_handle_publish_feedback(void *goal_handle_raw, void *feedback_raw, clips::UDFContext *udfc) {
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-publish-feedback: Invalid pointer to ServerGoalHandle");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-publish-feedback: Invalid pointer to ServerGoalHandle");
     clips::UDFThrowError(udfc);
     return;
   }
   auto it = const_feedbacks_.find(feedback_raw);
   if(it != const_feedbacks_.end()) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-publish-feedback: Cannot publish const feedback");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-publish-feedback: Cannot publish const feedback");
     clips::UDFThrowError(udfc);
     return;
   }
   auto feedback = feedbacks_.at(feedback_raw);
   if(!feedback) {
-    RCLCPP_ERROR(get_logger(), "server-goal-handle-publish-feedback: Invalid pointer to Feedback");
+    RCLCPP_ERROR(*logger_, "server-goal-handle-publish-feedback: Invalid pointer to Feedback");
     clips::UDFThrowError(udfc);
     return;
   }
@@ -858,7 +850,7 @@ clips::UDFValue {{name_camel}}::client_goal_handle_get_goal_id(clips::Environmen
     rclcpp_action::GoalUUID goal_id = goal_handle->get_goal_id();
 	uuid_str = rclcpp_action::to_string(goal_id);
   } else {
-    RCLCPP_ERROR(get_logger(), "client-goal-handle-get-goal-id: Invalid pointer to ClientGoalHandle");
+    RCLCPP_ERROR(*logger_, "client-goal-handle-get-goal-id: Invalid pointer to ClientGoalHandle");
     clips::UDFThrowError(udfc);
     uuid_str = "";
   }
@@ -872,7 +864,7 @@ clips::UDFValue {{name_camel}}::client_goal_handle_get_goal_stamp(clips::Environ
   if(goal_handle) {
   res.floatValue = clips::CreateFloat(env, goal_handle->get_goal_stamp().seconds());
   } else {
-     RCLCPP_ERROR(get_logger(), "client-goal-handle-get-goal-id: Invalid pointer to ClientGoalHandle");
+     RCLCPP_ERROR(*logger_, "client-goal-handle-get-goal-id: Invalid pointer to ClientGoalHandle");
      res.floatValue = clips::CreateFloat(env, 0.0);
      clips::UDFThrowError(udfc);
   }
@@ -892,7 +884,5 @@ void {{name_camel}}::server_goal_handle_destroy(void *g) {
       server_goal_handles_.erase(it);
   }
 }
-
-
 } // namespace cx
 PLUGINLIB_EXPORT_CLASS(cx::{{name_camel}}, cx::ClipsPlugin)

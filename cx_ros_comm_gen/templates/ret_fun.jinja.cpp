@@ -6,7 +6,7 @@ clips::UDFValue {{name_camel}}::{{template_type|snake_case}}_{{template_call_fun
   auto {{template_type|snake_case}} = {{template_type|snake_case}}s_.at({{template_type|snake_case}}_raw);
   clips::UDFValue res;
   if(!{{template_type|snake_case}}) {
-    RCLCPP_ERROR(get_logger(), "{{template_type|snake_case}}_{{template_call_fun|snake_case}}: Invalid pointer to {{template_type|camel_case}}");
+    RCLCPP_ERROR(*logger_, "{{template_type|snake_case}}_{{template_call_fun|snake_case}}: Invalid pointer to {{template_type|camel_case}}");
     res.lexemeValue = clips::CreateSymbol(env, "FALSE");
     clips::UDFThrowError(udfc);
     return res;
@@ -42,7 +42,7 @@ clips::UDFValue {{name_camel}}::{{template_type|snake_case}}_{{template_call_fun
        try {
         *out = instance->{{template_type|snake_case}}_{{template_call_fun|snake_case}}(env, {{template_type|snake_case}}.externalAddressValue->contents, udfc);
        } catch (std::out_of_range &e) {
-         RCLCPP_ERROR(instance->get_logger(), "Unknown {{template_type|snake_case}} %s", e.what());
+         RCLCPP_ERROR(*(instance->logger_), "Unknown {{template_type|snake_case}} %s", e.what());
        }
     },
     "{{template_type|snake_case}}_{{template_call_fun|snake_case}}", this);

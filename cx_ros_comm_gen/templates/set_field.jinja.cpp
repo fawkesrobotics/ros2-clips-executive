@@ -15,12 +15,12 @@ void {{name_camel}}::{{template_type|snake_case}}{{snake_type_sep}}set_field({{m
                                        clips::UDFValue value, clips::UDFContext *udfc) {
   std::vector<std::string> slots({ {% for slot in template_slots %}"{{ slot.name }}"{% if not loop.last %}, {% endif %}{% endfor %} });
   if(std::find(slots.begin(), slots.end(), field) == slots.end()) {
-    RCLCPP_ERROR(get_logger(), "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}set-field: cannot retrieve unknown slot name %s", field.c_str());
+    RCLCPP_ERROR(*logger_, "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}set-field: cannot retrieve unknown slot name %s", field.c_str());
     clips::UDFThrowError(udfc);
     return;
   }
   if(!req) {
-    RCLCPP_ERROR(get_logger(), "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}set-field: Invalid pointer {{template_type|camel_case}}");
+    RCLCPP_ERROR(*logger_, "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}set-field: Invalid pointer {{template_type|camel_case}}");
     clips::UDFThrowError(udfc);
     return;
   }
@@ -57,7 +57,7 @@ void {{name_camel}}::{{template_type|snake_case}}{{snake_type_sep}}set_field({{m
         value_vector_{{slot.name}}.push_back(multi->contents[i].lexemeValue->contents);
         break;
       default:
-        RCLCPP_ERROR(get_logger(),
+        RCLCPP_ERROR(*logger_,
                      "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}set-field: Unexpected Type %i (expected STRING/SYMBOL) of %li nth argument of UDF",
                      multi->contents[i].header->type, i);
         clips::UDFThrowError(udfc);
@@ -74,7 +74,7 @@ void {{name_camel}}::{{template_type|snake_case}}{{snake_type_sep}}set_field({{m
         value_vector_{{slot.name}}.push_back(multi->contents[i].integerValue->contents);
         break;
       default:
-        RCLCPP_ERROR(get_logger(),
+        RCLCPP_ERROR(*logger_,
                      "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}set-field: Unexpected Type %i (expected INTEGER) of %li nth argument of UDF",
                      multi->contents[i].header->type, i);
         clips::UDFThrowError(udfc);
@@ -90,7 +90,7 @@ void {{name_camel}}::{{template_type|snake_case}}{{snake_type_sep}}set_field({{m
         value_vector_{{slot.name}}.push_back(multi->contents[i].floatType->contents);
         break;
       default:
-        RCLCPP_ERROR(get_logger(),
+        RCLCPP_ERROR(*logger_,
                      "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}set-field: Unexpected Type %i (expected FLOAT) of %li nth argument of UDF",
                      multi->contents[i].header->type, i);
         clips::UDFThrowError(udfc);
@@ -106,7 +106,7 @@ void {{name_camel}}::{{template_type|snake_case}}{{snake_type_sep}}set_field({{m
         value_vector_{{slot.name}}.push_back(*static_cast<{{slot.type}}*>((multi->contents[i].externalAddressValue->contents)));
         break;
       default:
-        RCLCPP_ERROR(get_logger(),
+        RCLCPP_ERROR(*logger_,
                      "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}set-field: Unexpected Type %i (expected EXTERNAL-ADDRESS) of %li nth argument of UDF",
                      multi->contents[i].header->type, i);
         clips::UDFThrowError(udfc);

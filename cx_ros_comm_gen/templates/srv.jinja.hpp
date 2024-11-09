@@ -47,9 +47,10 @@ public:
   bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
 private:
-  rclcpp::executors::MultiThreadedExecutor executor_;
   rclcpp::CallbackGroup::SharedPtr cb_group_;
-  std::thread spin_thread_;
+
+  std::unique_ptr<rclcpp::Logger> logger_;
+
   std::map<std::string,
            std::map<std::string,
                     rclcpp::Service<{{message_type}}>::SharedPtr>>
