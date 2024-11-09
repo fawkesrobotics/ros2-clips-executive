@@ -41,6 +41,7 @@ namespace cx {
 }
 
 void {{name_camel}}::finalize() {
+  std::scoped_lock map_lock{map_mtx_};
   if (subscriptions_.size() > 0) {
     for (const auto &sub_map : subscriptions_) {
       for (const auto &sub : sub_map.second) {
@@ -247,6 +248,7 @@ void {{name_camel}}::publish_to_topic(clips::Environment *env, {{message_type}} 
 }
 
 void {{name_camel}}::create_new_publisher(clips::Environment *env, const std::string &topic_name) {
+  std::scoped_lock map_lock{map_mtx_};
   auto context = CLIPSEnvContext::get_context(env);
   auto node = parent_.lock();
   publishers_[context->env_name_][topic_name] =
@@ -256,6 +258,7 @@ void {{name_camel}}::create_new_publisher(clips::Environment *env, const std::st
 }
 
 void {{name_camel}}::destroy_publisher(clips::Environment *env, const std::string &topic_name) {
+  std::scoped_lock map_lock{map_mtx_};
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
   auto outer_it = publishers_.find(env_name);
@@ -278,6 +281,7 @@ void {{name_camel}}::subscribe_to_topic(clips::Environment *env,
     const std::string &topic_name) {
   RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_), "Subscribing to topic %s",
               topic_name.c_str());
+  std::scoped_lock map_lock{map_mtx_};
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
 
@@ -304,6 +308,7 @@ void {{name_camel}}::subscribe_to_topic(clips::Environment *env,
 
 void {{name_camel}}::unsubscribe_from_topic(clips::Environment *env,
     const std::string &topic_name) {
+  std::scoped_lock map_lock{map_mtx_};
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
 
@@ -322,8 +327,11 @@ void {{name_camel}}::topic_callback(
     const {{message_type}}::SharedPtr msg, std::string topic_name, clips::Environment *env) {
   auto context = CLIPSEnvContext::get_context(env);
   cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
-  std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-  messages_[msg.get()] = msg;
+  std::scoped_lock clips_lock{*clips.get_mutex_instance()};
+  {
+    std::scoped_lock map_lock{map_mtx_};
+    messages_[msg.get()] = msg;
+  }
 
   // assert the newest message
   clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-message");
@@ -335,6 +343,7 @@ void {{name_camel}}::topic_callback(
 
 clips::UDFValue {{name_camel}}::create_message(clips::Environment *env) {
   std::shared_ptr<{{message_type}}> ptr = std::make_shared<{{message_type}}>();
+  std::scoped_lock map_lock{map_mtx_};
   messages_[ptr.get()] = ptr;
   clips::UDFValue res;
   res.externalAddressValue = clips::CreateCExternalAddress(env, ptr.get());
@@ -342,6 +351,7 @@ clips::UDFValue {{name_camel}}::create_message(clips::Environment *env) {
 }
 
 void {{name_camel}}::destroy_msg({{message_type}} *msg) {
+  std::scoped_lock map_lock{map_mtx_};
   auto it = messages_.find(msg);
   if (it != messages_.end()) {
       messages_.erase(it);
