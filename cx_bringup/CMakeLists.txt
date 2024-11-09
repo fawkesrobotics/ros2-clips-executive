@@ -49,8 +49,6 @@ set(dependencies_psys2
 add_executable(cx_node
   src/cx_node.cpp
 )
-# ament_target_dependencies(plansys_node ${dependencies_psys2})
-# target_compile_definitions(plansys_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 ament_target_dependencies(cx_node ${dependencies})
 target_link_libraries(cx_node ClipsNS::libclips_ns spdlog::spdlog)
@@ -60,10 +58,12 @@ cx_generate_msg_bindings("std_msgs" "String")
 
 # generate bindings to interface with ROS services, such as std_srvs::srv::SetBool
 cx_generate_srv_bindings("std_srvs" "SetBool")
+
 # generate bindings to interface with ROS services, such as example_interfaces::action::Fibonacci
 cx_generate_action_bindings("example_interfaces" "Fibonacci")
 
-cx_generate_linked_protobuf_plugin("BringupProtobufPlugin" proto/cx_bringup/SearchRequest.proto)
+# generate protobuf plugin with linked proto files
+cx_generate_linked_protobuf_plugin_from_proto("BringupProtobufPlugin" proto/cx_bringup/SearchRequest.proto)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

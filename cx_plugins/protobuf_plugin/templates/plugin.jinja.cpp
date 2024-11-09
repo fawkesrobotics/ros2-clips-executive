@@ -5,6 +5,7 @@
  *
  *  Automatically Generated: {{ gen_date }}
  ****************************************************************************/
+// clang-format off
 #include "{{ name_snake }}.hpp"
 
 #include "pluginlib/class_list_macros.hpp"

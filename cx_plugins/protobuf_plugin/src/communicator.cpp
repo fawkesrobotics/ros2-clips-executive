@@ -318,25 +318,6 @@ void ClipsProtobufCommunicator::setup_clips() {
       },
       "clips_pb_destroy", this);
 
-  function_name = "pb-ref";
-  functions_.push_back(function_name);
-  clips::AddUDF(
-      clips_, function_name.c_str(), "e", 1, 1, ";e",
-      [](clips::Environment * /*env*/, clips::UDFContext *udfc,
-         clips::UDFValue *out) {
-        ClipsProtobufCommunicator *instance =
-            static_cast<ClipsProtobufCommunicator *>(udfc->context);
-        clips::UDFValue msgptr;
-        if (!clips::UDFNthArgument(udfc, 1, clips::EXTERNAL_ADDRESS_BIT,
-                                   &msgptr)) {
-          SPDLOG_ERROR("pb-ref: unexpected types, expected addr");
-          clips::UDFThrowError(udfc);
-          return;
-        }
-        *out = instance->clips_pb_ref(msgptr.externalAddressValue->contents);
-      },
-      "clips_pb_ref", this);
-
   function_name = "pb-set-field";
   functions_.push_back(function_name);
   clips::AddUDF(
@@ -817,20 +798,6 @@ ClipsProtobufCommunicator::clips_pb_create(std::string full_name) {
     res.externalAddressValue = clips::CreateCExternalAddress(clips_, nullptr);
     return res;
   }
-}
-
-clips::UDFValue ClipsProtobufCommunicator::clips_pb_ref(void *msgptr) {
-  clips::UDFValue res;
-  std::shared_ptr<google::protobuf::Message> *m =
-      static_cast<std::shared_ptr<google::protobuf::Message> *>(msgptr);
-  if (!*m) {
-    res.externalAddressValue = clips::CreateCExternalAddress(
-        clips_, new std::shared_ptr<google::protobuf::Message>());
-    return res;
-  }
-  res.externalAddressValue = clips::CreateCExternalAddress(
-      clips_, new std::shared_ptr<google::protobuf::Message>(*m));
-  return res;
 }
 
 void ClipsProtobufCommunicator::clips_pb_destroy(void *msgptr) {
@@ -1598,8 +1565,7 @@ void ClipsProtobufCommunicator::handle_server_client_disconnected(
 void ClipsProtobufCommunicator::handle_server_client_msg(
     ProtobufStreamServer::ClientID client, uint16_t component_id,
     uint16_t msg_type, std::shared_ptr<google::protobuf::Message> msg) {
-  std::lock_guard<std::mutex> lock(clips_mutex_);
-  std::lock_guard<std::mutex> lock2(map_mutex_);
+  std::scoped_lock lock{clips_mutex_, map_mutex_};
   RevServerClientMap::iterator c;
   if ((c = rev_server_clients_.find(client)) != rev_server_clients_.end()) {
     clips_assert_message(client_endpoints_[c->second], component_id, msg_type,

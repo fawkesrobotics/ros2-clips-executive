@@ -110,7 +110,6 @@ private:
   clips::UDFValue clips_pb_field_list(void *msgptr, std::string field_name);
   clips::UDFValue clips_pb_field_is_list(void *msgptr, std::string field_name);
   clips::UDFValue clips_pb_create(std::string full_name);
-  clips::UDFValue clips_pb_ref(void *msgptr);
   void clips_pb_destroy(void *msgptr);
   void clips_pb_set_field(void *msgptr, std::string field_name,
                           clips::UDFValue value);

@@ -8,6 +8,8 @@
   (bind ?peer-2 (pb-peer-create-local 127.0.0.1 4445 4444))
   (assert (peer ?peer-1))
   (assert (peer ?peer-2))
+  (bind ?success (pb-register-type "SearchRequest"))
+  (printout green "Register Type: " ?success crlf)
 )
 
 (defrule peer-send-msg

@@ -23,15 +23,29 @@ clips_manager:
       # Defaults to an empty list
       proto_paths: ["proto"]
 ```
+This automatically makes all proto files in the given paths available for serialization and deserialization and is the recommended use for this plugin.
+
+It is also possible to instead register types explicitly by looking them up from a linked library.
+However, this requires to build a shared library from proto files and then link it together with the **cx_protobuf_plugin**.
+
+In order to accomplish this, this plugin offers two cmake macros:
+```cmake
+# Generates a new plugin called NEW_PLUGIN_NAME (should be a name in CamelCase, e.g., CustomProtobufPlugin) given a list of protobuf message definitions PROTO_FILES.
+cx_generate_linked_protobuf_plugin_from_proto(NEW_PLUGIN_NAME PROTO_FILES)
+# Generates a new plugin called NEW_PLUGIN_NAME (should be a name in CamelCase, e.g., CustomProtobufPlugin) given a shared library that is linked against via target_link_libraries().
+cx_generate_linked_protobuf_plugin_from_lib(NEW_PLUGIN_NAME SHARED_LIBRARY_TARGET)
+```
+
 ## CLIPS Features
 This plugin defines deftemplates, rules and user-defined functions that are described below.
 
+It allows two differnet way of communication. Either via broadcast peers or via client server connection.
 ##### Deftemplates
 ```lisp
 ; Asserted by the create-subscription function.
 ; Retracted by the destroy-subscription function.
 (deftemplate protobuf-msg
-  (slot type (type STRING))            ; package + "." + message-name
+  (slot type (type STRING))            ; (package + "." +) message-name
   (slot comp-id (type INTEGER))
   (slot msg-type (type INTEGER))
   (slot rcvd-via (type SYMBOL)
@@ -105,7 +119,7 @@ It defines defrules and a defglobal to clean up the fact once the end of the age
 ```
 ##### Functions
 ```lisp
-(bind ?res (pb-register-type ?full-name))    ; returns TRUE if successful, FALSE otherwise
+; functions for processing messages:
 (bind ?res (pb-field-names ?msg))
 (bind ?res (pb-field-type ?msg ?field-name))
 (bind ?res (pb-has-field ?msg ?field-name))
@@ -114,13 +128,19 @@ It defines defrules and a defglobal to clean up the fact once the end of the age
 (bind ?res (pb-field-list ?msg ?field-name))
 (bind ?res (pb-field-is-list ?msg ?field-name))
 (bind ?res (pb-create ?full-name))
-(bind ?res (pb-ref ?msg))
 (pb-set-field ?msg ?field-name ?value)
 (pb-add-list ?msg ?field-name ?list)
-(pb-send ?client-id ?msg)
+;
 (bind ?res (pb-tostring ?msg))
+
+; functions for using a stream server or clients
 (pb-server-enable ?port)
 (pb-server-disable)
+(pb-send ?client-id ?msg)
+(bind ?res (pb-connect ?host ?port))
+(pb-disconnect ?host ?port)
+
+; functions for using broadcast peers
 (bind ?res (pb-peer-create ?address ?port))
 (bind ?res (pb-peer-create-local ?address ?send-port ?recv-port))
 (bind ?res (pb-peer-create-crypto ?address ?port ?crypto ?cypher))
@@ -128,8 +148,9 @@ It defines defrules and a defglobal to clean up the fact once the end of the age
 (pb-peer-destroy ?peer-id)
 (pb-peer-setup-crypto ?peer-id ?key ?cypher)
 (pb-broadcast ?peer-id ?msg)
-(bind ?res (pb-connect ?host ?port))
-(pb-disconnect ?host ?port)
+
+; In order to use types from a linked library, they need to be registered via this function first.
+(bind ?res (pb-register-type ?full-name))    ; returns TRUE if successful, FALSE otherwise
 ```
 
 ## Object Lifetimes and CLIPS
