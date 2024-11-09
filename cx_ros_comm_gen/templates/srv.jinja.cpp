@@ -42,42 +42,32 @@ namespace cx {
 
 void {{name_camel}}::finalize() {
   if(clients_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li client(s), cleaning up ...", clients_.size());
+    RCLCPP_WARN(*logger_, "Found %li client(s), cleaning up ...", clients_.size());
     clients_.clear();
   }
   if(services_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li service(s), cleaning up ...", services_.size());
+    RCLCPP_WARN(*logger_, "Found %li service(s), cleaning up ...", services_.size());
     services_.clear();
   }
-  executor_.remove_node(this->get_node_base_interface());
   if(requests_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li request(s), cleaning up ...", requests_.size());
+    RCLCPP_WARN(*logger_, "Found %li request(s), cleaning up ...", requests_.size());
     requests_.clear();
   }
   if(responses_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li response(s), cleaning up ...", responses_.size());
+    RCLCPP_WARN(*logger_, "Found %li response(s), cleaning up ...", responses_.size());
     responses_.clear();
-  }
-
-  // Stop the spin thread and join it
-  if (spin_thread_.joinable()) {
-      executor_.cancel();
-      spin_thread_.join();
   }
 }
 
-
 void {{name_camel}}::initialize() {
-   cb_group_ = this->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
-  executor_.add_node(this->get_node_base_interface());
-  spin_thread_ = std::thread([this]() {
-      executor_.spin();
-    });
+   logger_ = std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
+   auto node = parent_.lock();
+   cb_group_ = node->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
 }
 
 bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env) {
 
-  RCLCPP_DEBUG(get_logger(),
+  RCLCPP_DEBUG(*logger_,
               "Destroying clips context!");
   for(const auto& fun : function_names_) {
      clips::RemoveUDF(env.get_obj().get(), fun.c_str());
@@ -86,21 +76,21 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-client can not be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-service");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-service can not be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-response");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-response can not be undefined");
   }
 
@@ -108,7 +98,7 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
 }
 
 bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
-  RCLCPP_DEBUG(get_logger(),
+  RCLCPP_DEBUG(*logger_,
               "Initialising context for plugin %s",
               plugin_name_.c_str());
 
@@ -242,17 +232,17 @@ void {{name_camel}}::send_request(clips::Environment *env, {{message_type}}::Req
   bool print_warning = true;
   while (!clients_[env_name][service_name]->wait_for_service(1s)) {
     if (!rclcpp::ok()) {
-      RCLCPP_ERROR(get_logger(), "Interrupted while waiting for the service. Exiting.");
+      RCLCPP_ERROR(*logger_, "Interrupted while waiting for the service. Exiting.");
       return;
     }
     if(print_warning) {
-      RCLCPP_WARN(get_logger(), "service %s not available, start waiting", service_name.c_str());
+      RCLCPP_WARN(*logger_, "service %s not available, start waiting", service_name.c_str());
       print_warning = false;
     }
-    RCLCPP_DEBUG(get_logger(), "service %s not available, waiting again...", service_name.c_str());
+    RCLCPP_DEBUG(*logger_, "service %s not available, waiting again...", service_name.c_str());
   }
   if(!print_warning) {
-      RCLCPP_INFO(get_logger(), "service %s is finally reachable", service_name.c_str());
+      RCLCPP_INFO(*logger_, "service %s is finally reachable", service_name.c_str());
   }
   std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
   auto future = clients_[env_name][service_name]->async_send_request(req_shared);
@@ -270,9 +260,9 @@ void {{name_camel}}::send_request(clips::Environment *env, {{message_type}}::Req
 void {{name_camel}}::create_new_service(clips::Environment *env, const std::string &service_name) {
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
+  auto node = parent_.lock();
 
-  services_[env_name][service_name] =
-      this->create_service<{{message_type}}>(service_name, [this, env_name, service_name, env](const std::shared_ptr<{{message_type}}::Request> request,
+  services_[env_name][service_name] = node->create_service<{{message_type}}>(service_name, [this, env_name, service_name, env](const std::shared_ptr<{{message_type}}::Request> request,
     std::shared_ptr<{{message_type}}::Response> response) {
     this->service_callback(request, response, service_name, env);
   });
@@ -293,10 +283,10 @@ void {{name_camel}}::destroy_service(clips::Environment *env, const std::string 
           // Remove the service_name entry from the inner map
           inner_map.erase(inner_it);
       } else {
-          RCLCPP_WARN(this->get_logger(), "Service %s not found in environment %s", service_name.c_str(), env_name.c_str());
+          RCLCPP_WARN(*logger_, "Service %s not found in environment %s", service_name.c_str(), env_name.c_str());
       }
   } else {
-      RCLCPP_WARN(this->get_logger(), "Environment %s not found", env_name.c_str());
+      RCLCPP_WARN(*logger_, "Environment %s not found", env_name.c_str());
   }
 }
 
@@ -315,8 +305,9 @@ void {{name_camel}}::create_new_client(clips::Environment *env,
   } else {
     RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "Creating client for service %s", service_name.c_str());
+    auto node = parent_.lock();
     clients_[env_name][service_name] =
-        this->create_client<{{message_type}}>(service_name);
+        node->create_client<{{message_type}}>(service_name);
     clips::AssertString(env, ("({{name_kebab}}-client (service \"" + service_name + "\"))").c_str());
   }
 }
@@ -349,7 +340,7 @@ void {{name_camel}}::service_callback(const std::shared_ptr<{{message_type}}::Re
   // call a user-defined function
   clips::Deffunction *dec_fun = clips::FindDeffunction(clips.get_obj().get(),"{{name_kebab}}-service-callback");
   if(!dec_fun) {
-    RCLCPP_WARN(get_logger(), "{{name_kebab}}-service-callback not defined, skip callback");
+    RCLCPP_WARN(*logger_, "{{name_kebab}}-service-callback not defined, skip callback");
     return;
   }
   clips::FunctionCallBuilder *fcb = clips::CreateFunctionCallBuilder(clips.get_obj().get(),3);

@@ -42,38 +42,29 @@ namespace cx {
 
 void {{name_camel}}::finalize() {
   if(subscriptions_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li subscription(s), cleaning up ...", subscriptions_.size());
+    RCLCPP_WARN(*logger_, "Found %li subscription(s), cleaning up ...", subscriptions_.size());
     subscriptions_.clear();
   }
   if(publishers_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li publisher(s), cleaning up ...", publishers_.size());
+    RCLCPP_WARN(*logger_, "Found %li publisher(s), cleaning up ...", publishers_.size());
     publishers_.clear();
   }
-  executor_.remove_node(this->get_node_base_interface());
   if(messages_.size() > 0) {
-    RCLCPP_WARN(get_logger(), "Found %li message(s), cleaning up ...", messages_.size());
+    RCLCPP_WARN(*logger_, "Found %li message(s), cleaning up ...", messages_.size());
     messages_.clear();
-  }
-
-  // Stop the spin thread and join it
-  if (spin_thread_.joinable()) {
-      executor_.cancel();
-      spin_thread_.join();
   }
 }
 
 
 void {{name_camel}}::initialize() {
-   cb_group_ = this->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
-  executor_.add_node(this->get_node_base_interface());
-  spin_thread_ = std::thread([this]() {
-      executor_.spin();
-    });
+   logger_ = std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
+   auto node = parent_.lock();
+   cb_group_ = node->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
 }
 
 bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env) {
 
-  RCLCPP_DEBUG(get_logger(),
+  RCLCPP_DEBUG(*logger_,
               "Destroying clips context!");
   for(const auto& fun : function_names_) {
      clips::RemoveUDF(env.get_obj().get(), fun.c_str());
@@ -82,28 +73,28 @@ bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env)
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-subscriber cant be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-publisher");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-publisher cant be undefined");
   }
   curr_tmpl = clips::FindDeftemplate(env.get_obj().get(), "{{name_kebab}}-msg");
   if(curr_tmpl) {
     clips::Undeftemplate(curr_tmpl, env.get_obj().get());
   } else {
-    RCLCPP_WARN(get_logger(),
+    RCLCPP_WARN(*logger_,
               "{{name_kebab}}-msg cant be undefined");
   }
   return true;
 }
 
 bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
-  RCLCPP_DEBUG(get_logger(),
+  RCLCPP_DEBUG(*logger_,
               "Initializing context for plugin %s",
               plugin_name_.c_str());
 
@@ -243,8 +234,9 @@ void {{name_camel}}::publish_to_topic(clips::Environment *env, {{message_type}} 
 
 void {{name_camel}}::create_new_publisher(clips::Environment *env, const std::string &topic_name) {
   auto context = CLIPSEnvContext::get_context(env);
+  auto node = parent_.lock();
   publishers_[context->env_name_][topic_name] =
-      this->create_publisher<{{message_type}}>(topic_name, 10);
+      node->create_publisher<{{message_type}}>(topic_name, 10);
     clips::AssertString(env, ("({{name_kebab}}-publisher (topic \"" +
                                  topic_name + "\"))").c_str());
 }
@@ -261,10 +253,10 @@ void {{name_camel}}::destroy_publisher(clips::Environment *env, const std::strin
           // Remove the topic_name entry from the inner map
           inner_map.erase(inner_it);
       } else {
-          RCLCPP_WARN(this->get_logger(), "Topic %s not found in environment %s", topic_name.c_str(), env_name.c_str());
+          RCLCPP_WARN(*logger_, "Topic %s not found in environment %s", topic_name.c_str(), env_name.c_str());
       }
   } else {
-      RCLCPP_WARN(this->get_logger(), "Environment %s not found", env_name.c_str());
+      RCLCPP_WARN(*logger_, "Environment %s not found", env_name.c_str());
   }
 }
 
@@ -285,8 +277,9 @@ void {{name_camel}}::subscribe_to_topic(clips::Environment *env,
                 "Creating subscription to topic %s", topic_name.c_str());
 	auto options = rclcpp::SubscriptionOptions();
 	options.callback_group = cb_group_;
+    auto node = parent_.lock();
     subscriptions_[env_name][topic_name] =
-        this->create_subscription<{{message_type}}>(
+        node->create_subscription<{{message_type}}>(
             topic_name, 10, [this,topic_name,env](const {{message_type}}::SharedPtr msg) {
               topic_callback(msg, topic_name, env);
             }, options);

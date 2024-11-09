@@ -36,7 +36,7 @@
 
 namespace cx {
 
-class {{name_camel}} : public ClipsPlugin, public rclcpp::Node {
+class {{name_camel}} : public ClipsPlugin {
 public:
   {{name_camel}}();
   ~{{name_camel}}();
@@ -48,7 +48,6 @@ public:
   bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
 private:
-  rclcpp::executors::MultiThreadedExecutor executor_;
   rclcpp::CallbackGroup::SharedPtr cb_group_;
 
   std::queue<std::function<void()>> task_queue_;
@@ -57,8 +56,10 @@ private:
   std::thread clips_worker_thread_;
   bool stop_flag_ = false;
 
+  std::unique_ptr<rclcpp::Logger> logger_;
+
   std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
-  std::thread spin_thread_;
+
   std::map<std::string,
            std::map<std::string,
                     rclcpp_action::Server<{{message_type}}>::SharedPtr>>

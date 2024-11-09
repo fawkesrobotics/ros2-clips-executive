@@ -16,13 +16,13 @@ clips::UDFValue {{name_camel}}::{{template_type|snake_case}}{{snake_type_sep}}ge
   clips::UDFValue res;
   std::vector<std::string> slots({ {% for slot in template_slots %}"{{ slot.name }}"{% if not loop.last %}, {% endif %}{% endfor %} });
   if(std::find(slots.begin(), slots.end(), field) == slots.end()) {
-    RCLCPP_ERROR(get_logger(), "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}get-field: cannot retrieve unknown slot name %s", field.c_str());
+    RCLCPP_ERROR(*logger_, "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}get-field: cannot retrieve unknown slot name %s", field.c_str());
     Writeln(env, std::format("{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}get-field: cannot retrieve unknown slot name {}", field.c_str()).c_str());
     clips::UDFThrowError(udfc);
     return res;
   }
   if(!req) {
-    RCLCPP_ERROR(get_logger(), "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}get-field: Invalid pointer {{template_type|camel_case}}");
+    RCLCPP_ERROR(*logger_, "{{name_kebab}}-{{template_type|kebab_case}}{{kebab_type_sep}}get-field: Invalid pointer {{template_type|camel_case}}");
     clips::UDFThrowError(udfc);
     return res;
   }

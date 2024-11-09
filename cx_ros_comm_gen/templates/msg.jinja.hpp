@@ -47,17 +47,20 @@ public:
   bool clips_env_destroyed(LockSharedPtr<clips::Environment> &env) override;
 
 private:
-  rclcpp::executors::MultiThreadedExecutor executor_;
   rclcpp::CallbackGroup::SharedPtr cb_group_;
-  std::thread spin_thread_;
+
+  std::unique_ptr<rclcpp::Logger> logger_;
+
   std::map<std::string,
            std::map<std::string,
                     rclcpp::Publisher<{{message_type}}>::SharedPtr>>
       publishers_;
+
   std::map<std::string,
            std::map<std::string,
                     rclcpp::Subscription<{{message_type}}>::SharedPtr>>
       subscriptions_;
+
   std::unordered_map<void*, std::shared_ptr<{{message_type}}>> messages_;
   std::unordered_set<std::string> function_names_;
 
@@ -66,7 +69,7 @@ private:
 {% include 'get_field.jinja.cpp' with context %}
 {% include 'set_field.jinja.cpp' with context %}
 
-clips::UDFValue create_message(clips::Environment *env);
+  clips::UDFValue create_message(clips::Environment *env);
 
   void publish_to_topic(clips::Environment *env, {{message_type}} *msg, const std::string &topic_name);
 
