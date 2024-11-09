@@ -376,9 +376,10 @@ void RosMsgsPlugin::topic_callback(
     clips::Environment *env) {
   auto context = CLIPSEnvContext::get_context(env);
   cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
+  std::scoped_lock clips_lock{*clips.get_mutex_instance()};
   std::shared_ptr<MessageInfo> deserialized_msg;
   {
-    std::scoped_lock scoped_lock{map_mtx_, *clips.get_mutex_instance()};
+    std::scoped_lock map_lock{map_mtx_};
     deserialized_msg = deserialize_msg(msg, msg_type);
     if (!deserialized_msg) {
       RCLCPP_ERROR(*logger_, "failed to process msg (topic: %s type: %s)",
