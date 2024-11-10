@@ -3,6 +3,7 @@
 // clang-format off
 {%- if template_part == "definition" %}
 void {{name_camel}}::{{template_type|snake_case}}_destroy({{message_type}}::{{template_type|camel_case}} *g) {
+  std::scoped_lock map_lock{map_mtx_};
   auto it = {{template_type|snake_case}}s_.find(g);
   if (it != {{template_type|snake_case}}s_.end()) {
       {{template_type|snake_case}}s_.erase(it);

@@ -41,12 +41,25 @@ namespace cx {
 {{name_camel}}::~{{name_camel}}() {}
 
 void {{name_camel}}::finalize() {
+  std::scoped_lock map_lock{map_mtx_};
   if(clients_.size() > 0) {
-    RCLCPP_WARN(*logger_, "Found %li client(s), cleaning up ...", clients_.size());
+    for (const auto &client_map : clients_) {
+      for (const auto &client : client_map.second) {
+        RCLCPP_WARN(*logger_,
+                    "Environment %s has open %s client, cleaning up ...",
+                    client_map.first.c_str(), client.first.c_str());
+      }
+    }
     clients_.clear();
   }
   if(services_.size() > 0) {
-    RCLCPP_WARN(*logger_, "Found %li service(s), cleaning up ...", services_.size());
+    for (const auto &service_map : services_) {
+      for (const auto &service : service_map.second) {
+        RCLCPP_WARN(*logger_,
+                    "Environment %s has open %s service, cleaning up ...",
+                    service_map.first.c_str(), service.first.c_str());
+      }
+    }
     services_.clear();
   }
   if(requests_.size() > 0) {
@@ -57,12 +70,14 @@ void {{name_camel}}::finalize() {
     RCLCPP_WARN(*logger_, "Found %li response(s), cleaning up ...", responses_.size());
     responses_.clear();
   }
+  stop_flag_ = true;
 }
 
 void {{name_camel}}::initialize() {
    logger_ = std::make_unique<rclcpp::Logger>(rclcpp::get_logger(plugin_name_));
    auto node = parent_.lock();
    cb_group_ = node->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
+   stop_flag_ = false;
 }
 
 bool {{name_camel}}::clips_env_destroyed(LockSharedPtr<clips::Environment> &env) {
@@ -231,7 +246,7 @@ void {{name_camel}}::send_request(clips::Environment *env, {{message_type}}::Req
   cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
   bool print_warning = true;
   while (!clients_[env_name][service_name]->wait_for_service(1s)) {
-    if (!rclcpp::ok()) {
+    if (stop_flag_ || !rclcpp::ok()) {
       RCLCPP_ERROR(*logger_, "Interrupted while waiting for the service. Exiting.");
       return;
     }
@@ -245,14 +260,18 @@ void {{name_camel}}::send_request(clips::Environment *env, {{message_type}}::Req
       RCLCPP_INFO(*logger_, "service %s is finally reachable", service_name.c_str());
   }
   std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-  auto future = clients_[env_name][service_name]->async_send_request(req_shared);
-  auto resp = future.get();
-   responses_.try_emplace(resp.get(), resp);
-    clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-response");
-    clips::FBPutSlotString(fact_builder,"service",service_name.c_str());
-    clips::FBPutSlotCLIPSExternalAddress(fact_builder,"msg-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), resp.get()));
-    clips::FBAssert(fact_builder);
-    clips::FBDispose(fact_builder);
+  std::shared_ptr<{{message_type}}::Response> resp;
+  {
+    std::scoped_lock map_lock{map_mtx_};
+    auto future = clients_[env_name][service_name]->async_send_request(req_shared);
+    resp = future.get();
+    responses_.try_emplace(resp.get(), resp);
+  }
+   clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-response");
+   clips::FBPutSlotString(fact_builder,"service",service_name.c_str());
+   clips::FBPutSlotCLIPSExternalAddress(fact_builder,"msg-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), resp.get()));
+   clips::FBAssert(fact_builder);
+   clips::FBDispose(fact_builder);
 
   }).detach();
 }
@@ -262,6 +281,7 @@ void {{name_camel}}::create_new_service(clips::Environment *env, const std::stri
   std::string env_name = context->env_name_;
   auto node = parent_.lock();
 
+  std::scoped_lock map_lock{map_mtx_};
   services_[env_name][service_name] = node->create_service<{{message_type}}>(service_name, [this, env_name, service_name, env](const std::shared_ptr<{{message_type}}::Request> request,
     std::shared_ptr<{{message_type}}::Response> response) {
     this->service_callback(request, response, service_name, env);
@@ -274,6 +294,7 @@ void {{name_camel}}::destroy_service(clips::Environment *env, const std::string 
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
 
+  std::scoped_lock map_lock{map_mtx_};
   auto outer_it = services_.find(env_name);
   if (outer_it != services_.end()) {
       // Check if service_name exists in the inner map
@@ -297,17 +318,20 @@ void {{name_camel}}::create_new_client(clips::Environment *env,
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
 
+  map_mtx_.lock();
   auto it = clients_[env_name].find(service_name);
 
   if (it != clients_[env_name].end()) {
     RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "There already exists a client for service %s", service_name.c_str());
+    map_mtx_.unlock();
   } else {
     RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
                 "Creating client for service %s", service_name.c_str());
     auto node = parent_.lock();
     clients_[env_name][service_name] =
         node->create_client<{{message_type}}>(service_name);
+    map_mtx_.unlock();
     clips::AssertString(env, ("({{name_kebab}}-client (service \"" + service_name + "\"))").c_str());
   }
 }
@@ -316,13 +340,15 @@ void {{name_camel}}::destroy_client(clips::Environment *env,
     const std::string &service_name) {
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
+  {
+    std::scoped_lock map_lock{map_mtx_};
+    auto it = clients_[env_name].find(service_name);
 
-  auto it = clients_[env_name].find(service_name);
-
-  if (it != clients_[env_name].end()) {
-    RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
-                "Destroying client for service %s", service_name.c_str());
-    clients_[env_name].erase(service_name);
+    if (it != clients_[env_name].end()) {
+      RCLCPP_DEBUG(rclcpp::get_logger(plugin_name_),
+                  "Destroying client for service %s", service_name.c_str());
+      clients_[env_name].erase(service_name);
+    }
   }
 
   clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-client)) (eq (str-cat ?f:service) (str-cat " + service_name + "))  (retract ?f))").c_str(), NULL);

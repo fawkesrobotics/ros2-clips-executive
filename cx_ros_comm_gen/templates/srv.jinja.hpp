@@ -51,6 +51,10 @@ private:
 
   std::unique_ptr<rclcpp::Logger> logger_;
 
+  std::mutex map_mtx_;
+
+  bool stop_flag_;
+
   std::map<std::string,
            std::map<std::string,
                     rclcpp::Service<{{message_type}}>::SharedPtr>>

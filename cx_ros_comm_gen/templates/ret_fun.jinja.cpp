@@ -3,6 +3,7 @@
 // clang-format off
 {%- if template_part == "definition" %}
 clips::UDFValue {{name_camel}}::{{template_type|snake_case}}_{{template_call_fun|snake_case}}(clips::Environment *env, void *{{template_type|snake_case}}_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   auto {{template_type|snake_case}} = {{template_type|snake_case}}s_.at({{template_type|snake_case}}_raw);
   clips::UDFValue res;
   if(!{{template_type|snake_case}}) {
