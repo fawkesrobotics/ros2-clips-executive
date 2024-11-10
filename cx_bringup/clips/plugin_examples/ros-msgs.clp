@@ -5,12 +5,10 @@
   (not (ros-msgs-publisher (topic "ros_cx_out")))
   (not (executive-finalize))
 =>
-  (ros-msgs-create-publisher "ros_cx_out" "std_msgs/msg/String")
-  (printout info "Publishing on /ros_cx_out" crlf)
   ; print welcome text
-  (printout green "---------------- ")
-  (printout bold  "ros-msgs-introspection")
-  (printout green " ----------------" crlf)
+  (printout green "-------------------- ")
+  (printout bold  "ros msg example")
+  (printout green " -------------------" crlf)
   (printout green "| ")
   (printout blue  "Creates a subscription to /ros_cx_in and a publisher")
   (printout green " |" crlf)
@@ -24,6 +22,9 @@
   (printout  blue "with content \"Hello World!\".                        ")
   (printout green " |" crlf)
   (printout green "--------------------------------------------------------" crlf)
+  ; create the publisher
+  (ros-msgs-create-publisher "ros_cx_out" "std_msgs/msg/String")
+  (printout info "Publishing on /ros_cx_out" crlf)
 )
 
 (defrule ros-msgs-pub-hello
