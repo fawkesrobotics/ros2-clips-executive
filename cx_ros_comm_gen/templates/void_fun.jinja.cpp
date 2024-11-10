@@ -3,6 +3,7 @@
 // clang-format off
 {%- if template_part == "definition" %}
 void {{name_camel}}::{{template_type|snake_case}}_{{template_call_fun|snake_case}}(void *{{template_type|snake_case}}_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   auto {{template_type|snake_case}} = {{template_type|snake_case}}s_.at({{template_type|snake_case}}_raw);
   if(!{{template_type|snake_case}}) {
     RCLCPP_ERROR(*logger_, "{{template_type|snake_case}}_{{template_call_fun|snake_case}}: Invalid pointer to {{template_type|camel_case}}");

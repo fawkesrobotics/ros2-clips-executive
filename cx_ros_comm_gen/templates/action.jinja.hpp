@@ -58,6 +58,8 @@ private:
 
   std::unique_ptr<rclcpp::Logger> logger_;
 
+  std::mutex map_mtx_;
+
   std::map<std::string, LockSharedPtr<clips::Environment>> envs_;
 
   std::map<std::string,

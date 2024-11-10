@@ -64,12 +64,25 @@ void {{name_camel}}::finalize() {
   if (clips_worker_thread_.joinable()) {
       clips_worker_thread_.join();
   }
+  std::scoped_lock map_lock{map_mtx_};
   if(clients_.size() > 0) {
-    RCLCPP_WARN(*logger_, "Found %li client(s), cleaning up ...", clients_.size());
+    for (const auto &client_map : clients_) {
+      for (const auto &client : client_map.second) {
+        RCLCPP_WARN(*logger_,
+                    "Environment %s has open %s client, cleaning up ...",
+                    client_map.first.c_str(), client.first.c_str());
+      }
+    }
     clients_.clear();
   }
   if(servers_.size() > 0) {
-    RCLCPP_WARN(*logger_, "Found %li server(s), cleaning up ...", servers_.size());
+    for (const auto &server_map : servers_) {
+      for (const auto &server : server_map.second) {
+        RCLCPP_WARN(*logger_,
+                    "Environment %s has open %s server, cleaning up ...",
+                    server_map.first.c_str(), server.first.c_str());
+      }
+    }
     servers_.clear();
   }
   if(results_.size() > 0) {
@@ -504,6 +517,7 @@ bool {{name_camel}}::clips_env_init(LockSharedPtr<clips::Environment> &env) {
 {% include 'create.jinja.cpp' with context %}
 
 void {{name_camel}}::feedback_destroy({{message_type}}::Feedback *fb) {
+  std::scoped_lock map_lock{map_mtx_};
   auto it = feedbacks_.find(fb);
   if (it != feedbacks_.end()) {
       feedbacks_.erase(it);
@@ -521,8 +535,8 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
   bool print_warning = true;
-  while (!clients_[env_name][server_name]->wait_for_action_server(1s)) {
-    if (!rclcpp::ok()) {
+  while (!stop_flag_ && !clients_[env_name][server_name]->wait_for_action_server(1s)) {
+    if (stop_flag_ || !rclcpp::ok()) {
       RCLCPP_ERROR(*logger_, "Interrupted while waiting for the server. Exiting.");
       return;
     }
@@ -535,12 +549,21 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
   if(!print_warning) {
       RCLCPP_INFO(*logger_, "server %s is finally reachable", server_name.c_str());
   }
+  std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
+  if(stop_flag_) {
+    RCLCPP_DEBUG(*logger_, "Shutdown during async call.");
+    return;
+  }
   cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
    auto send_goal_options = rclcpp_action::Client<{{message_type}}>::SendGoalOptions();
   send_goal_options.goal_response_callback = [this, &clips, server_name](const std::shared_ptr<rclcpp_action::ClientGoalHandle<{{message_type}}>> &goal_handle) {
+    std::scoped_lock map_lock{map_mtx_};
     task_queue_.push([this, &clips, server_name, goal_handle]() {
       std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-      client_goal_handles_.try_emplace(goal_handle.get(), goal_handle);
+      {
+        std::scoped_lock map_lock{map_mtx_};
+        client_goal_handles_.try_emplace(goal_handle.get(), goal_handle);
+      }
       clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-goal-response");
       clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
       clips::FBPutSlotCLIPSExternalAddress(fact_builder,"client-goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
@@ -561,8 +584,11 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
     task_queue_.push([this, &clips, server_name, goal_handle, feedback]() {
       // Enqueue the task to avoid directly locking the handle_mutex_ in a callback
       std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
-      const_feedbacks_.try_emplace(const_cast<void *>(static_cast<const void*>(feedback.get())), feedback);
-      client_goal_handles_.try_emplace(goal_handle.get(), goal_handle);
+      {
+        std::scoped_lock map_lock{map_mtx_};
+        const_feedbacks_.try_emplace(const_cast<void *>(static_cast<const void*>(feedback.get())), feedback);
+        client_goal_handles_.try_emplace(goal_handle.get(), goal_handle);
+      }
       clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-goal-feedback");
       clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
       clips::FBPutSlotCLIPSExternalAddress(fact_builder,"client-goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
@@ -575,7 +601,11 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
 
   send_goal_options.result_callback = [this, &clips, server_name](const rclcpp_action::ClientGoalHandle<{{message_type}}>::WrappedResult &wrapped_result) {
     task_queue_.push([this, &clips, server_name, wrapped_result]() {
-      results_.try_emplace(wrapped_result.result.get(), wrapped_result.result);
+      std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
+      {
+        std::scoped_lock map_lock{map_mtx_};
+        results_.try_emplace(wrapped_result.result.get(), wrapped_result.result);
+      }
       clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-wrapped-result");
       clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
       clips::FBPutSlotString(fact_builder,"goal-id",rclcpp_action::to_string(wrapped_result.goal_id).c_str());
@@ -586,7 +616,6 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
         case rclcpp_action::ResultCode::CANCELED: code_str = "CANCELED"; break;
         case rclcpp_action::ResultCode::ABORTED: code_str = "ABORTED"; break;
       }
-      results_.try_emplace(wrapped_result.result.get(), wrapped_result.result);
       clips::FBPutSlotSymbol(fact_builder,"code", code_str.c_str());
       clips::FBPutSlotCLIPSExternalAddress(fact_builder,"result-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), wrapped_result.result.get()));
       clips::FBAssert(fact_builder);
@@ -609,7 +638,7 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     clips::Deffunction *dec_fun = clips::FindDeffunction(clips.get_obj().get(),"{{name_kebab}}-handle-goal-callback");
     if(!dec_fun) {
-      RCLCPP_INFO(*logger_, "Accepting goal per default");
+      RCLCPP_DEBUG(*logger_, "Accepting goal per default");
       return rclcpp_action::GoalResponse::ACCEPT_AND_EXECUTE;
     }
     clips::FunctionCallBuilder *fcb = clips::CreateFunctionCallBuilder(clips.get_obj().get(),3);
@@ -629,12 +658,15 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     clips::Deffunction *dec_fun = clips::FindDeffunction(clips.get_obj().get(),"{{name_kebab}}-cancel-goal-callback");
     if(!dec_fun) {
-      RCLCPP_INFO(*logger_, "Accepting goal cancellation per default");
+      RCLCPP_DEBUG(*logger_, "Accepting goal cancellation per default");
       return rclcpp_action::CancelResponse::ACCEPT;
     }
     // store the goal handle to ensure it is not cleaned up implicitly
-    // server_goal_handles_.try_emplace(goal_handle.get(),goal_handle);
-
+    // TODO: Maybe not needed?
+    {
+      std::scoped_lock map_lock{map_mtx_};
+      server_goal_handles_.try_emplace(goal_handle.get(),goal_handle);
+    }
     clips::FunctionCallBuilder *fcb = clips::CreateFunctionCallBuilder(clips.get_obj().get(),3);
     clips::FCBAppendString(fcb, server_name.c_str());
     clips::FCBAppendCLIPSExternalAddress(fcb, clips::CreateCExternalAddress(clips.get_obj().get(), const_cast<void *>(static_cast<const void *>(goal_handle->get_goal().get()))));
@@ -651,7 +683,10 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
     std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     // store the goal handle to ensure it is not cleaned up implicitly
-    server_goal_handles_.try_emplace(goal_handle.get(),goal_handle);
+    {
+      std::scoped_lock map_lock{map_mtx_};
+      server_goal_handles_.try_emplace(goal_handle.get(),goal_handle);
+    }
     clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-accepted-goal");
     clips::FBPutSlotString(fact_builder,"server",server_name.c_str());
     clips::FBPutSlotCLIPSExternalAddress(fact_builder,"server-goal-handle-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), goal_handle.get()));
@@ -661,27 +696,32 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
   auto context = CLIPSEnvContext::get_context(env);
   auto node = parent_.lock();
   std::string env_name = context->env_name_;
-  servers_[env_name][server_name] =
+  {
+    std::scoped_lock map_lock{map_mtx_};
+    servers_[env_name][server_name] =
       rclcpp_action::create_server<{{message_type}}>(node, server_name, handle_goal, handle_cancel, handle_accepted);
+  }
 }
 
 void {{name_camel}}::destroy_server(clips::Environment *env, const std::string &server_name) {
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
-
-  auto outer_it = servers_.find(env_name);
-  if (outer_it != servers_.end()) {
-      // Check if server_name exists in the inner map
-      auto& inner_map = outer_it->second;
-      auto inner_it = inner_map.find(server_name);
-      if (inner_it != inner_map.end()) {
-          // Remove the server_name entry from the inner map
-          inner_map.erase(inner_it);
-      } else {
-          RCLCPP_WARN(*logger_, "Service %s not found in environment %s", server_name.c_str(), env_name.c_str());
-      }
-  } else {
-      RCLCPP_WARN(*logger_, "Environment %s not found", env_name.c_str());
+  {
+    std::scoped_lock map_lock{map_mtx_};
+    auto outer_it = servers_.find(env_name);
+    if (outer_it != servers_.end()) {
+        // Check if server_name exists in the inner map
+        auto& inner_map = outer_it->second;
+        auto inner_it = inner_map.find(server_name);
+        if (inner_it != inner_map.end()) {
+            // Remove the server_name entry from the inner map
+            inner_map.erase(inner_it);
+        } else {
+            RCLCPP_WARN(*logger_, "Service %s not found in environment %s", server_name.c_str(), env_name.c_str());
+        }
+    } else {
+        RCLCPP_WARN(*logger_, "Environment %s not found", env_name.c_str());
+    }
   }
 
   clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-server)) (eq (str-cat ?f:name) (str-cat " + server_name + "))  (retract ?f))").c_str(), NULL);
@@ -692,17 +732,20 @@ void {{name_camel}}::create_new_client(clips::Environment *env,
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
 
+  map_mtx_.lock();
   auto it = clients_[env_name].find(server_name);
 
   if (it != clients_[env_name].end()) {
     RCLCPP_WARN(*logger_,
                 "There already exists a client for server %s", server_name.c_str());
+    map_mtx_.unlock();
   } else {
     RCLCPP_DEBUG(*logger_,
                 "Creating client for server %s", server_name.c_str());
     auto node = parent_.lock();
     clients_[env_name][server_name] =
         rclcpp_action::create_client<{{message_type}}>(node, server_name);
+    map_mtx_.unlock();
     clips::AssertString(env, ("({{name_kebab}}-client (server \"" + server_name + "\"))").c_str());
   }
 }
@@ -711,13 +754,15 @@ void {{name_camel}}::destroy_client(clips::Environment *env,
     const std::string &server_name) {
   auto context = CLIPSEnvContext::get_context(env);
   std::string env_name = context->env_name_;
+  {
+    std::scoped_lock map_lock{map_mtx_};
+    auto it = clients_[env_name].find(server_name);
 
-  auto it = clients_[env_name].find(server_name);
-
-  if (it != clients_[env_name].end()) {
-    RCLCPP_DEBUG(*logger_,
-                "Destroying client for server %s", server_name.c_str());
-    clients_[env_name].erase(server_name);
+    if (it != clients_[env_name].end()) {
+      RCLCPP_DEBUG(*logger_,
+                  "Destroying client for server %s", server_name.c_str());
+      clients_[env_name].erase(server_name);
+    }
   }
 
   clips::Eval(env, ("(do-for-all-facts ((?f {{name_kebab}}-client)) (eq (str-cat ?f:server) (str-cat " + server_name + "))  (retract ?f))").c_str(), NULL);
@@ -725,6 +770,7 @@ void {{name_camel}}::destroy_client(clips::Environment *env,
 
 
 void {{name_camel}}::server_goal_handle_abort(void *goal_handle_raw, void *result_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
     RCLCPP_ERROR(*logger_, "server-goal-handle-abort: Invalid pointer to ServerGoalHandle");
@@ -741,6 +787,7 @@ void {{name_camel}}::server_goal_handle_abort(void *goal_handle_raw, void *resul
 }
 
 void {{name_camel}}::server_goal_handle_succeed(void *goal_handle_raw, void *result_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
     RCLCPP_ERROR(*logger_, "server-goal-handle-succeed: Invalid pointer to ServerGoalHandle");
@@ -757,6 +804,7 @@ void {{name_camel}}::server_goal_handle_succeed(void *goal_handle_raw, void *res
 }
 
 void {{name_camel}}::server_goal_handle_canceled(void *goal_handle_raw, void *result_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
     RCLCPP_ERROR(*logger_, "server-goal-handle-canceled: Invalid pointer to ServerGoalHandle");
@@ -773,6 +821,7 @@ void {{name_camel}}::server_goal_handle_canceled(void *goal_handle_raw, void *re
 }
 
 clips::UDFValue {{name_camel}}::server_goal_handle_get_goal(clips::Environment *env, void *goal_handle_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   clips::UDFValue res;
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
@@ -786,6 +835,7 @@ clips::UDFValue {{name_camel}}::server_goal_handle_get_goal(clips::Environment *
 }
 
 clips::UDFValue {{name_camel}}::server_goal_handle_get_goal_id(clips::Environment *env, void *goal_handle_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   clips::UDFValue res;
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
@@ -821,6 +871,7 @@ clips::UDFValue {{name_camel}}::server_goal_handle_get_goal_id(clips::Environmen
 {% include 'ret_fun.jinja.cpp' with context %}
 
 void {{name_camel}}::server_goal_handle_publish_feedback(void *goal_handle_raw, void *feedback_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   auto goal_handle = server_goal_handles_.at(goal_handle_raw);
   if(!goal_handle) {
     RCLCPP_ERROR(*logger_, "server-goal-handle-publish-feedback: Invalid pointer to ServerGoalHandle");
@@ -843,6 +894,7 @@ void {{name_camel}}::server_goal_handle_publish_feedback(void *goal_handle_raw, 
 }
 
 clips::UDFValue {{name_camel}}::client_goal_handle_get_goal_id(clips::Environment *env, void *goal_handle_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   auto goal_handle = client_goal_handles_.at(goal_handle_raw);
   clips::UDFValue res;
   std::string uuid_str;
@@ -859,6 +911,7 @@ clips::UDFValue {{name_camel}}::client_goal_handle_get_goal_id(clips::Environmen
 }
 
 clips::UDFValue {{name_camel}}::client_goal_handle_get_goal_stamp(clips::Environment *env, void *goal_handle_raw, clips::UDFContext *udfc) {
+  std::scoped_lock map_lock{map_mtx_};
   auto goal_handle = client_goal_handles_.at(goal_handle_raw);
   clips::UDFValue res;
   if(goal_handle) {
@@ -872,6 +925,7 @@ clips::UDFValue {{name_camel}}::client_goal_handle_get_goal_stamp(clips::Environ
 }
 
 void {{name_camel}}::client_goal_handle_destroy(void *g) {
+  std::scoped_lock map_lock{map_mtx_};
   auto it = client_goal_handles_.find(g);
   if (it != client_goal_handles_.end()) {
       client_goal_handles_.erase(it);
@@ -879,6 +933,7 @@ void {{name_camel}}::client_goal_handle_destroy(void *g) {
 }
 
 void {{name_camel}}::server_goal_handle_destroy(void *g) {
+  std::scoped_lock map_lock{map_mtx_};
   auto it = server_goal_handles_.find(g);
   if (it != server_goal_handles_.end()) {
       server_goal_handles_.erase(it);

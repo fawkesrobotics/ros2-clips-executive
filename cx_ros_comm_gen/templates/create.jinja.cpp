@@ -4,6 +4,7 @@
 {%- if template_part == "definition" %}
 clips::UDFValue {{name_camel}}::{{template_type|snake_case}}_create(clips::Environment *env) {
   std::shared_ptr<{{message_type}}::{{template_type|camel_case}}> ptr = std::make_shared<{{message_type}}::{{template_type|camel_case}}>();
+  std::scoped_lock map_lock{map_mtx_};
   {{template_type|snake_case}}s_[ptr.get()] = ptr;
   clips::UDFValue res;
   res.externalAddressValue = clips::CreateCExternalAddress(env, ptr.get());
