@@ -11,3 +11,6 @@
   =>
   (retract ?f)
 )
+
+(unwatch facts time)
+(unwatch rules time-retract)
