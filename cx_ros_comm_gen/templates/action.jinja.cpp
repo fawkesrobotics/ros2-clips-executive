@@ -549,12 +549,12 @@ void {{name_camel}}::send_goal(clips::Environment *env, {{message_type}}::Goal *
   if(!print_warning) {
       RCLCPP_INFO(*logger_, "server %s is finally reachable", server_name.c_str());
   }
+  cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
   std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
   if(stop_flag_) {
     RCLCPP_DEBUG(*logger_, "Shutdown during async call.");
     return;
   }
-  cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
    auto send_goal_options = rclcpp_action::Client<{{message_type}}>::SendGoalOptions();
   send_goal_options.goal_response_callback = [this, &clips, server_name](const std::shared_ptr<rclcpp_action::ClientGoalHandle<{{message_type}}>> &goal_handle) {
     std::scoped_lock map_lock{map_mtx_};
@@ -701,6 +701,7 @@ void {{name_camel}}::create_new_server(clips::Environment *env, const std::strin
     servers_[env_name][server_name] =
       rclcpp_action::create_server<{{message_type}}>(node, server_name, handle_goal, handle_cancel, handle_accepted);
   }
+  clips::AssertString(env, ("({{name_kebab}}-server (name \"" + server_name + "\"))").c_str());
 }
 
 void {{name_camel}}::destroy_server(clips::Environment *env, const std::string &server_name) {
