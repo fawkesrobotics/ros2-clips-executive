@@ -10,8 +10,22 @@ It provides a dedicated node (`cx_node`) inside the `src` directory, which confi
 
 Lastly, it provides a convenient launch file that can be used in order to launch the provided node including common configuration options.
 
-## Launching The CLIPS-Executive
-Make sure to source the CLIPS-Executive workspace and run the following command to see the usage of generic ROS Message integration from within CLIPS:
+## Launching the CLIPS-Executive
+Make sure to source the CLIPS-Executive workspace and run the following command to select a configuration to launch:
 ```
-ros2 launch cx_bringup cx_launch.py manager_config:=plugin_examples/ros_msgs.yaml
+ros2 launch cx_bringup cx_launch.py manager_config:=<config-file>
 ```
+where config-file is one of:
+ - *plugin_examples/ament_index.yaml*
+ - *plugin_examples/config.yaml*
+ - *plugin_examples/executive.yaml*
+ - *plugin_examples/fibonacci_action.yaml*
+ - *plugin_examples/file_load.yaml*
+ - *plugin_examples/pddl_parser.yaml*
+ - *plugin_examples/protobuf_linked.yaml*
+ - *plugin_examples/protobuf.yaml*
+ - *plugin_examples/ros_msgs.yaml*
+ - *plugin_examples/set_bool_srv.yaml*
+ - *plugin_examples/string_msg.yaml*
+
+It defaults to `plugin_examples/file_load.yaml`.

@@ -32,7 +32,6 @@ def launch_with_context(context, *args, **kwargs):
             manager_config_file,
         ],
         arguments=["--ros-args", "--log-level", log_level],
-        # arguments=[('--ros-args --log-level debug')]
     )
     return [cx_node]
 
@@ -49,7 +48,7 @@ def generate_launch_description():
 
     declare_manager_config = DeclareLaunchArgument(
         "manager_config",
-        default_value="clips_env_manager.yaml",
+        default_value="plugin_examples/file_load.yaml",
         description="Name of the CLIPS environment manager configuration",
     )
 
