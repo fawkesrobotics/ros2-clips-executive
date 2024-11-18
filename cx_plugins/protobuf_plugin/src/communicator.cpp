@@ -663,7 +663,12 @@ void ClipsProtobufCommunicator::enable_server(int port) {
 }
 
 /** Disable protobuf stream server. */
-void ClipsProtobufCommunicator::disable_server() { server_.reset(); }
+void ClipsProtobufCommunicator::disable_server() {
+  std::thread([this]() {
+    std::scoped_lock lock{clips_mutex_, map_mutex_};
+    server_.reset();
+  }).detach();
+}
 
 /** Enable protobuf peer.
  * @param address IP address to send messages to
@@ -1261,41 +1266,37 @@ long int ClipsProtobufCommunicator::clips_pb_client_connect(std::string host,
 
 void ClipsProtobufCommunicator::clips_pb_send(long int client_id,
                                               void *msgptr) {
-  std::shared_ptr<google::protobuf::Message> *m =
-      static_cast<std::shared_ptr<google::protobuf::Message> *>(msgptr);
-  if (!(m && *m)) {
-    SPDLOG_WARN("CLIPS-Protobuf: Cannot send to {}: invalid message",
-                client_id);
+  auto msg = messages_[msgptr];
+  if (!msg) {
+    messages_.erase(msgptr);
     return;
   }
-
   try {
     std::lock_guard<std::mutex> lock(map_mutex_);
 
     if (server_ && server_clients_.find(client_id) != server_clients_.end()) {
       // printf("***** SENDING via SERVER\n");
-      server_->send(server_clients_[client_id], *m);
-      sig_server_sent_(server_clients_[client_id], *m);
+      server_->send(server_clients_[client_id], msg);
+      sig_server_sent_(server_clients_[client_id], msg);
     } else if (clients_.find(client_id) != clients_.end()) {
       // printf("***** SENDING via CLIENT\n");
-      clients_[client_id]->send(*m);
+      clients_[client_id]->send(msg);
       std::pair<std::string, unsigned short> &client_endpoint =
           client_endpoints_[client_id];
-      sig_client_sent_(client_endpoint.first, client_endpoint.second, *m);
+      sig_client_sent_(client_endpoint.first, client_endpoint.second, msg);
     } else if (peers_.find(client_id) != peers_.end()) {
-      // printf("***** SENDING via CLIENT\n");
-      peers_[client_id]->send(*m);
-      sig_peer_sent_(client_id, *m);
+      peers_[client_id]->send(msg);
+      sig_peer_sent_(client_id, msg);
     } else {
       // printf("Client ID %li is unknown, cannot send message of type %s\n",
       //     client_id, (*m)->GetTypeName().c_str());
     }
   } catch (google::protobuf::FatalException &e) {
     SPDLOG_WARN("CLIPS-Profobuf: Failed to send message of type {}: {}",
-                (*m)->GetTypeName().c_str(), e.what());
+                msg->GetTypeName().c_str(), e.what());
   } catch (std::runtime_error &e) {
     SPDLOG_WARN("CLIPS-Profobuf: Failed to send message of type {}: {}",
-                (*m)->GetTypeName().c_str(), e.what());
+                msg->GetTypeName().c_str(), e.what());
   }
 }
 
