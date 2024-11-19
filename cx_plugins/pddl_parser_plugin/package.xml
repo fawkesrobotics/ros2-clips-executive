@@ -15,6 +15,7 @@
   <depend>cx_plugin</depend>
   <depend>cx_utils</depend>
   <depend>pluginlib</depend>
+  <depend>clips_vendor</depend>
 
 
   <export>

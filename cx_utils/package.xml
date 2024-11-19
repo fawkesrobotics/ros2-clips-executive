@@ -14,6 +14,7 @@
 
   <depend>rclcpp</depend>
   <depend>spdlog</depend>
+  <depend>clips_vendor</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
