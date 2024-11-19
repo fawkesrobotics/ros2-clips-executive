@@ -1,0 +1,6 @@
+[submodule "clips_vendor"]
+	path = clips_vendor
+	url = https://github.com/carologistics/clips_vendor.git
+[submodule "protobuf_comm"]
+	path = protobuf_comm
+	url = https://github.com/fawkesrobotics/protobuf_comm.git
