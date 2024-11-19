@@ -14,7 +14,6 @@
   <depend>rclcpp</depend>
   <depend>cx_plugin</depend>
   <depend>cx_utils</depend>
-  <depend>pddl_parser</depend>
   <depend>pluginlib</depend>
 
 
