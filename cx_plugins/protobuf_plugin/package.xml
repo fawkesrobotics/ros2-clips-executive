@@ -16,7 +16,6 @@
   <depend>cx_utils</depend>
   <depend>pluginlib</depend>
   <depend>protobuf</depend>
-  <depend>protobuf_comm</depend>
 
 
   <export>

@@ -15,7 +15,6 @@
   <depend>cx_plugin</depend>
   <depend>cx_utils</depend>
   <depend>pluginlib</depend>
-  <depend>clips_vendor</depend>
   <depend>plansys2_problem_expert</depend>
   <depend>plansys2_domain_expert</depend>
   <depend>plansys2_planner</depend>
