@@ -10,7 +10,6 @@
 )
 
 (deffunction example-interfaces-fibonacci-cancel-goal-callback (?server ?goal ?goal-handle)
-  (example-interfaces-fibonacci-goal-destroy ?goal)
   ; (return 0) ; REJECT
   (return 1) ; ACCEPT
 )
@@ -89,13 +88,16 @@
 
 (defrule fibonacci-client-send-goal
   (example-interfaces-fibonacci-client (server ?server))
-  ;(not (send-request))
+  (not (send-request))
   =>
-  ;(assert (send-request))
+  (assert (send-request))
   (bind ?goal (example-interfaces-fibonacci-goal-create))
+  (assert (fibnoacci-goal ?goal))
   (example-interfaces-fibonacci-goal-set-field ?goal "order" 5)
   (example-interfaces-fibonacci-send-goal ?goal ?server)
-  (example-interfaces-fibonacci-goal-destroy ?goal)
+
+  ; do not destroy the goal here, only do it once the goal is fully processed and finished
+  ; (example-interfaces-fibonacci-goal-destroy ?goal)
 )
 
 (defrule fibonacci-client-get-feedback
@@ -107,7 +109,7 @@
   (bind ?g-status (example-interfaces-fibonacci-client-goal-handle-get-status ?ghp))
   (bind ?g-is-f-aware (example-interfaces-fibonacci-client-goal-handle-is-feedback-aware ?ghp))
   (bind ?g-is-r-aware (example-interfaces-fibonacci-client-goal-handle-is-result-aware ?ghp))
-  ; the stamp seems to be broken (looks like a rclcpp_action issue
+  ; the stamp seems to be broken (looks like a rclcpp_action issue)
   (printout cyan "[" (- (now) ?g-stamp) "] " ?g-status " " ?g-id " f " ?g-is-f-aware " r " ?g-is-r-aware crlf)
   (bind ?part-seq (example-interfaces-fibonacci-feedback-get-field ?fp "sequence"))
   (printout blue "partial sequence: " ?part-seq   crlf)
@@ -116,9 +118,10 @@
 )
 
 (defrule fibonacci-client-cleanup-after-wrapped-result
-  (declare (salience 99))
+  (declare (salience 10))
   ?f <- (example-interfaces-fibonacci-goal-response (server ?server) (client-goal-handle-ptr ?ghp))
   ?g <- (example-interfaces-fibonacci-wrapped-result (server ?server) (goal-id ?uuid) (code SUCCEEDED) (result-ptr ?rp))
+  ?request-goal <- (fibnoacci-goal ?goal)
   (time ?now)
   =>
   (bind ?g-status (example-interfaces-fibonacci-client-goal-handle-get-status ?ghp))
@@ -134,11 +137,10 @@
     (printout cyan "Final goal response [" (- (now) ?g-stamp) "] " ?uuid " " ?g-status " " ?g-id " f " ?g-is-f-aware " r " ?g-is-r-aware crlf)
     (example-interfaces-fibonacci-client-goal-handle-destroy ?ghp)
     (retract ?f)
-    (example-interfaces-fibonacci-destroy-server "ros_cx_fibonacci")
-    (example-interfaces-fibonacci-destroy-client "ros_cx_fibonacci")
+    (example-interfaces-fibonacci-goal-destroy ?goal)
+    (retract ?request-goal)
   )
 )
-
 
 (defrule fibonacci-client-server-cleanup
   (executive-finalize)
@@ -156,10 +158,19 @@
   (example-interfaces-fibonacci-client-goal-handle-destroy ?p)
   (retract ?f)
 )
+
 (defrule fibonacci-accepted-goal-cleanup
   (executive-finalize)
   ?f <- (example-interfaces-fibonacci-accepted-goal (server-goal-handle-ptr ?p))
   =>
   (example-interfaces-fibonacci-server-goal-handle-destroy ?p)
+  (retract ?f)
+)
+
+(defrule fibonacci-accepted-goal-cleanup
+  (executive-finalize)
+  ?f <- (fibnoacci-goal p)
+  =>
+  (example-interfaces-fibonacci--goal-destroy ?p)
   (retract ?f)
 )

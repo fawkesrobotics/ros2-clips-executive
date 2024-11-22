@@ -1,32 +1,48 @@
-
 ; Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
 
-(defrule protobuf-init-example-peer
-  (not (peer ?any-peer-id))
+(defrule protobuf-init-example-client-server
+  (not (executive-finalize))
+  (not (client ?any-c-id))
   =>
-  (bind ?peer-1 (pb-peer-create-local 127.0.0.1 4444 4445))
-  (bind ?peer-2 (pb-peer-create-local 127.0.0.1 4445 4444))
-  (assert (peer ?peer-1))
-  (assert (peer ?peer-2))
+  (pb-server-enable 4446)
+  (bind ?res (pb-connect 127.0.0.1 4446))
+  (printout green "Connect to server: " ?res crlf)
+  (assert (client ?res))
   (bind ?success (pb-register-type "SearchRequest"))
   (printout green "Register Type: " ?success crlf)
 )
 
 (defrule peer-send-msg
-  (peer ?peer-id)
+  (client ?c-id)
+  (protobuf-client-connected ?c-id)
   (not (protobuf-msg))
   =>
   (bind ?msg (pb-create "SearchRequest"))
   (pb-set-field ?msg "query" "hello")
-  (pb-set-field ?msg "page_number" ?peer-id)
-  (pb-set-field ?msg "results_per_page" ?peer-id)
-  (pb-broadcast ?peer-id ?msg)
+  (pb-set-field ?msg "page_number" ?c-id)
+  (pb-set-field ?msg "results_per_page" ?c-id)
+  (pb-send ?c-id ?msg)
   (pb-destroy ?msg)
 )
+
 (defrule protobuf-msg-read
-  (protobuf-msg (type ?type) (comp-id ?comp-id) (msg-type ?msg-type) (rcvd-via ?via) (rcvd-from ?address ?port) (rcvd-at ?rcvd-at) (client-type ?c-type) (client-id ?c-id) (ptr ?ptr))
+  (protobuf-msg (type ?type) (comp-id ?comp-id) (msg-type ?msg-type)
+    (rcvd-via ?via) (rcvd-from ?address ?port) (rcvd-at ?rcvd-at)
+    (client-type ?c-type) (client-id ?c-id) (ptr ?ptr))
   =>
-  (printout blue ?c-id "("?c-type") received" ?type " (" ?comp-id " " ?msg-type ") from " ?address ":" ?port " " (- (now)  ?rcvd-at) "s ago" crlf)
+  (printout blue ?c-id "("?c-type") received" ?type
+    " (" ?comp-id " " ?msg-type ") from " ?address ":" ?port "
+    " (- (now)  ?rcvd-at) "s ago" crlf
+  )
   (bind ?var (pb-tostring ?ptr))
   (printout yellow ?var crlf)
+)
+
+(defrule protobuf-close
+  (executive-finalize)
+  ?f <- (client ?any-client)
+  =>
+  (pb-disconnect ?any-client)
+  (pb-server-disable)
+  (retract ?f)
 )
