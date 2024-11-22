@@ -8,7 +8,7 @@
 
   <maintainer email="viehmann@kbsg.rwth-aachen.de">Tarik Viehmann</maintainer>
 
-  <license>GPLv2+ license</license>
+  <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <exec_depend>python3</exec_depend>
