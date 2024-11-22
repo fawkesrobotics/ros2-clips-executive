@@ -8,7 +8,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <spdlog/spdlog.h>
 
-#include "cx_utils/LockSharedPtr.hpp"
+#include "cx_utils/lock_shared_ptr.hpp"
 #include <clips_ns/clips.h>
 
 namespace cx {

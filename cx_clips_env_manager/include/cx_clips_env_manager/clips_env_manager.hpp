@@ -18,7 +18,7 @@
 #include "lifecycle_msgs/msg/transition.hpp"
 
 #include "cx_clips_env_manager/clips_plugin_manager.hpp"
-#include "cx_utils/LockSharedPtr.hpp"
+#include "cx_utils/lock_shared_ptr.hpp"
 
 #include "cx_msgs/srv/create_clips_env.hpp"
 #include "cx_msgs/srv/destroy_clips_env.hpp"

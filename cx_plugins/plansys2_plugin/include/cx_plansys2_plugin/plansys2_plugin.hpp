@@ -10,7 +10,7 @@
 #include "plansys2_problem_expert/ProblemExpertClient.hpp"
 
 #include "cx_plugin/clips_plugin.hpp"
-#include "cx_utils/LockSharedPtr.hpp"
+#include "cx_utils/lock_shared_ptr.hpp"
 
 namespace cx {
 

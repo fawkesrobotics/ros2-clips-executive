@@ -27,7 +27,7 @@
 
 #include <cx_plugin/clips_plugin.hpp>
 #include "{{name_snake}}.hpp"
-#include <cx_utils/LockSharedPtr.hpp>
+#include <cx_utils/lock_shared_ptr.hpp>
 #include <cx_utils/clips_env_context.hpp>
 
 // To export as plugin

@@ -30,7 +30,7 @@
 #include <cx_pddl_parser_plugin/clips_pddl_parser.h>
 
 #include "cx_plugin/clips_plugin.hpp"
-#include "cx_utils/LockSharedPtr.hpp"
+#include "cx_utils/lock_shared_ptr.hpp"
 
 namespace cx {
 

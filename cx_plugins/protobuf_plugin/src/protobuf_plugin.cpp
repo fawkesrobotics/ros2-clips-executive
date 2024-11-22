@@ -27,8 +27,8 @@
 #include "cx_plugin/clips_plugin.hpp"
 #include "cx_protobuf_plugin/protobuf_plugin.hpp"
 
-#include <cx_utils/LockSharedPtr.hpp>
 #include <cx_utils/clips_env_context.hpp>
+#include <cx_utils/lock_shared_ptr.hpp>
 #include <cx_utils/param_utils.hpp>
 
 #include <cx_protobuf_plugin/communicator.hpp>
