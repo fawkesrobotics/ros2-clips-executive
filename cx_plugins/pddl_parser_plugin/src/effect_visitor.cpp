@@ -47,8 +47,7 @@ EffectToCLIPSFactVisitor::EffectToCLIPSFactVisitor(const string &pddl_operator,
  * @param q The quantified formula to translate into a string.
  * @return An empty vector.
  */
-vector<string>
-EffectToCLIPSFactVisitor::operator()(QuantifiedFormula &q) const {
+vector<string> EffectToCLIPSFactVisitor::operator()(QuantifiedFormula &) const {
   throw PddlParserException(
       "QuantifiedFormulas are not supported in CLIPS yet.");
   return vector<string>();
