@@ -51,7 +51,7 @@ void ExecutivePlugin::initialize() {
   node->get_parameter(plugin_name_ + ".refresh_rate", refresh_rate_);
   if (publish_on_refresh_) {
     clips_agenda_refresh_pub_ = node->create_publisher<std_msgs::msg::Empty>(
-        "clips_executive/refresh_agenda", rclcpp::QoS(100).reliable());
+        "clips_executive/refresh_agenda", rclcpp::QoS(10));
   }
   double rate = 1.0 / refresh_rate_;
   // Sets the time between each clips agenda refresh in ns
