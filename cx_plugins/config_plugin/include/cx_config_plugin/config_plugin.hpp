@@ -28,7 +28,7 @@
 #include <string>
 
 #include "cx_plugin/clips_plugin.hpp"
-#include "cx_utils/LockSharedPtr.hpp"
+#include "cx_utils/lock_shared_ptr.hpp"
 #include <yaml-cpp/yaml.h>
 
 #include "rcl_yaml_param_parser/parser.h"

@@ -7,7 +7,7 @@
 #include <map>
 #include <string>
 
-#include "cx_utils/LockSharedPtr.hpp"
+#include "cx_utils/lock_shared_ptr.hpp"
 
 #include "pluginlib/class_loader.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
