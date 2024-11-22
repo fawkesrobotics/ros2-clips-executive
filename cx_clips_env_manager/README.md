@@ -80,6 +80,8 @@ The log files are stored at the ROS logging directory "~/.ros/log/" and are name
 For log routing inside CLIPS, the custom loggers accepts the following logical names that log to the file and additionally also in some cases to ROS:
 - "l","t","info","loginfo" log via `RCLCPP_INFO`
 - "green", "blue", "yellow", "magenta" "cyan", "white", "bold" log via RCLCPP_INFO with additional ANSI escape codes for color output (for terminals that support them)
--  "debug","logdebug","stdout" log via RCLCPP_INFO (note that stdout is logging to debug because otherwise watched rule activations and such would spam the terminal on normal execution)
+-  "debug","logdebug" log via RCLCPP_DEBUG
 - "warn",logwarn","stdwrn" log via RCLCPP_WARN
 - "error","logerror","stderr" log via RCLCPP_ERROR
+- "stdout" logs via RCLCPP_INFO if `redirect_stdout_to_debug` is set to false.
+- "stdout" logs via RCLCPP_DEBUG if `redirect_stdout_to_debug` is set true.

@@ -18,9 +18,11 @@ constexpr const char *WHITE = "\033[37m";
 constexpr const char *BOLD = "\033[1m";
 constexpr const char *RESET = "\033[0m";
 
-CLIPSLogger::CLIPSLogger(const char *component, bool log_to_file)
+CLIPSLogger::CLIPSLogger(const char *component, bool log_to_file,
+                         bool stdout_to_debug)
     : component_(strdup(component)),
-      logger_(rclcpp::get_logger(std::string(component_))) {
+      logger_(rclcpp::get_logger(std::string(component_))),
+      stdout_to_debug_(stdout_to_debug) {
   auto now = std::chrono::system_clock::now();
   std::time_t now_time = std::chrono::system_clock::to_time_t(now);
 
@@ -91,7 +93,7 @@ void CLIPSLogger::log(const char *logical_name, const char *str) {
           (std::string(cx::WHITE) + terminal_buffer_ + cx::RESET).c_str());
     } else if (strcmp(logical_name, "debug") == 0 ||
                strcmp(logical_name, "logdebug") == 0 ||
-               strcmp(logical_name, clips::STDOUT) == 0) {
+               (stdout_to_debug_ && strcmp(logical_name, clips::STDOUT) == 0)) {
       RCLCPP_DEBUG(this->logger_, terminal_buffer_.c_str());
     } else if (strcmp(logical_name, "warn") == 0 ||
                strcmp(logical_name, "logwarn") == 0 ||
