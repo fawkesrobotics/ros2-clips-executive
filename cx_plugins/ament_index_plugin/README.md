@@ -11,7 +11,7 @@ clips_manager:
     main:
       plugins: ["ament_index"]
 
-    ros_msgs:
+    ament_index:
       plugin: "cx::AmentIndexPlugin"
 ```
 
