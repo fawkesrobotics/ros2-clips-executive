@@ -28,7 +28,6 @@
 
 #include "cx_plugin/clips_plugin.hpp"
 #include "cx_utils/LockSharedPtr.hpp"
-#include "cx_utils/NodeThread.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"

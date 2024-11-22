@@ -31,7 +31,6 @@ include_directories(include)
 
 set(CX_UTILS_SOURCES
   src/LockSharedPtr.cpp
-  src/NodeThread.cpp
   src/map_skill.cpp
   src/clips_env_context.cpp
   src/param_utils.cpp
