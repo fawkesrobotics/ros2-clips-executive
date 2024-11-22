@@ -352,6 +352,9 @@ CLIPSEnvManager::new_env(const std::string &env_name) {
   cx::cx_utils::declare_parameter_if_not_declared(
       this, env_name + ".watch",
       rclcpp::ParameterValue(std::vector<std::string>{}));
+  cx::cx_utils::declare_parameter_if_not_declared(
+      this, env_name + ".redirect_stdout_to_debug",
+      rclcpp::ParameterValue(false));
   std::vector<std::string> watch_info;
   get_parameter(env_name + ".watch", watch_info);
   for (const auto &w : watch_info) {
@@ -360,12 +363,15 @@ CLIPSEnvManager::new_env(const std::string &env_name) {
   }
   bool log_to_file = false;
   get_parameter(env_name + ".log_clips_to_file", log_to_file);
+  bool stdout_to_debug = false;
+  get_parameter(env_name + ".redirect_stdout_to_debug", stdout_to_debug);
 
   auto context = CLIPSEnvContext::get_context(env);
   context->env_name_ = env_name;
   context->env_lock_ptr_ = clips;
   // mem allocated already, so construct object in-place
-  new (&context->logger_) CLIPSLogger(env_name.c_str(), log_to_file);
+  new (&context->logger_)
+      CLIPSLogger(env_name.c_str(), log_to_file, stdout_to_debug);
 
   clips::AddRouter(env, (char *)ROUTER_NAME, /*router priority*/
                    40, log_router_query, log_router_print, NULL, NULL,

@@ -14,13 +14,15 @@
 namespace cx {
 class CLIPSLogger {
 public:
-  explicit CLIPSLogger(const char *component, bool log_to_file);
+  explicit CLIPSLogger(const char *component, bool log_to_file,
+                       bool stdout_to_debug);
   ~CLIPSLogger();
   void log(const char *logical_name, const char *str);
 
 private:
   char *component_;
   const rclcpp::Logger logger_;
+  const bool stdout_to_debug_;
   std::shared_ptr<spdlog::logger> clips_logger_;
   std::string buffer_;
   std::string terminal_buffer_;
