@@ -60,26 +60,19 @@
   (retract ?msg-f)
 )
 
-(defrule ros-msgs-sub-finalize
-" Delete the subscription on executive finalize. "
-  (executive-finalize)
-  (ros-msgs-subscription (topic ?topic))
-=>
-  (printout debug "Destroying topic " ?topic crlf)
-  (ros-msgs-destroy-subscription ?topic)
-)
-
-(defrule ros-msgs-pub-finalize
-" Delete the publisher on executive finalize. "
+(defrule ros-msgs-pub-sub-finalize
+" Delete the publisher and subscription on executive finalize. "
   (executive-finalize)
   (ros-msgs-publisher (topic ?topic))
+  (ros-msgs-subscription (topic ?in-topic))
 =>
-  (printout info "Destroying topic " ?topic crlf)
+  (printout info "Destroying publishers and subscriptions " crlf)
   (ros-msgs-destroy-publisher ?topic)
+  (ros-msgs-destroy-subscription ?in-topic)
 )
 
 (defrule ros-msgs-message-cleanup
-" Delete the subscription on executive finalize. "
+" Delete the messages on executive finalize. "
   (executive-finalize)
   ?msg-f <- (ros-msgs-message (msg-ptr ?ptr))
 =>

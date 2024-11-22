@@ -21,10 +21,25 @@
   (pb-broadcast ?peer-id ?msg)
   (pb-destroy ?msg)
 )
+
 (defrule protobuf-msg-read
-  (protobuf-msg (type ?type) (comp-id ?comp-id) (msg-type ?msg-type) (rcvd-via ?via) (rcvd-from ?address ?port) (rcvd-at ?rcvd-at) (client-type ?c-type) (client-id ?c-id) (ptr ?ptr))
+  (protobuf-msg (type ?type) (comp-id ?comp-id) (msg-type ?msg-type)
+    (rcvd-via ?via) (rcvd-from ?address ?port) (rcvd-at ?rcvd-at)
+    (client-type ?c-type) (client-id ?c-id) (ptr ?ptr))
   =>
-  (printout blue ?c-id "("?c-type") received" ?type " (" ?comp-id " " ?msg-type ") from " ?address ":" ?port " " (- (now)  ?rcvd-at) "s ago" crlf)
+  (printout blue ?c-id "("?c-type") received" ?type
+    " (" ?comp-id " " ?msg-type ") from " ?address ":" ?port "
+    " (- (now)  ?rcvd-at) "s ago" crlf
+  )
   (bind ?var (pb-tostring ?ptr))
   (printout yellow ?var crlf)
+)
+
+
+(defrule protobuf-close-peer
+  (executive-finalize)
+  ?f <- (peer ?any-peer-id)
+  =>
+  (pb-peer-destroy ?any-peer-id)
+  (retract ?f)
 )

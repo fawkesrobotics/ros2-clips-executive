@@ -72,8 +72,12 @@ endif()
 
 install(DIRECTORY launch params clips proto DESTINATION share/${PROJECT_NAME})
 
+install(PROGRAMS
+  scripts/test_service.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(TARGETS
-  # plansys_node
   cx_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
