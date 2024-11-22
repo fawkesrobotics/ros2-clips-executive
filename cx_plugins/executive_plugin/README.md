@@ -15,7 +15,7 @@ clips_manager:
 
     executive:
       plugin: "cx::ExecutivePlugin"
-      # Publish an empty messae with each agenda refresh.
+      # Publish an empty message with each agenda refresh.
       # Mainly useful for debug purposes to observe true refresh rate.
       # Defaults to false
       publish_on_refresh: false
@@ -40,7 +40,9 @@ Then it asserts an unordered fact `time` with the current ROS time, which looks 
 ```lisp
 (time 1729689959.63119)
 ```
+
 It then also defines a defrule and defglobal to clean up the fact once the end of the agenda is reached:
+
 ```
 (defglobal
   ?*PRIORITY-TIME-RETRACT*    = -10000

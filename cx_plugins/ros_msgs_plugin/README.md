@@ -40,7 +40,6 @@ This plugin defines deftemplates and user-defined functions that are described b
 (deftemplate ros-msgs-message
   (slot topic (type STRING)) ; example          : "/cx_string_in"
   (slot msg-ptr (type EXTERNAL-ADDRESS)) example: <Pointer-C-0x7f1550001d20>
-"
 )
 ```
 ##### Functions

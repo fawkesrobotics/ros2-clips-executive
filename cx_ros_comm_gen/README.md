@@ -8,7 +8,7 @@ The usage involves a few steps:
 3. Using the generated functions and templates
 
 ### Generating Bindings
-The *cx_ros_comm_gen* plugin provides cmake functions to generate bindings for ros messages, services and actions via the following macros:
+The *cx_ros_comm_gen* package provides cmake functions to generate bindings for ros messages, services and actions via the following macros:
 ```cmake
 cx_generate_msg_bindings(package msg_name)
 
@@ -132,13 +132,13 @@ Given a package (e.g., "std_srvs") and a service (e.g., "SetBool") all deftempla
 
 ; Creating, destroying and processing of requests
 (bind ?msg-ptr (<package-kebab>-<service-kebab>-request-create))
-(<package-kebab>-<service-kebab>-request-destoy ?msg-ptr)
+(<package-kebab>-<service-kebab>-request-destroy ?msg-ptr)
 (<package-kebab>-<service-kebab>-request-set-field ?msg-ptr ?field-name ?field-value)
 (<package-kebab>-<service-kebab>-request-get-field ?msg-ptr ?field-name)
 
 ; Creating, destroying and processing of responses
 (bind ?msg-ptr (<package-kebab>-<service-kebab>-response-create))
-(<package-kebab>-<service-kebab>-response-destoy ?msg-ptr)
+(<package-kebab>-<service-kebab>-response-destroy ?msg-ptr)
 (<package-kebab>-<service-kebab>-response-set-field ?msg-ptr ?field-name ?field-value)
 (<package-kebab>-<service-kebab>-response-get-field ?msg-ptr ?field-name)
 ```
@@ -201,19 +201,19 @@ Given a package (e.g., "example_interfaces") and an action (e.g., "Fibonacci") a
 
 ; Creating, destroying and processing of goals
 (bind ?msg-ptr (<package-kebab>-<action-kebab>-goal-create))
-(<package-kebab>-<action-kebab>-goal-destoy ?msg-ptr)
+(<package-kebab>-<action-kebab>-goal-destroy ?msg-ptr)
 (<package-kebab>-<action-kebab>-goal-set-field ?msg-ptr ?field-name ?field-value)
 (<package-kebab>-<action-kebab>-goal-get-field ?msg-ptr ?field-name)
 
 ; Creating, destroying and processing of feedback
 (bind ?msg-ptr (<package-kebab>-<action-kebab>-feedback-create))
-(<package-kebab>-<action-kebab>-feedback-destoy ?msg-ptr)
+(<package-kebab>-<action-kebab>-feedback-destroy ?msg-ptr)
 (<package-kebab>-<action-kebab>-feedback-set-field ?msg-ptr ?field-name ?field-value)
 (<package-kebab>-<action-kebab>-feedback-get-field ?msg-ptr ?field-name)
 
 ; Creating, destroying and processing of results
 (bind ?msg-ptr (<package-kebab>-<action-kebab>-result-create))
-(<package-kebab>-<action-kebab>-result-destoy ?msg-ptr)
+(<package-kebab>-<action-kebab>-result-destroy ?msg-ptr)
 (<package-kebab>-<action-kebab>-result-set-field ?msg-ptr ?field-name ?field-value)
 (<package-kebab>-<action-kebab>-result-get-field ?msg-ptr ?field-name)
 
@@ -277,7 +277,7 @@ Instead, object lifetimes need to be managed more explicitly through the usage o
 
 It is advised to clean up all objects as soon as they are not needed anymore in order to free up memory.
 
-This is mostly straight-forward in case of short lifetimes (e.g., creating a message and immidiately sending it), but can be a bit tricky in case of long-lasting references, such as goals and goal handles in action clients/servers.
+This is mostly straight-forward in case of short lifetimes (e.g., creating a message and immidiately sending it), but can be a bit tricky in case of long-lasting references, such as goals and goal handles in action clients/servers. In particular, it is adviced to clean up resources belonging to a goal to only be cleaned up once the goal is fully processed and either rejected or finished.
 
 #### Callbacks and Mutexes
 It can be tricky to interface between ROS callbacks and CLIPS environments, especially if locks are guarding said callbacks that are not visible to the end user.
