@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="dir_d5395a4b2063be07edc40f9e7d3d8ccc" kind="dir">
+    <compoundname>include/cx_clips_env_manager</compoundname>
+    <innerfile refid="clips__env__manager_8hpp">clips_env_manager.hpp</innerfile>
+    <innerfile refid="clips__plugin__manager_8hpp">clips_plugin_manager.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/cx_clips_env_manager/"/>
+  </compounddef>
+</doxygen>

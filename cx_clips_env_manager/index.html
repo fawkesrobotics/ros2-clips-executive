@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cx_clips_env_manager &mdash; cx_clips_env_manager 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="C++ API" href="generated/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> cx_clips_env_manager
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/index.html">C++ API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#full-c-api">Full C++ API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/namespace_cx.html">Namespace cx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/namespace_rclcpp_lifecycle.html">Namespace rclcpp_lifecycle</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#classes-and-structs">Classes and Structs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/classcx_1_1CLIPSEnvManager.html">Class CLIPSEnvManager</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/classcx_1_1ClipsPluginManager.html">Class ClipsPluginManager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/typedef_clips__plugin__manager_8hpp_1a6e41636630926d99d74705252267fdc7.html">Typedef cx::EnvsMap</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#directories">Directories</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/dir_include.html">Directory include</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/dir_include_cx_clips_env_manager.html">Directory cx_clips_env_manager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#files">Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/file_include_cx_clips_env_manager_clips_env_manager.hpp.html">File clips_env_manager.hpp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/file_include_cx_clips_env_manager_clips_plugin_manager.hpp.html">File clips_plugin_manager.hpp</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standard Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/PACKAGE.html">PACKAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/README.html">README</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="standard_docs/README.html#cx-clips-env-manager">cx_clips_env_manager</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="standard_docs/README.html#responsibilities">Responsibilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standard_docs/README.html#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standard_docs/README.html#plugins">Plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standard_docs/README.html#logging-and-routing">Logging and Routing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">cx_clips_env_manager</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>cx_clips_env_manager</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cx-clips-env-manager">
+<h1>cx_clips_env_manager<a class="headerlink" href="#cx-clips-env-manager" title="Permalink to this headline"></a></h1>
+<p>Lifecycle node for managing CLIPS environments</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/index.html">C++ API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#full-c-api">Full C++ API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standard Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/PACKAGE.html">PACKAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/README.html">README</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline"></a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="cx-clips-env-manager">
+<h2>cx_clips_env_manager<a class="headerlink" href="#cx-clips-env-manager" title="Permalink to this headline"></a></h2>
+<p>This is the central package of the CLIPS-Executive that provides the CLIPS Environment Manager.</p>
+<section id="responsibilities">
+<h3>Responsibilities<a class="headerlink" href="#responsibilities" title="Permalink to this headline"></a></h3>
+<p>The CLIPS Environment Manager is the central component that allows to:</p>
+<ul class="simple">
+<li><p>dynamically create and destroy CLIPS environments</p></li>
+<li><p>log the CLIPS output to ROS and to files</p></li>
+<li><p>Extend CLIPS environments by plugins (using the <em>cx_plugin_manager</em> and <a class="reference external" href="https://docs.ros.org/en/rolling/Tutorials/Beginner-Client-Libraries/Pluginlib.html">pluginlib</a>) that allow to externally customize CLIPS environments further via the CLIPS C++ API  (e.g., to inject C++ functions to CLIPS environments)</p></li>
+</ul>
+<p>It provides a clear execution flow guided through the lifecycle:</p>
+<ul class="simple">
+<li><p>On being configured, it parses all parameters to determine the environmnents and plugins to load. It initializes the environments and plugins.</p></li>
+<li><p>On being activated, it first loads all requested plugins, before calling <strong>(reset)</strong>  in the environments, refreshing all agendas and calling <strong>(run)</strong> to start rule execution.</p></li>
+<li><p>On being deactivated, it first asserts a <code class="docutils literal notranslate"><span class="pre">(executive-finalize)</span></code> before refreshing all agendas and calling <strong>(run)</strong> one more time to allow cleanup routines to execute before shutdown.</p></li>
+</ul>
+<p>Similarly, each dynamically created environment goes through the same steps  as on activation and each dynamically destroyed environment goes through the same steps as on deactivation.</p>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h3>
+<p>To just launch a bare unconfigured node, just run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2 run cx_clips_env_manager clips_node
+</pre></div>
+</div>
+<p>The environment manager node can be configured via ROS parameters to automatically setup environments on startup.</p>
+<p>Additionally, it provides services to create and destroy environments dynamically at runtime and to load and unload plugins into environments.</p>
+<section id="parameters">
+<h4>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline"></a></h4>
+<p>The example configuration below shows the configuration for an instance of the CLIPS environment manager that creates two environments on start.
+It utilzes three different plugins, but the “executive” plugin is used for both instances.</p>
+<p>For a more comprehensive example, check out the <strong>cx_bringup</strong> package.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">clips_manager</span><span class="p">:</span>
+  <span class="n">ros__parameters</span><span class="p">:</span>
+    <span class="n">environments</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">]</span>
+    <span class="n">main</span><span class="p">:</span>
+      <span class="c1"># which plugins should be loaded. If undefined, defaults to no plugins</span>
+      <span class="n">plugins</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;executive&quot;</span><span class="p">,</span><span class="s2">&quot;files_other&quot;</span><span class="p">]</span>
+
+      <span class="c1"># Should CLIPS activities be logged to files? Defaults to true</span>
+      <span class="n">log_clips_to_file</span><span class="p">:</span> <span class="n">true</span>
+
+      <span class="c1"># What changes should be watched (and logged). Defaults to not watching</span>
+      <span class="c1"># anything. By watching &quot;rules&quot; and facts one effectively get a full</span>
+      <span class="c1"># program trace of the execution execution, but CLIPS supports more,</span>
+      <span class="c1"># namely:</span>
+      <span class="c1">#   &quot;all&quot;, &quot;facts&quot;, &quot;instances&quot;, &quot;slots&quot;, &quot;rules&quot;, &quot;activations&quot;,</span>
+      <span class="c1">#   &quot;messages&quot;, &quot;message_handlers&quot;, &quot;generic_functions&quot;, &quot;methods&quot;,</span>
+      <span class="c1">#   &quot;deffunctions&quot;, &quot;compilations&quot;, &quot;statistics&quot;, &quot;globals&quot;, &quot;focus&quot;</span>
+      <span class="n">watch</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;rules&quot;</span><span class="p">,</span> <span class="s2">&quot;facts&quot;</span><span class="p">]</span>
+
+    <span class="c1"># no configuration for &quot;other&quot; means that default values are chosen</span>
+
+    <span class="c1"># plugin definitions</span>
+    <span class="c1"># ...</span>
+</pre></div>
+</div>
+</section>
+<section id="services">
+<h4>Services<a class="headerlink" href="#services" title="Permalink to this headline"></a></h4>
+<p>These services are provided by each environment manager node:</p>
+<ul class="simple">
+<li><p><em>/create_env</em> for creating environments</p></li>
+<li><p><em>/destroy_env</em> for destroying environments</p></li>
+<li><p><em>/load_plugin</em> for loading of plugins in environments.</p></li>
+<li><p><em>/unload_plugin</em> for unloading of plugins from environments.</p></li>
+<li><p><em>/list_plugins</em> for listing all plugins loaded in an environment.</p></li>
+</ul>
+</section>
+</section>
+<section id="plugins">
+<h3>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline"></a></h3>
+<p>Plugins are specializations of of the <em>cx_plugin</em> base class and are handled as follows:</p>
+<ul class="simple">
+<li><p>Each plugin is initialized exactly once before it is loaded into environments by calling it’s <code class="docutils literal notranslate"><span class="pre">initialize()</span></code> function.</p></li>
+<li><p>When an environment is loaded, all specified plugins are <strong>loaded in order</strong> of the respective plugins parameter.</p></li>
+<li><p>Whenever an environment needs to load a plugin, it’s <code class="docutils literal notranslate"><span class="pre">clips_env_init()</span></code> function is called once. Loading the same plugin again before unloading it first, results in an error (and the function is not called again).</p></li>
+<li><p>Whenever an environment needs to unload a plugin, it’s <code class="docutils literal notranslate"><span class="pre">clips_env_destroyed()</span></code> is called once. Unloading the same plugin again before loading it first, results in an error (and the function is not called again).</p></li>
+<li><p>Before an environment is destroyed, all plugins are <strong>unloaded in reverse order</strong> of loading.</p></li>
+<li><p>On destruction of a plugin, the <code class="docutils literal notranslate"><span class="pre">finalize()</span></code> function is called exactly once.</p></li>
+<li><p>Before a plugin is destroyed, it is unloaded from all environments.</p></li>
+</ul>
+</section>
+<section id="logging-and-routing">
+<h3>Logging and Routing<a class="headerlink" href="#logging-and-routing" title="Permalink to this headline"></a></h3>
+<p>THe CLIPS Environment manager provides a custom CLIPS logger that logs CLIPS output to ROS and also saves CLIPS output of each environment to files if configured so.
+The log files are stored at the ROS logging directory “~/.ros/log/” and are named using the name of the envrionment followed by a timestamp.</p>
+<p>For log routing inside CLIPS, the custom loggers accepts the following logical names that log to the file and additionally also in some cases to ROS:</p>
+<ul class="simple">
+<li><p>“l”,”t”,”info”,”loginfo” log via <code class="docutils literal notranslate"><span class="pre">RCLCPP_INFO</span></code></p></li>
+<li><p>“green”, “blue”, “yellow”, “magenta” “cyan”, “white”, “bold” log via RCLCPP_INFO with additional ANSI escape codes for color output (for terminals that support them)</p></li>
+<li><p>“debug”,”logdebug” log via RCLCPP_DEBUG</p></li>
+<li><p>“warn”,logwarn”,”stdwrn” log via RCLCPP_WARN</p></li>
+<li><p>“error”,”logerror”,”stderr” log via RCLCPP_ERROR</p></li>
+<li><p>“stdout” logs via RCLCPP_INFO if <code class="docutils literal notranslate"><span class="pre">redirect_stdout_to_debug</span></code> is set to false.</p></li>
+<li><p>“stdout” logs via RCLCPP_DEBUG if <code class="docutils literal notranslate"><span class="pre">redirect_stdout_to_debug</span></code> is set true.</p></li>
+</ul>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="generated/index.html" class="btn btn-neutral float-right" title="C++ API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright The &lt;cx_clips_env_manager&gt; Contributors. License: Apache License 2.0.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

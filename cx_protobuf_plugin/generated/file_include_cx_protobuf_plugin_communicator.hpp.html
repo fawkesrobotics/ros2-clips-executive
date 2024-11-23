@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File communicator.hpp &mdash; cx_protobuf_plugin 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Program Listing for File communicator.hpp" href="program_listing_file_include_cx_protobuf_plugin_communicator.hpp.html" />
+    <link rel="prev" title="Directory cx_protobuf_plugin" href="dir_include_cx_protobuf_plugin.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> cx_protobuf_plugin
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++ API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#full-c-api">Full C++ API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="index.html#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="namespace_cx.html">Namespace cx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_fawkes.html">Namespace fawkes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_protobuf_clips.html">Namespace protobuf_clips</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_protobuf_comm.html">Namespace protobuf_comm</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#classes-and-structs">Classes and Structs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="classcx_1_1ProtobufPlugin.html">Class ProtobufPlugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classprotobuf__clips_1_1ClipsProtobufCommunicator.html">Class ClipsProtobufCommunicator</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#directories">Directories</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dir_include.html">Directory include</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dir_include_cx_protobuf_plugin.html">Directory cx_protobuf_plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html#files">Files</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">File communicator.hpp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_include_cx_protobuf_plugin_protobuf_plugin.hpp.html">File protobuf_plugin.hpp</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../standards.html">Standard Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../standard_docs/PACKAGE.html">PACKAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../standard_docs/README.html">README</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../standard_docs/README.html#cx-protobuf-plugin">cx_protobuf_plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../standard_docs/README.html#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../standard_docs/README.html#clips-features">CLIPS Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../standard_docs/README.html#object-lifetimes-and-clips">Object Lifetimes and CLIPS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cx_protobuf_plugin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">C++ API</a> &raquo;</li>
+      <li>File communicator.hpp</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/file_include_cx_protobuf_plugin_communicator.hpp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="file-communicator-hpp">
+<span id="file-include-cx-protobuf-plugin-communicator-hpp"></span><h1>File communicator.hpp<a class="headerlink" href="#file-communicator-hpp" title="Permalink to this headline"></a></h1>
+<p>↰ <a class="reference internal" href="dir_include_cx_protobuf_plugin.html#dir-include-cx-protobuf-plugin"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">include/cx_protobuf_plugin</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-include-cx-protobuf-plugin-communicator-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">include/cx_protobuf_plugin/communicator.hpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#classes" id="id5">Classes</a></p></li>
+</ul>
+</div>
+<section id="definition-include-cx-protobuf-plugin-communicator-hpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">include/cx_protobuf_plugin/communicator.hpp</span></code>)<a class="headerlink" href="#definition-include-cx-protobuf-plugin-communicator-hpp" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_include_cx_protobuf_plugin_communicator.hpp.html">Program Listing for File communicator.hpp</a></li>
+</ul>
+</div>
+</section>
+<section id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">clips_ns/clips.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">map</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mutex</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">protobuf_comm/server.h</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rclcpp_lifecycle/lifecycle_node.hpp</span></code></p></li>
+</ul>
+</section>
+<section id="included-by">
+<h2>Included By<a class="headerlink" href="#included-by" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="file_include_cx_protobuf_plugin_protobuf_plugin.hpp.html#file-include-cx-protobuf-plugin-protobuf-plugin-hpp"><span class="std std-ref">File protobuf_plugin.hpp</span></a></p></li>
+</ul>
+</section>
+<section id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_fawkes.html#namespace-fawkes"><span class="std std-ref">Namespace fawkes</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_protobuf_clips.html#namespace-protobuf-clips"><span class="std std-ref">Namespace protobuf_clips</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_protobuf_comm.html#namespace-protobuf-comm"><span class="std std-ref">Namespace protobuf_comm</span></a></p></li>
+</ul>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="classprotobuf__clips_1_1ClipsProtobufCommunicator.html#exhale-class-classprotobuf-clips-1-1clipsprotobufcommunicator"><span class="std std-ref">Class ClipsProtobufCommunicator</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dir_include_cx_protobuf_plugin.html" class="btn btn-neutral float-left" title="Directory cx_protobuf_plugin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="program_listing_file_include_cx_protobuf_plugin_communicator.hpp.html" class="btn btn-neutral float-right" title="Program Listing for File communicator.hpp" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright The &lt;cx_protobuf_plugin&gt; Contributors. License: GPLv2+ license.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

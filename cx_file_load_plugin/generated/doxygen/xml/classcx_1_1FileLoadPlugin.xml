@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classcx_1_1FileLoadPlugin" kind="class" language="C++" prot="public">
+    <compoundname>cx::FileLoadPlugin</compoundname>
+    <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcx_1_1FileLoadPlugin_1ad5bcef6f72774411c4a34d2ea091401c" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; rclcpp::Logger &gt;</type>
+        <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::FileLoadPlugin::logger_</definition>
+        <argsstring></argsstring>
+        <name>logger_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="36" column="19" bodyfile="include/cx_file_load_plugin/file_load_plugin.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1FileLoadPlugin_1af3a384f66107110e2f6c55320fd32c39" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; cx::FileLoadPlugin::init_files_</definition>
+        <argsstring></argsstring>
+        <name>init_files_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="38" column="15" bodyfile="include/cx_file_load_plugin/file_load_plugin.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1FileLoadPlugin_1a2f189c1892f904d231119accec26413a" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; cx::FileLoadPlugin::init_batch_files_</definition>
+        <argsstring></argsstring>
+        <name>init_batch_files_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="39" column="15" bodyfile="include/cx_file_load_plugin/file_load_plugin.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1FileLoadPlugin_1aed6bb59f1d92981052d51709fac1274c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::string &gt;</type>
+        <definition>std::vector&lt;std::string&gt; cx::FileLoadPlugin::cleanup_files_</definition>
+        <argsstring></argsstring>
+        <name>cleanup_files_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="40" column="15" bodyfile="include/cx_file_load_plugin/file_load_plugin.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcx_1_1FileLoadPlugin_1a1c2fcafd3c88629552c50f1d25dd90dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::FileLoadPlugin::FileLoadPlugin</definition>
+        <argsstring>()</argsstring>
+        <name>FileLoadPlugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="27" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1FileLoadPlugin_1a71369a6ef262d182bfa5d2cf15378878" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::FileLoadPlugin::~FileLoadPlugin</definition>
+        <argsstring>()</argsstring>
+        <name>~FileLoadPlugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="28" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1FileLoadPlugin_1a48211a04b1e027c12da02383342adcc0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void cx::FileLoadPlugin::initialize</definition>
+        <argsstring>()</argsstring>
+        <name>initialize</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="30" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1FileLoadPlugin_1a5822e72d9a5620382dfbd298d76c69f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::FileLoadPlugin::clips_env_init</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
+        <name>clips_env_init</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="32" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1FileLoadPlugin_1a03e336134f9287d38f39caa2cd547ff0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::FileLoadPlugin::clips_env_destroyed</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
+        <name>clips_env_destroyed</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="33" column="8"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+      <node id="1">
+        <label>cx::FileLoadPlugin</label>
+        <link refid="classcx_1_1FileLoadPlugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+      <node id="1">
+        <label>cx::FileLoadPlugin</label>
+        <link refid="classcx_1_1FileLoadPlugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="25" column="1" bodyfile="include/cx_file_load_plugin/file_load_plugin.hpp" bodystart="25" bodyend="41"/>
+    <listofallmembers>
+      <member refid="classcx_1_1FileLoadPlugin_1aed6bb59f1d92981052d51709fac1274c" prot="private" virt="non-virtual"><scope>cx::FileLoadPlugin</scope><name>cleanup_files_</name></member>
+      <member refid="classcx_1_1FileLoadPlugin_1a03e336134f9287d38f39caa2cd547ff0" prot="public" virt="virtual"><scope>cx::FileLoadPlugin</scope><name>clips_env_destroyed</name></member>
+      <member refid="classcx_1_1FileLoadPlugin_1a5822e72d9a5620382dfbd298d76c69f0" prot="public" virt="virtual"><scope>cx::FileLoadPlugin</scope><name>clips_env_init</name></member>
+      <member refid="classcx_1_1FileLoadPlugin_1a1c2fcafd3c88629552c50f1d25dd90dd" prot="public" virt="non-virtual"><scope>cx::FileLoadPlugin</scope><name>FileLoadPlugin</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60" prot="public" virt="virtual"><scope>cx::FileLoadPlugin</scope><name>finalize</name></member>
+      <member refid="classcx_1_1FileLoadPlugin_1a2f189c1892f904d231119accec26413a" prot="private" virt="non-virtual"><scope>cx::FileLoadPlugin</scope><name>init_batch_files_</name></member>
+      <member refid="classcx_1_1FileLoadPlugin_1af3a384f66107110e2f6c55320fd32c39" prot="private" virt="non-virtual"><scope>cx::FileLoadPlugin</scope><name>init_files_</name></member>
+      <member refid="classcx_1_1FileLoadPlugin_1a48211a04b1e027c12da02383342adcc0" prot="public" virt="virtual"><scope>cx::FileLoadPlugin</scope><name>initialize</name></member>
+      <member refid="classcx_1_1FileLoadPlugin_1ad5bcef6f72774411c4a34d2ea091401c" prot="private" virt="non-virtual"><scope>cx::FileLoadPlugin</scope><name>logger_</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a5c9c64f5ab925a688f022554d3985342" prot="protected" virt="non-virtual"><scope>cx::FileLoadPlugin</scope><name>parent_</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1aace7c9a1941b76a19a23e6881ec26906" prot="protected" virt="non-virtual"><scope>cx::FileLoadPlugin</scope><name>plugin_name_</name></member>
+      <member refid="classcx_1_1FileLoadPlugin_1a71369a6ef262d182bfa5d2cf15378878" prot="public" virt="non-virtual"><scope>cx::FileLoadPlugin</scope><name>~FileLoadPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,23 @@
+.. GENERATED_CONTENT by rosdoc2.verbs.build.builders.sphinx_builder.
+
+cx_example_plugin
+=================
+
+CLIPS plugin example that does not actually do anything and rather serves as boilerplate
+
+.. toctree::
+   :maxdepth: 2
+
+
+   C++ API <generated/index>
+
+
+
+   Standard Documents <standards>
+
+.. include:: __readme_include.rst
+
+.. toctree::
+   :hidden:
+
+   genindex

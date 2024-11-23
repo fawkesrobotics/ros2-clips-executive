@@ -1,0 +1,71 @@
+
+.. _file_include_cx_protobuf_plugin_communicator.hpp:
+
+File communicator.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir_include_cx_protobuf_plugin>` (``include/cx_protobuf_plugin``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/cx_protobuf_plugin/communicator.hpp``)
+------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_cx_protobuf_plugin_communicator.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``clips_ns/clips.h``
+
+- ``list``
+
+- ``map``
+
+- ``mutex``
+
+- ``protobuf_comm/server.h``
+
+- ``rclcpp_lifecycle/lifecycle_node.hpp``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_include_cx_protobuf_plugin_protobuf_plugin.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_fawkes`
+
+- :ref:`namespace_protobuf_clips`
+
+- :ref:`namespace_protobuf_comm`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classprotobuf__clips_1_1ClipsProtobufCommunicator`
+

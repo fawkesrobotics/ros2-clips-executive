@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+  <compound refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4" kind="struct"><name>YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;</name>
+    <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1afcf20a28cbccab035bccae831205627d" kind="variable"><name>node</name></member>
+    <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1a1d0298b9d118ee3106b3c2b6d6567d30" kind="function"><name>as_if</name></member>
+    <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1aa088b4f0b2c645aa3954108188dedf3c" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4" kind="struct"><name>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;</name>
+    <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1ae14c0c7c49b2d3af7b679c6f856a4329" kind="variable"><name>node</name></member>
+    <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a3445bdd4ed73d790ec557c60b0c01533" kind="function"><name>as_if</name></member>
+    <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a5401d0138162258d516b1d2123643c3c" kind="function"><name>operator()</name></member>
+  </compound>
+  <compound refid="classcx_1_1ConfigPlugin" kind="class"><name>cx::ConfigPlugin</name>
+    <member refid="classcx_1_1ConfigPlugin_1adb4861c891599680bcefab6a4c2f42eb" kind="variable"><name>logger_</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1a9f6d97b75a0fd36e195d83daebee8d16" kind="function"><name>ConfigPlugin</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1ab0534ed851f16ee6eb92f6a0676881b3" kind="function"><name>~ConfigPlugin</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1a3a94284e0f08bd7a6b2612438d7c55e6" kind="function"><name>initialize</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1a2b9ba4726e7bc02ba5e899499da752a0" kind="function"><name>clips_env_init</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1a6ca27a0f54626711042088c74c899b72" kind="function"><name>clips_env_destroyed</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1abc4c39d5def91dc249564e515533ef0f" kind="function"><name>clips_config_load</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1a90ecabcfa93cf85465b70c5bf7c92a2d" kind="function"><name>getScalarType</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1a8652f7c03aca9b9c68a17a992a5a4edd" kind="function"><name>iterateThroughYamlRecuresively</name></member>
+    <member refid="classcx_1_1ConfigPlugin_1a74135f6a1a9f1f793196cc529c993f3d" kind="function"><name>sequenceIterator</name></member>
+  </compound>
+  <compound refid="namespacecx" kind="namespace"><name>cx</name>
+  </compound>
+  <compound refid="namespaceYAML" kind="namespace"><name>YAML</name>
+  </compound>
+  <compound refid="config__plugin_8hpp" kind="file"><name>config_plugin.hpp</name>
+  </compound>
+  <compound refid="dir_052a8cace5be80becf3b66b755fd4582" kind="dir"><name>include/cx_config_plugin</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+</doxygenindex>

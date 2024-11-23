@@ -1,0 +1,26 @@
+.. _exhale_class_classcx_1_1ProtobufPlugin:
+
+Class ProtobufPlugin
+====================
+
+- Defined in :ref:`file_include_cx_protobuf_plugin_protobuf_plugin.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public cx::ClipsPlugin``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::ProtobufPlugin
+   :project: cx_protobuf_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

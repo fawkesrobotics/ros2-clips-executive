@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="namespacecx" kind="namespace" language="C++">
+    <compoundname>cx</compoundname>
+    <innerclass refid="classcx_1_1CLIPSEnvManager" prot="public">cx::CLIPSEnvManager</innerclass>
+    <innerclass refid="classcx_1_1ClipsPluginManager" prot="public">cx::ClipsPluginManager</innerclass>
+    <innerclass refid="classcx_1_1ClipsPlugin" prot="public">cx::ClipsPlugin</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/cx_plugin/clips_plugin.hpp" line="27" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,26 @@
+.. _exhale_class_classcx_1_1CLIPSEnvManager:
+
+Class CLIPSEnvManager
+=====================
+
+- Defined in :ref:`file_include_cx_clips_env_manager_clips_env_manager.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public rclcpp_lifecycle::LifecycleNode``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::CLIPSEnvManager
+   :project: cx_clips_env_manager Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,37 @@
+.. _exhale_class_classcx_1_1RosMsgsPlugin:
+
+Class RosMsgsPlugin
+===================
+
+- Defined in :ref:`file_include_cx_ros_msgs_plugin_ros_msgs_plugin.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structcx_1_1RosMsgsPlugin_1_1MessageInfo`
+- :ref:`exhale_struct_structcx_1_1RosMsgsPlugin_1_1MessageInfoHasher`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public cx::ClipsPlugin``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::RosMsgsPlugin
+   :project: cx_ros_msgs_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

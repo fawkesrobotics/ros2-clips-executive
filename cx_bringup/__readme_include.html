@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>README &mdash; cx_bringup 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> cx_bringup
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standard Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/PACKAGE.html">PACKAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/README.html">README</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="standard_docs/README.html#cx-bringup">cx_bringup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="standard_docs/README.html#launching-the-clips-executive">Launching the CLIPS-Executive</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cx_bringup</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>README</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/__readme_include.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline"></a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="cx-bringup">
+<h2>cx_bringup<a class="headerlink" href="#cx-bringup" title="Permalink to this headline"></a></h2>
+<hr class="docutils" />
+<p>Provides an example bringup mechanism for CX applications.</p>
+<p>This package includes configuration files to showcase the different plugins <code class="docutils literal notranslate"><span class="pre">params</span></code> folder.</p>
+<p>The CLIPS-Executive environment (CLIPS Environment Manager node) is configurable to specify which CLIPS environments should be loaded at startup and which plugins should be loaded in those environments.</p>
+<p>It provides a dedicated node (<code class="docutils literal notranslate"><span class="pre">cx_node</span></code>) inside the <code class="docutils literal notranslate"><span class="pre">src</span></code> directory, which configures the lifecycle manager node per default.</p>
+<p>Lastly, it provides a convenient launch file that can be used in order to launch the provided node including common configuration options.</p>
+<section id="launching-the-clips-executive">
+<h3>Launching the CLIPS-Executive<a class="headerlink" href="#launching-the-clips-executive" title="Permalink to this headline"></a></h3>
+<p>Make sure to source the CLIPS-Executive workspace and run the following command to select a configuration to launch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ros2</span> <span class="n">launch</span> <span class="n">cx_bringup</span> <span class="n">cx_launch</span><span class="o">.</span><span class="n">py</span> <span class="n">manager_config</span><span class="o">:=&lt;</span><span class="n">config</span><span class="o">-</span><span class="n">file</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where config-file is one of:</p>
+<ul class="simple">
+<li><p><em>plugin_examples/ament_index.yaml</em></p></li>
+<li><p><em>plugin_examples/config.yaml</em></p></li>
+<li><p><em>plugin_examples/executive.yaml</em></p></li>
+<li><p><em>plugin_examples/fibonacci_action.yaml</em></p></li>
+<li><p><em>plugin_examples/file_load.yaml</em></p></li>
+<li><p><em>plugin_examples/pddl_parser.yaml</em></p></li>
+<li><p><em>plugin_examples/protobuf_linked.yaml</em></p></li>
+<li><p><em>plugin_examples/protobuf.yaml</em></p></li>
+<li><p><em>plugin_examples/ros_msgs.yaml</em></p></li>
+<li><p><em>plugin_examples/set_bool_srv.yaml</em></p></li>
+<li><p><em>plugin_examples/string_msg.yaml</em></p></li>
+</ul>
+<p>It defaults to <code class="docutils literal notranslate"><span class="pre">plugin_examples/file_load.yaml</span></code>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright The &lt;cx_bringup&gt; Contributors. License: Apache License 2.0.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

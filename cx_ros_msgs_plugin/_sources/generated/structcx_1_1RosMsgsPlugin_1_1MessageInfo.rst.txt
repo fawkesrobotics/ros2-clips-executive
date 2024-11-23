@@ -1,0 +1,23 @@
+.. _exhale_struct_structcx_1_1RosMsgsPlugin_1_1MessageInfo:
+
+Struct RosMsgsPlugin::MessageInfo
+=================================
+
+- Defined in :ref:`file_include_cx_ros_msgs_plugin_ros_msgs_plugin.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_class_classcx_1_1RosMsgsPlugin`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: cx::RosMsgsPlugin::MessageInfo
+   :project: cx_ros_msgs_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

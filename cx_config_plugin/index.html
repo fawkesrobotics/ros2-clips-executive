@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cx_config_plugin &mdash; cx_config_plugin 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="C++ API" href="generated/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> cx_config_plugin
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/index.html">C++ API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#full-c-api">Full C++ API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/namespace_cx.html">Namespace cx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/namespace_YAML.html">Namespace YAML</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#classes-and-structs">Classes and Structs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4.html">Template Struct as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4.html">Template Struct as_if&lt; T, std::optional&lt; T &gt; &gt;</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/classcx_1_1ConfigPlugin.html">Class ConfigPlugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#directories">Directories</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/dir_include.html">Directory include</a></li>
+<li class="toctree-l4"><a class="reference internal" href="generated/dir_include_cx_config_plugin.html">Directory cx_config_plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="generated/index.html#files">Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="generated/file_include_cx_config_plugin_config_plugin.hpp.html">File config_plugin.hpp</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standard Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/PACKAGE.html">PACKAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/README.html">README</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="standard_docs/README.html#cx-config-plugin">cx_config_plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="standard_docs/README.html#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standard_docs/README.html#clips-features">CLIPS Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standard_docs/README.html#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">cx_config_plugin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>cx_config_plugin</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cx-config-plugin">
+<h1>cx_config_plugin<a class="headerlink" href="#cx-config-plugin" title="Permalink to this headline"></a></h1>
+<p>CX plugin to parse yaml files and provide the values to CLIPS</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/index.html">C++ API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generated/index.html#full-c-api">Full C++ API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standard Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/PACKAGE.html">PACKAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="standard_docs/README.html">README</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="readme">
+<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline"></a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="cx-config-plugin">
+<h2>cx_config_plugin<a class="headerlink" href="#cx-config-plugin" title="Permalink to this headline"></a></h2>
+<p>This package offers the <code class="docutils literal notranslate"><span class="pre">cx::ConfigPlugin</span></code> CLIPS plugin to read config values from yaml.</p>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h3>
+<p>Register this plugin with the plugin manager. It requires no additional configuration, an example setup is shown below:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">clips_manager</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ros__parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">environments</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;main&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">plugins</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;config&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cx::ConfigPlugin&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="clips-features">
+<h3>CLIPS Features<a class="headerlink" href="#clips-features" title="Permalink to this headline"></a></h3>
+<p>This plugin adds deftemplates and deffunctions as listed below:</p>
+<section id="deftemplates">
+<h4>Deftemplates<a class="headerlink" href="#deftemplates" title="Permalink to this headline"></a></h4>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="c1">; Asserted by the config-load function for each configuration value in the parsed yaml file.</span>
+<span class="p">(</span><span class="nv">deftemplate</span> <span class="nv">confval</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">path</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="k">type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">SYMBOL</span><span class="p">)</span> <span class="p">(</span><span class="nv">allowed-values</span> <span class="nv">FLOAT</span> <span class="nv">UINT</span> <span class="nv">INT</span> <span class="nv">BOOL</span> <span class="nv">STRING</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">value</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">is-list</span> <span class="p">(</span><span class="k">type</span> <span class="nv">SYMBOL</span><span class="p">)</span> <span class="p">(</span><span class="nv">allowed-values</span> <span class="nv">TRUE</span> <span class="nv">FALSE</span><span class="p">)</span> <span class="p">(</span><span class="nv">default</span> <span class="nv">FALSE</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">multislot</span> <span class="nv">list-value</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="functions">
+<h4>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h4>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="c1">; Load all config values from a file (absolute path) given a prefix and store tjhem into (confval) facts.</span>
+<span class="c1">; The prefix determines tha resulting path in the confval facts.</span>
+<span class="p">(</span><span class="nv">config-load</span> <span class="nv">?file</span> <span class="nv">?prefix</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h3>
+<p>Assuming a yaml file at path <code class="docutils literal notranslate"><span class="pre">/home/&lt;user&gt;/test.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">root</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">branch</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">val1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
+<span class="w">        </span><span class="nt">val2</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">test1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">test2</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="nt">branch2</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="nt">val1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Calling the function with different prefixes yields the following results:</p>
+<section id="parsing-everyting">
+<h4>Parsing Everyting<a class="headerlink" href="#parsing-everyting" title="Permalink to this headline"></a></h4>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">config-load</span> <span class="s">&quot;/home/&lt;user&gt;/test.yaml&quot;</span> <span class="s">&quot;/&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">confval</span>
+  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch/val1&quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">type</span> <span class="nv">BOOL</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">value</span> <span class="nv">TRUE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">FALSE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="p">(</span><span class="nv">confval</span>
+  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch/val2&quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">value</span> <span class="no">nil</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">TRUE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">list-value</span> <span class="s">&quot;test1&quot;</span> <span class="s">&quot;test2&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="p">(</span><span class="nv">confval</span>
+  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch2/val1&quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">type</span> <span class="nv">BOOL</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">value</span> <span class="nv">FALSE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">FLASE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="parsing-only-branch">
+<h4>Parsing Only “branch”<a class="headerlink" href="#parsing-only-branch" title="Permalink to this headline"></a></h4>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">config-load</span> <span class="s">&quot;/home/&lt;user&gt;/test.yaml&quot;</span> <span class="s">&quot;/root/branch&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">confval</span>
+  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch/val1&quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">type</span> <span class="nv">BOOL</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">value</span> <span class="nv">TRUE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">FALSE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="p">(</span><span class="nv">confval</span>
+  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch/val2&quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">value</span> <span class="no">nil</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">TRUE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">list-value</span> <span class="s">&quot;test1&quot;</span> <span class="s">&quot;test2&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="generated/index.html" class="btn btn-neutral float-right" title="C++ API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright The &lt;cx_config_plugin&gt; Contributors. License: Apache License 2.0.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

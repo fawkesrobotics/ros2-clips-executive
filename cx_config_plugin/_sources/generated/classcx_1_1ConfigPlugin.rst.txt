@@ -1,0 +1,26 @@
+.. _exhale_class_classcx_1_1ConfigPlugin:
+
+Class ConfigPlugin
+==================
+
+- Defined in :ref:`file_include_cx_config_plugin_config_plugin.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public cx::ClipsPlugin``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::ConfigPlugin
+   :project: cx_config_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

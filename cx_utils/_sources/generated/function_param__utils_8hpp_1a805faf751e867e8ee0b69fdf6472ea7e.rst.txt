@@ -1,0 +1,14 @@
+.. _exhale_function_param__utils_8hpp_1a805faf751e867e8ee0b69fdf6472ea7e:
+
+Template Function cx::cx_utils::get_plugin_type_param
+=====================================================
+
+- Defined in :ref:`file_include_cx_utils_param_utils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: cx::cx_utils::get_plugin_type_param(NodeT, const std::string&)
+   :project: cx_utils Doxygen Project

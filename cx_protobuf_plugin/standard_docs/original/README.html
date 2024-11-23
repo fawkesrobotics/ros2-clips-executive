@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cx_protobuf_plugin &mdash; cx_protobuf_plugin 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> cx_protobuf_plugin
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../generated/index.html">C++ API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/index.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/index.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/index.html#full-c-api">Full C++ API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../generated/index.html#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/namespace_cx.html">Namespace cx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/namespace_fawkes.html">Namespace fawkes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/namespace_protobuf_clips.html">Namespace protobuf_clips</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/namespace_protobuf_comm.html">Namespace protobuf_comm</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated/index.html#classes-and-structs">Classes and Structs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/classcx_1_1ProtobufPlugin.html">Class ProtobufPlugin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/classprotobuf__clips_1_1ClipsProtobufCommunicator.html">Class ClipsProtobufCommunicator</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated/index.html#directories">Directories</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/dir_include.html">Directory include</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/dir_include_cx_protobuf_plugin.html">Directory cx_protobuf_plugin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../generated/index.html#files">Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/file_include_cx_protobuf_plugin_communicator.hpp.html">File communicator.hpp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../generated/file_include_cx_protobuf_plugin_protobuf_plugin.hpp.html">File protobuf_plugin.hpp</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../standards.html">Standard Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PACKAGE.html">PACKAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../README.html">README</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../README.html#cx-protobuf-plugin">cx_protobuf_plugin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#clips-features">CLIPS Features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../README.html#object-lifetimes-and-clips">Object Lifetimes and CLIPS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">cx_protobuf_plugin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>cx_protobuf_plugin</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/standard_docs/original/README.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="cx-protobuf-plugin">
+<h1>cx_protobuf_plugin<a class="headerlink" href="#cx-protobuf-plugin" title="Permalink to this headline"></a></h1>
+<p>This package offers the `cx::ProtobufPlugin’ plugin that allows to communicate via protobuf through <a class="reference external" href="https://github.com/fawkesrobotics/protobuf_comm">protobuf_comm</a>.</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
+<p>Register this plugin with the plugin manager.
+It’s configuration parameters are depicted in this example setup below.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">clips_manager</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ros__parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">environments</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;main&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">plugins</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;protobuf&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="nt">protobuf</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cx::ProtobufPlugin&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># When specifying relative paths, look at the share directories of the listed packages to resolve them.</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Attempts to resolve the relative paths in order of the listed packages</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Defaults to an empty list</span><span class="w"></span>
+<span class="w">      </span><span class="nt">pkg_share_dirs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;cx_bringup&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Specify directories to look for protobuf messages.</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Supports absolute paths or relative paths using the share directories specified above.</span><span class="w"></span>
+<span class="w">      </span><span class="c1"># Defaults to an empty list</span><span class="w"></span>
+<span class="w">      </span><span class="nt">proto_paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;proto&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+</pre></div>
+</div>
+<p>This automatically makes all proto files in the given paths available for serialization and deserialization and is the recommended use for this plugin.</p>
+<p>It is also possible to instead register types explicitly by looking them up from a linked library.
+However, this requires to build a shared library from proto files and then link it together with the <strong>cx_protobuf_plugin</strong>.</p>
+<p>In order to accomplish this, this plugin offers two cmake macros:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Generates a new plugin called NEW_PLUGIN_NAME (should be a name in CamelCase, e.g., CustomProtobufPlugin) given a list of protobuf message definitions PROTO_FILES.</span>
+<span class="nb">cx_generate_linked_protobuf_plugin_from_proto</span><span class="p">(</span><span class="s">NEW_PLUGIN_NAME</span><span class="w"> </span><span class="s">PROTO_FILES</span><span class="p">)</span>
+<span class="c"># Generates a new plugin called NEW_PLUGIN_NAME (should be a name in CamelCase, e.g., CustomProtobufPlugin) given a shared library that is linked against via target_link_libraries().</span>
+<span class="nb">cx_generate_linked_protobuf_plugin_from_lib</span><span class="p">(</span><span class="s">NEW_PLUGIN_NAME</span><span class="w"> </span><span class="s">SHARED_LIBRARY_TARGET</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="clips-features">
+<h2>CLIPS Features<a class="headerlink" href="#clips-features" title="Permalink to this headline"></a></h2>
+<p>This plugin defines deftemplates, rules and user-defined functions that are described below.</p>
+<p>It allows two differnet way of communication. Either via broadcast peers or via client server connection.</p>
+<section id="deftemplates">
+<h3>Deftemplates<a class="headerlink" href="#deftemplates" title="Permalink to this headline"></a></h3>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="c1">; Asserted by the create-subscription function.</span>
+<span class="c1">; Retracted by the destroy-subscription function.</span>
+<span class="p">(</span><span class="nv">deftemplate</span> <span class="nv">protobuf-msg</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="k">type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span>            <span class="c1">; (package + &quot;.&quot; +) message-name</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">comp-id</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">msg-type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">rcvd-via</span> <span class="p">(</span><span class="k">type</span> <span class="nv">SYMBOL</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">allowed-values</span> <span class="nv">STREAM</span> <span class="nv">BROADCAST</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="p">(</span><span class="nv">multislot</span> <span class="nv">rcvd-from</span>                 <span class="c1">; address and port</span>
+    <span class="p">(</span><span class="nv">cardinality</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">rcvd-at</span> <span class="p">(</span><span class="k">type</span> <span class="nv">FLOAT</span><span class="p">))</span>          <span class="c1">; ros timestamp in seconds</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">client-type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">SYMBOL</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">allowed-values</span> <span class="nv">SERVER</span> <span class="nv">CLIENT</span> <span class="nv">PEER</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">client-id</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">ptr</span> <span class="p">(</span><span class="k">type</span> <span class="nv">EXTERNAL-ADDRESS</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">deftemplate</span> <span class="nv">protobuf-receive-failed</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">comp-id</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">msg-type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">rcvd-via</span> <span class="p">(</span><span class="k">type</span> <span class="nv">SYMBOL</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">allowed-values</span> <span class="nv">STREAM</span> <span class="nv">BROADCAST</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="p">(</span><span class="nv">multislot</span> <span class="nv">rcvd-from</span> <span class="p">(</span><span class="nv">cardinality</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">client-id</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">message</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">deftemplate</span> <span class="nv">protobuf-server-receive-failed</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">comp-id</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">msg-type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">rcvd-via</span> <span class="p">(</span><span class="k">type</span> <span class="nv">SYMBOL</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">allowed-values</span> <span class="nv">STREAM</span> <span class="nv">BROADCAST</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="p">(</span><span class="nv">multislot</span> <span class="nv">rcvd-from</span> <span class="p">(</span><span class="nv">cardinality</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">client-id</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">message</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="defrules">
+<h3>Defrules<a class="headerlink" href="#defrules" title="Permalink to this headline"></a></h3>
+<p>It defines defrules and a defglobal to clean up the fact once the end of the agenda is reached:</p>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">defglobal</span>
+  <span class="nv">?*PRIORITY-PROTOBUF-RETRACT*</span>    <span class="nb">=</span> <span class="mi">-10000</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrule</span> <span class="nv">protobuf-cleanup-receive-failed</span>
+  <span class="p">(</span><span class="k">declare</span> <span class="p">(</span><span class="nv">salience</span> <span class="nv">?*PRIORITY-PROTOBUF-RETRACT*</span><span class="p">))</span>
+  <span class="nv">?f</span> <span class="nv">&lt;-</span> <span class="p">(</span><span class="nv">protobuf-receive-failed</span> <span class="p">(</span><span class="nv">comp-id</span> <span class="nv">?cid</span><span class="p">)</span> <span class="p">(</span><span class="nv">msg-type</span> <span class="nv">?mt</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">rcvd-from</span> <span class="nv">?host</span> <span class="nv">?port</span><span class="p">)</span> <span class="p">(</span><span class="nv">message</span> <span class="nv">?msg</span><span class="p">))</span>
+  <span class="nv">=&gt;</span>
+  <span class="p">(</span><span class="nv">retract</span> <span class="nv">?f</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">printout</span> <span class="no">t</span> <span class="s">&quot;Protobuf rcv fail for &quot;</span> <span class="nv">?cid</span> <span class="s">&quot;:&quot;</span> <span class="nv">?mt</span> <span class="s">&quot; from &quot;</span> <span class="nv">?host</span> <span class="s">&quot;:&quot;</span> <span class="nv">?port</span> <span class="s">&quot;: &quot;</span> <span class="nv">?msg</span> <span class="nv">crlf</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrule</span> <span class="nv">protobuf-cleanup-server-receive-failed</span>
+  <span class="p">(</span><span class="k">declare</span> <span class="p">(</span><span class="nv">salience</span> <span class="nv">?*PRIORITY-PROTOBUF-RETRACT*</span><span class="p">))</span>
+  <span class="nv">?f</span> <span class="nv">&lt;-</span> <span class="p">(</span><span class="nv">protobuf-server-receive-failed</span> <span class="p">(</span><span class="nv">comp-id</span> <span class="nv">?cid</span><span class="p">)</span> <span class="p">(</span><span class="nv">msg-type</span> <span class="nv">?mt</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">rcvd-from</span> <span class="nv">?host</span> <span class="nv">?port</span><span class="p">)</span> <span class="p">(</span><span class="nv">message</span> <span class="nv">?msg</span><span class="p">))</span>
+  <span class="nv">=&gt;</span>
+  <span class="p">(</span><span class="nv">retract</span> <span class="nv">?f</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">printout</span> <span class="no">t</span> <span class="s">&quot;Protobuf server rcv fail for &quot;</span> <span class="nv">?cid</span> <span class="s">&quot;:&quot;</span> <span class="nv">?mt</span> <span class="s">&quot; from &quot;</span> <span class="nv">?host</span> <span class="s">&quot;:&quot;</span> <span class="nv">?port</span> <span class="s">&quot;: &quot;</span> <span class="nv">?msg</span> <span class="nv">crlf</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrule</span> <span class="nv">protobuf-cleanup-message</span>
+  <span class="p">(</span><span class="k">declare</span> <span class="p">(</span><span class="nv">salience</span> <span class="nv">?*PRIORITY-PROTOBUF-RETRACT*</span><span class="p">))</span>
+  <span class="nv">?pf</span> <span class="nv">&lt;-</span> <span class="p">(</span><span class="nv">protobuf-msg</span> <span class="p">(</span><span class="nv">ptr</span> <span class="nv">?p</span><span class="p">))</span>
+  <span class="nv">=&gt;</span>
+  <span class="p">(</span><span class="nv">pb-destroy</span> <span class="nv">?p</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">retract</span> <span class="nv">?pf</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="c1">; functions for processing messages:</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-field-names</span> <span class="nv">?msg</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-field-type</span> <span class="nv">?msg</span> <span class="nv">?field-name</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-has-field</span> <span class="nv">?msg</span> <span class="nv">?field-name</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-field-label</span> <span class="nv">?msg</span> <span class="nv">?field-name</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-field-value</span> <span class="nv">?msg</span> <span class="nv">?field-name</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-field-list</span> <span class="nv">?msg</span> <span class="nv">?field-name</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-field-is-list</span> <span class="nv">?msg</span> <span class="nv">?field-name</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-create</span> <span class="nv">?full-name</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">pb-set-field</span> <span class="nv">?msg</span> <span class="nv">?field-name</span> <span class="nv">?value</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">pb-add-list</span> <span class="nv">?msg</span> <span class="nv">?field-name</span> <span class="nv">?list</span><span class="p">)</span>
+<span class="c1">;</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-tostring</span> <span class="nv">?msg</span><span class="p">))</span>
+
+<span class="c1">; functions for using a stream server or clients</span>
+<span class="p">(</span><span class="nv">pb-server-enable</span> <span class="nv">?port</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">pb-server-disable</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">pb-send</span> <span class="nv">?client-id</span> <span class="nv">?msg</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-connect</span> <span class="nv">?host</span> <span class="nv">?port</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">pb-disconnect</span> <span class="nv">?host</span> <span class="nv">?port</span><span class="p">)</span>
+
+<span class="c1">; functions for using broadcast peers</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-peer-create</span> <span class="nv">?address</span> <span class="nv">?port</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-peer-create-local</span> <span class="nv">?address</span> <span class="nv">?send-port</span> <span class="nv">?recv-port</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-peer-create-crypto</span> <span class="nv">?address</span> <span class="nv">?port</span> <span class="nv">?crypto</span> <span class="nv">?cypher</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-peer-create-local-crypto</span> <span class="nv">?address</span> <span class="nv">?send-port</span> <span class="nv">?recv-port</span> <span class="nv">?crypto</span> <span class="nv">?cypher</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">pb-peer-destroy</span> <span class="nv">?peer-id</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">pb-peer-setup-crypto</span> <span class="nv">?peer-id</span> <span class="nv">?key</span> <span class="nv">?cypher</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">pb-broadcast</span> <span class="nv">?peer-id</span> <span class="nv">?msg</span><span class="p">)</span>
+
+<span class="c1">; In order to use types from a linked library, they need to be registered via this function first.</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?res</span> <span class="p">(</span><span class="nv">pb-register-type</span> <span class="nv">?full-name</span><span class="p">))</span>    <span class="c1">; returns TRUE if successful, FALSE otherwise</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="object-lifetimes-and-clips">
+<h2>Object Lifetimes and CLIPS<a class="headerlink" href="#object-lifetimes-and-clips" title="Permalink to this headline"></a></h2>
+<p>Since clips stores objects via void pointers, dynamic object lifetime management via <code class="docutils literal notranslate"><span class="pre">std::shared_ptr</span></code> does not work direcly from within CLIPS.
+Instead, object lifetimes need to be managed more explicitly through the usage of <code class="docutils literal notranslate"><span class="pre">create</span></code> and <code class="docutils literal notranslate"><span class="pre">destroy</span></code> functions.</p>
+<p>It is advised to clean up all objects as soon as they are not needed anymore in order to free up memory.</p>
+<p>Note that when processing nested messages, the message obtained via <strong>pb-field-value</strong> is allocating new memory, hence the returned external address also needs to be cleaned up afterwards.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright The &lt;cx_protobuf_plugin&gt; Contributors. License: GPLv2+ license.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

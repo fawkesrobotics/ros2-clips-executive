@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="namespacecx" kind="namespace" language="C++">
+    <compoundname>cx</compoundname>
+    <innerclass refid="classcx_1_1CLIPSEnvManager" prot="public">cx::CLIPSEnvManager</innerclass>
+    <innerclass refid="classcx_1_1ClipsPluginManager" prot="public">cx::ClipsPluginManager</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="clips__plugin__manager_8hpp_1a6e41636630926d99d74705252267fdc7" prot="public" static="no">
+        <type>std::unordered_map&lt; std::string, cx::LockSharedPtr&lt; clips::Environment &gt; &gt;</type>
+        <definition>using cx::EnvsMap = typedef std::unordered_map&lt;std::string, cx::LockSharedPtr&lt;clips::Environment&gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>EnvsMap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_clips_env_manager/clips_plugin_manager.hpp" line="39" column="1" bodyfile="include/cx_clips_env_manager/clips_plugin_manager.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/cx_clips_env_manager/clips_env_manager.hpp" line="40" column="1"/>
+  </compounddef>
+</doxygen>

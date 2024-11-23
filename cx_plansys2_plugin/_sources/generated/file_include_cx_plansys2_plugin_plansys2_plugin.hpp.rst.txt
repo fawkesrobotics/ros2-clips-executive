@@ -1,0 +1,61 @@
+
+.. _file_include_cx_plansys2_plugin_plansys2_plugin.hpp:
+
+File plansys2_plugin.hpp
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir_include_cx_plansys2_plugin>` (``include/cx_plansys2_plugin``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/cx_plansys2_plugin/plansys2_plugin.hpp``)
+---------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_cx_plansys2_plugin_plansys2_plugin.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cx_plugin/clips_plugin.hpp``
+
+- ``cx_utils/lock_shared_ptr.hpp``
+
+- ``plansys2_domain_expert/DomainExpertClient.hpp``
+
+- ``plansys2_planner/PlannerClient.hpp``
+
+- ``plansys2_problem_expert/ProblemExpertClient.hpp``
+
+- ``string``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_cx`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classcx_1_1Plansys2Plugin`
+

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+  <compound refid="classcx_1_1ExecutivePlugin" kind="class"><name>cx::ExecutivePlugin</name>
+    <member refid="classcx_1_1ExecutivePlugin_1a732f16062fd7a2b2c235dc6bd1393131" kind="variable"><name>refresh_rate_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a1988b7afe7afdadd19c2b6cf816003ad" kind="variable"><name>assert_time_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1ab71bf309cf37db4dede7409cd951dbd0" kind="variable"><name>publish_on_refresh_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a18257588998f3734d386edf8b3b786b4" kind="variable"><name>plugin_path_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a0690d9a7dbb520fe4cf35e4786c9c6c9" kind="variable"><name>agenda_refresh_timer_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a93c9e12fdfe8ff047d16430cedbce58a" kind="variable"><name>clips_agenda_refresh_pub_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a90bcf01585ac247ea2dad0528f21bdf1" kind="variable"><name>publish_rate_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a8f8400444d958aee6b58f82069f3875c" kind="variable"><name>logger_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a7af5f484cf51c499d7c44f680e66f122" kind="variable"><name>managed_envs</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a469ff11c8f0923b65d8aee55c2394542" kind="variable"><name>envs_mutex_</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1acb40de58ad887327a054a1818c46d0f9" kind="function"><name>ExecutivePlugin</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1ae35c4e0ed6a6a27b3b38df4ec23abc3d" kind="function"><name>~ExecutivePlugin</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a05c41e5b7f22ea76d35870c7904cbe45" kind="function"><name>initialize</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1acb14d613c62ba47ab41edbc2749a2d6a" kind="function"><name>finalize</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a937771362f6c1d684f58da0c19835514" kind="function"><name>clips_env_init</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1a63944b60c5fb30dac6b675344a2f1c41" kind="function"><name>clips_env_destroyed</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1ae2cd5af8a1f1cc43b1d11ce881252dbf" kind="function"><name>get_node</name></member>
+  </compound>
+  <compound refid="namespacecx" kind="namespace"><name>cx</name>
+  </compound>
+  <compound refid="executive__plugin_8hpp" kind="file"><name>executive_plugin.hpp</name>
+  </compound>
+  <compound refid="dir_e65249f1953d1ea2ba730aa71c7d4cc4" kind="dir"><name>include/cx_executive_plugin</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+</doxygenindex>

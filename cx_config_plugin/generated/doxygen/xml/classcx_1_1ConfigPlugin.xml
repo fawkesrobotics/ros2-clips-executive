@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classcx_1_1ConfigPlugin" kind="class" language="C++" prot="public">
+    <compoundname>cx::ConfigPlugin</compoundname>
+    <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcx_1_1ConfigPlugin_1adb4861c891599680bcefab6a4c2f42eb" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; rclcpp::Logger &gt;</type>
+        <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::ConfigPlugin::logger_</definition>
+        <argsstring></argsstring>
+        <name>logger_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="86" column="19" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1a9f6d97b75a0fd36e195d83daebee8d16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::ConfigPlugin::ConfigPlugin</definition>
+        <argsstring>()</argsstring>
+        <name>ConfigPlugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="65" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1ab0534ed851f16ee6eb92f6a0676881b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::ConfigPlugin::~ConfigPlugin</definition>
+        <argsstring>()</argsstring>
+        <name>~ConfigPlugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="66" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1a3a94284e0f08bd7a6b2612438d7c55e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void cx::ConfigPlugin::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="68" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1a2b9ba4726e7bc02ba5e899499da752a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::ConfigPlugin::clips_env_init</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
+        <name>clips_env_init</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="70" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1a6ca27a0f54626711042088c74c899b72" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::ConfigPlugin::clips_env_destroyed</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
+        <name>clips_env_destroyed</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="71" column="8"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1abc4c39d5def91dc249564e515533ef0f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::ConfigPlugin::clips_config_load</definition>
+        <argsstring>(clips::Environment *env, const std::string &amp;file, const std::string &amp;cfg_prefix)</argsstring>
+        <name>clips_config_load</name>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>cfg_prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="74" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1a90ecabcfa93cf85465b70c5bf7c92a2d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string cx::ConfigPlugin::getScalarType</definition>
+        <argsstring>(const YAML::Node &amp;input_node)</argsstring>
+        <name>getScalarType</name>
+        <param>
+          <type>const YAML::Node &amp;</type>
+          <declname>input_node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="77" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1a8652f7c03aca9b9c68a17a992a5a4edd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::ConfigPlugin::iterateThroughYamlRecuresively</definition>
+        <argsstring>(const YAML::Node &amp;current_level_node, std::string cfg_prefix, clips::Environment *env)</argsstring>
+        <name>iterateThroughYamlRecuresively</name>
+        <param>
+          <type>const YAML::Node &amp;</type>
+          <declname>current_level_node</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>cfg_prefix</declname>
+        </param>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="79" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ConfigPlugin_1a74135f6a1a9f1f793196cc529c993f3d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::ConfigPlugin::sequenceIterator</definition>
+        <argsstring>(const YAML::Node &amp;input_node, std::string &amp;cfg_prefix, clips::Environment *env)</argsstring>
+        <name>sequenceIterator</name>
+        <param>
+          <type>const YAML::Node &amp;</type>
+          <declname>input_node</declname>
+        </param>
+        <param>
+          <type>std::string &amp;</type>
+          <declname>cfg_prefix</declname>
+        </param>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="83" column="8"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+      <node id="1">
+        <label>cx::ConfigPlugin</label>
+        <link refid="classcx_1_1ConfigPlugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+      <node id="1">
+        <label>cx::ConfigPlugin</label>
+        <link refid="classcx_1_1ConfigPlugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/cx_config_plugin/config_plugin.hpp" line="63" column="1" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="63" bodyend="87"/>
+    <listofallmembers>
+      <member refid="classcx_1_1ConfigPlugin_1abc4c39d5def91dc249564e515533ef0f" prot="private" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>clips_config_load</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1a6ca27a0f54626711042088c74c899b72" prot="public" virt="virtual"><scope>cx::ConfigPlugin</scope><name>clips_env_destroyed</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1a2b9ba4726e7bc02ba5e899499da752a0" prot="public" virt="virtual"><scope>cx::ConfigPlugin</scope><name>clips_env_init</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1a9f6d97b75a0fd36e195d83daebee8d16" prot="public" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>ConfigPlugin</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60" prot="public" virt="virtual"><scope>cx::ConfigPlugin</scope><name>finalize</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1a90ecabcfa93cf85465b70c5bf7c92a2d" prot="private" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>getScalarType</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1a3a94284e0f08bd7a6b2612438d7c55e6" prot="public" virt="virtual"><scope>cx::ConfigPlugin</scope><name>initialize</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1a8652f7c03aca9b9c68a17a992a5a4edd" prot="private" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>iterateThroughYamlRecuresively</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1adb4861c891599680bcefab6a4c2f42eb" prot="private" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>logger_</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a5c9c64f5ab925a688f022554d3985342" prot="protected" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>parent_</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1aace7c9a1941b76a19a23e6881ec26906" prot="protected" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>plugin_name_</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1a74135f6a1a9f1f793196cc529c993f3d" prot="private" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>sequenceIterator</name></member>
+      <member refid="classcx_1_1ConfigPlugin_1ab0534ed851f16ee6eb92f6a0676881b3" prot="public" virt="non-virtual"><scope>cx::ConfigPlugin</scope><name>~ConfigPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

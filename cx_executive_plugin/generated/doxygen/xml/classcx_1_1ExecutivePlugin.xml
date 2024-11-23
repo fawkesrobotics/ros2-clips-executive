@@ -1,0 +1,294 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classcx_1_1ExecutivePlugin" kind="class" language="C++" prot="public">
+    <compoundname>cx::ExecutivePlugin</compoundname>
+    <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a732f16062fd7a2b2c235dc6bd1393131" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int cx::ExecutivePlugin::refresh_rate_</definition>
+        <argsstring></argsstring>
+        <name>refresh_rate_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="41" column="7" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a1988b7afe7afdadd19c2b6cf816003ad" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cx::ExecutivePlugin::assert_time_</definition>
+        <argsstring></argsstring>
+        <name>assert_time_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="42" column="8" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1ab71bf309cf37db4dede7409cd951dbd0" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool cx::ExecutivePlugin::publish_on_refresh_</definition>
+        <argsstring></argsstring>
+        <name>publish_on_refresh_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="43" column="8" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a18257588998f3734d386edf8b3b786b4" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string cx::ExecutivePlugin::plugin_path_</definition>
+        <argsstring></argsstring>
+        <name>plugin_path_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="45" column="15" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a0690d9a7dbb520fe4cf35e4786c9c6c9" prot="private" static="no" mutable="no">
+        <type>rclcpp::TimerBase::SharedPtr</type>
+        <definition>rclcpp::TimerBase::SharedPtr cx::ExecutivePlugin::agenda_refresh_timer_</definition>
+        <argsstring></argsstring>
+        <name>agenda_refresh_timer_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="47" column="32" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a93c9e12fdfe8ff047d16430cedbce58a" prot="private" static="no" mutable="no">
+        <type>rclcpp_lifecycle::LifecyclePublisher&lt; std_msgs::msg::Empty &gt;::SharedPtr</type>
+        <definition>rclcpp_lifecycle::LifecyclePublisher&lt;std_msgs::msg::Empty&gt;::SharedPtr cx::ExecutivePlugin::clips_agenda_refresh_pub_</definition>
+        <argsstring></argsstring>
+        <name>clips_agenda_refresh_pub_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="50" column="7" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a90bcf01585ac247ea2dad0528f21bdf1" prot="private" static="no" mutable="no">
+        <type>std::chrono::nanoseconds</type>
+        <definition>std::chrono::nanoseconds cx::ExecutivePlugin::publish_rate_</definition>
+        <argsstring></argsstring>
+        <name>publish_rate_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="52" column="28" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a8f8400444d958aee6b58f82069f3875c" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; rclcpp::Logger &gt;</type>
+        <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::ExecutivePlugin::logger_</definition>
+        <argsstring></argsstring>
+        <name>logger_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="54" column="19" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a7af5f484cf51c499d7c44f680e66f122" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; LockSharedPtr&lt; clips::Environment &gt; &gt;</type>
+        <definition>std::vector&lt;LockSharedPtr&lt;clips::Environment&gt; &gt; cx::ExecutivePlugin::managed_envs</definition>
+        <argsstring></argsstring>
+        <name>managed_envs</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="56" column="15" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a469ff11c8f0923b65d8aee55c2394542" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex cx::ExecutivePlugin::envs_mutex_</definition>
+        <argsstring></argsstring>
+        <name>envs_mutex_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="57" column="14" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1acb40de58ad887327a054a1818c46d0f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::ExecutivePlugin::ExecutivePlugin</definition>
+        <argsstring>()</argsstring>
+        <name>ExecutivePlugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="29" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1ae35c4e0ed6a6a27b3b38df4ec23abc3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::ExecutivePlugin::~ExecutivePlugin</definition>
+        <argsstring>()</argsstring>
+        <name>~ExecutivePlugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="30" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1a05c41e5b7f22ea76d35870c7904cbe45" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void cx::ExecutivePlugin::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="32" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1acb14d613c62ba47ab41edbc2749a2d6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void cx::ExecutivePlugin::finalize</definition>
+        <argsstring>() override</argsstring>
+        <name>finalize</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60">finalize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="33" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1a937771362f6c1d684f58da0c19835514" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::ExecutivePlugin::clips_env_init</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;clips) override</argsstring>
+        <name>clips_env_init</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>clips</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="35" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1a63944b60c5fb30dac6b675344a2f1c41" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::ExecutivePlugin::clips_env_destroyed</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;clips) override</argsstring>
+        <name>clips_env_destroyed</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>clips</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="36" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1ae2cd5af8a1f1cc43b1d11ce881252dbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt;</type>
+        <definition>std::shared_ptr&lt;rclcpp_lifecycle::LifecycleNode&gt; cx::ExecutivePlugin::get_node</definition>
+        <argsstring>()</argsstring>
+        <name>get_node</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_executive_plugin/executive_plugin.hpp" line="38" column="19"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+      <node id="1">
+        <label>cx::ExecutivePlugin</label>
+        <link refid="classcx_1_1ExecutivePlugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+      <node id="1">
+        <label>cx::ExecutivePlugin</label>
+        <link refid="classcx_1_1ExecutivePlugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/cx_executive_plugin/executive_plugin.hpp" line="27" column="1" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="27" bodyend="58"/>
+    <listofallmembers>
+      <member refid="classcx_1_1ExecutivePlugin_1a0690d9a7dbb520fe4cf35e4786c9c6c9" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>agenda_refresh_timer_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a1988b7afe7afdadd19c2b6cf816003ad" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>assert_time_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a93c9e12fdfe8ff047d16430cedbce58a" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>clips_agenda_refresh_pub_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a63944b60c5fb30dac6b675344a2f1c41" prot="public" virt="virtual"><scope>cx::ExecutivePlugin</scope><name>clips_env_destroyed</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a937771362f6c1d684f58da0c19835514" prot="public" virt="virtual"><scope>cx::ExecutivePlugin</scope><name>clips_env_init</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a469ff11c8f0923b65d8aee55c2394542" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>envs_mutex_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1acb40de58ad887327a054a1818c46d0f9" prot="public" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>ExecutivePlugin</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1acb14d613c62ba47ab41edbc2749a2d6a" prot="public" virt="virtual"><scope>cx::ExecutivePlugin</scope><name>finalize</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1ae2cd5af8a1f1cc43b1d11ce881252dbf" prot="public" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>get_node</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a05c41e5b7f22ea76d35870c7904cbe45" prot="public" virt="virtual"><scope>cx::ExecutivePlugin</scope><name>initialize</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a8f8400444d958aee6b58f82069f3875c" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>logger_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a7af5f484cf51c499d7c44f680e66f122" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>managed_envs</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a5c9c64f5ab925a688f022554d3985342" prot="protected" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>parent_</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1aace7c9a1941b76a19a23e6881ec26906" prot="protected" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>plugin_name_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a18257588998f3734d386edf8b3b786b4" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>plugin_path_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1ab71bf309cf37db4dede7409cd951dbd0" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>publish_on_refresh_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a90bcf01585ac247ea2dad0528f21bdf1" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>publish_rate_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1a732f16062fd7a2b2c235dc6bd1393131" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>refresh_rate_</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1ae35c4e0ed6a6a27b3b38df4ec23abc3d" prot="public" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>~ExecutivePlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

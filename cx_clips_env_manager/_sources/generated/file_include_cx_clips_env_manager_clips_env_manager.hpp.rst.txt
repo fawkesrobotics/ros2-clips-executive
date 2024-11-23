@@ -1,0 +1,81 @@
+
+.. _file_include_cx_clips_env_manager_clips_env_manager.hpp:
+
+File clips_env_manager.hpp
+==========================
+
+|exhale_lsh| :ref:`Parent directory <dir_include_cx_clips_env_manager>` (``include/cx_clips_env_manager``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/cx_clips_env_manager/clips_env_manager.hpp``)
+-------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_cx_clips_env_manager_clips_env_manager.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm``
+
+- ``cx_clips_env_manager/clips_plugin_manager.hpp`` (:ref:`file_include_cx_clips_env_manager_clips_plugin_manager.hpp`)
+
+- ``cx_msgs/srv/create_clips_env.hpp``
+
+- ``cx_msgs/srv/destroy_clips_env.hpp``
+
+- ``cx_utils/lock_shared_ptr.hpp``
+
+- ``lifecycle_msgs/msg/state.hpp``
+
+- ``lifecycle_msgs/msg/transition.hpp``
+
+- ``list``
+
+- ``map``
+
+- ``memory``
+
+- ``rclcpp/clock.hpp``
+
+- ``rclcpp/rclcpp.hpp``
+
+- ``rclcpp_lifecycle/lifecycle_node.hpp``
+
+- ``set``
+
+- ``spdlog/spdlog.h``
+
+- ``string``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_cx`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classcx_1_1CLIPSEnvManager`
+

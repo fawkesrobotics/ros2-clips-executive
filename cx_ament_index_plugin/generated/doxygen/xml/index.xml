@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+  <compound refid="classcx_1_1AmentIndexPlugin" kind="class"><name>cx::AmentIndexPlugin</name>
+    <member refid="classcx_1_1AmentIndexPlugin_1afe1779a55eb2833f4b40180a04913c8f" kind="variable"><name>logger_</name></member>
+    <member refid="classcx_1_1AmentIndexPlugin_1ab8f575c1e2b532accb489966eaba0743" kind="variable"><name>function_names_</name></member>
+    <member refid="classcx_1_1AmentIndexPlugin_1ab793db99488017449bec149dc35045fd" kind="function"><name>AmentIndexPlugin</name></member>
+    <member refid="classcx_1_1AmentIndexPlugin_1a7c3ffc00bbed58f238090a5f3ee79122" kind="function"><name>~AmentIndexPlugin</name></member>
+    <member refid="classcx_1_1AmentIndexPlugin_1a0cd21481cc7a72d8638f834d3eb333f8" kind="function"><name>initialize</name></member>
+    <member refid="classcx_1_1AmentIndexPlugin_1ad58f4fad55929e2ef9869b20558d1c5f" kind="function"><name>clips_env_init</name></member>
+    <member refid="classcx_1_1AmentIndexPlugin_1a2440c884e373529f8f699eaabd42dd56" kind="function"><name>clips_env_destroyed</name></member>
+  </compound>
+  <compound refid="namespacecx" kind="namespace"><name>cx</name>
+  </compound>
+  <compound refid="ament__index__plugin_8hpp" kind="file"><name>ament_index_plugin.hpp</name>
+  </compound>
+  <compound refid="dir_fc41150fdb90b08cbd11000eb4abdc15" kind="dir"><name>include/cx_ament_index_plugin</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+</doxygenindex>

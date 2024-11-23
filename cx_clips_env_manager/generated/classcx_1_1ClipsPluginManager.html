@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class ClipsPluginManager &mdash; cx_clips_env_manager 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Typedef cx::EnvsMap" href="typedef_clips__plugin__manager_8hpp_1a6e41636630926d99d74705252267fdc7.html" />
+    <link rel="prev" title="Class CLIPSEnvManager" href="classcx_1_1CLIPSEnvManager.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> cx_clips_env_manager
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">C++ API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html#full-c-api">Full C++ API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="index.html#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="namespace_cx.html">Namespace cx</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_rclcpp_lifecycle.html">Namespace rclcpp_lifecycle</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html#classes-and-structs">Classes and Structs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="classcx_1_1CLIPSEnvManager.html">Class CLIPSEnvManager</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Class ClipsPluginManager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="typedef_clips__plugin__manager_8hpp_1a6e41636630926d99d74705252267fdc7.html">Typedef cx::EnvsMap</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#directories">Directories</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="dir_include.html">Directory include</a></li>
+<li class="toctree-l4"><a class="reference internal" href="dir_include_cx_clips_env_manager.html">Directory cx_clips_env_manager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#files">Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="file_include_cx_clips_env_manager_clips_env_manager.hpp.html">File clips_env_manager.hpp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="file_include_cx_clips_env_manager_clips_plugin_manager.hpp.html">File clips_plugin_manager.hpp</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../standards.html">Standard Documents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../standard_docs/PACKAGE.html">PACKAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../standard_docs/README.html">README</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../standard_docs/README.html#cx-clips-env-manager">cx_clips_env_manager</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../standard_docs/README.html#responsibilities">Responsibilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../standard_docs/README.html#usage">Usage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../standard_docs/README.html#plugins">Plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../standard_docs/README.html#logging-and-routing">Logging and Routing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cx_clips_env_manager</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">C++ API</a> &raquo;</li>
+      <li>Class ClipsPluginManager</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/classcx_1_1ClipsPluginManager.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="class-clipspluginmanager">
+<span id="exhale-class-classcx-1-1clipspluginmanager"></span><h1>Class ClipsPluginManager<a class="headerlink" href="#class-clipspluginmanager" title="Permalink to this headline"></a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_include_cx_clips_env_manager_clips_plugin_manager.hpp.html#file-include-cx-clips-env-manager-clips-plugin-manager-hpp"><span class="std std-ref">File clips_plugin_manager.hpp</span></a></p></li>
+</ul>
+<section id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline"></a></h2>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManagerE">
+<span id="_CPPv3N2cx18ClipsPluginManagerE"></span><span id="_CPPv2N2cx18ClipsPluginManagerE"></span><span id="cx::ClipsPluginManager"></span><span class="target" id="classcx_1_1ClipsPluginManager"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">cx</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">ClipsPluginManager</span></span></span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManagerE" title="Permalink to this definition"></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager10PluginsMapE">
+<span id="_CPPv3N2cx18ClipsPluginManager10PluginsMapE"></span><span id="_CPPv2N2cx18ClipsPluginManager10PluginsMapE"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a3f562bacd27d955e14671d1ad181dc97"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PluginsMap</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">cx</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ClipsPlugin</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Ptr</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager10PluginsMapE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager18ClipsPluginManagerEv">
+<span id="_CPPv3N2cx18ClipsPluginManager18ClipsPluginManagerEv"></span><span id="_CPPv2N2cx18ClipsPluginManager18ClipsPluginManagerEv"></span><span id="cx::ClipsPluginManager::ClipsPluginManager"></span><span class="target" id="classcx_1_1ClipsPluginManager_1aedddb2fe6e43190a90fdf023b7406e47"></span><span class="sig-name descname"><span class="n"><span class="pre">ClipsPluginManager</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager18ClipsPluginManagerEv" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManagerD0Ev">
+<span id="_CPPv3N2cx18ClipsPluginManagerD0Ev"></span><span id="_CPPv2N2cx18ClipsPluginManagerD0Ev"></span><span id="cx::ClipsPluginManager::~ClipsPluginManager"></span><span class="target" id="classcx_1_1ClipsPluginManager_1aff64874f50a08b8ddbf1f25d3f377c73"></span><span class="sig-name descname"><span class="n"><span class="pre">~ClipsPluginManager</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManagerD0Ev" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager9configureERKN16rclcpp_lifecycle13LifecycleNode7WeakPtrERKNSt6stringER13LockSharedPtrI7EnvsMapE">
+<span id="_CPPv3N2cx18ClipsPluginManager9configureERKN16rclcpp_lifecycle13LifecycleNode7WeakPtrERKNSt6stringER13LockSharedPtrI7EnvsMapE"></span><span id="_CPPv2N2cx18ClipsPluginManager9configureERKN16rclcpp_lifecycle13LifecycleNode7WeakPtrERKNSt6stringER13LockSharedPtrI7EnvsMapE"></span><span id="cx::ClipsPluginManager::configure__rclcpp_lifecycle::LifecycleNode::WeakPtrCR.ssCR.LockSharedPtr:EnvsMap:R"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a425b712eb2e583867a74809da1006396"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">configure</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">rclcpp_lifecycle</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">LifecycleNode</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">WeakPtr</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parent</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">LockSharedPtr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef_clips__plugin__manager_8hpp_1a6e41636630926d99d74705252267fdc7.html#_CPPv4N2cx7EnvsMapE" title="cx::EnvsMap"><span class="n"><span class="pre">EnvsMap</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">envs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager9configureERKN16rclcpp_lifecycle13LifecycleNode7WeakPtrERKNSt6stringER13LockSharedPtrI7EnvsMapE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager7cleanupEv">
+<span id="_CPPv3N2cx18ClipsPluginManager7cleanupEv"></span><span id="_CPPv2N2cx18ClipsPluginManager7cleanupEv"></span><span id="cx::ClipsPluginManager::cleanup"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a406358de5ccc5b4aab6a1b78b7b51b60"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cleanup</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager7cleanupEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Cleanup resources. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager8activateEv">
+<span id="_CPPv3N2cx18ClipsPluginManager8activateEv"></span><span id="_CPPv2N2cx18ClipsPluginManager8activateEv"></span><span id="cx::ClipsPluginManager::activate"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a8fa97cdff583af75930a085c2c57f9da"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">activate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager8activateEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Activate plugin manager. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager12activate_envERKNSt6stringER13LockSharedPtrIN5clips11EnvironmentEE">
+<span id="_CPPv3N2cx18ClipsPluginManager12activate_envERKNSt6stringER13LockSharedPtrIN5clips11EnvironmentEE"></span><span id="_CPPv2N2cx18ClipsPluginManager12activate_envERKNSt6stringER13LockSharedPtrIN5clips11EnvironmentEE"></span><span id="cx::ClipsPluginManager::activate_env__ssCR.LockSharedPtr:clips::Environment:R"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a85d1a2236ef1b10f2984d3ef9330b7a7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">activate_env</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">env_name</span></span>, <span class="n"><span class="pre">LockSharedPtr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">clips</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Environment</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">env</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager12activate_envERKNSt6stringER13LockSharedPtrIN5clips11EnvironmentEE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager10deactivateEv">
+<span id="_CPPv3N2cx18ClipsPluginManager10deactivateEv"></span><span id="_CPPv2N2cx18ClipsPluginManager10deactivateEv"></span><span id="cx::ClipsPluginManager::deactivate"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a561ff83f760a6e9a7852625a0a114a9a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deactivate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager10deactivateEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Deactivate plugin manager. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager14deactivate_envERKNSt6stringER13LockSharedPtrIN5clips11EnvironmentEE">
+<span id="_CPPv3N2cx18ClipsPluginManager14deactivate_envERKNSt6stringER13LockSharedPtrIN5clips11EnvironmentEE"></span><span id="_CPPv2N2cx18ClipsPluginManager14deactivate_envERKNSt6stringER13LockSharedPtrIN5clips11EnvironmentEE"></span><span id="cx::ClipsPluginManager::deactivate_env__ssCR.LockSharedPtr:clips::Environment:R"></span><span class="target" id="classcx_1_1ClipsPluginManager_1ae71e812a14ac68b4688bf72a981901c7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deactivate_env</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">env_name</span></span>, <span class="n"><span class="pre">LockSharedPtr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">clips</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Environment</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">env</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager14deactivate_envERKNSt6stringER13LockSharedPtrIN5clips11EnvironmentEE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager5resetEv">
+<span id="_CPPv3N2cx18ClipsPluginManager5resetEv"></span><span id="_CPPv2N2cx18ClipsPluginManager5resetEv"></span><span id="cx::ClipsPluginManager::reset"></span><span class="target" id="classcx_1_1ClipsPluginManager_1aea194d3c4da6b3d3a2e6df14e4f97a72"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reset</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager5resetEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reset plugin manager. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager19plugin_init_contextERKNSt6stringERKNSt6stringE">
+<span id="_CPPv3N2cx18ClipsPluginManager19plugin_init_contextERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N2cx18ClipsPluginManager19plugin_init_contextERKNSt6stringERKNSt6stringE"></span><span id="cx::ClipsPluginManager::plugin_init_context__ssCR.ssCR"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a06d8c9482d8de825670fe5e5c6469a27"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">plugin_init_context</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">env_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">plugin_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager19plugin_init_contextERKNSt6stringERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager20clips_request_pluginEPN5clips11EnvironmentEPN5clips8UDFValueERKNSt6stringE">
+<span id="_CPPv3N2cx18ClipsPluginManager20clips_request_pluginEPN5clips11EnvironmentEPN5clips8UDFValueERKNSt6stringE"></span><span id="_CPPv2N2cx18ClipsPluginManager20clips_request_pluginEPN5clips11EnvironmentEPN5clips8UDFValueERKNSt6stringE"></span><span id="cx::ClipsPluginManager::clips_request_plugin__clips::EnvironmentP.clips::UDFValueP.ssCR"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a224eb043e4fda0964dfc9df0791a2960"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clips_request_plugin</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">clips</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Environment</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">env</span></span>, <span class="n"><span class="pre">clips</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">UDFValue</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">out</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">plugin_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager20clips_request_pluginEPN5clips11EnvironmentEPN5clips8UDFValueERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager14load_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv15LoadCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv15LoadCLIPSPlugin8ResponseEEE">
+<span id="_CPPv3N2cx18ClipsPluginManager14load_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv15LoadCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv15LoadCLIPSPlugin8ResponseEEE"></span><span id="_CPPv2N2cx18ClipsPluginManager14load_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv15LoadCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv15LoadCLIPSPlugin8ResponseEEE"></span><span id="cx::ClipsPluginManager::load_plugin_cb__std::shared_ptr:rmw_request_id_t:C.std::shared_ptr:cx_msgs::srv::LoadCLIPSPlugin::Request:C.std::shared_ptr:cx_msgs::srv::LoadCLIPSPlugin::Response:C"></span><span class="target" id="classcx_1_1ClipsPluginManager_1aed7d44e8e940d024e3ee4a63d3ede989"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">load_plugin_cb</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">rmw_request_id_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">request_header</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">cx_msgs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">srv</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">LoadCLIPSPlugin</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Request</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">request</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">cx_msgs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">srv</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">LoadCLIPSPlugin</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Response</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager14load_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv15LoadCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv15LoadCLIPSPlugin8ResponseEEE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager16unload_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv17UnloadCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv17UnloadCLIPSPlugin8ResponseEEE">
+<span id="_CPPv3N2cx18ClipsPluginManager16unload_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv17UnloadCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv17UnloadCLIPSPlugin8ResponseEEE"></span><span id="_CPPv2N2cx18ClipsPluginManager16unload_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv17UnloadCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv17UnloadCLIPSPlugin8ResponseEEE"></span><span id="cx::ClipsPluginManager::unload_plugin_cb__std::shared_ptr:rmw_request_id_t:C.std::shared_ptr:cx_msgs::srv::UnloadCLIPSPlugin::Request:C.std::shared_ptr:cx_msgs::srv::UnloadCLIPSPlugin::Response:C"></span><span class="target" id="classcx_1_1ClipsPluginManager_1a7c67f486484d5d68f6191f4504ed5a4f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unload_plugin_cb</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">rmw_request_id_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">request_header</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">cx_msgs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">srv</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">UnloadCLIPSPlugin</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Request</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">request</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">cx_msgs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">srv</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">UnloadCLIPSPlugin</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Response</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager16unload_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv17UnloadCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv17UnloadCLIPSPlugin8ResponseEEE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N2cx18ClipsPluginManager14list_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv15ListCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv15ListCLIPSPlugin8ResponseEEE">
+<span id="_CPPv3N2cx18ClipsPluginManager14list_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv15ListCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv15ListCLIPSPlugin8ResponseEEE"></span><span id="_CPPv2N2cx18ClipsPluginManager14list_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv15ListCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv15ListCLIPSPlugin8ResponseEEE"></span><span id="cx::ClipsPluginManager::list_plugin_cb__std::shared_ptr:rmw_request_id_t:C.std::shared_ptr:cx_msgs::srv::ListCLIPSPlugin::Request:C.std::shared_ptr:cx_msgs::srv::ListCLIPSPlugin::Response:C"></span><span class="target" id="classcx_1_1ClipsPluginManager_1afd4aac5a762c10e6feb30e0dd67bdac1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">list_plugin_cb</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">rmw_request_id_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">request_header</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">cx_msgs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">srv</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ListCLIPSPlugin</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Request</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">request</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">cx_msgs</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">srv</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ListCLIPSPlugin</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Response</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">response</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N2cx18ClipsPluginManager14list_plugin_cbEKNSt10shared_ptrI16rmw_request_id_tEEKNSt10shared_ptrIN7cx_msgs3srv15ListCLIPSPlugin7RequestEEEKNSt10shared_ptrIN7cx_msgs3srv15ListCLIPSPlugin8ResponseEEE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="classcx_1_1CLIPSEnvManager.html" class="btn btn-neutral float-left" title="Class CLIPSEnvManager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="typedef_clips__plugin__manager_8hpp_1a6e41636630926d99d74705252267fdc7.html" class="btn btn-neutral float-right" title="Typedef cx::EnvsMap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright The &lt;cx_clips_env_manager&gt; Contributors. License: Apache License 2.0.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

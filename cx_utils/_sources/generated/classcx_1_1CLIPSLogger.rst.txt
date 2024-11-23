@@ -1,0 +1,17 @@
+.. _exhale_class_classcx_1_1CLIPSLogger:
+
+Class CLIPSLogger
+=================
+
+- Defined in :ref:`file_include_cx_utils_clips_env_context.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::CLIPSLogger
+   :project: cx_utils Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

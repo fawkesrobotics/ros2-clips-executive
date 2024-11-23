@@ -1,0 +1,17 @@
+.. _exhale_class_classcx_1_1ClipsPlugin:
+
+Class ClipsPlugin
+=================
+
+- Defined in :ref:`file_include_cx_plugin_clips_plugin.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::ClipsPlugin
+   :project: cx_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,311 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classcx_1_1Plansys2Plugin" kind="class" language="C++" prot="public">
+    <compoundname>cx::Plansys2Plugin</compoundname>
+    <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcx_1_1Plansys2Plugin_1a223d7adf49b04bcf58e15390f1749fba" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; std::string, std::unique_ptr&lt; plansys2::DomainExpertClient &gt; &gt;</type>
+        <definition>std::unordered_map&lt;std::string, std::unique_ptr&lt;plansys2::DomainExpertClient&gt; &gt; cx::Plansys2Plugin::domain_client_</definition>
+        <argsstring></argsstring>
+        <name>domain_client_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="40" column="7" bodyfile="include/cx_plansys2_plugin/plansys2_plugin.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1Plansys2Plugin_1ac967cdd5b8bf78ded1faa308b7d5a3f6" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; std::string, std::unique_ptr&lt; plansys2::ProblemExpertClient &gt; &gt;</type>
+        <definition>std::unordered_map&lt;std::string, std::unique_ptr&lt;plansys2::ProblemExpertClient&gt; &gt; cx::Plansys2Plugin::problem_client_</definition>
+        <argsstring></argsstring>
+        <name>problem_client_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="43" column="7" bodyfile="include/cx_plansys2_plugin/plansys2_plugin.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1Plansys2Plugin_1a6e8b540eed80aa1599ec6927c2062e08" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; std::string, std::unique_ptr&lt; plansys2::PlannerClient &gt; &gt;</type>
+        <definition>std::unordered_map&lt;std::string, std::unique_ptr&lt;plansys2::PlannerClient&gt; &gt; cx::Plansys2Plugin::planner_client_</definition>
+        <argsstring></argsstring>
+        <name>planner_client_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="45" column="7" bodyfile="include/cx_plansys2_plugin/plansys2_plugin.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1Plansys2Plugin_1a59c87f296b993c280f07f22f74c124f8" prot="private" static="no" mutable="no">
+        <type>unsigned int</type>
+        <definition>unsigned int cx::Plansys2Plugin::plan_id_</definition>
+        <argsstring></argsstring>
+        <name>plan_id_</name>
+        <initializer>{0}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="47" column="16" bodyfile="include/cx_plansys2_plugin/plansys2_plugin.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1aa0bef2ba64a3bb7831659e5cfbc25715" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::Plansys2Plugin::Plansys2Plugin</definition>
+        <argsstring>()</argsstring>
+        <name>Plansys2Plugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="31" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1a4e3c87b643bf84b72d1ff74afcce8209" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::Plansys2Plugin::~Plansys2Plugin</definition>
+        <argsstring>()</argsstring>
+        <name>~Plansys2Plugin</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="32" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1ab3b13cc2068651d311e9d5182cd9da06" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::Plansys2Plugin::clips_env_init</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
+        <name>clips_env_init</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="34" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1a461a39ff4df219d139039e0a7cf8ca79" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::Plansys2Plugin::clips_env_destroyed</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
+        <name>clips_env_destroyed</name>
+        <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="35" column="8"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1ab5a5b2d9ca5b6afd805bda15ec3fc09b" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>unsigned int</type>
+        <definition>unsigned int cx::Plansys2Plugin::next_plan_id</definition>
+        <argsstring>()</argsstring>
+        <name>next_plan_id</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="50" column="23" bodyfile="include/cx_plansys2_plugin/plansys2_plugin.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1a94b25d1f5d373409c6361301df1bf1d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::Plansys2Plugin::add_problem_instance</definition>
+        <argsstring>(clips::Environment *env, const std::string &amp;name, const std::string &amp;type)</argsstring>
+        <name>add_problem_instance</name>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="52" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1a53b02d1bd2b83f46e706d9782b7bdf37" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::Plansys2Plugin::add_problem_predicate</definition>
+        <argsstring>(clips::Environment *env, const std::string &amp;pred)</argsstring>
+        <name>add_problem_predicate</name>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>pred</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="54" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1ac0f29b653db75168b42cb2264e8fbf51" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::Plansys2Plugin::clear_problem_expert_knowledge</definition>
+        <argsstring>(clips::Environment *env)</argsstring>
+        <name>clear_problem_expert_knowledge</name>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="55" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1ae5337ae9ce74f7581818a6824ed248d8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::Plansys2Plugin::plan_with_plansys2</definition>
+        <argsstring>(clips::Environment *env, const std::string &amp;goal_id, const std::string &amp;goal, const std::string &amp;plan_id)</argsstring>
+        <name>plan_with_plansys2</name>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>goal_id</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>goal</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>plan_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="57" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Plansys2Plugin_1a99c1d9d91e8e10ace37d618c91f146fd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::Plansys2Plugin::call_planner</definition>
+        <argsstring>(clips::Environment *env, const std::string &amp;goal_id, const std::string &amp;goal, const std::string &amp;plan_id)</argsstring>
+        <name>call_planner</name>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>goal_id</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>goal</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>plan_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="60" column="8"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>cx::Plansys2Plugin</label>
+        <link refid="classcx_1_1Plansys2Plugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>cx::Plansys2Plugin</label>
+        <link refid="classcx_1_1Plansys2Plugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+    </collaborationgraph>
+    <location file="include/cx_plansys2_plugin/plansys2_plugin.hpp" line="29" column="1" bodyfile="include/cx_plansys2_plugin/plansys2_plugin.hpp" bodystart="29" bodyend="62"/>
+    <listofallmembers>
+      <member refid="classcx_1_1Plansys2Plugin_1a94b25d1f5d373409c6361301df1bf1d1" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>add_problem_instance</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1a53b02d1bd2b83f46e706d9782b7bdf37" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>add_problem_predicate</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1a99c1d9d91e8e10ace37d618c91f146fd" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>call_planner</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1ac0f29b653db75168b42cb2264e8fbf51" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>clear_problem_expert_knowledge</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1a461a39ff4df219d139039e0a7cf8ca79" prot="public" virt="virtual"><scope>cx::Plansys2Plugin</scope><name>clips_env_destroyed</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1ab3b13cc2068651d311e9d5182cd9da06" prot="public" virt="virtual"><scope>cx::Plansys2Plugin</scope><name>clips_env_init</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1a223d7adf49b04bcf58e15390f1749fba" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>domain_client_</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60" prot="public" virt="virtual"><scope>cx::Plansys2Plugin</scope><name>finalize</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f" prot="public" virt="virtual"><scope>cx::Plansys2Plugin</scope><name>initialize</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1ab5a5b2d9ca5b6afd805bda15ec3fc09b" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>next_plan_id</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a5c9c64f5ab925a688f022554d3985342" prot="protected" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>parent_</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1a59c87f296b993c280f07f22f74c124f8" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>plan_id_</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1ae5337ae9ce74f7581818a6824ed248d8" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>plan_with_plansys2</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1a6e8b540eed80aa1599ec6927c2062e08" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>planner_client_</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1aa0bef2ba64a3bb7831659e5cfbc25715" prot="public" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>Plansys2Plugin</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1aace7c9a1941b76a19a23e6881ec26906" prot="protected" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>plugin_name_</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1ac967cdd5b8bf78ded1faa308b7d5a3f6" prot="private" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>problem_client_</name></member>
+      <member refid="classcx_1_1Plansys2Plugin_1a4e3c87b643bf84b72d1ff74afcce8209" prot="public" virt="non-virtual"><scope>cx::Plansys2Plugin</scope><name>~Plansys2Plugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

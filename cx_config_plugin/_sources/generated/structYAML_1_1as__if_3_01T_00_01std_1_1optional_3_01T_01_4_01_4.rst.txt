@@ -1,0 +1,17 @@
+.. _exhale_struct_structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4:
+
+Template Struct as_if< T, std::optional< T > >
+==============================================
+
+- Defined in :ref:`file_include_cx_config_plugin_config_plugin.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: YAML::as_if< T, std::optional< T > >
+   :project: cx_config_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

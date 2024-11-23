@@ -1,0 +1,59 @@
+
+.. _file_include_cx_utils_clips_env_context.hpp:
+
+File clips_env_context.hpp
+==========================
+
+|exhale_lsh| :ref:`Parent directory <dir_include_cx_utils>` (``include/cx_utils``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/cx_utils/clips_env_context.hpp``)
+-------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_cx_utils_clips_env_context.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``clips_ns/clips.h``
+
+- ``cx_utils/lock_shared_ptr.hpp`` (:ref:`file_include_cx_utils_lock_shared_ptr.hpp`)
+
+- ``rclcpp/rclcpp.hpp``
+
+- ``spdlog/spdlog.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_cx`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classcx_1_1CLIPSEnvContext`
+
+- :ref:`exhale_class_classcx_1_1CLIPSLogger`
+

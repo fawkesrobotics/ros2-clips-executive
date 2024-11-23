@@ -1,0 +1,26 @@
+.. _exhale_class_classcx_1_1ExamplePlugin:
+
+Class ExamplePlugin
+===================
+
+- Defined in :ref:`file_include_cx_example_plugin_example_plugin.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public cx::ClipsPlugin``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::ExamplePlugin
+   :project: cx_example_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

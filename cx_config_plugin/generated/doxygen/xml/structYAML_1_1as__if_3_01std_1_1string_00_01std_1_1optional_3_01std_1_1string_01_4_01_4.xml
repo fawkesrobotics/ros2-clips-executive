@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4" kind="struct" language="C++" prot="public">
+    <compoundname>YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;</compoundname>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1afcf20a28cbccab035bccae831205627d" prot="public" static="no" mutable="no">
+        <type>const Node &amp;</type>
+        <definition>const Node&amp; YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="48" column="14" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1a1d0298b9d118ee3106b3c2b6d6567d30" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;::as_if</definition>
+        <argsstring>(const Node &amp;input_node)</argsstring>
+        <name>as_if</name>
+        <param>
+          <type>const Node &amp;</type>
+          <declname>input_node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="47" column="12" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1aa088b4f0b2c645aa3954108188dedf3c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>const std::optional&lt; std::string &gt;</type>
+        <definition>const std::optional&lt;std::string&gt; YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;::operator()</definition>
+        <argsstring>() const</argsstring>
+        <name>operator()</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_config_plugin/config_plugin.hpp" line="50" column="23" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="50" bodyend="57"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/cx_config_plugin/config_plugin.hpp" line="46" column="11" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="46" bodyend="58"/>
+    <listofallmembers>
+      <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1a1d0298b9d118ee3106b3c2b6d6567d30" prot="public" virt="non-virtual"><scope>YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;</scope><name>as_if</name></member>
+      <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1afcf20a28cbccab035bccae831205627d" prot="public" virt="non-virtual"><scope>YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;</scope><name>node</name></member>
+      <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1aa088b4f0b2c645aa3954108188dedf3c" prot="public" virt="non-virtual"><scope>YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

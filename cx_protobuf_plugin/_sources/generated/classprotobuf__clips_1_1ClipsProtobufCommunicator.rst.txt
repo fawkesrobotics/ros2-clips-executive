@@ -1,0 +1,17 @@
+.. _exhale_class_classprotobuf__clips_1_1ClipsProtobufCommunicator:
+
+Class ClipsProtobufCommunicator
+===============================
+
+- Defined in :ref:`file_include_cx_protobuf_plugin_communicator.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: protobuf_clips::ClipsProtobufCommunicator
+   :project: cx_protobuf_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

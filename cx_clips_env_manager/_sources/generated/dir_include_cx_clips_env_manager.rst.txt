@@ -1,0 +1,21 @@
+.. _dir_include_cx_clips_env_manager:
+
+
+Directory cx_clips_env_manager
+==============================
+
+
+|exhale_lsh| :ref:`Parent directory <dir_include>` (``include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``include/cx_clips_env_manager``
+
+
+Files
+-----
+
+- :ref:`file_include_cx_clips_env_manager_clips_env_manager.hpp`
+- :ref:`file_include_cx_clips_env_manager_clips_plugin_manager.hpp`
+
+

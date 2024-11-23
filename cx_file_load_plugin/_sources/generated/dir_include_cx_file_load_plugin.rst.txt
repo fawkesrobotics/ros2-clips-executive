@@ -1,0 +1,20 @@
+.. _dir_include_cx_file_load_plugin:
+
+
+Directory cx_file_load_plugin
+=============================
+
+
+|exhale_lsh| :ref:`Parent directory <dir_include>` (``include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``include/cx_file_load_plugin``
+
+
+Files
+-----
+
+- :ref:`file_include_cx_file_load_plugin_file_load_plugin.hpp`
+
+

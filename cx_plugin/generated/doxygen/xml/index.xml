@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+  <compound refid="classcx_1_1ClipsPlugin" kind="class"><name>cx::ClipsPlugin</name>
+    <member refid="classcx_1_1ClipsPlugin_1a5053a0c74ce074ddc7123554f9e45752" kind="typedef"><name>Ptr</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1a68cdb6f3c003491e6b12d502e4aca142" kind="friend"><name>ClipsPluginManager</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1aace7c9a1941b76a19a23e6881ec26906" kind="variable"><name>plugin_name_</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1a5c9c64f5ab925a688f022554d3985342" kind="variable"><name>parent_</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1ad659901e789d9344a41a0d64bb7e2c53" kind="function"><name>ClipsPlugin</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1a5307ca4a8e112257ee6c1902822d7ce1" kind="function"><name>~ClipsPlugin</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f" kind="function"><name>initialize</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60" kind="function"><name>finalize</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03" kind="function"><name>clips_env_init</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0" kind="function"><name>clips_env_destroyed</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1acb1a9459c0b47aeac9ed24861732baad" kind="function"><name>get_plugin_name</name></member>
+    <member refid="classcx_1_1ClipsPlugin_1a61690874f940acc67d0d7d04e0a4c077" kind="function"><name>initialize</name></member>
+  </compound>
+  <compound refid="namespacecx" kind="namespace"><name>cx</name>
+  </compound>
+  <compound refid="clips__plugin_8hpp" kind="file"><name>clips_plugin.hpp</name>
+  </compound>
+  <compound refid="dir_ab0053d13a9578e56083a2ce071faa83" kind="dir"><name>include/cx_plugin</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+</doxygenindex>

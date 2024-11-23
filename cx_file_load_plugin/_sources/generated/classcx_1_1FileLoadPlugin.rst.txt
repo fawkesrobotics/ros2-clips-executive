@@ -1,0 +1,26 @@
+.. _exhale_class_classcx_1_1FileLoadPlugin:
+
+Class FileLoadPlugin
+====================
+
+- Defined in :ref:`file_include_cx_file_load_plugin_file_load_plugin.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public cx::ClipsPlugin``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::FileLoadPlugin
+   :project: cx_file_load_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

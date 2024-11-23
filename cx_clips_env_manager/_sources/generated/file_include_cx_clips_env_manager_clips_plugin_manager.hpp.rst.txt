@@ -1,0 +1,90 @@
+
+.. _file_include_cx_clips_env_manager_clips_plugin_manager.hpp:
+
+File clips_plugin_manager.hpp
+=============================
+
+|exhale_lsh| :ref:`Parent directory <dir_include_cx_clips_env_manager>` (``include/cx_clips_env_manager``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/cx_clips_env_manager/clips_plugin_manager.hpp``)
+----------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_cx_clips_env_manager_clips_plugin_manager.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cx_msgs/srv/list_clips_plugin.hpp``
+
+- ``cx_msgs/srv/load_clips_plugin.hpp``
+
+- ``cx_msgs/srv/unload_clips_plugin.hpp``
+
+- ``cx_plugin/clips_plugin.hpp``
+
+- ``lifecycle_msgs/msg/state.hpp``
+
+- ``lifecycle_msgs/msg/transition.hpp``
+
+- ``map``
+
+- ``memory``
+
+- ``pluginlib/class_list_macros.hpp``
+
+- ``pluginlib/class_loader.hpp``
+
+- ``rclcpp/rclcpp.hpp``
+
+- ``rclcpp_lifecycle/lifecycle_node.hpp``
+
+- ``string``
+
+- ``unordered_map``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_include_cx_clips_env_manager_clips_env_manager.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_cx`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classcx_1_1ClipsPluginManager`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_clips__plugin__manager_8hpp_1a6e41636630926d99d74705252267fdc7`
+

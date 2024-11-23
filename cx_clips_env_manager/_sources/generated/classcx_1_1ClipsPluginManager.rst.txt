@@ -1,0 +1,17 @@
+.. _exhale_class_classcx_1_1ClipsPluginManager:
+
+Class ClipsPluginManager
+========================
+
+- Defined in :ref:`file_include_cx_clips_env_manager_clips_plugin_manager.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::ClipsPluginManager
+   :project: cx_clips_env_manager Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

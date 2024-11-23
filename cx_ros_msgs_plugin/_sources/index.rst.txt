@@ -1,0 +1,23 @@
+.. GENERATED_CONTENT by rosdoc2.verbs.build.builders.sphinx_builder.
+
+cx_ros_msgs_plugin
+==================
+
+CLIPS plugin for using generic ROS topics via introspection API.
+
+.. toctree::
+   :maxdepth: 2
+
+
+   C++ API <generated/index>
+
+
+
+   Standard Documents <standards>
+
+.. include:: __readme_include.rst
+
+.. toctree::
+   :hidden:
+
+   genindex

@@ -1,0 +1,69 @@
+
+.. _file_include_cx_config_plugin_config_plugin.hpp:
+
+File config_plugin.hpp
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir_include_cx_config_plugin>` (``include/cx_config_plugin``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/cx_config_plugin/config_plugin.hpp``)
+-----------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_cx_config_plugin_config_plugin.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cx_plugin/clips_plugin.hpp``
+
+- ``cx_utils/lock_shared_ptr.hpp``
+
+- ``map``
+
+- ``memory``
+
+- ``rcl_yaml_param_parser/parser.h``
+
+- ``string``
+
+- ``yaml-cpp/yaml.h``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_cx`
+
+- :ref:`namespace_YAML`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4`
+
+- :ref:`exhale_struct_structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4`
+
+- :ref:`exhale_class_classcx_1_1ConfigPlugin`
+

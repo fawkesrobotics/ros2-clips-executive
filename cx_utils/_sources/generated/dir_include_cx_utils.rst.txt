@@ -1,0 +1,23 @@
+.. _dir_include_cx_utils:
+
+
+Directory cx_utils
+==================
+
+
+|exhale_lsh| :ref:`Parent directory <dir_include>` (``include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``include/cx_utils``
+
+
+Files
+-----
+
+- :ref:`file_include_cx_utils_clips_env_context.hpp`
+- :ref:`file_include_cx_utils_lock_shared_ptr.hpp`
+- :ref:`file_include_cx_utils_param_utils.hpp`
+- :ref:`file_include_cx_utils_string_utils.hpp`
+
+

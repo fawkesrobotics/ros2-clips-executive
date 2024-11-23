@@ -1,0 +1,26 @@
+.. _exhale_class_classcx_1_1AmentIndexPlugin:
+
+Class AmentIndexPlugin
+======================
+
+- Defined in :ref:`file_include_cx_ament_index_plugin_ament_index_plugin.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public cx::ClipsPlugin``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::AmentIndexPlugin
+   :project: cx_ament_index_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

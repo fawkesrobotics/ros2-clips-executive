@@ -1,0 +1,23 @@
+.. GENERATED_CONTENT by rosdoc2.verbs.build.builders.sphinx_builder.
+
+cx_ros_comm_gen
+===============
+
+Generate CLIPS bindings to use ROS messages, actions and services
+
+.. toctree::
+   :maxdepth: 2
+
+
+
+
+
+
+   Standard Documents <standards>
+
+.. include:: __readme_include.rst
+
+.. toctree::
+   :hidden:
+
+   genindex

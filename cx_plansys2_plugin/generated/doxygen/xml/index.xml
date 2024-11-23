@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+  <compound refid="classcx_1_1Plansys2Plugin" kind="class"><name>cx::Plansys2Plugin</name>
+    <member refid="classcx_1_1Plansys2Plugin_1a223d7adf49b04bcf58e15390f1749fba" kind="variable"><name>domain_client_</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1ac967cdd5b8bf78ded1faa308b7d5a3f6" kind="variable"><name>problem_client_</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1a6e8b540eed80aa1599ec6927c2062e08" kind="variable"><name>planner_client_</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1a59c87f296b993c280f07f22f74c124f8" kind="variable"><name>plan_id_</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1aa0bef2ba64a3bb7831659e5cfbc25715" kind="function"><name>Plansys2Plugin</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1a4e3c87b643bf84b72d1ff74afcce8209" kind="function"><name>~Plansys2Plugin</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1ab3b13cc2068651d311e9d5182cd9da06" kind="function"><name>clips_env_init</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1a461a39ff4df219d139039e0a7cf8ca79" kind="function"><name>clips_env_destroyed</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1ab5a5b2d9ca5b6afd805bda15ec3fc09b" kind="function"><name>next_plan_id</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1a94b25d1f5d373409c6361301df1bf1d1" kind="function"><name>add_problem_instance</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1a53b02d1bd2b83f46e706d9782b7bdf37" kind="function"><name>add_problem_predicate</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1ac0f29b653db75168b42cb2264e8fbf51" kind="function"><name>clear_problem_expert_knowledge</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1ae5337ae9ce74f7581818a6824ed248d8" kind="function"><name>plan_with_plansys2</name></member>
+    <member refid="classcx_1_1Plansys2Plugin_1a99c1d9d91e8e10ace37d618c91f146fd" kind="function"><name>call_planner</name></member>
+  </compound>
+  <compound refid="namespacecx" kind="namespace"><name>cx</name>
+  </compound>
+  <compound refid="plansys2__plugin_8hpp" kind="file"><name>plansys2_plugin.hpp</name>
+  </compound>
+  <compound refid="dir_77be66e90b42179a59e1aaa423f69f86" kind="dir"><name>include/cx_plansys2_plugin</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+</doxygenindex>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+  <compound refid="classcx_1_1FileLoadPlugin" kind="class"><name>cx::FileLoadPlugin</name>
+    <member refid="classcx_1_1FileLoadPlugin_1ad5bcef6f72774411c4a34d2ea091401c" kind="variable"><name>logger_</name></member>
+    <member refid="classcx_1_1FileLoadPlugin_1af3a384f66107110e2f6c55320fd32c39" kind="variable"><name>init_files_</name></member>
+    <member refid="classcx_1_1FileLoadPlugin_1a2f189c1892f904d231119accec26413a" kind="variable"><name>init_batch_files_</name></member>
+    <member refid="classcx_1_1FileLoadPlugin_1aed6bb59f1d92981052d51709fac1274c" kind="variable"><name>cleanup_files_</name></member>
+    <member refid="classcx_1_1FileLoadPlugin_1a1c2fcafd3c88629552c50f1d25dd90dd" kind="function"><name>FileLoadPlugin</name></member>
+    <member refid="classcx_1_1FileLoadPlugin_1a71369a6ef262d182bfa5d2cf15378878" kind="function"><name>~FileLoadPlugin</name></member>
+    <member refid="classcx_1_1FileLoadPlugin_1a48211a04b1e027c12da02383342adcc0" kind="function"><name>initialize</name></member>
+    <member refid="classcx_1_1FileLoadPlugin_1a5822e72d9a5620382dfbd298d76c69f0" kind="function"><name>clips_env_init</name></member>
+    <member refid="classcx_1_1FileLoadPlugin_1a03e336134f9287d38f39caa2cd547ff0" kind="function"><name>clips_env_destroyed</name></member>
+  </compound>
+  <compound refid="namespacecx" kind="namespace"><name>cx</name>
+  </compound>
+  <compound refid="file__load__plugin_8hpp" kind="file"><name>file_load_plugin.hpp</name>
+  </compound>
+  <compound refid="dir_b166368b57d13738ca0cf263393c28e6" kind="dir"><name>include/cx_file_load_plugin</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+</doxygenindex>
