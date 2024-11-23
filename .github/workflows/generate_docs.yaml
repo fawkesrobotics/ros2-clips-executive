@@ -19,7 +19,6 @@ jobs:
         uses: ros-tooling/setup-ros@v0.4
         with:
           distribution: jazzy
-          install-packages: python3-rosdoc2
 
       - name: Install rosdoc2
         run: sudo apt-get update && sudo apt-get install -y python3-rosdoc2
@@ -41,7 +40,7 @@ jobs:
           echo '<!DOCTYPE html>
           <html>
             <head>
-              <meta http-equiv="refresh" content="0; URL="./clips_executive/index.html" />
+              <meta http-equiv="refresh" content="0; URL='./clips_executive/index.html'" />
             </head>
             <body>
               <p>If you are not redirected, <a href="./clips_executive/index.html">click here</a>.</p>
