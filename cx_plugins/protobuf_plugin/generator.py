@@ -1,5 +1,17 @@
 #!/usr/bin/env python3
-# Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+# Copyright (c) 2024 Carologistics
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Library General Public License for more details.
+#
+# Read the full text in the LICENSE.GPL file in the main directory.
 import argparse
 import re
 from datetime import datetime
@@ -10,14 +22,14 @@ from jinja2 import FileSystemLoader
 
 
 def to_camel_case(s):
-    words = s.split("_")  # Split the string into words based on underscores
+    words = s.split("_")
     camel_case_words = [word.capitalize() for word in words]
     camel_case_string = "".join(camel_case_words)
     return camel_case_string
 
 
 def to_upper_case(s):
-    words = s.split("_")  # Split the string into words based on underscores
+    words = s.split("_")
     upper_case_words = [word.upper() for word in words]
     upper_case_words = "".join(upper_case_words)
     return upper_case_words
@@ -46,16 +58,13 @@ def main():
     # Parse the arguments
     args = parser.parse_args()
 
-    # Ensure the plugin_name is converted to camel case
     camel_case_plugin_name = args.plugin_name
 
-    # Simulate generating the bindings
     print(f"Generating bindings for plugin '{args.plugin_name}'")
     print(f"Generating bindings for plugin '{camel_case_plugin_name}'")
     package_dir = get_package_share_directory("cx_protobuf_plugin")
     time_string = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Generate the base file name
     file_name = to_snake_case(camel_case_plugin_name)
 
     # Create environment for Jinja templates
@@ -77,7 +86,7 @@ def main():
         exit(1)
 
     try:
-        with open(file_name + ".hpp", "w") as header_file:  # Corrected to .hpp
+        with open(file_name + ".hpp", "w") as header_file:
             tmpl = env.get_template("plugin.jinja.hpp")
             out = tmpl.render(
                 gen_date=time_string,
@@ -93,7 +102,7 @@ def main():
     # Generate plugin XML file
     try:
         with open(file_name + ".xml", "w") as plugin_file:
-            tmpl = env.get_template("plugin.jinja.xml")  # Ensure the correct template for XML
+            tmpl = env.get_template("plugin.jinja.xml")
             out = tmpl.render(
                 gen_date=time_string,
                 name_camel=camel_case_plugin_name,
