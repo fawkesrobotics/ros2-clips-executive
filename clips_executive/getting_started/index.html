@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; clips_executive 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fundamentals" href="../fundamentals/index.html" />
+    <link rel="prev" title="ROS 2 Clips-Executive" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> clips_executive
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">ROS 2 Clips-Executive</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#clips">CLIPS</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-index">Package Index</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#related-projects">Related Projects</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../fundamentals/index.html">Fundamentals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugins/index.html">CLIPS Plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugin_generator/index.html">ROS Interface Plugin Generator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#binary-installation">Binary Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-from-source">Installation from Source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-the-example">Running the Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../fundamentals/index.html">Fundamentals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">CLIPS Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_generator/index.html">ROS Interface Plugin Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">clips_executive</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/getting_started/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h1>
+<p>This document shows how to install the ROS2 CLIPS-Executive so you are set up to explore it’s <a class="reference internal" href="../user_docs/fundamentals/index.html#fundamentals"><span class="std std-ref">Fundamentals</span></a>.</p>
+<p>A general project description can be found on the <a class="reference internal" href="../user_docs/index.html#main"><span class="std std-ref">main landing page</span></a>.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h2>
+<p>This document assumes you have a basic ROS 2 installation. If not, refer to the official <a class="reference external" href="https://docs.ros.org/">ROS documentation</a>.</p>
+<section id="binary-installation">
+<h3>Binary Installation<a class="headerlink" href="#binary-installation" title="Permalink to this headline"></a></h3>
+<p>The easiest way to install the ROS2 CLIPS-Executive is via your package manager:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ROS2 CLIPS-Executive is currently in the process of being indexed, hence binary packages might not be available yet.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt intall ros-&lt;ros2-distro&gt;-clips-executive
+</pre></div>
+</div>
+</section>
+<section id="installation-from-source">
+<h3>Installation from Source<a class="headerlink" href="#installation-from-source" title="Permalink to this headline"></a></h3>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>dependency.repos should not be necessary</p>
+</div>
+<p>All dependencies are listed in the <a class="reference external" href="https://github.com/fawkesrobotics/ros2-clips-executive/blob/master/dependency.repos">dependency.repos</a> file of the ROS2 CLIPS-Executive project.
+This enables setting up a dependency workspace using <cite>vcstool</cite>.</p>
+<p>The following steps will set up two workspaces, one for dependencies of the ROS2 CLIPS-Executive and one for the main project. Adjust target locations as needed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir -p ~/ros2/<span class="o">{</span>clips_executive_ws,deps_clips_executive_ws<span class="o">}</span>/src
+git clone -b tviehmann/major-cleanup https://github.com/fawkesrobotics/ros2-clips-executive.git ~/ros2/clips_executive_ws/src/ros2-clips-executive
+<span class="nb">cd</span> ~/ros2/deps_clips_executive_ws/src
+vcs import &lt; ~/ros2/clips_executive_ws/src/ros2-clips-executive/dependency.repos
+<span class="nb">cd</span> ~/ros2/deps_clips_executive_ws/
+colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug -DBUILD_TESTING<span class="o">=</span>OFF
+</pre></div>
+</div>
+<p>Then source the workspace with dependencies and build the CLIPS-Executive:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> ~/ros2/deps_clips_executive_ws/install/setup.bash
+<span class="nb">cd</span> ~/ros2/clips_executive_ws/
+colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE<span class="o">=</span>Debug -DBUILD_TESTING<span class="o">=</span>OFF
+<span class="nb">source</span> ~/ros2/clips_executive_ws/install/setup.bash
+</pre></div>
+</div>
+</section>
+<section id="running-the-example">
+<h3>Running the Example<a class="headerlink" href="#running-the-example" title="Permalink to this headline"></a></h3>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>we should probably provide a more convincing example</p>
+</div>
+<p>The following example showcases simple interactions between CLIPS and ROS via a topic:</p>
+<ol class="arabic simple">
+<li><p>Run the <cite>ros_msgs</cite> demo:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2 launch cx_bringup cx_launch.py manager_config:<span class="o">=</span>plugin_examples/ros_msgs.yaml
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Publish a String on the <cite>/ros_cx_in</cite> topic:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2 topic pub /ros_cx_in std_msgs/msg/String <span class="s2">&quot;{data: &#39;Hello&#39;}&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Listen on the <cite>/ros_cx_out</cite> topic for responses:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2 topic <span class="nb">echo</span> /ros_cx_out
+</pre></div>
+</div>
+<p>You should receive a <cite>“Hello World!”</cite> message for each message received in the CLIPS environment.</p>
+<p>Check out the <span class="xref std std-ref">Tutorials</span> page to learn how to write your own CLIPS applications.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="ROS 2 Clips-Executive" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../fundamentals/index.html" class="btn btn-neutral float-right" title="Fundamentals" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tarik Viehmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

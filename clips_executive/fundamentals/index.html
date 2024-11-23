@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fundamentals &mdash; clips_executive 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Environment Manager Configuration" href="node_start.html" />
+    <link rel="prev" title="Getting Started" href="../getting_started/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> clips_executive
+          </a>
+              <div class="version">
+                0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">ROS 2 Clips-Executive</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#clips">CLIPS</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-index">Package Index</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#related-projects">Related Projects</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Fundamentals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugins/index.html">CLIPS Plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../plugin_generator/index.html">ROS Interface Plugin Generator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fundamentals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="node_start.html">Environment Manager Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logging and Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamic.html">Dynamic Setup via Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">CLIPS Plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plugin_generator/index.html">ROS Interface Plugin Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">clips_executive</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Fundamentals</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/fundamentals/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fundamentals">
+<span id="id1"></span><h1>Fundamentals<a class="headerlink" href="#fundamentals" title="Permalink to this headline"></a></h1>
+<p>The ROS2 CLIPS-Executive mainly provides a ROS <a class="reference external" href="https://design.ros2.org/articles/node_lifecycle.html">lifecycle</a> node (<a class="reference external" href="https://fawkesrobotics.github.io/ros2-clips-executive/cx_clips_env_manager">Package</a>, <a class="reference external" href="https://github.com/fawkesrobotics/ros2-clips-executive/blob/master/cx_clips_env_manager">Github</a>) that manages a CLIPS instance and has the following responsibilities:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>dynamically create and destroy CLIPS environments</p></li>
+<li><p>log the CLIPS output to ROS and to files.</p></li>
+<li><p>Extend CLIPS environments by plugins (using <a class="reference external" href="https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Pluginlib.html">pluginlib</a>) that allow to externally customize CLIPS environments further via the CLIPS C++ API  (e.g., to inject C++ functions to CLIPS environments)</p></li>
+</ul>
+</div></blockquote>
+<p>It provides a clear execution flow guided through the lifecycle:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>On being configured, it parses all parameters to determine the environmnents and plugins to load. It initializes the environments and plugins.</p></li>
+<li><p>On being activated, it first loads all requested plugins, before calling <strong>(reset)</strong>  in the environments, refreshing all agendas and calling <strong>(run)</strong> to start rule execution.</p></li>
+<li><p>On being deactivated, it first asserts a <code class="docutils literal notranslate"><span class="pre">(executive-finalize)</span></code> fact before refreshing all agendas and calling <strong>(run)</strong> one more time to allow cleanup routines to execute before shutdown.</p></li>
+</ul>
+</div></blockquote>
+<p>Similarly, each dynamically created environment goes through the same steps as on activation and each dynamically destroyed environment goes through the same steps as on deactivation.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="node_start.html">Environment Manager Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="node_start.html#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node_start.html#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logging.html">Logging and Routing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dynamic.html">Dynamic Setup via Services</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../getting_started/index.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="node_start.html" class="btn btn-neutral float-right" title="Environment Manager Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tarik Viehmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

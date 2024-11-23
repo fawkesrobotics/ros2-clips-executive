@@ -1,0 +1,9 @@
+tutorials/
+==========
+
+.. toctree::
+   :caption: Documentation in this subdirectory
+   :maxdepth: 2
+   :glob:
+
+   user_docs/tutorials/*

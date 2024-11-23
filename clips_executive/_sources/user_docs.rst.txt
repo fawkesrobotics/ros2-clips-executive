@@ -1,0 +1,13 @@
+Documentation
+=============
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   user_docs/*
+   plugin_generator/ <user_docs_plugin_generator>
+   tutorials/ <user_docs_tutorials>
+   getting_started/ <user_docs_getting_started>
+   fundamentals/ <user_docs_fundamentals>
+   plugins/ <user_docs_plugins>
