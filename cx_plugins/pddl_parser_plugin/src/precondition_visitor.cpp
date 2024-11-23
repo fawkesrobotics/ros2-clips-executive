@@ -1,24 +1,24 @@
-// Licensed under GPLv2. See LICENSE file. Copyright Carologistics.
+// Copyright (c) 2024 Carologistics
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Library General Public License for more details.
+//
+// Read the full text in the LICENSE.GPL file in the main directory.
 
 /***************************************************************************
  *  precondition_visitor.cpp - A static visitor to translate a precondition
  *
  *  Created: Mon 16 Oct 2017 18:34:44 CEST 18:34
  *  Copyright  2017  Till Hofmann <hofmann@kbsg.rwth-aachen.de>
+ *  Copyright  2024  Tarik Viehmann <viehmann@kbsg.rwth-aachen.de>
  ****************************************************************************/
-
-/*  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
- *
- *  Read the full text in the LICENSE.GPL file in the doc directory.
- */
 
 #include <cx_pddl_parser_plugin/precondition_visitor.h>
 

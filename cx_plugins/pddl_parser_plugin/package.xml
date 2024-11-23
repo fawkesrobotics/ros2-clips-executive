@@ -3,7 +3,7 @@
 <package format="3">
   <name>cx_pddl_parser_plugin</name>
   <version>0.1.0</version>
-  <description>Provide pddl parsing functions and deftemplates to Clips.</description>
+  <description>Provide pddl parsing functions and deftemplates to CLIPS.</description>
 
   <maintainer email="viehmann@kbsg.rwth-aachen.de">Tarik Viehmann</maintainer>
 
