@@ -1021,8 +1021,10 @@ ClipsProtobufCommunicator::clips_pb_field_value(void *msgptr,
     const google::protobuf::Message &mfield = refl->GetMessage(*msg, field);
     google::protobuf::Message *mcopy = mfield.New();
     mcopy->CopyFrom(mfield);
-    void *ptr = new std::shared_ptr<google::protobuf::Message>(mcopy);
-    res.externalAddressValue = clips::CreateCExternalAddress(clips_, ptr);
+
+    std::shared_ptr<google::protobuf::Message> m(mcopy);
+    messages_[m.get()] = m;
+    res.externalAddressValue = clips::CreateCExternalAddress(clips_, m.get());
     return res;
   }
   case FieldDescriptor::TYPE_UINT32:
