@@ -1104,12 +1104,13 @@ void ClipsProtobufCommunicator::clips_pb_set_field(void *msgptr,
       refl->SetString(msg.get(), field, value.lexemeValue->contents);
       break;
     case FieldDescriptor::TYPE_MESSAGE: {
-      std::shared_ptr<google::protobuf::Message> *mfrom =
-          static_cast<std::shared_ptr<google::protobuf::Message> *>(
-              value.externalAddressValue->contents);
+      auto sub_msg = messages_[value.externalAddressValue->contents];
+      if (!sub_msg) {
+        messages_.erase(msgptr);
+        return;
+      }
       Message *mut_msg = refl->MutableMessage(msg.get(), field);
-      mut_msg->CopyFrom(**mfrom);
-      delete mfrom;
+      mut_msg->CopyFrom(*(sub_msg.get()));
     } break;
     case FieldDescriptor::TYPE_BYTES:
       break;
