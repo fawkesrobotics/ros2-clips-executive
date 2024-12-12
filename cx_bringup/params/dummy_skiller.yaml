@@ -1,5 +1,0 @@
-robot1_skill_node:
-  ros__parameters:
-    exec_times:
-      gowait:
-        time: 7.0

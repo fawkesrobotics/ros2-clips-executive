@@ -17,9 +17,9 @@ find_package(plansys2_domain_expert REQUIRED)
 find_package(plansys2_problem_expert REQUIRED)
 find_package(plansys2_planner REQUIRED)
 find_package(plansys2_lifecycle_manager REQUIRED)
-find_package(cx_feature_manager REQUIRED)
-find_package(cx_clips REQUIRED)
-find_package(cx_clips_executive REQUIRED)
+find_package(cx_clips_env_manager REQUIRED)
+find_package(cx_ros_comm_gen REQUIRED)
+find_package(cx_protobuf_plugin REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 set(dependencies
@@ -29,9 +29,7 @@ set(dependencies
   plansys2_problem_expert
   plansys2_planner
   plansys2_lifecycle_manager
-  cx_feature_manager
-  cx_clips
-  cx_clips_executive
+  cx_clips_env_manager
   PkgConfig
 )
 set(dependencies_psys2
@@ -44,19 +42,28 @@ set(dependencies_psys2
   PkgConfig
 )
 
-add_executable(plansys_node
-  src/plansys2_node.cpp
-)
+# add_executable(plansys_node
+#   src/plansys2_node.cpp
+# )
 
 add_executable(cx_node
   src/cx_node.cpp
 )
-ament_target_dependencies(plansys_node ${dependencies_psys2})
-target_compile_definitions(plansys_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
 
 ament_target_dependencies(cx_node ${dependencies})
-target_compile_definitions(cx_node PUBLIC "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")
-target_link_libraries(cx_node ClipsNS::libclips_ns)
+target_link_libraries(cx_node ClipsNS::libclips_ns spdlog::spdlog)
+
+# generate bindings to interface with ROS messages, such as std_msgs::msg::String
+cx_generate_msg_bindings("std_msgs" "String")
+
+# generate bindings to interface with ROS services, such as std_srvs::srv::SetBool
+cx_generate_srv_bindings("std_srvs" "SetBool")
+
+# generate bindings to interface with ROS services, such as example_interfaces::action::Fibonacci
+cx_generate_action_bindings("example_interfaces" "Fibonacci")
+
+# generate protobuf plugin with linked proto files
+cx_generate_linked_protobuf_plugin_from_proto("BringupProtobufPlugin" proto/cx_bringup/SearchRequest.proto)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -65,8 +72,12 @@ endif()
 
 install(DIRECTORY launch params clips proto DESTINATION share/${PROJECT_NAME})
 
+install(PROGRAMS
+  scripts/test_service.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(TARGETS
-  plansys_node
   cx_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib

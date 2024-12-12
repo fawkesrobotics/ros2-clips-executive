@@ -1,7 +1,0 @@
-<class_libraries>
-  <library path="cx_skill_execution_feature">
-    <class type="cx::SkillExecutionFeature" base_class_type="cx::ClipsFeature">
-      <description>Clips Feature providing skill execution possibilities to the Clips Environment</description>
-    </class>
-  </library>
-</class_libraries>
