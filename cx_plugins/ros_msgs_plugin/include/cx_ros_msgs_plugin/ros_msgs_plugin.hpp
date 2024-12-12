@@ -21,6 +21,8 @@
 #include "cx_utils/lock_shared_ptr.hpp"
 #include <rosidl_typesupport_introspection_cpp/message_introspection.hpp>
 
+#include <rclcpp/generic_client.hpp>
+
 namespace cx {
 
 class RosMsgsPlugin : public ClipsPlugin {
@@ -36,6 +38,7 @@ public:
 
 private:
   struct MessageInfo {
+    std::shared_ptr<void> external_created_ptr;
     void *msg_ptr;
     const rosidl_typesupport_introspection_cpp::MessageMembers *members;
     bool is_sub_msg;
@@ -60,6 +63,13 @@ private:
                                                                // initialization
         }
       }
+    }
+    MessageInfo(
+        const rosidl_typesupport_introspection_cpp::MessageMembers *members,
+        std::shared_ptr<void> external_created_ptr)
+        : external_created_ptr(external_created_ptr),
+          msg_ptr(external_created_ptr.get()), members(members) {
+      is_sub_msg = true;
     }
 
     ~MessageInfo() {
@@ -94,6 +104,8 @@ private:
   clips::UDFValue create_message(clips::Environment *env,
                                  const std::string &type);
   void destroy_msg(void *msg);
+  clips::UDFValue create_request(clips::Environment *env,
+                                 const std::string &service_type);
 
   clips::UDFValue ros_msg_member_to_udf_value(
       clips::Environment *env, std::shared_ptr<MessageInfo> &msg_info,
@@ -143,6 +155,13 @@ private:
   void publish_to_topic(clips::Environment *env, void *deserialized_msg,
                         const std::string &topic_name);
 
+  void create_new_client(clips::Environment *env,
+                         const std::string &service_name,
+                         const std::string &service_type);
+  void destroy_client(clips::Environment *env, const std::string &service_name);
+  void send_request(clips::Environment *env, void *deserialized_msg,
+                    const std::string &service_name);
+
   std::string get_msg_type(
       const rosidl_typesupport_introspection_cpp::MessageMembers *members);
   const rosidl_typesupport_introspection_cpp::MessageMembers *
@@ -180,6 +199,7 @@ private:
       libs_;
 
   std::mutex map_mtx_;
+  bool stop_flag_;
   // MessageInfo* -> shared_ptr holding the MessageInfo*
   std::unordered_map<void *, std::shared_ptr<MessageInfo>> messages_;
   // parent msg MessageInfo* -> nested msg MessageInfo*
@@ -187,6 +207,16 @@ private:
   // message_type -> message_info
   std::unordered_map<std::string, const rosidl_message_type_support_t *>
       type_support_cache_;
+
+  // env -> (service_name -> client)
+  std::map<std::string,
+           std::map<std::string, std::shared_ptr<rclcpp::GenericClient>>>
+      clients_;
+  // env -> (service_name -> service_type)
+  std::map<std::string, std::unordered_map<std::string, std::string>>
+      client_types_;
+  std::unordered_map<std::string, const rosidl_service_type_support_t *>
+      service_type_support_cache_;
 };
 } // namespace cx
 
