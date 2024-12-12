@@ -159,8 +159,8 @@ private:
                          const std::string &service_name,
                          const std::string &service_type);
   void destroy_client(clips::Environment *env, const std::string &service_name);
-  void send_request(clips::Environment *env, void *deserialized_msg,
-                    const std::string &service_name);
+  clips::UDFValue send_request(clips::Environment *env, void *deserialized_msg,
+                               const std::string &service_name);
 
   std::string get_msg_type(
       const rosidl_typesupport_introspection_cpp::MessageMembers *members);

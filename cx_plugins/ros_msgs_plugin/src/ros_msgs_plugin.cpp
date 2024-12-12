@@ -287,17 +287,18 @@ bool RosMsgsPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
   fun_name = "ros-msgs-async-send-request";
   function_names_.insert(fun_name);
   clips::AddUDF(
-      env.get_obj().get(), fun_name.c_str(), "v", 2, 2, ";e;sy",
+      env.get_obj().get(), fun_name.c_str(), "bl", 2, 2, ";e;sy",
       [](clips::Environment *env, clips::UDFContext *udfc,
-         clips::UDFValue * /*out*/) {
+         clips::UDFValue *out) {
         auto *instance = static_cast<RosMsgsPlugin *>(udfc->context);
         clips::UDFValue request, service_name;
         using namespace clips;
         clips::UDFNthArgument(udfc, 1, EXTERNAL_ADDRESS_BIT, &request);
         clips::UDFNthArgument(udfc, 2, LEXEME_BITS, &service_name);
 
-        instance->send_request(env, request.externalAddressValue->contents,
-                               service_name.lexemeValue->contents);
+        *out =
+            instance->send_request(env, request.externalAddressValue->contents,
+                                   service_name.lexemeValue->contents);
       },
       "async-send-request", this);
 
@@ -317,6 +318,7 @@ bool RosMsgsPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
             )");
   clips::Build(env.get_obj().get(), "(deftemplate ros-msgs-response \
             (slot service (type STRING) ) \
+            (slot request-id (type INTEGER) ) \
             (slot msg-ptr (type EXTERNAL-ADDRESS)) \
             )");
 
@@ -1078,56 +1080,37 @@ void RosMsgsPlugin::udf_value_to_ros_message_member(
   }
 }
 
-void RosMsgsPlugin::send_request(clips::Environment *env,
-                                 void *deserialized_msg,
-                                 const std::string &service_name) {
+clips::UDFValue RosMsgsPlugin::send_request(clips::Environment *env,
+                                            void *deserialized_msg,
+                                            const std::string &service_name) {
   using namespace std::chrono_literals;
   auto scoped_lock = std::scoped_lock{map_mtx_};
-
+  clips::UDFValue result;
   if (!messages_.contains(deserialized_msg)) {
     RCLCPP_ERROR(*logger_, "Failed to publish invalid msg pointer");
-    return;
+    result.value = clips::CreateBoolean(env, false);
+    return result;
   }
   std::shared_ptr<MessageInfo> msg_info = messages_[deserialized_msg];
   std::string msg_type = get_msg_type(msg_info->members);
-  // rclcpp::SerializedMessage serialized_msg = serialize_msg(msg_info,
-  // msg_type); if (serialized_msg.capacity() == 0) {
-  //   RCLCPP_ERROR(*logger_, "Failed to publish due to serialization error");
-  // }
-  // Handle the result asynchronously to not block clips engine potentially
-  // endlessly
-  std::thread([this, msg_info, service_name, env]() {
-    auto context = CLIPSEnvContext::get_context(env);
-    std::string env_name = context->env_name_;
+  auto context = CLIPSEnvContext::get_context(env);
+  std::string env_name = context->env_name_;
+  if (!clients_[env_name][service_name]->wait_for_service(1s)) {
+    RCLCPP_WARN(*logger_, "service %s not available, abort request.",
+                service_name.c_str());
+    result.value = clips::CreateBoolean(env, false);
+    return result;
+  }
+  rclcpp::GenericClient::FutureAndRequestId future_and_id =
+      clients_[env_name][service_name]->async_send_request(msg_info->msg_ptr);
+  int id = future_and_id.request_id;
+  rclcpp::GenericClient::SharedFuture fut = future_and_id.future.share();
+  std::thread([this, &context, service_name, env_name, id, fut]() {
     cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
-    bool print_warning = true;
+    std::shared_ptr<void> resp = fut.get();
     std::shared_ptr<MessageInfo> response_info;
-    while (!clients_[env_name][service_name]->wait_for_service(1s)) {
-      if (stop_flag_ || !rclcpp::ok()) {
-        RCLCPP_ERROR(*logger_,
-                     "Interrupted while waiting for the service. Exiting.");
-        return;
-      }
-      if (print_warning) {
-        RCLCPP_WARN(*logger_, "service %s not available, start waiting",
-                    service_name.c_str());
-        print_warning = false;
-      }
-      RCLCPP_DEBUG(*logger_, "service %s not available, waiting again...",
-                   service_name.c_str());
-    }
-    if (!print_warning) {
-      RCLCPP_INFO(*logger_, "service %s is finally reachable",
-                  service_name.c_str());
-    }
-    std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
     {
       std::scoped_lock map_lock{map_mtx_};
-      rclcpp::GenericClient::FutureAndRequestId future_and_id =
-          clients_[env_name][service_name]->async_send_request(
-              msg_info->msg_ptr);
-      std::shared_ptr<void> resp = future_and_id.future.get();
-
       std::string service_type = client_types_[env_name][service_name];
       auto *introspection_type_support = get_service_typesupport_handle(
           service_type_support_cache_[service_type],
@@ -1146,16 +1129,22 @@ void RosMsgsPlugin::send_request(clips::Environment *env,
 
       messages_[response_info.get()] = response_info;
     }
-    clips::FactBuilder *fact_builder =
-        clips::CreateFactBuilder(clips.get_obj().get(), "ros-msgs-response");
-    clips::FBPutSlotString(fact_builder, "service", service_name.c_str());
-    clips::FBPutSlotCLIPSExternalAddress(
-        fact_builder, "msg-ptr",
-        clips::CreateCExternalAddress(clips.get_obj().get(),
-                                      response_info.get()));
-    clips::FBAssert(fact_builder);
-    clips::FBDispose(fact_builder);
+    {
+      std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
+      clips::FactBuilder *fact_builder =
+          clips::CreateFactBuilder(clips.get_obj().get(), "ros-msgs-response");
+      clips::FBPutSlotString(fact_builder, "service", service_name.c_str());
+      clips::FBPutSlotInteger(fact_builder, "request-id", id);
+      clips::FBPutSlotCLIPSExternalAddress(
+          fact_builder, "msg-ptr",
+          clips::CreateCExternalAddress(clips.get_obj().get(),
+                                        response_info.get()));
+      clips::FBAssert(fact_builder);
+      clips::FBDispose(fact_builder);
+    }
   }).detach();
+  result.value = clips::CreateInteger(env, id);
+  return result;
 }
 
 void RosMsgsPlugin::clips_to_ros_value(
