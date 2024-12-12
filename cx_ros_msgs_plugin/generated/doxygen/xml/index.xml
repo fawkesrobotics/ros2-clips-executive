@@ -1,11 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
   <compound refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo" kind="struct"><name>cx::RosMsgsPlugin::MessageInfo</name>
+    <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a97b712a771a26f4c6ec8918746fc9cd7" kind="variable"><name>external_created_ptr</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a873d64d3e1b99cc09d9dbecef4cc397e" kind="variable"><name>msg_ptr</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a76b39346d285fa3462c66cdc9134da4c" kind="variable"><name>members</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a07e1f717c293a473a45c9b07bd6ab703" kind="variable"><name>is_sub_msg</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a11e61b22b9041966810ec518c3603729" kind="variable"><name>allocator</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a7b1b9dfe4fa888d292969201cd71a3c9" kind="function"><name>MessageInfo</name></member>
+    <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a0971c1ce7808d48f8c74f11a9fe6e676" kind="function"><name>MessageInfo</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a1b77d2a6711f053e31fe217cb319b7ff" kind="function"><name>~MessageInfo</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a21ab9cf1b6f37879b00b2e44f07d46b6" kind="function"><name>MessageInfo</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1ac671e62dad6e2b91c5bccd3a6b46f6c1" kind="function"><name>operator=</name></member>
@@ -22,9 +24,13 @@
     <member refid="classcx_1_1RosMsgsPlugin_1a5a5daed99de5a7242e9e83d7e7ec455b" kind="variable"><name>publishers_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a505257dfa296e07d77645cd1f338865d" kind="variable"><name>libs_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1ae586916966473e6f89deb9dadfd2238f" kind="variable"><name>map_mtx_</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1aad844bb413e0965f88eeba78c642b310" kind="variable"><name>stop_flag_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a72d36324b642cc96a991aa209126f731" kind="variable"><name>messages_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1ae664b32901c073747254edeea0ab0cc3" kind="variable"><name>sub_messages_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a8368f7e49f07727e19f561b34eb7730e" kind="variable"><name>type_support_cache_</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a539933a98e6a6a49a6526e6aae58e0f5" kind="variable"><name>clients_</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a91d17a9ad33fd8ae3f395753c393ac42" kind="variable"><name>client_types_</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a57a48362df14a4a22fce6980de3a5b90" kind="variable"><name>service_type_support_cache_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1adc20b22ceaa9111766ed0b9b199db6c3" kind="function"><name>RosMsgsPlugin</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a179582c3ae1c1ad7bf5917514bf65911" kind="function"><name>~RosMsgsPlugin</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1aa172b6316fa790bdeab73a356bdcf6e3" kind="function"><name>initialize</name></member>
@@ -33,6 +39,7 @@
     <member refid="classcx_1_1RosMsgsPlugin_1ab7e6edd6ba5e7925500aa0dce7b9baf4" kind="function"><name>clips_env_destroyed</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a34eb1287e8f01a38ece5c7437ecdcc11" kind="function"><name>create_message</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1aaaabb1083d1509f697c2f743090c1242" kind="function"><name>destroy_msg</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a8d8728435dd9d1e3637f8c1fcbaa3a05" kind="function"><name>create_request</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a2caf464562d233a78f07db5126cd35d1" kind="function"><name>ros_msg_member_to_udf_value</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a42f08ab6e863e4c9ee1265cd2ffdf3f3" kind="function"><name>process_nested_msg</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a7a595c869419d289edbc79a0cecc486f" kind="function"><name>ros_to_clips_value</name></member>
@@ -47,6 +54,9 @@
     <member refid="classcx_1_1RosMsgsPlugin_1aad9708e0479a64b622360d2ce13f4148" kind="function"><name>create_new_publisher</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a4b99a3f0e765bd53118fc827f27da3b3" kind="function"><name>destroy_publisher</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1ae7497f509f176b7d2c2efd5632ddbe70" kind="function"><name>publish_to_topic</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1ad9ce370716455d7391a5b803d23d1161" kind="function"><name>create_new_client</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1aabeb519eef52e8a611826ea9600655a4" kind="function"><name>destroy_client</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1ab8567663784dfe04a9622fef6540453d" kind="function"><name>send_request</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a26bdaac87b2dba2eb4260ecad671a3cb" kind="function"><name>get_msg_type</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a97bd4289362becac5c76c31073e487bc" kind="function"><name>get_msg_members</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1ae94e1a8b0622e2174d3fdcb58302aef2" kind="function"><name>deserialize_msg</name></member>

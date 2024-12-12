@@ -98,25 +98,42 @@
   <span class="p">(</span><span class="nv">slot</span> <span class="k">type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span>  <span class="c1">; example: &quot;std_msgs/msg/String&quot;</span>
 <span class="p">)</span>
 
+<span class="c1">; Asserted by the ros-msgs-create-client function.</span>
+<span class="c1">; Retracted by the respective ros-msgs-destroy-client function.</span>
+<span class="p">(</span><span class="nv">deftemplate-ros-msgs-client</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">topic</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span> <span class="c1">; example: &quot;/ros_cx_client&quot;</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="k">type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span>  <span class="c1">; example: &quot;std_srvs/srv/SetBool&quot;</span>
+<span class="p">)</span>
+
 <span class="c1">; Asserted by the callback of a subscriber whenever a message arrives.</span>
-<span class="c1">; Process the message and then call ros-msgs-destroy-msgs before retracting!</span>
+<span class="c1">; Process the message and then call ros-msgs-destroy-message before retracting!</span>
 <span class="p">(</span><span class="nv">deftemplate</span> <span class="nv">ros-msgs-message</span>
   <span class="p">(</span><span class="nv">slot</span> <span class="nv">topic</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span> <span class="c1">; example          : &quot;/cx_string_in&quot;</span>
   <span class="p">(</span><span class="nv">slot</span> <span class="nv">msg-ptr</span> <span class="p">(</span><span class="k">type</span> <span class="nv">EXTERNAL-ADDRESS</span><span class="p">))</span> <span class="nv">example:</span> <span class="nv">&lt;Pointer-C-0x7f1550001d20&gt;</span>
 <span class="p">)</span>
+
+<span class="c1">; Asserted by the callback of ros-msgs-async-send-request.</span>
+<span class="c1">; Process the response like a normal message and then call</span>
+<span class="c1">; ros-msgs-destroy-message before retracting!</span>
+<span class="p">(</span><span class="nv">deftemplate</span> <span class="nv">ros-msgs-response</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">service</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span> <span class="c1">; example        : &quot;/ros_cx_client&quot;</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">request-id</span> <span class="p">(</span><span class="k">type</span> <span class="nv">INTEGER</span><span class="p">)</span><span class="c1">; example      : 1</span>
+  <span class="p">(</span><span class="nv">slot</span> <span class="nv">msg-ptr</span> <span class="p">(</span><span class="k">type</span> <span class="nv">EXTERNAL-ADDRESS</span><span class="p">))</span> <span class="nv">example:</span> <span class="nv">&lt;Pointer-C-0x7f1550001d20&gt;</span>
 </pre></div>
 </div>
 </section>
 <section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
-<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="c1">; Create and destroy publishers and subscribers.</span>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="c1">; Create and destroy publishers, subscribers and service clients.</span>
 <span class="p">(</span><span class="nv">ros-msgs-create-publisher</span> <span class="nv">?topic-name</span> <span class="nv">?msg-type</span><span class="p">)</span>    <span class="c1">; example args: &quot;/cx_string_out&quot; &quot;std_msgs/msg/String&quot;</span>
 <span class="p">(</span><span class="nv">ros-msgs-destroy-publisher</span> <span class="nv">?topic-name</span><span class="p">)</span>             <span class="c1">; example args: &quot;/cx_string_out&quot;</span>
 <span class="p">(</span><span class="nv">ros-msgs-create-subscription</span> <span class="nv">?topic-name</span> <span class="nv">?msg-type</span><span class="p">)</span> <span class="c1">; example args: &quot;/cx_string_in&quot; &quot;std_msgs/msg/String&quot;</span>
 <span class="p">(</span><span class="nv">ros-msgs-destroy-subscription</span> <span class="nv">?topic-name</span><span class="p">)</span>          <span class="c1">; example args: &quot;/cx_string_in&quot;</span>
+<span class="p">(</span><span class="nv">ros-msgs-create-client</span> <span class="nv">?service-name</span> <span class="nv">?service-type</span><span class="p">)</span> <span class="c1">; example args: &quot;/ros_cx_client&quot; &quot;std_srvs/srv/SetBool&quot;</span>
+<span class="p">(</span><span class="nv">ros-msgs-destroy-client</span> <span class="nv">?service-name</span><span class="p">)</span>              <span class="c1">; example args: &quot;/ros_cx_client&quot;</span>
 
 <span class="c1">; Publish a given message over a topic.</span>
-<span class="c1">; Requires the publisher to be created first using create-publisher.</span>
+<span class="c1">; Requires the publisher to be created first using ros-msgs-create-publisher.</span>
 <span class="p">(</span><span class="nv">ros-msgs-publish</span> <span class="nv">?msg-ptr</span> <span class="nv">?topic-name</span><span class="p">)</span>
 
 <span class="c1">; Create a message and return a pointer to it</span>
@@ -133,6 +150,17 @@
 <span class="c1">; Retrieve a field of a message.</span>
 <span class="c1">; If the field is a message, then a pointer is returned that can be further inspected by passing it to ros-msgs-get-field.</span>
 <span class="p">(</span><span class="nv">ros-msgs-get-field</span> <span class="nv">?msg-ptr</span> <span class="nv">?field-name</span><span class="p">)</span>
+
+<span class="c1">; Create a request message and return a pointer to it.</span>
+<span class="c1">; It is a regular message and hence can be pouplated with ros-msgs-set-field</span>
+<span class="c1">; and destroyed with ros-msgs-destroy-message</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?msg-ptr</span> <span class="p">(</span><span class="nv">ros-msgs-create-request</span> <span class="nv">?msg-type</span><span class="p">))</span> <span class="c1">; example args: &quot;std_srvs/srv/SetBool&quot;</span>
+                                                    <span class="c1">; example ret: &lt;Pointer-C-0x7f1550001d20&gt;</span>
+
+<span class="c1">; Send a given request message to a service.</span>
+<span class="c1">; Requires the service client to be created first using ros-msgs-create-client.</span>
+<span class="p">(</span><span class="nv">bind</span> <span class="nv">?request-id</span> <span class="p">(</span><span class="nv">ros-msgs-async-send-request</span> <span class="nv">?msg-ptr</span> <span class="nv">?service-name</span><span class="p">))</span> <span class="c1">; example args: &quot;std_srvs/srv/SetBool&quot;</span>
+                                                                        <span class="c1">; example ret: 1 (or FALSE if sending the request failed)</span>
 </pre></div>
 </div>
 </section>
@@ -168,8 +196,8 @@ See the example below:</p>
 </div>
 </section>
 </section>
-<section id="usage-example">
-<h2>Usage Example<a class="headerlink" href="#usage-example" title="Permalink to this headline"></a></h2>
+<section id="usage-example-1-publishers-and-subscribers">
+<h2>Usage Example 1: Publishers and Subscribers<a class="headerlink" href="#usage-example-1-publishers-and-subscribers" title="Permalink to this headline"></a></h2>
 <p>A minimal working example is provided by the <a class="reference external" href="https://fawkesrobotics.github.io/ros2-clips-executive/cx_bringup">cx_bringup</a> package. Run it via:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2 launch cx_bringup cx_launch.py manager_config:<span class="o">=</span>plugin_examples/ros_msgs.yaml
 </pre></div>
@@ -254,6 +282,105 @@ Additionally, it creates a publisher on <code class="docutils literal notranslat
   <span class="p">(</span><span class="nv">printout</span> <span class="nv">info</span> <span class="s">&quot;Destroying publishers and subscriptions &quot;</span> <span class="nv">crlf</span><span class="p">)</span>
   <span class="p">(</span><span class="nv">ros-msgs-destroy-publisher</span> <span class="nv">?topic</span><span class="p">)</span>
   <span class="p">(</span><span class="nv">ros-msgs-destroy-subscription</span> <span class="nv">?in-topic</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrule</span> <span class="nv">ros-msgs-message-cleanup</span>
+<span class="s">&quot; Delete the messages on executive finalize. &quot;</span>
+  <span class="p">(</span><span class="nv">executive-finalize</span><span class="p">)</span>
+  <span class="nv">?msg-f</span> <span class="nv">&lt;-</span> <span class="p">(</span><span class="nv">ros-msgs-message</span> <span class="p">(</span><span class="nv">msg-ptr</span> <span class="nv">?ptr</span><span class="p">))</span>
+<span class="nv">=&gt;</span>
+  <span class="p">(</span><span class="nv">ros-msgs-destroy-message</span> <span class="nv">?ptr</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">retract</span> <span class="nv">?msg-f</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="usage-example-2-service-client">
+<h2>Usage Example 2: Service Client<a class="headerlink" href="#usage-example-2-service-client" title="Permalink to this headline"></a></h2>
+<p>A minimal working example is provided by the <a class="reference external" href="https://fawkesrobotics.github.io/ros2-clips-executive/cx_bringup">cx_bringup</a> package. Run it via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2 launch cx_bringup cx_launch.py manager_config:<span class="o">=</span>plugin_examples/ros_msgs_client.yaml
+</pre></div>
+</div>
+<p>It creates a <code class="docutils literal notranslate"><span class="pre">std_srvs/srv/SetBool</span></code> client for <code class="docutils literal notranslate"><span class="pre">/ros_cx_client</span></code>, sends a request and prints the response.</p>
+<p>In order to launch a simple service to send the request to, run the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2 run cx_bringup test_service.py
+</pre></div>
+</div>
+<section id="id2">
+<h3>Configuration<a class="headerlink" href="#id2" title="Permalink to this headline"></a></h3>
+<p>File <a class="reference external" href="https://github.com/fawkesrobotics/ros2-clips-executive/blob/master/cx_bringup/params/plugin_examples/ros_msgs_client.yaml">cx_bringup/params/plugin_examples/ros_msgs_client.yaml</a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">clips_manager</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">ros__parameters</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">environments</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;cx_ros_msgs_client&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">    </span><span class="nt">cx_ros_msgs_client</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">plugins</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;executive&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;ros_msgs&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;files&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">watch</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;facts&quot;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">&quot;rules&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+
+<span class="w">    </span><span class="nt">executive</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cx::ExecutivePlugin&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">refresh_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span><span class="w"></span>
+<span class="w">    </span><span class="nt">ros_msgs</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cx::RosMsgsPlugin&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">files</span><span class="p">:</span><span class="w"></span>
+<span class="w">      </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cx::FileLoadPlugin&quot;</span><span class="w"></span>
+<span class="w">      </span><span class="nt">pkg_share_dirs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;cx_bringup&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">      </span><span class="nt">load</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;clips/plugin_examples/ros-msgs-client.clp&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>Code<a class="headerlink" href="#id3" title="Permalink to this headline"></a></h3>
+<p>File <a class="reference external" href="https://github.com/fawkesrobotics/ros2-clips-executive/blob/master/cx_bringup/clips/plugin_examples/ros-msgs.clp">cx_bringup/clips/plugin_examples/ros-msgs.clp</a>.</p>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">defrule</span> <span class="nv">ros-msgs-client-init</span>
+<span class="s">&quot; Create publisher for ros_cx_out.&quot;</span>
+  <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nv">ros-msgs-client</span> <span class="p">(</span><span class="nv">service</span> <span class="s">&quot;ros_cx_client&quot;</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nv">executive-finalize</span><span class="p">))</span>
+<span class="nv">=&gt;</span>
+  <span class="c1">; create the publisher</span>
+  <span class="p">(</span><span class="nv">ros-msgs-create-client</span> <span class="s">&quot;ros_cx_client&quot;</span> <span class="s">&quot;std_srvs/srv/SetBool&quot;</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">printout</span> <span class="nv">info</span> <span class="s">&quot;Opening client on /ros_cx_client&quot;</span> <span class="nv">crlf</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrule</span> <span class="nv">ros-msgs-request-true</span>
+<span class="s">&quot; Attempt to request the service. &quot;</span>
+  <span class="p">(</span><span class="nv">ros-msgs-client</span> <span class="p">(</span><span class="nv">service</span> <span class="nv">?service</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nv">request</span> <span class="nv">?any-id</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">time</span> <span class="nv">?any-time</span><span class="p">)</span> <span class="c1">; used to continuously attempt to request the service until success</span>
+  <span class="nv">=&gt;</span>
+  <span class="p">(</span><span class="nv">bind</span> <span class="nv">?new-req</span> <span class="p">(</span><span class="nv">ros-msgs-create-request</span> <span class="s">&quot;std_srvs/srv/SetBool&quot;</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">ros-msgs-set-field</span> <span class="nv">?new-req</span> <span class="s">&quot;data&quot;</span> <span class="nv">TRUE</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">bind</span> <span class="nv">?id</span> <span class="p">(</span><span class="nv">ros-msgs-async-send-request</span> <span class="nv">?new-req</span> <span class="nv">?service</span><span class="p">))</span>
+  <span class="p">(</span><span class="k">if</span> <span class="nv">?id</span> <span class="nv">then</span>
+    <span class="p">(</span><span class="nv">printout</span> <span class="nv">yellow</span> <span class="s">&quot;Request sent with id &quot;</span> <span class="nv">?id</span> <span class="nv">crlf</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">assert</span> <span class="p">(</span><span class="nv">request</span> <span class="nv">?id</span><span class="p">))</span>
+   <span class="nv">else</span>
+    <span class="p">(</span><span class="nv">printout</span> <span class="nv">red</span> <span class="s">&quot;Sending of request failed, is the service running?&quot;</span> <span class="nv">crlf</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">printout</span> <span class="nv">red</span> <span class="s">&quot;Start it using \&quot;ros2 run cx_bringup test_service.py\&quot;&quot;</span> <span class="nv">crlf</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="p">(</span><span class="nv">ros-msgs-destroy-message</span> <span class="nv">?new-req</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrule</span> <span class="nv">set-bool-client-response-received</span>
+<span class="s">&quot; Get response, read it and delete.&quot;</span>
+  <span class="nv">?msg-fact</span> <span class="nv">&lt;-</span> <span class="p">(</span><span class="nv">ros-msgs-response</span> <span class="p">(</span><span class="nv">service</span> <span class="nv">?service</span><span class="p">)</span> <span class="p">(</span><span class="nv">msg-ptr</span> <span class="nv">?ptr</span><span class="p">)</span> <span class="p">(</span><span class="nv">request-id</span> <span class="nv">?id</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">request</span> <span class="nv">?id</span><span class="p">)</span>
+<span class="nv">=&gt;</span>
+  <span class="p">(</span><span class="nv">bind</span> <span class="nv">?succ</span> <span class="p">(</span><span class="nv">ros-msgs-get-field</span> <span class="nv">?ptr</span> <span class="s">&quot;success&quot;</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">bind</span> <span class="nv">?msg</span> <span class="p">(</span><span class="nv">ros-msgs-get-field</span> <span class="nv">?ptr</span> <span class="s">&quot;message&quot;</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">printout</span> <span class="nv">green</span> <span class="s">&quot;Received response from &quot;</span> <span class="nv">?service</span> <span class="s">&quot; with: &quot;</span> <span class="nv">?succ</span> <span class="s">&quot; (&quot;</span> <span class="nv">?msg</span> <span class="s">&quot;)&quot;</span> <span class="nv">crlf</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">ros-msgs-destroy-message</span> <span class="nv">?ptr</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">retract</span> <span class="nv">?msg-fact</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nv">defrule</span> <span class="nv">ros-msgs-client-finalize</span>
+<span class="s">&quot; Delete the client on executive finalize. &quot;</span>
+  <span class="p">(</span><span class="nv">executive-finalize</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">ros-msgs-client</span> <span class="p">(</span><span class="nv">service</span> <span class="nv">?service</span><span class="p">))</span>
+<span class="nv">=&gt;</span>
+  <span class="p">(</span><span class="nv">printout</span> <span class="nv">info</span> <span class="s">&quot;Destroying client&quot;</span> <span class="nv">crlf</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">ros-msgs-destroy-client</span> <span class="nv">?service</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="p">(</span><span class="nv">defrule</span> <span class="nv">ros-msgs-message-cleanup</span>

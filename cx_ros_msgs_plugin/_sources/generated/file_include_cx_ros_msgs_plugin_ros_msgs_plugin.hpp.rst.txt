@@ -33,6 +33,8 @@ Includes
 
 - ``cx_utils/lock_shared_ptr.hpp``
 
+- ``rclcpp/generic_client.hpp``
+
 - ``rosidl_typesupport_introspection_cpp/message_introspection.hpp``
 
 - ``string``

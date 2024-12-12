@@ -95,8 +95,9 @@
 <span id="usage-cx-ros-comm-gen"></span><h1>ROS Interface Plugin Generator<a class="headerlink" href="#ros-interface-plugin-generator" title="Permalink to this headline"></a></h1>
 <p>Source code on <a class="reference external" href="https://github.com/fawkesrobotics/ros2-clips-executive/blob/master/cx_ros_comm_gen">GitHub</a>.</p>
 <p>In order to interface with ROS directly without the need for generic introspection, the ROS2 CLIPS-Executive offers a plugin generator for individual interfaces (messages, services or actions).</p>
-<p>Note that the <a class="reference internal" href="../user_docs/plugins/ros_msgs_plugin.html#usage-ros-msgs-plugin"><span class="std std-ref">Generic ROS Msg Plugin</span></a> provides an alternative for ROS messages specifically, which works directly through introspection instead of relying on individual plugins for each message type.</p>
-<p>Generic support for services and actions is not implemented yet, hence the plugin generator is needed in order to deal with services and actions.</p>
+<p>Note that the <a class="reference internal" href="../user_docs/plugins/ros_msgs_plugin.html#usage-ros-msgs-plugin"><span class="std std-ref">Generic ROS Msg Plugin</span></a> provides an alternative for ROS messages specifically, which works directly through introspection instead of relying on individual plugins for each message type.
+It also allows to call services through clients, but can not create clients.</p>
+<p>Generic support for services and actions is not implemented yet due to missing generic interfaces in rclcpp, hence the plugin generator is needed in order to deal with services and actions.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="gen_info.html">Plugin Generation</a><ul>
