@@ -19,6 +19,7 @@ macro(cx_generate_bindings package msg_name type)
   message(STATUS "Generate bindings for ${package}/${type}/${msg_name}")
 
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
+  find_package(cx_plugin REQUIRED)
   find_package(${package} REQUIRED)
   find_package(pluginlib REQUIRED)
   find_package(clips_vendor REQUIRED)
