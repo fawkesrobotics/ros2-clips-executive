@@ -1105,7 +1105,8 @@ clips::UDFValue RosMsgsPlugin::send_request(clips::Environment *env,
       clients_[env_name][service_name]->async_send_request(msg_info->msg_ptr);
   int id = future_and_id.request_id;
   rclcpp::GenericClient::SharedFuture fut = future_and_id.future.share();
-  std::thread([this, &context, service_name, env_name, id, fut]() {
+  std::thread([this, env, service_name, env_name, id, fut]() {
+    auto context = CLIPSEnvContext::get_context(env);
     cx::LockSharedPtr<clips::Environment> &clips = context->env_lock_ptr_;
     std::shared_ptr<void> resp = fut.get();
     std::shared_ptr<MessageInfo> response_info;
