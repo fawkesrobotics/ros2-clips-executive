@@ -12,6 +12,7 @@
 ; See the License for the specific language governing permissions and
 ; limitations under the License.
 
+(defmodule MAIN (export deftemplate time))
 (defglobal
   ?*PRIORITY-TIME-RETRACT*    = -10000
 )

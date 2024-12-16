@@ -70,6 +70,8 @@ bool FileLoadPlugin::clips_env_init(LockSharedPtr<clips::Environment> &env) {
               context->env_name_.c_str());
   for (const auto &f : init_files_) {
 
+    clips::Defmodule *main_module = clips::FindDefmodule(env.get_obj().get(), "MAIN");
+    clips::Focus(main_module);
     if (clips::EE_NO_ERROR != clips::Eval(env.get_obj().get(),
                                           std::format("(load* {})", f).c_str(),
                                           NULL)) {
