@@ -53,7 +53,7 @@ clips::UDFValue {{name_camel}}::{{template_type|snake_case}}{{snake_type_sep}}ge
     res.integerValue = clips::CreateInteger(env, req->{{ slot.name }});
 {%- endif %}
 {%- if slot.clips_type == "FLOAT" %}
-    res.floatValue = clips::CreateFloat(env, req->{{ slot.name }};
+    res.floatValue = clips::CreateFloat(env, req->{{ slot.name }});
 {%- endif %}
 {%- if slot.clips_type == "BOOLEAN" %}
     res.lexemeValue = clips::CreateSymbol(env, req->{{ slot.name }} ? "TRUE" : "FALSE");
