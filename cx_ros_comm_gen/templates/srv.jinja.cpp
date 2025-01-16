@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Carologistics
+// Copyright (c) 2024-2025 Carologistics
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -259,7 +259,6 @@ void {{name_camel}}::send_request(clips::Environment *env, {{message_type}}::Req
   if(!print_warning) {
       RCLCPP_INFO(*logger_, "service %s is finally reachable", service_name.c_str());
   }
-  std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
   std::shared_ptr<{{message_type}}::Response> resp;
   {
     std::scoped_lock map_lock{map_mtx_};
@@ -267,6 +266,7 @@ void {{name_camel}}::send_request(clips::Environment *env, {{message_type}}::Req
     resp = future.get();
     responses_.try_emplace(resp.get(), resp);
   }
+   std::lock_guard<std::mutex> guard(*(clips.get_mutex_instance()));
    clips::FactBuilder *fact_builder = clips::CreateFactBuilder(clips.get_obj().get(), "{{name_kebab}}-response");
    clips::FBPutSlotString(fact_builder,"service",service_name.c_str());
    clips::FBPutSlotCLIPSExternalAddress(fact_builder,"msg-ptr", clips::CreateCExternalAddress(clips.get_obj().get(), resp.get()));
