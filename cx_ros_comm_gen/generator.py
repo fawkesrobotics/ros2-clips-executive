@@ -61,6 +61,7 @@ clips_types = {
     "char": "STRING",
     "float32": "FLOAT",
     "float64": "FLOAT",
+    "double": "FLOAT",
     "int8": "INTEGER",
     "uint8": "INTEGER",
     "int16": "INTEGER",
