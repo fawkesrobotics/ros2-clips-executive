@@ -25,3 +25,4 @@ The |CX| provides several plugins out-of-the-box that are described here.
    file_load_plugin.rst
    protobuf_plugin.rst
    ros_msgs_plugin.rst
+   rl_plugin.rst
