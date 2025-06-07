@@ -49,16 +49,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../plugins/index.html">CLIPS Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../plugin_generator/index.html">ROS Interface Plugin Generator</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#controlling-a-turtle-via-clips">Controlling a Turtle via CLIPS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#writing-a-plugin">Writing a Plugin</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#callbacks-and-mutexes">Callbacks and Mutexes</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="hello_world.html">Hello World</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ros_monitoring.html">Continuous Monitoring</a></li>
-<li class="toctree-l4"><a class="reference internal" href="writing_a_plugin.html">Writing a Plugin</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world.html">Hello World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ros_monitoring.html">Continuous Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="writing_a_plugin.html">Writing a Plugin</a></li>
 </ul>
 </li>
 </ul>
@@ -89,23 +82,6 @@
              
   <section id="tutorials">
 <span id="id1"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading"></a></h1>
-<div class="admonition-todo admonition" id="id2">
-<p class="admonition-title">Todo</p>
-<p>Add tutorials here</p>
-</div>
-<section id="controlling-a-turtle-via-clips">
-<h2>Controlling a Turtle via CLIPS<a class="headerlink" href="#controlling-a-turtle-via-clips" title="Link to this heading"></a></h2>
-</section>
-<section id="writing-a-plugin">
-<span id="id3"></span><h2>Writing a Plugin<a class="headerlink" href="#writing-a-plugin" title="Link to this heading"></a></h2>
-<section id="callbacks-and-mutexes">
-<h3>Callbacks and Mutexes<a class="headerlink" href="#callbacks-and-mutexes" title="Link to this heading"></a></h3>
-<p>It can be tricky to interface between ROS callbacks and CLIPS environments, especially if locks are guarding said callbacks that are not visible to the end user.
-As CLIPS environment access must also guarded by locks (as access is not thread-safe), this can easily create deadlocks in situations, where other functions can be called from clips that also try to acquire the lock held by a callback.</p>
-<p>Example: The feedback callback for action clients is guarded by a mutex that is also used by client goal handles to access members in a thread-safe manner (such as get_status()).</p>
-<p>A CLIPS rule that calls ClientGoalHandle::get_status() will therefore attempt to lock such a mutex while the clips lock is being held by the thread running the clips environment.
-If a callback is received right before, then the clips environment will stall as the function call is stuck (mutex is held by the callback function), while the callback function is stuck because it tries to acquire the lock for the clips environment (because it wants to pass the callback content to the clips environment).</p>
-<p>In these cases special care must be taken, e.g., by deferring CLIPS access out of scope of the mutexes guarding the callbacks.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="hello_world.html">Hello World</a><ul>
@@ -132,8 +108,6 @@ If a callback is received right before, then the clips environment will stall as
 </li>
 </ul>
 </div>
-</section>
-</section>
 </section>
 
 
