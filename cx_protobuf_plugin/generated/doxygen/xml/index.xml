@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
   <compound refid="classprotobuf__clips_1_1ClipsProtobufCommunicator" kind="class"><name>protobuf_clips::ClipsProtobufCommunicator</name>
     <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed7220bce6a1065943d0c32ae8a3ef0c" kind="enum"><name>ClientType</name></member>
     <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed7220bce6a1065943d0c32ae8a3ef0cae8370b0af899857911189daa426f4e0a" kind="enumvalue"><name>CT_SERVER</name></member>
@@ -28,9 +28,9 @@
     <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1abc30ac62426556659a0ca76f9da141ac" kind="function"><name>~ClipsProtobufCommunicator</name></member>
     <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a62f89d0182fcf10d9167f9b42b2bdf06" kind="function"><name>enable_server</name></member>
     <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1ad9031ecd13912bcde0e2059d9efacefe" kind="function"><name>disable_server</name></member>
-    <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a0e2f98f4562c5cdf22030c37092edce4" kind="function"><name>signal_server_sent</name></member>
-    <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed6d32a6c279205c7ec11124ab79cf4d" kind="function"><name>signal_client_sent</name></member>
-    <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a6bbff2bbe9dccd8d89d14af480df9633" kind="function"><name>signal_peer_sent</name></member>
+    <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1ad9b1d71d6433c0f0f6fff5f556631d43" kind="function"><name>signal_server_sent</name></member>
+    <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1af0cd4f4f1d5af8495c0dd955f8c97170" kind="function"><name>signal_client_sent</name></member>
+    <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aabee4aa597a5bc5f612c939c9267afea" kind="function"><name>signal_peer_sent</name></member>
     <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a785a2cb98f231519896b6a6aea56df97" kind="function"><name>setup_clips</name></member>
     <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a43970233a023ac6b402495a220ac771c" kind="function"><name>clips_pb_register_type</name></member>
     <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a7202de9a2c1c247f15b3792d73dea609" kind="function"><name>clips_pb_field_names</name></member>

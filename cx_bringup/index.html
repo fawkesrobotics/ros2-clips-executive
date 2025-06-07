@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cx_bringup &mdash; cx_bringup 0.1.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -23,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> cx_bringup
+
+          
+          
+          <a href="#" class="icon icon-home">
+            cx_bringup
           </a>
               <div class="version">
                 0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -49,6 +56,9 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
 
         </div>
       </div>
@@ -63,8 +73,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>cx_bringup</li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cx_bringup</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -75,7 +85,7 @@
            <div itemprop="articleBody">
              
   <section id="cx-bringup">
-<h1>cx_bringup<a class="headerlink" href="#cx-bringup" title="Permalink to this headline"></a></h1>
+<h1>cx_bringup<a class="headerlink" href="#cx-bringup" title="Link to this heading"></a></h1>
 <p>Central CX bringup scripts and parameters for nodes</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -88,9 +98,9 @@
 </div>
 </section>
 <section id="readme">
-<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline"></a></h1>
-<section class="tex2jax_ignore mathjax_ignore" id="cx-bringup">
-<h2>cx_bringup<a class="headerlink" href="#cx-bringup" title="Permalink to this headline"></a></h2>
+<h1>README<a class="headerlink" href="#readme" title="Link to this heading"></a></h1>
+<section id="cx-bringup">
+<h2>cx_bringup<a class="headerlink" href="#cx-bringup" title="Link to this heading"></a></h2>
 <hr class="docutils" />
 <p>Provides an example bringup mechanism for CX applications.</p>
 <p>This package includes configuration files to showcase the different plugins <code class="docutils literal notranslate"><span class="pre">params</span></code> folder.</p>
@@ -98,7 +108,7 @@
 <p>It provides a dedicated node (<code class="docutils literal notranslate"><span class="pre">cx_node</span></code>) inside the <code class="docutils literal notranslate"><span class="pre">src</span></code> directory, which configures the lifecycle manager node per default.</p>
 <p>Lastly, it provides a convenient launch file that can be used in order to launch the provided node including common configuration options.</p>
 <section id="launching-the-clips-executive">
-<h3>Launching the CLIPS-Executive<a class="headerlink" href="#launching-the-clips-executive" title="Permalink to this headline"></a></h3>
+<h3>Launching the CLIPS-Executive<a class="headerlink" href="#launching-the-clips-executive" title="Link to this heading"></a></h3>
 <p>Make sure to source the CLIPS-Executive workspace and run the following command to select a configuration to launch:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ros2</span> <span class="n">launch</span> <span class="n">cx_bringup</span> <span class="n">cx_launch</span><span class="o">.</span><span class="n">py</span> <span class="n">manager_config</span><span class="o">:=&lt;</span><span class="n">config</span><span class="o">-</span><span class="n">file</span><span class="o">&gt;</span>
 </pre></div>

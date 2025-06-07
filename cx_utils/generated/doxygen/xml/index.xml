@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
   <compound refid="classcx_1_1CLIPSEnvContext" kind="class"><name>cx::CLIPSEnvContext</name>
     <member refid="classcx_1_1CLIPSEnvContext_1ad1c67e36e0f50a0612a6a8b27f091999" kind="variable"><name>env_name_</name></member>
     <member refid="classcx_1_1CLIPSEnvContext_1ad91c6256d14fad9530df8e872df84ed8" kind="variable"><name>env_lock_ptr_</name></member>
     <member refid="classcx_1_1CLIPSEnvContext_1a5f879804216e90ec49fbda6e5b6c3e48" kind="variable"><name>logger_</name></member>
-    <member refid="classcx_1_1CLIPSEnvContext_1a0ad045f192d95803de8efe15ba88c0f8" kind="function"><name>get_context</name></member>
+    <member refid="classcx_1_1CLIPSEnvContext_1a641c2466c193ef0d61c8b9837b67f912" kind="function"><name>get_context</name></member>
   </compound>
   <compound refid="classcx_1_1CLIPSLogger" kind="class"><name>cx::CLIPSLogger</name>
     <member refid="classcx_1_1CLIPSLogger_1aa248c97461aba811624fb955a10771f4" kind="variable"><name>component_</name></member>

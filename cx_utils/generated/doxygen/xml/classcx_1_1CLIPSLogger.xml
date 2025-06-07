@@ -1,13 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classcx_1_1CLIPSLogger" kind="class" language="C++" prot="public">
     <compoundname>cx::CLIPSLogger</compoundname>
-      <sectiondef kind="private-attrib">
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classcx_1_1CLIPSLogger_1aa248c97461aba811624fb955a10771f4" prot="private" static="no" mutable="no">
-        <type>char *</type>
+        <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">char</ref> *</type>
         <definition>char* cx::CLIPSLogger::component_</definition>
         <argsstring></argsstring>
         <name>component_</name>
+        <qualifiedname>cx::CLIPSLogger::component_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -17,10 +18,11 @@
         <location file="include/cx_utils/clips_env_context.hpp" line="35" column="8" bodyfile="include/cx_utils/clips_env_context.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classcx_1_1CLIPSLogger_1add4edaa6795383a52bcc45981ff48a1a" prot="private" static="no" mutable="no">
-        <type>const rclcpp::Logger</type>
+        <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">const</ref> rclcpp::Logger</type>
         <definition>const rclcpp::Logger cx::CLIPSLogger::logger_</definition>
         <argsstring></argsstring>
         <name>logger_</name>
+        <qualifiedname>cx::CLIPSLogger::logger_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -30,10 +32,11 @@
         <location file="include/cx_utils/clips_env_context.hpp" line="36" column="24" bodyfile="include/cx_utils/clips_env_context.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classcx_1_1CLIPSLogger_1a8d156bef0419ec4ff9ffc2ddecf6beaa" prot="private" static="no" mutable="no">
-        <type>const bool</type>
+        <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">const</ref> <ref refid="classcx_1_1LockSharedPtr" kindref="compound">bool</ref></type>
         <definition>const bool cx::CLIPSLogger::stdout_to_debug_</definition>
         <argsstring></argsstring>
         <name>stdout_to_debug_</name>
+        <qualifiedname>cx::CLIPSLogger::stdout_to_debug_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -47,6 +50,7 @@
         <definition>std::shared_ptr&lt;spdlog::logger&gt; cx::CLIPSLogger::clips_logger_</definition>
         <argsstring></argsstring>
         <name>clips_logger_</name>
+        <qualifiedname>cx::CLIPSLogger::clips_logger_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -60,6 +64,7 @@
         <definition>std::string cx::CLIPSLogger::buffer_</definition>
         <argsstring></argsstring>
         <name>buffer_</name>
+        <qualifiedname>cx::CLIPSLogger::buffer_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -73,6 +78,7 @@
         <definition>std::string cx::CLIPSLogger::terminal_buffer_</definition>
         <argsstring></argsstring>
         <name>terminal_buffer_</name>
+        <qualifiedname>cx::CLIPSLogger::terminal_buffer_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -81,23 +87,24 @@
         </inbodydescription>
         <location file="include/cx_utils/clips_env_context.hpp" line="40" column="15" bodyfile="include/cx_utils/clips_env_context.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classcx_1_1CLIPSLogger_1a820920ac2ee52d84c19fd7f3fe46d0c0" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
         <type></type>
         <definition>cx::CLIPSLogger::CLIPSLogger</definition>
         <argsstring>(const char *component, bool log_to_file, bool stdout_to_debug)</argsstring>
         <name>CLIPSLogger</name>
+        <qualifiedname>cx::CLIPSLogger::CLIPSLogger</qualifiedname>
         <param>
-          <type>const char *</type>
+          <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">const</ref> <ref refid="classcx_1_1LockSharedPtr" kindref="compound">char</ref> *</type>
           <declname>component</declname>
         </param>
         <param>
-          <type>bool</type>
+          <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">bool</ref></type>
           <declname>log_to_file</declname>
         </param>
         <param>
-          <type>bool</type>
+          <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">bool</ref></type>
           <declname>stdout_to_debug</declname>
         </param>
         <briefdescription>
@@ -113,6 +120,7 @@
         <definition>cx::CLIPSLogger::~CLIPSLogger</definition>
         <argsstring>()</argsstring>
         <name>~CLIPSLogger</name>
+        <qualifiedname>cx::CLIPSLogger::~CLIPSLogger</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -122,16 +130,17 @@
         <location file="include/cx_utils/clips_env_context.hpp" line="31" column="3"/>
       </memberdef>
       <memberdef kind="function" id="classcx_1_1CLIPSLogger_1ab0ecbf1459675aac82e4c8a8dda38fc9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
+        <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">void</ref></type>
         <definition>void cx::CLIPSLogger::log</definition>
         <argsstring>(const char *logical_name, const char *str)</argsstring>
         <name>log</name>
+        <qualifiedname>cx::CLIPSLogger::log</qualifiedname>
         <param>
-          <type>const char *</type>
+          <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">const</ref> <ref refid="classcx_1_1LockSharedPtr" kindref="compound">char</ref> *</type>
           <declname>logical_name</declname>
         </param>
         <param>
-          <type>const char *</type>
+          <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">const</ref> <ref refid="classcx_1_1LockSharedPtr" kindref="compound">char</ref> *</type>
           <declname>str</declname>
         </param>
         <briefdescription>
@@ -142,7 +151,7 @@
         </inbodydescription>
         <location file="include/cx_utils/clips_env_context.hpp" line="32" column="8"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

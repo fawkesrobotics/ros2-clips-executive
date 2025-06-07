@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cx_config_plugin &mdash; cx_config_plugin 0.1.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/collapsible-lists/css/tree_view.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=86f27845" />
+      <link rel="stylesheet" type="text/css" href="../../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
-        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+  
+        <script src="../../_static/jquery.js?v=8dae8fb0"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -25,14 +28,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> cx_config_plugin
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            cx_config_plugin
           </a>
               <div class="version">
                 0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -81,6 +88,9 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+</ul>
 
         </div>
       </div>
@@ -95,8 +105,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>cx_config_plugin</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cx_config_plugin</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/standard_docs/original/README.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -106,103 +116,103 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="cx-config-plugin">
-<h1>cx_config_plugin<a class="headerlink" href="#cx-config-plugin" title="Permalink to this headline"></a></h1>
+  <section id="cx-config-plugin">
+<h1>cx_config_plugin<a class="headerlink" href="#cx-config-plugin" title="Link to this heading"></a></h1>
 <p>This package offers the <code class="docutils literal notranslate"><span class="pre">cx::ConfigPlugin</span></code> CLIPS plugin to read config values from yaml.</p>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <p>Register this plugin with the plugin manager. It requires no additional configuration, an example setup is shown below:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">clips_manager</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">ros__parameters</span><span class="p">:</span><span class="w"></span>
-<span class="w">    </span><span class="nt">environments</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;main&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">    </span><span class="nt">main</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">plugins</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;config&quot;</span><span class="p p-Indicator">]</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">clips_manager</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ros__parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">environments</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;main&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">main</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">plugins</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;config&quot;</span><span class="p p-Indicator">]</span>
 
-<span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w"></span>
-<span class="w">      </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cx::ConfigPlugin&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">plugin</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;cx::ConfigPlugin&quot;</span>
 </pre></div>
 </div>
 </section>
 <section id="clips-features">
-<h2>CLIPS Features<a class="headerlink" href="#clips-features" title="Permalink to this headline"></a></h2>
+<h2>CLIPS Features<a class="headerlink" href="#clips-features" title="Link to this heading"></a></h2>
 <p>This plugin adds deftemplates and deffunctions as listed below:</p>
 <section id="deftemplates">
-<h3>Deftemplates<a class="headerlink" href="#deftemplates" title="Permalink to this headline"></a></h3>
+<h3>Deftemplates<a class="headerlink" href="#deftemplates" title="Link to this heading"></a></h3>
 <div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="c1">; Asserted by the config-load function for each configuration value in the parsed yaml file.</span>
-<span class="p">(</span><span class="nv">deftemplate</span> <span class="nv">confval</span>
-  <span class="p">(</span><span class="nv">slot</span> <span class="nv">path</span> <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">))</span>
-  <span class="p">(</span><span class="nv">slot</span> <span class="k">type</span> <span class="p">(</span><span class="k">type</span> <span class="nv">SYMBOL</span><span class="p">)</span> <span class="p">(</span><span class="nv">allowed-values</span> <span class="nv">FLOAT</span> <span class="nv">UINT</span> <span class="nv">INT</span> <span class="nv">BOOL</span> <span class="nv">STRING</span><span class="p">))</span>
-  <span class="p">(</span><span class="nv">slot</span> <span class="nv">value</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">slot</span> <span class="nv">is-list</span> <span class="p">(</span><span class="k">type</span> <span class="nv">SYMBOL</span><span class="p">)</span> <span class="p">(</span><span class="nv">allowed-values</span> <span class="nv">TRUE</span> <span class="nv">FALSE</span><span class="p">)</span> <span class="p">(</span><span class="nv">default</span> <span class="nv">FALSE</span><span class="p">))</span>
-  <span class="p">(</span><span class="nv">multislot</span> <span class="nv">list-value</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">deftemplate</span><span class="w"> </span><span class="nv">confval</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">slot</span><span class="w"> </span><span class="nv">path</span><span class="w"> </span><span class="p">(</span><span class="k">type</span><span class="w"> </span><span class="nv">STRING</span><span class="p">))</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">slot</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="p">(</span><span class="k">type</span><span class="w"> </span><span class="nv">SYMBOL</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">allowed-values</span><span class="w"> </span><span class="nv">FLOAT</span><span class="w"> </span><span class="nv">UINT</span><span class="w"> </span><span class="nv">INT</span><span class="w"> </span><span class="nv">BOOL</span><span class="w"> </span><span class="nv">STRING</span><span class="p">))</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">slot</span><span class="w"> </span><span class="nv">value</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">slot</span><span class="w"> </span><span class="nv">is-list</span><span class="w"> </span><span class="p">(</span><span class="k">type</span><span class="w"> </span><span class="nv">SYMBOL</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">allowed-values</span><span class="w"> </span><span class="nv">TRUE</span><span class="w"> </span><span class="nv">FALSE</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">default</span><span class="w"> </span><span class="nv">FALSE</span><span class="p">))</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">multislot</span><span class="w"> </span><span class="nv">list-value</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="c1">; Load all config values from a file (absolute path) given a prefix and store tjhem into (confval) facts.</span>
 <span class="c1">; The prefix determines tha resulting path in the confval facts.</span>
-<span class="p">(</span><span class="nv">config-load</span> <span class="nv">?file</span> <span class="nv">?prefix</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">config-load</span><span class="w"> </span><span class="nv">?file</span><span class="w"> </span><span class="nv">?prefix</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 </section>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline"></a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <p>Assuming a yaml file at path <code class="docutils literal notranslate"><span class="pre">/home/&lt;user&gt;/test.yaml</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">root</span><span class="p">:</span><span class="w"></span>
-<span class="w">  </span><span class="nt">branch</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">val1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w"></span>
-<span class="w">        </span><span class="nt">val2</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">test1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">test2</span><span class="p p-Indicator">]</span><span class="w"></span>
-<span class="w">  </span><span class="nt">branch2</span><span class="p">:</span><span class="w"></span>
-<span class="w">        </span><span class="nt">val1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w"></span>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">root</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">branch</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">val1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">        </span><span class="nt">val2</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">test1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">test2</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">branch2</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">val1</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </pre></div>
 </div>
 <p>Calling the function with different prefixes yields the following results:</p>
 <section id="parsing-everyting">
-<h3>Parsing Everyting<a class="headerlink" href="#parsing-everyting" title="Permalink to this headline"></a></h3>
-<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">config-load</span> <span class="s">&quot;/home/&lt;user&gt;/test.yaml&quot;</span> <span class="s">&quot;/&quot;</span><span class="p">)</span>
+<h3>Parsing Everyting<a class="headerlink" href="#parsing-everyting" title="Link to this heading"></a></h3>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">config-load</span><span class="w"> </span><span class="s">&quot;/home/&lt;user&gt;/test.yaml&quot;</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">)</span>
 <span class="p">(</span><span class="nv">confval</span>
-  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch/val1&quot;</span><span class="p">)</span>
-  <span class="p">(</span><span class="k">type</span> <span class="nv">BOOL</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">value</span> <span class="nv">TRUE</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">FALSE</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">path</span><span class="w"> </span><span class="s">&quot;/root/branch/val1&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="k">type</span><span class="w"> </span><span class="nv">BOOL</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">value</span><span class="w"> </span><span class="nv">TRUE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">is-list</span><span class="w"> </span><span class="nv">FALSE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="p">(</span><span class="nv">confval</span>
-  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch/val2&quot;</span><span class="p">)</span>
-  <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">value</span> <span class="no">nil</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">TRUE</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">list-value</span> <span class="s">&quot;test1&quot;</span> <span class="s">&quot;test2&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">path</span><span class="w"> </span><span class="s">&quot;/root/branch/val2&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="k">type</span><span class="w"> </span><span class="nv">STRING</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">value</span><span class="w"> </span><span class="no">nil</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">is-list</span><span class="w"> </span><span class="nv">TRUE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">list-value</span><span class="w"> </span><span class="s">&quot;test1&quot;</span><span class="w"> </span><span class="s">&quot;test2&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="p">(</span><span class="nv">confval</span>
-  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch2/val1&quot;</span><span class="p">)</span>
-  <span class="p">(</span><span class="k">type</span> <span class="nv">BOOL</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">value</span> <span class="nv">FALSE</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">FLASE</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">path</span><span class="w"> </span><span class="s">&quot;/root/branch2/val1&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="k">type</span><span class="w"> </span><span class="nv">BOOL</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">value</span><span class="w"> </span><span class="nv">FALSE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">is-list</span><span class="w"> </span><span class="nv">FLASE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="parsing-only-branch">
-<h3>Parsing Only “branch”<a class="headerlink" href="#parsing-only-branch" title="Permalink to this headline"></a></h3>
-<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">config-load</span> <span class="s">&quot;/home/&lt;user&gt;/test.yaml&quot;</span> <span class="s">&quot;/root/branch&quot;</span><span class="p">)</span>
+<h3>Parsing Only “branch”<a class="headerlink" href="#parsing-only-branch" title="Link to this heading"></a></h3>
+<div class="highlight-lisp notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="nv">config-load</span><span class="w"> </span><span class="s">&quot;/home/&lt;user&gt;/test.yaml&quot;</span><span class="w"> </span><span class="s">&quot;/root/branch&quot;</span><span class="p">)</span>
 <span class="p">(</span><span class="nv">confval</span>
-  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch/val1&quot;</span><span class="p">)</span>
-  <span class="p">(</span><span class="k">type</span> <span class="nv">BOOL</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">value</span> <span class="nv">TRUE</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">FALSE</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">path</span><span class="w"> </span><span class="s">&quot;/root/branch/val1&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="k">type</span><span class="w"> </span><span class="nv">BOOL</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">value</span><span class="w"> </span><span class="nv">TRUE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">is-list</span><span class="w"> </span><span class="nv">FALSE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">list-value</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="p">(</span><span class="nv">confval</span>
-  <span class="p">(</span><span class="nv">path</span> <span class="s">&quot;/root/branch/val2&quot;</span><span class="p">)</span>
-  <span class="p">(</span><span class="k">type</span> <span class="nv">STRING</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">value</span> <span class="no">nil</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">is-list</span> <span class="nv">TRUE</span><span class="p">)</span>
-  <span class="p">(</span><span class="nv">list-value</span> <span class="s">&quot;test1&quot;</span> <span class="s">&quot;test2&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">path</span><span class="w"> </span><span class="s">&quot;/root/branch/val2&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="k">type</span><span class="w"> </span><span class="nv">STRING</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">value</span><span class="w"> </span><span class="no">nil</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">is-list</span><span class="w"> </span><span class="nv">TRUE</span><span class="p">)</span>
+<span class="w">  </span><span class="p">(</span><span class="nv">list-value</span><span class="w"> </span><span class="s">&quot;test1&quot;</span><span class="w"> </span><span class="s">&quot;test2&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>

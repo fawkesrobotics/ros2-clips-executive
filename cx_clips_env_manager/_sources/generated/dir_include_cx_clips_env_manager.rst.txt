@@ -9,6 +9,7 @@ Directory cx_clips_env_manager
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
 *Directory path:* ``include/cx_clips_env_manager``
 
 

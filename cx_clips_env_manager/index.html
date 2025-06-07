@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cx_clips_env_manager &mdash; cx_clips_env_manager 0.1.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+      <link rel="stylesheet" type="text/css" href="_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
-        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -26,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> cx_clips_env_manager
+
+          
+          
+          <a href="#" class="icon icon-home">
+            cx_clips_env_manager
           </a>
               <div class="version">
                 0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -87,6 +94,9 @@
 </ul>
 </li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+</ul>
 
         </div>
       </div>
@@ -101,8 +111,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>cx_clips_env_manager</li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cx_clips_env_manager</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -113,7 +123,7 @@
            <div itemprop="articleBody">
              
   <section id="cx-clips-env-manager">
-<h1>cx_clips_env_manager<a class="headerlink" href="#cx-clips-env-manager" title="Permalink to this headline"></a></h1>
+<h1>cx_clips_env_manager<a class="headerlink" href="#cx-clips-env-manager" title="Link to this heading"></a></h1>
 <p>Lifecycle node for managing CLIPS environments</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -132,12 +142,12 @@
 </div>
 </section>
 <section id="readme">
-<h1>README<a class="headerlink" href="#readme" title="Permalink to this headline"></a></h1>
-<section class="tex2jax_ignore mathjax_ignore" id="cx-clips-env-manager">
-<h2>cx_clips_env_manager<a class="headerlink" href="#cx-clips-env-manager" title="Permalink to this headline"></a></h2>
+<h1>README<a class="headerlink" href="#readme" title="Link to this heading"></a></h1>
+<section id="cx-clips-env-manager">
+<h2>cx_clips_env_manager<a class="headerlink" href="#cx-clips-env-manager" title="Link to this heading"></a></h2>
 <p>This is the central package of the CLIPS-Executive that provides the CLIPS Environment Manager.</p>
 <section id="responsibilities">
-<h3>Responsibilities<a class="headerlink" href="#responsibilities" title="Permalink to this headline"></a></h3>
+<h3>Responsibilities<a class="headerlink" href="#responsibilities" title="Link to this heading"></a></h3>
 <p>The CLIPS Environment Manager is the central component that allows to:</p>
 <ul class="simple">
 <li><p>dynamically create and destroy CLIPS environments</p></li>
@@ -153,15 +163,15 @@
 <p>Similarly, each dynamically created environment goes through the same steps  as on activation and each dynamically destroyed environment goes through the same steps as on deactivation.</p>
 </section>
 <section id="usage">
-<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline"></a></h3>
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h3>
 <p>To just launch a bare unconfigured node, just run the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2 run cx_clips_env_manager clips_node
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ros2<span class="w"> </span>run<span class="w"> </span>cx_clips_env_manager<span class="w"> </span>clips_node
 </pre></div>
 </div>
 <p>The environment manager node can be configured via ROS parameters to automatically setup environments on startup.</p>
 <p>Additionally, it provides services to create and destroy environments dynamically at runtime and to load and unload plugins into environments.</p>
 <section id="parameters">
-<h4>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline"></a></h4>
+<h4>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h4>
 <p>The example configuration below shows the configuration for an instance of the CLIPS environment manager that creates two environments on start.
 It utilzes three different plugins, but the “executive” plugin is used for both instances.</p>
 <p>For a more comprehensive example, check out the <strong>cx_bringup</strong> package.</p>
@@ -192,7 +202,7 @@ It utilzes three different plugins, but the “executive” plugin is used for b
 </div>
 </section>
 <section id="services">
-<h4>Services<a class="headerlink" href="#services" title="Permalink to this headline"></a></h4>
+<h4>Services<a class="headerlink" href="#services" title="Link to this heading"></a></h4>
 <p>These services are provided by each environment manager node:</p>
 <ul class="simple">
 <li><p><em>/create_env</em> for creating environments</p></li>
@@ -204,7 +214,7 @@ It utilzes three different plugins, but the “executive” plugin is used for b
 </section>
 </section>
 <section id="plugins">
-<h3>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline"></a></h3>
+<h3>Plugins<a class="headerlink" href="#plugins" title="Link to this heading"></a></h3>
 <p>Plugins are specializations of of the <em>cx_plugin</em> base class and are handled as follows:</p>
 <ul class="simple">
 <li><p>Each plugin is initialized exactly once before it is loaded into environments by calling it’s <code class="docutils literal notranslate"><span class="pre">initialize()</span></code> function.</p></li>
@@ -217,7 +227,7 @@ It utilzes three different plugins, but the “executive” plugin is used for b
 </ul>
 </section>
 <section id="logging-and-routing">
-<h3>Logging and Routing<a class="headerlink" href="#logging-and-routing" title="Permalink to this headline"></a></h3>
+<h3>Logging and Routing<a class="headerlink" href="#logging-and-routing" title="Link to this heading"></a></h3>
 <p>THe CLIPS Environment manager provides a custom CLIPS logger that logs CLIPS output to ROS and also saves CLIPS output of each environment to files if configured so.
 The log files are stored at the ROS logging directory “~/.ros/log/” and are named using the name of the envrionment followed by a timestamp.</p>
 <p>For log routing inside CLIPS, the custom loggers accepts the following logical names that log to the file and additionally also in some cases to ROS:</p>

@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classcx_1_1ExamplePlugin" kind="class" language="C++" prot="public">
     <compoundname>cx::ExamplePlugin</compoundname>
     <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
-      <sectiondef kind="private-attrib">
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classcx_1_1ExamplePlugin_1a8666ae96072d60c1ac550aaf9337f6dc" prot="private" static="no" mutable="no">
         <type>std::unique_ptr&lt; rclcpp::Logger &gt;</type>
         <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::ExamplePlugin::logger_</definition>
         <argsstring></argsstring>
         <name>logger_</name>
+        <qualifiedname>cx::ExamplePlugin::logger_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -17,13 +18,14 @@
         </inbodydescription>
         <location file="include/cx_example_plugin/example_plugin.hpp" line="36" column="19" bodyfile="include/cx_example_plugin/example_plugin.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classcx_1_1ExamplePlugin_1a65b39ee0843555da144a467d775963c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>cx::ExamplePlugin::ExamplePlugin</definition>
         <argsstring>()</argsstring>
         <name>ExamplePlugin</name>
+        <qualifiedname>cx::ExamplePlugin::ExamplePlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -37,6 +39,7 @@
         <definition>cx::ExamplePlugin::~ExamplePlugin</definition>
         <argsstring>()</argsstring>
         <name>~ExamplePlugin</name>
+        <qualifiedname>cx::ExamplePlugin::~ExamplePlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -50,6 +53,7 @@
         <definition>void cx::ExamplePlugin::initialize</definition>
         <argsstring>() override</argsstring>
         <name>initialize</name>
+        <qualifiedname>cx::ExamplePlugin::initialize</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
         <briefdescription>
         </briefdescription>
@@ -64,6 +68,7 @@
         <definition>bool cx::ExamplePlugin::clips_env_init</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_init</name>
+        <qualifiedname>cx::ExamplePlugin::clips_env_init</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -82,6 +87,7 @@
         <definition>bool cx::ExamplePlugin::clips_env_destroyed</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_destroyed</name>
+        <qualifiedname>cx::ExamplePlugin::clips_env_destroyed</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -95,7 +101,7 @@
         </inbodydescription>
         <location file="include/cx_example_plugin/example_plugin.hpp" line="33" column="8"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

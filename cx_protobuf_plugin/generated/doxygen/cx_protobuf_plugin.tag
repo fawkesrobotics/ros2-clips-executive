@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<tagfile doxygen_version="1.9.1">
+<tagfile doxygen_version="1.9.8">
   <compound kind="class">
     <name>protobuf_clips::ClipsProtobufCommunicator</name>
     <filename>classprotobuf__clips_1_1ClipsProtobufCommunicator.html</filename>
@@ -7,21 +7,21 @@
       <type>boost::signals2::signal&lt; void(protobuf_comm::ProtobufStreamServer::ClientID, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp;</type>
       <name>signal_server_sent</name>
       <anchorfile>classprotobuf__clips_1_1ClipsProtobufCommunicator.html</anchorfile>
-      <anchor>a0e2f98f4562c5cdf22030c37092edce4</anchor>
+      <anchor>ad9b1d71d6433c0f0f6fff5f556631d43</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>boost::signals2::signal&lt; void(std::string, unsigned short, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp;</type>
       <name>signal_client_sent</name>
       <anchorfile>classprotobuf__clips_1_1ClipsProtobufCommunicator.html</anchorfile>
-      <anchor>aed6d32a6c279205c7ec11124ab79cf4d</anchor>
+      <anchor>af0cd4f4f1d5af8495c0dd955f8c97170</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>boost::signals2::signal&lt; void(long, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp;</type>
       <name>signal_peer_sent</name>
       <anchorfile>classprotobuf__clips_1_1ClipsProtobufCommunicator.html</anchorfile>
-      <anchor>a6bbff2bbe9dccd8d89d14af480df9633</anchor>
+      <anchor>aabee4aa597a5bc5f612c939c9267afea</anchor>
       <arglist>()</arglist>
     </member>
   </compound>

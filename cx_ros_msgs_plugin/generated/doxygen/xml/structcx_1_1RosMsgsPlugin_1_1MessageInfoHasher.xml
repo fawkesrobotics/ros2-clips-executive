@@ -1,13 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="structcx_1_1RosMsgsPlugin_1_1MessageInfoHasher" kind="struct" language="C++" prot="private">
     <compoundname>cx::RosMsgsPlugin::MessageInfoHasher</compoundname>
-      <sectiondef kind="public-func">
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="structcx_1_1RosMsgsPlugin_1_1MessageInfoHasher_1a29694b8acaa4ca1fd5ab32126d976c1e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>std::size_t</type>
         <definition>std::size_t cx::RosMsgsPlugin::MessageInfoHasher::operator()</definition>
         <argsstring>(const MessageInfo &amp;key) const</argsstring>
         <name>operator()</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfoHasher::operator()</qualifiedname>
         <param>
           <type>const MessageInfo &amp;</type>
           <declname>key</declname>
@@ -18,14 +19,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="97" column="17" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="97" bodyend="101"/>
+        <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="102" column="17" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="102" bodyend="107"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="96" column="3" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="96" bodyend="102"/>
+    <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="101" column="3" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="101" bodyend="108"/>
     <listofallmembers>
       <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfoHasher_1a29694b8acaa4ca1fd5ab32126d976c1e" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfoHasher</scope><name>operator()</name></member>
     </listofallmembers>

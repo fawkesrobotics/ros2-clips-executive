@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classcx_1_1ClipsPlugin" kind="class" language="C++" prot="public" abstract="yes">
     <compoundname>cx::ClipsPlugin</compoundname>
     <includes refid="clips__plugin_8hpp" local="no">clips_plugin.hpp</includes>
-      <sectiondef kind="private-type">
+    <sectiondef kind="private-type">
       <memberdef kind="typedef" id="classcx_1_1ClipsPlugin_1a5053a0c74ce074ddc7123554f9e45752" prot="private" static="no">
         <type>pluginlib::UniquePtr&lt; <ref refid="classcx_1_1ClipsPlugin" kindref="compound">cx::ClipsPlugin</ref> &gt;</type>
         <definition>using cx::ClipsPlugin::Ptr =  pluginlib::UniquePtr&lt;cx::ClipsPlugin&gt;</definition>
         <argsstring></argsstring>
         <name>Ptr</name>
+        <qualifiedname>cx::ClipsPlugin::Ptr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -17,13 +18,14 @@
         </inbodydescription>
         <location file="include/cx_plugin/clips_plugin.hpp" line="38" column="3" bodyfile="include/cx_plugin/clips_plugin.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="friend">
+    </sectiondef>
+    <sectiondef kind="friend">
       <memberdef kind="friend" id="classcx_1_1ClipsPlugin_1a68cdb6f3c003491e6b12d502e4aca142" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>class</type>
         <definition>friend class ClipsPluginManager</definition>
         <argsstring></argsstring>
         <name>ClipsPluginManager</name>
+        <qualifiedname>cx::ClipsPlugin::ClipsPluginManager</qualifiedname>
         <param>
           <type><ref refid="classcx_1_1ClipsPluginManager" kindref="compound" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_clips_env_manager/cx_clips_env_manager.tag">ClipsPluginManager</ref></type>
         </param>
@@ -33,15 +35,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/cx_plugin/clips_plugin.hpp" line="37" column="3" bodyfile="include/cx_plugin/clips_plugin.hpp" bodystart="37" bodyend="-1"/>
+        <location file="include/cx_plugin/clips_plugin.hpp" line="37" column="16" bodyfile="include/cx_plugin/clips_plugin.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="protected-attrib">
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
       <memberdef kind="variable" id="classcx_1_1ClipsPlugin_1aace7c9a1941b76a19a23e6881ec26906" prot="protected" static="no" mutable="no">
         <type>std::string</type>
         <definition>std::string cx::ClipsPlugin::plugin_name_</definition>
         <argsstring></argsstring>
         <name>plugin_name_</name>
+        <qualifiedname>cx::ClipsPlugin::plugin_name_</qualifiedname>
         <briefdescription>
 <para>Configured name of the plugin. </para>
         </briefdescription>
@@ -56,6 +59,7 @@
         <definition>rclcpp_lifecycle::LifecycleNode::WeakPtr cx::ClipsPlugin::parent_</definition>
         <argsstring></argsstring>
         <name>parent_</name>
+        <qualifiedname>cx::ClipsPlugin::parent_</qualifiedname>
         <briefdescription>
 <para>Reference to parent node in case ROS interaction is needed. </para>
         </briefdescription>
@@ -65,13 +69,14 @@
         </inbodydescription>
         <location file="include/cx_plugin/clips_plugin.hpp" line="80" column="44" bodyfile="include/cx_plugin/clips_plugin.hpp" bodystart="80" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classcx_1_1ClipsPlugin_1ad659901e789d9344a41a0d64bb7e2c53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>cx::ClipsPlugin::ClipsPlugin</definition>
         <argsstring>()</argsstring>
         <name>ClipsPlugin</name>
+        <qualifiedname>cx::ClipsPlugin::ClipsPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -85,6 +90,7 @@
         <definition>virtual cx::ClipsPlugin::~ClipsPlugin</definition>
         <argsstring>()</argsstring>
         <name>~ClipsPlugin</name>
+        <qualifiedname>cx::ClipsPlugin::~ClipsPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -98,6 +104,7 @@
         <definition>virtual void cx::ClipsPlugin::initialize</definition>
         <argsstring>()</argsstring>
         <name>initialize</name>
+        <qualifiedname>cx::ClipsPlugin::initialize</qualifiedname>
         <briefdescription>
 <para>Called once for each plugin when it is loaded. </para>
         </briefdescription>
@@ -112,6 +119,7 @@
         <definition>virtual void cx::ClipsPlugin::finalize</definition>
         <argsstring>()</argsstring>
         <name>finalize</name>
+        <qualifiedname>cx::ClipsPlugin::finalize</qualifiedname>
         <briefdescription>
 <para>Called once for each plugin when it is unloaded. </para>
         </briefdescription>
@@ -126,6 +134,7 @@
         <definition>virtual bool cx::ClipsPlugin::clips_env_init</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env)=0</argsstring>
         <name>clips_env_init</name>
+        <qualifiedname>cx::ClipsPlugin::clips_env_init</qualifiedname>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
           <declname>env</declname>
@@ -157,6 +166,7 @@
         <definition>virtual bool cx::ClipsPlugin::clips_env_destroyed</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env)=0</argsstring>
         <name>clips_env_destroyed</name>
+        <qualifiedname>cx::ClipsPlugin::clips_env_destroyed</qualifiedname>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
           <declname>env</declname>
@@ -186,6 +196,7 @@
         <definition>std::string cx::ClipsPlugin::get_plugin_name</definition>
         <argsstring>() const</argsstring>
         <name>get_plugin_name</name>
+        <qualifiedname>cx::ClipsPlugin::get_plugin_name</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -194,13 +205,14 @@
         </inbodydescription>
         <location file="include/cx_plugin/clips_plugin.hpp" line="73" column="15"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
+    </sectiondef>
+    <sectiondef kind="private-func">
       <memberdef kind="function" id="classcx_1_1ClipsPlugin_1a61690874f940acc67d0d7d04e0a4c077" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void cx::ClipsPlugin::initialize</definition>
         <argsstring>(const rclcpp_lifecycle::LifecycleNode::WeakPtr parent, const std::string &amp;plugin_name)</argsstring>
         <name>initialize</name>
+        <qualifiedname>cx::ClipsPlugin::initialize</qualifiedname>
         <param>
           <type>const rclcpp_lifecycle::LifecycleNode::WeakPtr</type>
           <declname>parent</declname>
@@ -217,7 +229,7 @@
         </inbodydescription>
         <location file="include/cx_plugin/clips_plugin.hpp" line="84" column="8"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
 <para>Clips Plugin. </para>
     </briefdescription>

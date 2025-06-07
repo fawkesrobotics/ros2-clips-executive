@@ -8,6 +8,7 @@ File clips_plugin_manager.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -29,7 +30,7 @@ Includes
 --------
 
 
-- ``cx_msgs/srv/list_clips_plugin.hpp``
+- ``cx_msgs/srv/list_clips_plugins.hpp``
 
 - ``cx_msgs/srv/load_clips_plugin.hpp``
 

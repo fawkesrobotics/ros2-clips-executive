@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="clips__plugin_8hpp" kind="file" language="C++">
     <compoundname>clips_plugin.hpp</compoundname>
     <includes local="no">clips_ns/clips.h</includes>
@@ -9,15 +9,6 @@
     <includes local="yes">pluginlib/class_loader.hpp</includes>
     <includes local="yes">rclcpp_lifecycle/lifecycle_node.hpp</includes>
     <incdepgraph>
-      <node id="2">
-        <label>clips_ns/clips.h</label>
-      </node>
-      <node id="4">
-        <label>string</label>
-      </node>
-      <node id="3">
-        <label>map</label>
-      </node>
       <node id="1">
         <label>include/cx_plugin/clips_plugin.hpp</label>
         <link refid="clips__plugin_8hpp"/>
@@ -34,14 +25,23 @@
         <childnode refid="7" relation="include">
         </childnode>
       </node>
+      <node id="2">
+        <label>clips_ns/clips.h</label>
+      </node>
       <node id="5">
         <label>cx_utils/lock_shared_ptr.hpp</label>
+      </node>
+      <node id="3">
+        <label>map</label>
       </node>
       <node id="6">
         <label>pluginlib/class_loader.hpp</label>
       </node>
       <node id="7">
         <label>rclcpp_lifecycle/lifecycle_node.hpp</label>
+      </node>
+      <node id="4">
+        <label>string</label>
       </node>
     </incdepgraph>
     <innerclass refid="classcx_1_1ClipsPlugin" prot="public">cx::ClipsPlugin</innerclass>
@@ -51,7 +51,7 @@
     <detaileddescription>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024-2025<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Licensed<sp/>under<sp/>the<sp/>Apache<sp/>License,<sp/>Version<sp/>2.0<sp/>(the<sp/>&quot;License&quot;);</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>you<sp/>may<sp/>not<sp/>use<sp/>this<sp/>file<sp/>except<sp/>in<sp/>compliance<sp/>with<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
@@ -82,11 +82,11 @@
 <codeline lineno="30"><highlight class="normal"></highlight></codeline>
 <codeline lineno="36" refid="classcx_1_1ClipsPlugin" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcx_1_1ClipsPlugin" kindref="compound">ClipsPlugin</ref><sp/>{</highlight></codeline>
 <codeline lineno="37"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcx_1_1ClipsPluginManager" kindref="compound" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_clips_env_manager/cx_clips_env_manager.tag">ClipsPluginManager</ref>;</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Ptr<sp/>=<sp/>pluginlib::UniquePtr&lt;cx::ClipsPlugin&gt;;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">using<sp/></highlight><highlight class="normal">Ptr<sp/>=<sp/>pluginlib::UniquePtr&lt;cx::ClipsPlugin&gt;;</highlight></codeline>
 <codeline lineno="39"><highlight class="normal"></highlight></codeline>
 <codeline lineno="40"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
 <codeline lineno="41"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1ClipsPlugin" kindref="compound">ClipsPlugin</ref>();</highlight></codeline>
-<codeline lineno="42"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~<ref refid="classcx_1_1ClipsPlugin" kindref="compound">ClipsPlugin</ref>();</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1ClipsPlugin" kindref="compound">~ClipsPlugin</ref>();</highlight></codeline>
 <codeline lineno="43"><highlight class="normal"></highlight></codeline>
 <codeline lineno="45" refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f" kindref="member">initialize</ref>();</highlight></codeline>
 <codeline lineno="47" refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60" kindref="member">finalize</ref>();</highlight></codeline>

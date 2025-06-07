@@ -1,29 +1,29 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="namespacecx" kind="namespace" language="C++">
     <compoundname>cx</compoundname>
-    <innerclass refid="classcx_1_1ProtobufPlugin" prot="public">cx::ProtobufPlugin</innerclass>
-    <innerclass refid="classcx_1_1ConfigPlugin" prot="public">cx::ConfigPlugin</innerclass>
-    <innerclass refid="classcx_1_1CLIPSEnvManager" prot="public">cx::CLIPSEnvManager</innerclass>
-    <innerclass refid="classcx_1_1ClipsPluginManager" prot="public">cx::ClipsPluginManager</innerclass>
-    <innerclass refid="classcx_1_1Plansys2Plugin" prot="public">cx::Plansys2Plugin</innerclass>
-    <innerclass refid="classcx_1_1ExecutivePlugin" prot="public">cx::ExecutivePlugin</innerclass>
-    <innerclass refid="classcx_1_1ExamplePlugin" prot="public">cx::ExamplePlugin</innerclass>
-    <innerclass refid="classcx_1_1RosMsgsPlugin" prot="public">cx::RosMsgsPlugin</innerclass>
-    <innerclass refid="classcx_1_1ClipsPlugin" prot="public">cx::ClipsPlugin</innerclass>
     <innerclass refid="classcx_1_1AmentIndexPlugin" prot="public">cx::AmentIndexPlugin</innerclass>
-    <innerclass refid="classcx_1_1PddlParserPlugin" prot="public">cx::PddlParserPlugin</innerclass>
-    <innerclass refid="classcx_1_1FileLoadPlugin" prot="public">cx::FileLoadPlugin</innerclass>
-    <innerclass refid="classcx_1_1CLIPSLogger" prot="public">cx::CLIPSLogger</innerclass>
     <innerclass refid="classcx_1_1CLIPSEnvContext" prot="public">cx::CLIPSEnvContext</innerclass>
+    <innerclass refid="classcx_1_1CLIPSEnvManager" prot="public">cx::CLIPSEnvManager</innerclass>
+    <innerclass refid="classcx_1_1CLIPSLogger" prot="public">cx::CLIPSLogger</innerclass>
+    <innerclass refid="classcx_1_1ClipsPlugin" prot="public">cx::ClipsPlugin</innerclass>
+    <innerclass refid="classcx_1_1ClipsPluginManager" prot="public">cx::ClipsPluginManager</innerclass>
+    <innerclass refid="classcx_1_1ConfigPlugin" prot="public">cx::ConfigPlugin</innerclass>
+    <innerclass refid="classcx_1_1ExamplePlugin" prot="public">cx::ExamplePlugin</innerclass>
+    <innerclass refid="classcx_1_1ExecutivePlugin" prot="public">cx::ExecutivePlugin</innerclass>
+    <innerclass refid="classcx_1_1FileLoadPlugin" prot="public">cx::FileLoadPlugin</innerclass>
     <innerclass refid="classcx_1_1LockSharedPtr" prot="public">cx::LockSharedPtr</innerclass>
+    <innerclass refid="classcx_1_1PddlParserPlugin" prot="public">cx::PddlParserPlugin</innerclass>
+    <innerclass refid="classcx_1_1ProtobufPlugin" prot="public">cx::ProtobufPlugin</innerclass>
+    <innerclass refid="classcx_1_1RosMsgsPlugin" prot="public">cx::RosMsgsPlugin</innerclass>
     <innernamespace refid="namespacecx_1_1cx__utils">cx::cx_utils</innernamespace>
-      <sectiondef kind="var">
+    <sectiondef kind="var">
       <memberdef kind="variable" id="string__utils_8hpp_1a8d8a6edcb760b28dacf2804884ef1e62" prot="public" static="no" mutable="no">
         <type>std::string</type>
         <definition>std::string cx::chars</definition>
         <argsstring></argsstring>
         <name>chars</name>
+        <qualifiedname>cx::chars</qualifiedname>
         <initializer>{
     &quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-&quot;}</initializer>
         <briefdescription>
@@ -32,13 +32,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/cx_utils/string_utils.hpp" line="27" column="13" bodyfile="include/cx_utils/string_utils.hpp" bodystart="27" bodyend="-1"/>
+        <location file="include/cx_utils/string_utils.hpp" line="27" column="13" bodyfile="include/cx_utils/string_utils.hpp" bodystart="27" bodyend="28"/>
       </memberdef>
       <memberdef kind="variable" id="string__utils_8hpp_1ab55bf494ff071923012e9f7982c967d6" prot="public" static="no" mutable="no">
         <type>std::random_device</type>
         <definition>std::random_device cx::rd</definition>
         <argsstring></argsstring>
         <name>rd</name>
+        <qualifiedname>cx::rd</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -47,13 +48,14 @@
         </inbodydescription>
         <location file="include/cx_utils/string_utils.hpp" line="29" column="20" bodyfile="include/cx_utils/string_utils.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="func">
+    </sectiondef>
+    <sectiondef kind="func">
       <memberdef kind="function" id="string__utils_8hpp_1a1810683f407b6fadb41a3b8f1df0fd8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::mt19937</type>
         <definition>std::mt19937 cx::generator</definition>
         <argsstring>(rd())</argsstring>
         <name>generator</name>
+        <qualifiedname>cx::generator</qualifiedname>
         <param>
           <type>rd()</type>
         </param>
@@ -70,8 +72,9 @@
         <definition>std::string cx::generate_rnd_string</definition>
         <argsstring>(int length)</argsstring>
         <name>generate_rnd_string</name>
+        <qualifiedname>cx::generate_rnd_string</qualifiedname>
         <param>
-          <type>int</type>
+          <type><ref refid="classcx_1_1LockSharedPtr" kindref="compound">int</ref></type>
           <declname>length</declname>
         </param>
         <briefdescription>
@@ -82,7 +85,7 @@
         </inbodydescription>
         <location file="include/cx_utils/string_utils.hpp" line="32" column="13" bodyfile="include/cx_utils/string_utils.hpp" bodystart="32" bodyend="36"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

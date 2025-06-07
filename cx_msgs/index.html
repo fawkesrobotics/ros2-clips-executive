@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>cx_msgs &mdash; cx_msgs 0.1.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -23,14 +26,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> cx_msgs
+
+          
+          
+          <a href="#" class="icon icon-home">
+            cx_msgs
           </a>
               <div class="version">
                 0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -40,15 +47,20 @@
 <li class="toctree-l1"><a class="reference internal" href="interfaces/service_definitions.html">Service Definitions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="interfaces/srv/CreateClipsEnv.html">CreateClipsEnv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interfaces/srv/DestroyClipsEnv.html">DestroyClipsEnv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/ListCLIPSPlugin.html">ListCLIPSPlugin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/LoadCLIPSPlugin.html">LoadCLIPSPlugin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/UnloadCLIPSPlugin.html">UnloadCLIPSPlugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/ListClipsEnvs.html">ListClipsEnvs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/ListClipsPlugins.html">ListClipsPlugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/ListClipsenvs.html">ListClipsenvs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/LoadClipsPlugin.html">LoadClipsPlugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/UnloadClipsPlugin.html">UnloadClipsPlugin</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="standards.html">Standard Documents</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="standard_docs/PACKAGE.html">PACKAGE</a></li>
 </ul>
 </li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
 </ul>
 
         </div>
@@ -64,8 +76,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>cx_msgs</li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cx_msgs</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -76,16 +88,18 @@
            <div itemprop="articleBody">
              
   <section id="cx-msgs">
-<h1>cx_msgs<a class="headerlink" href="#cx-msgs" title="Permalink to this headline"></a></h1>
+<h1>cx_msgs<a class="headerlink" href="#cx-msgs" title="Link to this heading"></a></h1>
 <p>Messages, Services and Action files for ROS2 Clips-Executive</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="interfaces/service_definitions.html">Service Definitions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="interfaces/srv/CreateClipsEnv.html">CreateClipsEnv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="interfaces/srv/DestroyClipsEnv.html">DestroyClipsEnv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/ListCLIPSPlugin.html">ListCLIPSPlugin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/LoadCLIPSPlugin.html">LoadCLIPSPlugin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/UnloadCLIPSPlugin.html">UnloadCLIPSPlugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/ListClipsEnvs.html">ListClipsEnvs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/ListClipsPlugins.html">ListClipsPlugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/ListClipsenvs.html">ListClipsenvs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/LoadClipsPlugin.html">LoadClipsPlugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/srv/UnloadClipsPlugin.html">UnloadClipsPlugin</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="standards.html">Standard Documents</a><ul>

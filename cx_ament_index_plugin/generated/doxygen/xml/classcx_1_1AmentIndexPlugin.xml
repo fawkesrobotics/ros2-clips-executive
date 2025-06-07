@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classcx_1_1AmentIndexPlugin" kind="class" language="C++" prot="public">
     <compoundname>cx::AmentIndexPlugin</compoundname>
     <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
-      <sectiondef kind="private-attrib">
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classcx_1_1AmentIndexPlugin_1afe1779a55eb2833f4b40180a04913c8f" prot="private" static="no" mutable="no">
         <type>std::unique_ptr&lt; rclcpp::Logger &gt;</type>
         <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::AmentIndexPlugin::logger_</definition>
         <argsstring></argsstring>
         <name>logger_</name>
+        <qualifiedname>cx::AmentIndexPlugin::logger_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -22,6 +23,7 @@
         <definition>std::unordered_set&lt;std::string&gt; cx::AmentIndexPlugin::function_names_</definition>
         <argsstring></argsstring>
         <name>function_names_</name>
+        <qualifiedname>cx::AmentIndexPlugin::function_names_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -30,13 +32,14 @@
         </inbodydescription>
         <location file="include/cx_ament_index_plugin/ament_index_plugin.hpp" line="37" column="22" bodyfile="include/cx_ament_index_plugin/ament_index_plugin.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classcx_1_1AmentIndexPlugin_1ab793db99488017449bec149dc35045fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>cx::AmentIndexPlugin::AmentIndexPlugin</definition>
         <argsstring>()</argsstring>
         <name>AmentIndexPlugin</name>
+        <qualifiedname>cx::AmentIndexPlugin::AmentIndexPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -50,6 +53,7 @@
         <definition>cx::AmentIndexPlugin::~AmentIndexPlugin</definition>
         <argsstring>()</argsstring>
         <name>~AmentIndexPlugin</name>
+        <qualifiedname>cx::AmentIndexPlugin::~AmentIndexPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -63,6 +67,7 @@
         <definition>void cx::AmentIndexPlugin::initialize</definition>
         <argsstring>()</argsstring>
         <name>initialize</name>
+        <qualifiedname>cx::AmentIndexPlugin::initialize</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
         <briefdescription>
         </briefdescription>
@@ -77,6 +82,7 @@
         <definition>bool cx::AmentIndexPlugin::clips_env_init</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_init</name>
+        <qualifiedname>cx::AmentIndexPlugin::clips_env_init</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -95,6 +101,7 @@
         <definition>bool cx::AmentIndexPlugin::clips_env_destroyed</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_destroyed</name>
+        <qualifiedname>cx::AmentIndexPlugin::clips_env_destroyed</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -108,33 +115,33 @@
         </inbodydescription>
         <location file="include/cx_ament_index_plugin/ament_index_plugin.hpp" line="33" column="8"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <inheritancegraph>
-      <node id="2">
-        <label>cx::ClipsPlugin</label>
-        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
-      </node>
       <node id="1">
         <label>cx::AmentIndexPlugin</label>
         <link refid="classcx_1_1AmentIndexPlugin"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
       </node>
     </inheritancegraph>
     <collaborationgraph>
-      <node id="2">
-        <label>cx::ClipsPlugin</label>
-        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
-      </node>
       <node id="1">
         <label>cx::AmentIndexPlugin</label>
         <link refid="classcx_1_1AmentIndexPlugin"/>
         <childnode refid="2" relation="public-inheritance">
         </childnode>
+      </node>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
       </node>
     </collaborationgraph>
     <location file="include/cx_ament_index_plugin/ament_index_plugin.hpp" line="25" column="1" bodyfile="include/cx_ament_index_plugin/ament_index_plugin.hpp" bodystart="25" bodyend="38"/>

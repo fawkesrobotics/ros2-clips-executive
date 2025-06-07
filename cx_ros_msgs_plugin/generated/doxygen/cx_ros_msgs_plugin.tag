@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<tagfile doxygen_version="1.9.1">
+<tagfile doxygen_version="1.9.8">
   <compound kind="class">
     <name>cx::RosMsgsPlugin</name>
     <filename>classcx_1_1RosMsgsPlugin.html</filename>

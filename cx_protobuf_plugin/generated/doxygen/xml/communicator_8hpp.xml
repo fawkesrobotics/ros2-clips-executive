@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="communicator_8hpp" kind="file" language="C++">
     <compoundname>communicator.hpp</compoundname>
     <includes local="yes">rclcpp_lifecycle/lifecycle_node.hpp</includes>
@@ -10,9 +10,6 @@
     <includes local="no">mutex</includes>
     <includedby refid="protobuf__plugin_8hpp" local="no">include/cx_protobuf_plugin/protobuf_plugin.hpp</includedby>
     <incdepgraph>
-      <node id="5">
-        <label>list</label>
-      </node>
       <node id="1">
         <label>include/cx_protobuf_plugin/communicator.hpp</label>
         <link refid="communicator_8hpp"/>
@@ -32,14 +29,17 @@
       <node id="4">
         <label>clips_ns/clips.h</label>
       </node>
+      <node id="5">
+        <label>list</label>
+      </node>
       <node id="6">
         <label>map</label>
       </node>
-      <node id="3">
-        <label>protobuf_comm/server.h</label>
-      </node>
       <node id="7">
         <label>mutex</label>
+      </node>
+      <node id="3">
+        <label>protobuf_comm/server.h</label>
       </node>
       <node id="2">
         <label>rclcpp_lifecycle/lifecycle_node.hpp</label>
@@ -66,7 +66,7 @@
     <detaileddescription>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024-2025<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>This<sp/>program<sp/>is<sp/>free<sp/>software;<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>as<sp/>published<sp/>by</highlight><highlight class="normal"></highlight></codeline>
@@ -118,26 +118,26 @@
 <codeline lineno="50"><highlight class="normal"><sp/><sp/><ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator" kindref="compound">ClipsProtobufCommunicator</ref>(clips::Environment<sp/>*env,<sp/>std::mutex<sp/>&amp;env_mutex,</highlight></codeline>
 <codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;std::string&gt;<sp/>&amp;proto_path,</highlight></codeline>
 <codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rclcpp_lifecycle::LifecycleNode::WeakPtr<sp/>parent);</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/>~<ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator" kindref="compound">ClipsProtobufCommunicator</ref>();</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator" kindref="compound">~ClipsProtobufCommunicator</ref>();</highlight></codeline>
 <codeline lineno="54"><highlight class="normal"></highlight></codeline>
 <codeline lineno="55"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>enable_server(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>port);</highlight></codeline>
 <codeline lineno="56"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>disable_server();</highlight></codeline>
 <codeline lineno="57"><highlight class="normal"></highlight></codeline>
 <codeline lineno="61"><highlight class="normal"><sp/><sp/>boost::signals2::signal&lt;void(protobuf_comm::ProtobufStreamServer::ClientID,</highlight></codeline>
 <codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::shared_ptr&lt;google::protobuf::Message&gt;)&gt;<sp/>&amp;</highlight></codeline>
-<codeline lineno="63" refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a0e2f98f4562c5cdf22030c37092edce4" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a0e2f98f4562c5cdf22030c37092edce4" kindref="member">signal_server_sent</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="63" refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1ad9b1d71d6433c0f0f6fff5f556631d43" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1ad9b1d71d6433c0f0f6fff5f556631d43" kindref="member">signal_server_sent</ref>()<sp/>{</highlight></codeline>
 <codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>sig_server_sent_;</highlight></codeline>
 <codeline lineno="65"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
 <codeline lineno="66"><highlight class="normal"></highlight></codeline>
 <codeline lineno="70"><highlight class="normal"><sp/><sp/>boost::signals2::signal&lt;void(std::string,<sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">short</highlight><highlight class="normal">,</highlight></codeline>
 <codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::shared_ptr&lt;google::protobuf::Message&gt;)&gt;<sp/>&amp;</highlight></codeline>
-<codeline lineno="72" refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed6d32a6c279205c7ec11124ab79cf4d" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed6d32a6c279205c7ec11124ab79cf4d" kindref="member">signal_client_sent</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="72" refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1af0cd4f4f1d5af8495c0dd955f8c97170" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1af0cd4f4f1d5af8495c0dd955f8c97170" kindref="member">signal_client_sent</ref>()<sp/>{</highlight></codeline>
 <codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>sig_client_sent_;</highlight></codeline>
 <codeline lineno="74"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
 <codeline lineno="75"><highlight class="normal"></highlight></codeline>
 <codeline lineno="79"><highlight class="normal"><sp/><sp/>boost::signals2::signal&lt;void(</highlight><highlight class="keywordtype">long</highlight><highlight class="normal">,</highlight></codeline>
 <codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::shared_ptr&lt;google::protobuf::Message&gt;)&gt;<sp/>&amp;</highlight></codeline>
-<codeline lineno="81" refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a6bbff2bbe9dccd8d89d14af480df9633" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a6bbff2bbe9dccd8d89d14af480df9633" kindref="member">signal_peer_sent</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="81" refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aabee4aa597a5bc5f612c939c9267afea" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aabee4aa597a5bc5f612c939c9267afea" kindref="member">signal_peer_sent</ref>()<sp/>{</highlight></codeline>
 <codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>sig_peer_sent_;</highlight></codeline>
 <codeline lineno="83"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
 <codeline lineno="84"><highlight class="normal"></highlight></codeline>

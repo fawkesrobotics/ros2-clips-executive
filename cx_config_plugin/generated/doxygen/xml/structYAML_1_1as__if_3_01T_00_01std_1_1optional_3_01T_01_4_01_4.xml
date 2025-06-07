@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4" kind="struct" language="C++" prot="public">
     <compoundname>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;</compoundname>
     <templateparamlist>
@@ -7,12 +7,13 @@
         <type>typename T</type>
       </param>
     </templateparamlist>
-      <sectiondef kind="public-attrib">
+    <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1ae14c0c7c49b2d3af7b679c6f856a4329" prot="public" static="no" mutable="no">
         <type>const Node &amp;</type>
         <definition>const Node&amp; YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;::node</definition>
         <argsstring></argsstring>
         <name>node</name>
+        <qualifiedname>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;::node</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -21,13 +22,14 @@
         </inbodydescription>
         <location file="include/cx_config_plugin/config_plugin.hpp" line="32" column="14" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="32" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a3445bdd4ed73d790ec557c60b0c01533" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
         <type></type>
         <definition>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;::as_if</definition>
         <argsstring>(const Node &amp;input_node)</argsstring>
         <name>as_if</name>
+        <qualifiedname>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;::as_if</qualifiedname>
         <param>
           <type>const Node &amp;</type>
           <declname>input_node</declname>
@@ -40,11 +42,12 @@
         </inbodydescription>
         <location file="include/cx_config_plugin/config_plugin.hpp" line="31" column="12" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="31" bodyend="31"/>
       </memberdef>
-      <memberdef kind="function" id="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a5401d0138162258d516b1d2123643c3c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a290f7c1d06e0a9c83028f262ed41e200" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>const std::optional&lt; T &gt;</type>
-        <definition>const std::optional&lt;T&gt; YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;::operator()</definition>
+        <definition>const std::optional&lt; T &gt; YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;::operator()</definition>
         <argsstring>() const</argsstring>
         <name>operator()</name>
+        <qualifiedname>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;::operator()</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -53,7 +56,7 @@
         </inbodydescription>
         <location file="include/cx_config_plugin/config_plugin.hpp" line="34" column="23" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="34" bodyend="41"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
@@ -62,7 +65,7 @@
     <listofallmembers>
       <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a3445bdd4ed73d790ec557c60b0c01533" prot="public" virt="non-virtual"><scope>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;</scope><name>as_if</name></member>
       <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1ae14c0c7c49b2d3af7b679c6f856a4329" prot="public" virt="non-virtual"><scope>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;</scope><name>node</name></member>
-      <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a5401d0138162258d516b1d2123643c3c" prot="public" virt="non-virtual"><scope>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;</scope><name>operator()</name></member>
+      <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a290f7c1d06e0a9c83028f262ed41e200" prot="public" virt="non-virtual"><scope>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;</scope><name>operator()</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

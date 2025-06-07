@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
   <compound refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo" kind="struct"><name>cx::RosMsgsPlugin::MessageInfo</name>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a97b712a771a26f4c6ec8918746fc9cd7" kind="variable"><name>external_created_ptr</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a873d64d3e1b99cc09d9dbecef4cc397e" kind="variable"><name>msg_ptr</name></member>
@@ -10,7 +10,7 @@
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a0971c1ce7808d48f8c74f11a9fe6e676" kind="function"><name>MessageInfo</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a1b77d2a6711f053e31fe217cb319b7ff" kind="function"><name>~MessageInfo</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a21ab9cf1b6f37879b00b2e44f07d46b6" kind="function"><name>MessageInfo</name></member>
-    <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1ac671e62dad6e2b91c5bccd3a6b46f6c1" kind="function"><name>operator=</name></member>
+    <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1af0566cbc5c9d63f92e568522bf90bf5c" kind="function"><name>operator=</name></member>
     <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a5f003287f70a90882b4a8253ca615a53" kind="function"><name>MessageInfo</name></member>
   </compound>
   <compound refid="structcx_1_1RosMsgsPlugin_1_1MessageInfoHasher" kind="struct"><name>cx::RosMsgsPlugin::MessageInfoHasher</name>
@@ -26,7 +26,7 @@
     <member refid="classcx_1_1RosMsgsPlugin_1ae586916966473e6f89deb9dadfd2238f" kind="variable"><name>map_mtx_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1aad844bb413e0965f88eeba78c642b310" kind="variable"><name>stop_flag_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a72d36324b642cc96a991aa209126f731" kind="variable"><name>messages_</name></member>
-    <member refid="classcx_1_1RosMsgsPlugin_1ae664b32901c073747254edeea0ab0cc3" kind="variable"><name>sub_messages_</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a74bc98fa6681903a660447b779986f52" kind="variable"><name>sub_messages_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a8368f7e49f07727e19f561b34eb7730e" kind="variable"><name>type_support_cache_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a539933a98e6a6a49a6526e6aae58e0f5" kind="variable"><name>clients_</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a91d17a9ad33fd8ae3f395753c393ac42" kind="variable"><name>client_types_</name></member>
@@ -41,14 +41,14 @@
     <member refid="classcx_1_1RosMsgsPlugin_1aaaabb1083d1509f697c2f743090c1242" kind="function"><name>destroy_msg</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a8d8728435dd9d1e3637f8c1fcbaa3a05" kind="function"><name>create_request</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a2caf464562d233a78f07db5126cd35d1" kind="function"><name>ros_msg_member_to_udf_value</name></member>
-    <member refid="classcx_1_1RosMsgsPlugin_1a42f08ab6e863e4c9ee1265cd2ffdf3f3" kind="function"><name>process_nested_msg</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a8dd75c0ff9576064ee581d7760558bd8" kind="function"><name>process_nested_msg</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a7a595c869419d289edbc79a0cecc486f" kind="function"><name>ros_to_clips_value</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a15e239db1787f34937abb6c577ae2cb3" kind="function"><name>get_field</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a26ff626d77298fe154ed8c35d94055a9" kind="function"><name>udf_value_to_ros_message_member</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1ab50021d356f1f12d4389533920bd974d" kind="function"><name>clips_to_ros_value</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1af00069db8b446c5ed89f734b6e91646a" kind="function"><name>set_field</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a3ec123d0ce60adf5f699a346b77fd715" kind="function"><name>subscribe_to_topic</name></member>
-    <member refid="classcx_1_1RosMsgsPlugin_1a0ee035b68ff6770d84e1b2d570709bf2" kind="function"><name>create_deserialized_msg</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a631e2fddfb6d7d07dca9f3d750205013" kind="function"><name>create_deserialized_msg</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a70ce8455d4915270c27971d29c8c5b8c" kind="function"><name>topic_callback</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1ad881e3e2c808c5d29fc514baafb31cc8" kind="function"><name>unsubscribe_from_topic</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1aad9708e0479a64b622360d2ce13f4148" kind="function"><name>create_new_publisher</name></member>
@@ -58,8 +58,8 @@
     <member refid="classcx_1_1RosMsgsPlugin_1aabeb519eef52e8a611826ea9600655a4" kind="function"><name>destroy_client</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1ab8567663784dfe04a9622fef6540453d" kind="function"><name>send_request</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1a26bdaac87b2dba2eb4260ecad671a3cb" kind="function"><name>get_msg_type</name></member>
-    <member refid="classcx_1_1RosMsgsPlugin_1a97bd4289362becac5c76c31073e487bc" kind="function"><name>get_msg_members</name></member>
-    <member refid="classcx_1_1RosMsgsPlugin_1ae94e1a8b0622e2174d3fdcb58302aef2" kind="function"><name>deserialize_msg</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a72f1de19540d16507bbfd05b4c989240" kind="function"><name>get_msg_members</name></member>
+    <member refid="classcx_1_1RosMsgsPlugin_1a45450de119755c9034b634681231eedf" kind="function"><name>deserialize_msg</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1aec1785cc3352de18ea1302e5308cde66" kind="function"><name>serialize_msg</name></member>
     <member refid="classcx_1_1RosMsgsPlugin_1aa3a80e5be2eb1513afa365b49d4ebbda" kind="function"><name>move_field_to_parent</name></member>
   </compound>

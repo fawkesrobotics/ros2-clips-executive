@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classcx_1_1FileLoadPlugin" kind="class" language="C++" prot="public">
     <compoundname>cx::FileLoadPlugin</compoundname>
     <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
-      <sectiondef kind="private-attrib">
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classcx_1_1FileLoadPlugin_1ad5bcef6f72774411c4a34d2ea091401c" prot="private" static="no" mutable="no">
         <type>std::unique_ptr&lt; rclcpp::Logger &gt;</type>
         <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::FileLoadPlugin::logger_</definition>
         <argsstring></argsstring>
         <name>logger_</name>
+        <qualifiedname>cx::FileLoadPlugin::logger_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -22,6 +23,7 @@
         <definition>std::vector&lt;std::string&gt; cx::FileLoadPlugin::init_files_</definition>
         <argsstring></argsstring>
         <name>init_files_</name>
+        <qualifiedname>cx::FileLoadPlugin::init_files_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -35,6 +37,7 @@
         <definition>std::vector&lt;std::string&gt; cx::FileLoadPlugin::init_batch_files_</definition>
         <argsstring></argsstring>
         <name>init_batch_files_</name>
+        <qualifiedname>cx::FileLoadPlugin::init_batch_files_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -48,6 +51,7 @@
         <definition>std::vector&lt;std::string&gt; cx::FileLoadPlugin::cleanup_files_</definition>
         <argsstring></argsstring>
         <name>cleanup_files_</name>
+        <qualifiedname>cx::FileLoadPlugin::cleanup_files_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -56,13 +60,14 @@
         </inbodydescription>
         <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="40" column="15" bodyfile="include/cx_file_load_plugin/file_load_plugin.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classcx_1_1FileLoadPlugin_1a1c2fcafd3c88629552c50f1d25dd90dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>cx::FileLoadPlugin::FileLoadPlugin</definition>
         <argsstring>()</argsstring>
         <name>FileLoadPlugin</name>
+        <qualifiedname>cx::FileLoadPlugin::FileLoadPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -76,6 +81,7 @@
         <definition>cx::FileLoadPlugin::~FileLoadPlugin</definition>
         <argsstring>()</argsstring>
         <name>~FileLoadPlugin</name>
+        <qualifiedname>cx::FileLoadPlugin::~FileLoadPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -89,6 +95,7 @@
         <definition>void cx::FileLoadPlugin::initialize</definition>
         <argsstring>()</argsstring>
         <name>initialize</name>
+        <qualifiedname>cx::FileLoadPlugin::initialize</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
         <briefdescription>
         </briefdescription>
@@ -103,6 +110,7 @@
         <definition>bool cx::FileLoadPlugin::clips_env_init</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_init</name>
+        <qualifiedname>cx::FileLoadPlugin::clips_env_init</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -121,6 +129,7 @@
         <definition>bool cx::FileLoadPlugin::clips_env_destroyed</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_destroyed</name>
+        <qualifiedname>cx::FileLoadPlugin::clips_env_destroyed</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -134,7 +143,7 @@
         </inbodydescription>
         <location file="include/cx_file_load_plugin/file_load_plugin.hpp" line="33" column="8"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

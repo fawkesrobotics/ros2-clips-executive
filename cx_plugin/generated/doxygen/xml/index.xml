@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
   <compound refid="classcx_1_1ClipsPlugin" kind="class"><name>cx::ClipsPlugin</name>
     <member refid="classcx_1_1ClipsPlugin_1a5053a0c74ce074ddc7123554f9e45752" kind="typedef"><name>Ptr</name></member>
     <member refid="classcx_1_1ClipsPlugin_1a68cdb6f3c003491e6b12d502e4aca142" kind="friend"><name>ClipsPluginManager</name></member>

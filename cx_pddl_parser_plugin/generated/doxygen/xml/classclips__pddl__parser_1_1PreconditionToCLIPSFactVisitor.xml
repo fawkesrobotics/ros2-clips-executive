@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor" kind="class" language="C++" prot="public">
     <compoundname>clips_pddl_parser::PreconditionToCLIPSFactVisitor</compoundname>
     <basecompoundref prot="public" virt="non-virtual">boost::static_visitor&lt; std::vector&lt; std::string &gt; &gt;</basecompoundref>
-      <sectiondef kind="private-attrib">
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a2148bbd9d8ba7fdbcd088deb3294c8ac" prot="private" static="no" mutable="no">
         <type>std::string</type>
         <definition>std::string clips_pddl_parser::PreconditionToCLIPSFactVisitor::parent_</definition>
         <argsstring></argsstring>
         <name>parent_</name>
+        <qualifiedname>clips_pddl_parser::PreconditionToCLIPSFactVisitor::parent_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -22,6 +23,7 @@
         <definition>uint clips_pddl_parser::PreconditionToCLIPSFactVisitor::sub_counter_</definition>
         <argsstring></argsstring>
         <name>sub_counter_</name>
+        <qualifiedname>clips_pddl_parser::PreconditionToCLIPSFactVisitor::sub_counter_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -35,6 +37,7 @@
         <definition>bool clips_pddl_parser::PreconditionToCLIPSFactVisitor::is_main_</definition>
         <argsstring></argsstring>
         <name>is_main_</name>
+        <qualifiedname>clips_pddl_parser::PreconditionToCLIPSFactVisitor::is_main_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -43,13 +46,14 @@
         </inbodydescription>
         <location file="include/cx_pddl_parser_plugin/precondition_visitor.h" line="47" column="8" bodyfile="include/cx_pddl_parser_plugin/precondition_visitor.h" bodystart="47" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a701ac4fa898a02adfdc8a05195f303a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>clips_pddl_parser::PreconditionToCLIPSFactVisitor::PreconditionToCLIPSFactVisitor</definition>
         <argsstring>(const std::string &amp;parent, int sub_counter, bool is_main=false)</argsstring>
         <name>PreconditionToCLIPSFactVisitor</name>
+        <qualifiedname>clips_pddl_parser::PreconditionToCLIPSFactVisitor::PreconditionToCLIPSFactVisitor</qualifiedname>
         <param>
           <type>const std::string &amp;</type>
           <declname>parent</declname>
@@ -71,11 +75,12 @@
         </inbodydescription>
         <location file="include/cx_pddl_parser_plugin/precondition_visitor.h" line="38" column="3"/>
       </memberdef>
-      <memberdef kind="function" id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1af67e9c454ac0b34d5bd18fa2f99523bc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1afbc23c297464b353bd58c4b716b6b142" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>std::vector&lt; std::string &gt;</type>
-        <definition>std::vector&lt;std::string&gt; clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</definition>
+        <definition>std::vector&lt; std::string &gt; clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</definition>
         <argsstring>(pddl_parser::Atom &amp;a) const</argsstring>
         <name>operator()</name>
+        <qualifiedname>clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</qualifiedname>
         <param>
           <type>pddl_parser::Atom &amp;</type>
           <declname>a</declname>
@@ -88,11 +93,12 @@
         </inbodydescription>
         <location file="include/cx_pddl_parser_plugin/precondition_visitor.h" line="40" column="15"/>
       </memberdef>
-      <memberdef kind="function" id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a7899acc924f48e97115354ac40a7643e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1ae892d72bb265d9886cd514ffa2db7c75" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>std::vector&lt; std::string &gt;</type>
-        <definition>std::vector&lt;std::string&gt; clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</definition>
+        <definition>std::vector&lt; std::string &gt; clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</definition>
         <argsstring>(pddl_parser::Predicate &amp;p) const</argsstring>
         <name>operator()</name>
+        <qualifiedname>clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</qualifiedname>
         <param>
           <type>pddl_parser::Predicate &amp;</type>
           <declname>p</declname>
@@ -105,11 +111,12 @@
         </inbodydescription>
         <location file="include/cx_pddl_parser_plugin/precondition_visitor.h" line="41" column="15"/>
       </memberdef>
-      <memberdef kind="function" id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a42feeacc684bcafb811ad780c95bb658" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a5efdcd6bc5244b65973d36c9dcbce806" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>std::vector&lt; std::string &gt;</type>
-        <definition>std::vector&lt;std::string&gt; clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</definition>
+        <definition>std::vector&lt; std::string &gt; clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</definition>
         <argsstring>(pddl_parser::QuantifiedFormula &amp;q) const</argsstring>
         <name>operator()</name>
+        <qualifiedname>clips_pddl_parser::PreconditionToCLIPSFactVisitor::operator()</qualifiedname>
         <param>
           <type>pddl_parser::QuantifiedFormula &amp;</type>
           <declname>q</declname>
@@ -122,7 +129,7 @@
         </inbodydescription>
         <location file="include/cx_pddl_parser_plugin/precondition_visitor.h" line="42" column="15"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
@@ -152,9 +159,9 @@
     <location file="include/cx_pddl_parser_plugin/precondition_visitor.h" line="35" column="1" bodyfile="include/cx_pddl_parser_plugin/precondition_visitor.h" bodystart="36" bodyend="48"/>
     <listofallmembers>
       <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1aea0a8e672806ae548fb5f2c53b960d2a" prot="private" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>is_main_</name></member>
-      <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1af67e9c454ac0b34d5bd18fa2f99523bc" prot="public" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>operator()</name></member>
-      <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a7899acc924f48e97115354ac40a7643e" prot="public" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>operator()</name></member>
-      <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a42feeacc684bcafb811ad780c95bb658" prot="public" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>operator()</name></member>
+      <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1afbc23c297464b353bd58c4b716b6b142" prot="public" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>operator()</name></member>
+      <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1ae892d72bb265d9886cd514ffa2db7c75" prot="public" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>operator()</name></member>
+      <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a5efdcd6bc5244b65973d36c9dcbce806" prot="public" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>operator()</name></member>
       <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a2148bbd9d8ba7fdbcd088deb3294c8ac" prot="private" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>parent_</name></member>
       <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a701ac4fa898a02adfdc8a05195f303a3" prot="public" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>PreconditionToCLIPSFactVisitor</name></member>
       <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a62c14eda2811ff14b457997db5edd23c" prot="private" virt="non-virtual"><scope>clips_pddl_parser::PreconditionToCLIPSFactVisitor</scope><name>sub_counter_</name></member>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
   <compound refid="classcx_1_1AmentIndexPlugin" kind="class"><name>cx::AmentIndexPlugin</name>
     <member refid="classcx_1_1AmentIndexPlugin_1afe1779a55eb2833f4b40180a04913c8f" kind="variable"><name>logger_</name></member>
     <member refid="classcx_1_1AmentIndexPlugin_1ab8f575c1e2b532accb489966eaba0743" kind="variable"><name>function_names_</name></member>

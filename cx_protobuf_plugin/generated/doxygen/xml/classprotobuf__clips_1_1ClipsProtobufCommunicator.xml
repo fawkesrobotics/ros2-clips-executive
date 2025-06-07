@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classprotobuf__clips_1_1ClipsProtobufCommunicator" kind="class" language="C++" prot="public">
     <compoundname>protobuf_clips::ClipsProtobufCommunicator</compoundname>
-      <sectiondef kind="private-type">
+    <sectiondef kind="private-type">
       <memberdef kind="enum" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed7220bce6a1065943d0c32ae8a3ef0c" prot="private" static="no" strong="no">
         <type></type>
         <name>ClientType</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::ClientType</qualifiedname>
         <enumvalue id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed7220bce6a1065943d0c32ae8a3ef0cae8370b0af899857911189daa426f4e0a" prot="private">
           <name>CT_SERVER</name>
           <briefdescription>
@@ -40,6 +41,7 @@
         <definition>typedef std::map&lt;protobuf_comm::ProtobufStreamServer::ClientID, long int&gt; protobuf_clips::ClipsProtobufCommunicator::RevServerClientMap</definition>
         <argsstring></argsstring>
         <name>RevServerClientMap</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::RevServerClientMap</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -48,13 +50,14 @@
         </inbodydescription>
         <location file="include/cx_protobuf_plugin/communicator.hpp" line="186" column="7" bodyfile="include/cx_protobuf_plugin/communicator.hpp" bodystart="186" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-attrib">
+    </sectiondef>
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed9f993406c953e9d7f9aeaa2b5e3c4b" prot="private" static="no" mutable="no">
         <type>clips::Environment *</type>
         <definition>clips::Environment* protobuf_clips::ClipsProtobufCommunicator::clips_</definition>
         <argsstring></argsstring>
         <name>clips_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -68,6 +71,7 @@
         <definition>std::mutex&amp; protobuf_clips::ClipsProtobufCommunicator::clips_mutex_</definition>
         <argsstring></argsstring>
         <name>clips_mutex_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_mutex_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -81,6 +85,7 @@
         <definition>std::unique_ptr&lt;protobuf_comm::MessageRegister&gt; protobuf_clips::ClipsProtobufCommunicator::message_register_</definition>
         <argsstring></argsstring>
         <name>message_register_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::message_register_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -94,6 +99,7 @@
         <definition>std::unique_ptr&lt;protobuf_comm::ProtobufStreamServer&gt; protobuf_clips::ClipsProtobufCommunicator::server_</definition>
         <argsstring></argsstring>
         <name>server_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::server_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -107,6 +113,7 @@
         <definition>boost::signals2::signal&lt;void(protobuf_comm::ProtobufStreamServer::ClientID, std::shared_ptr&lt;google::protobuf::Message&gt;)&gt; protobuf_clips::ClipsProtobufCommunicator::sig_server_sent_</definition>
         <argsstring></argsstring>
         <name>sig_server_sent_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::sig_server_sent_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -120,6 +127,7 @@
         <definition>boost::signals2::signal&lt;void(std::string, unsigned short, std::shared_ptr&lt;google::protobuf::Message&gt;)&gt; protobuf_clips::ClipsProtobufCommunicator::sig_client_sent_</definition>
         <argsstring></argsstring>
         <name>sig_client_sent_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::sig_client_sent_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -133,6 +141,7 @@
         <definition>boost::signals2::signal&lt;void(long int, std::shared_ptr&lt;google::protobuf::Message&gt;)&gt; protobuf_clips::ClipsProtobufCommunicator::sig_peer_sent_</definition>
         <argsstring></argsstring>
         <name>sig_peer_sent_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::sig_peer_sent_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -146,6 +155,7 @@
         <definition>std::mutex protobuf_clips::ClipsProtobufCommunicator::map_mutex_</definition>
         <argsstring></argsstring>
         <name>map_mutex_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::map_mutex_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -159,6 +169,7 @@
         <definition>long int protobuf_clips::ClipsProtobufCommunicator::next_client_id_</definition>
         <argsstring></argsstring>
         <name>next_client_id_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::next_client_id_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -172,6 +183,7 @@
         <definition>std::map&lt;long int, protobuf_comm::ProtobufStreamServer::ClientID&gt; protobuf_clips::ClipsProtobufCommunicator::server_clients_</definition>
         <argsstring></argsstring>
         <name>server_clients_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::server_clients_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -185,6 +197,7 @@
         <definition>RevServerClientMap protobuf_clips::ClipsProtobufCommunicator::rev_server_clients_</definition>
         <argsstring></argsstring>
         <name>rev_server_clients_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::rev_server_clients_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -198,6 +211,7 @@
         <definition>std::map&lt;long int, std::unique_ptr&lt;protobuf_comm::ProtobufStreamClient&gt; &gt; protobuf_clips::ClipsProtobufCommunicator::clients_</definition>
         <argsstring></argsstring>
         <name>clients_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clients_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -211,6 +225,7 @@
         <definition>std::map&lt;long int, std::unique_ptr&lt;protobuf_comm::ProtobufBroadcastPeer&gt; &gt; protobuf_clips::ClipsProtobufCommunicator::peers_</definition>
         <argsstring></argsstring>
         <name>peers_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::peers_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -224,6 +239,7 @@
         <definition>std::map&lt;long int, std::pair&lt;std::string, unsigned short&gt; &gt; protobuf_clips::ClipsProtobufCommunicator::client_endpoints_</definition>
         <argsstring></argsstring>
         <name>client_endpoints_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::client_endpoints_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -237,6 +253,7 @@
         <definition>std::list&lt;std::string&gt; protobuf_clips::ClipsProtobufCommunicator::functions_</definition>
         <argsstring></argsstring>
         <name>functions_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::functions_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -250,6 +267,7 @@
         <definition>rclcpp_lifecycle::LifecycleNode::WeakPtr protobuf_clips::ClipsProtobufCommunicator::parent_</definition>
         <argsstring></argsstring>
         <name>parent_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::parent_</qualifiedname>
         <briefdescription>
 <para>Reference to parent node to get ros time. </para>
         </briefdescription>
@@ -264,6 +282,7 @@
         <definition>std::unordered_map&lt;void *, std::shared_ptr&lt;google::protobuf::Message&gt; &gt; protobuf_clips::ClipsProtobufCommunicator::messages_</definition>
         <argsstring></argsstring>
         <name>messages_</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::messages_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -272,13 +291,14 @@
         </inbodydescription>
         <location file="include/cx_protobuf_plugin/communicator.hpp" line="200" column="7" bodyfile="include/cx_protobuf_plugin/communicator.hpp" bodystart="200" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a64840fa9e8157bd87f6b55a7f647ea17" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>protobuf_clips::ClipsProtobufCommunicator::ClipsProtobufCommunicator</definition>
         <argsstring>(clips::Environment *env, std::mutex &amp;env_mutex, rclcpp_lifecycle::LifecycleNode::WeakPtr parent)</argsstring>
         <name>ClipsProtobufCommunicator</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::ClipsProtobufCommunicator</qualifiedname>
         <param>
           <type>clips::Environment *</type>
           <declname>env</declname>
@@ -304,6 +324,7 @@
         <definition>protobuf_clips::ClipsProtobufCommunicator::ClipsProtobufCommunicator</definition>
         <argsstring>(clips::Environment *env, std::mutex &amp;env_mutex, std::vector&lt; std::string &gt; &amp;proto_path, rclcpp_lifecycle::LifecycleNode::WeakPtr parent)</argsstring>
         <name>ClipsProtobufCommunicator</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::ClipsProtobufCommunicator</qualifiedname>
         <param>
           <type>clips::Environment *</type>
           <declname>env</declname>
@@ -333,6 +354,7 @@
         <definition>protobuf_clips::ClipsProtobufCommunicator::~ClipsProtobufCommunicator</definition>
         <argsstring>()</argsstring>
         <name>~ClipsProtobufCommunicator</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::~ClipsProtobufCommunicator</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -346,6 +368,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::enable_server</definition>
         <argsstring>(int port)</argsstring>
         <name>enable_server</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::enable_server</qualifiedname>
         <param>
           <type>int</type>
           <declname>port</declname>
@@ -363,6 +386,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::disable_server</definition>
         <argsstring>()</argsstring>
         <name>disable_server</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::disable_server</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -371,11 +395,12 @@
         </inbodydescription>
         <location file="include/cx_protobuf_plugin/communicator.hpp" line="56" column="8"/>
       </memberdef>
-      <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a0e2f98f4562c5cdf22030c37092edce4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1ad9b1d71d6433c0f0f6fff5f556631d43" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>boost::signals2::signal&lt; void(protobuf_comm::ProtobufStreamServer::ClientID, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp;</type>
-        <definition>boost::signals2::signal&lt;void(protobuf_comm::ProtobufStreamServer::ClientID, std::shared_ptr&lt;google::protobuf::Message&gt;)&gt;&amp; protobuf_clips::ClipsProtobufCommunicator::signal_server_sent</definition>
+        <definition>boost::signals2::signal&lt; void(protobuf_comm::ProtobufStreamServer::ClientID, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp; protobuf_clips::ClipsProtobufCommunicator::signal_server_sent</definition>
         <argsstring>()</argsstring>
         <name>signal_server_sent</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::signal_server_sent</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -387,11 +412,12 @@
         </inbodydescription>
         <location file="include/cx_protobuf_plugin/communicator.hpp" line="63" column="3" bodyfile="include/cx_protobuf_plugin/communicator.hpp" bodystart="63" bodyend="65"/>
       </memberdef>
-      <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed6d32a6c279205c7ec11124ab79cf4d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1af0cd4f4f1d5af8495c0dd955f8c97170" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>boost::signals2::signal&lt; void(std::string, unsigned short, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp;</type>
-        <definition>boost::signals2::signal&lt;void(std::string, unsigned short, std::shared_ptr&lt;google::protobuf::Message&gt;)&gt;&amp; protobuf_clips::ClipsProtobufCommunicator::signal_client_sent</definition>
+        <definition>boost::signals2::signal&lt; void(std::string, unsigned short, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp; protobuf_clips::ClipsProtobufCommunicator::signal_client_sent</definition>
         <argsstring>()</argsstring>
         <name>signal_client_sent</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::signal_client_sent</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -403,11 +429,12 @@
         </inbodydescription>
         <location file="include/cx_protobuf_plugin/communicator.hpp" line="72" column="3" bodyfile="include/cx_protobuf_plugin/communicator.hpp" bodystart="72" bodyend="74"/>
       </memberdef>
-      <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a6bbff2bbe9dccd8d89d14af480df9633" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aabee4aa597a5bc5f612c939c9267afea" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>boost::signals2::signal&lt; void(long, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp;</type>
-        <definition>boost::signals2::signal&lt;void(long, std::shared_ptr&lt;google::protobuf::Message&gt;)&gt;&amp; protobuf_clips::ClipsProtobufCommunicator::signal_peer_sent</definition>
+        <definition>boost::signals2::signal&lt; void(long, std::shared_ptr&lt; google::protobuf::Message &gt;)&gt; &amp; protobuf_clips::ClipsProtobufCommunicator::signal_peer_sent</definition>
         <argsstring>()</argsstring>
         <name>signal_peer_sent</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::signal_peer_sent</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -419,13 +446,14 @@
         </inbodydescription>
         <location file="include/cx_protobuf_plugin/communicator.hpp" line="81" column="3" bodyfile="include/cx_protobuf_plugin/communicator.hpp" bodystart="81" bodyend="83"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
+    </sectiondef>
+    <sectiondef kind="private-func">
       <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a785a2cb98f231519896b6a6aea56df97" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void protobuf_clips::ClipsProtobufCommunicator::setup_clips</definition>
         <argsstring>()</argsstring>
         <name>setup_clips</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::setup_clips</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -439,6 +467,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_register_type</definition>
         <argsstring>(std::string full_name)</argsstring>
         <name>clips_pb_register_type</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_register_type</qualifiedname>
         <param>
           <type>std::string</type>
           <declname>full_name</declname>
@@ -456,6 +485,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_names</definition>
         <argsstring>(void *msgptr)</argsstring>
         <name>clips_pb_field_names</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_names</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -473,6 +503,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_has_field</definition>
         <argsstring>(void *msgptr, std::string field_name)</argsstring>
         <name>clips_pb_has_field</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_has_field</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -494,6 +525,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_value</definition>
         <argsstring>(void *msgptr, std::string field_name)</argsstring>
         <name>clips_pb_field_value</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_value</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -515,6 +547,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_type</definition>
         <argsstring>(void *msgptr, std::string field_name)</argsstring>
         <name>clips_pb_field_type</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_type</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -536,6 +569,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_label</definition>
         <argsstring>(void *msgptr, std::string field_name)</argsstring>
         <name>clips_pb_field_label</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_label</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -557,6 +591,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_list</definition>
         <argsstring>(void *msgptr, std::string field_name)</argsstring>
         <name>clips_pb_field_list</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_list</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -578,6 +613,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_is_list</definition>
         <argsstring>(void *msgptr, std::string field_name)</argsstring>
         <name>clips_pb_field_is_list</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_field_is_list</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -599,6 +635,7 @@
         <definition>clips::UDFValue protobuf_clips::ClipsProtobufCommunicator::clips_pb_create</definition>
         <argsstring>(std::string full_name)</argsstring>
         <name>clips_pb_create</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_create</qualifiedname>
         <param>
           <type>std::string</type>
           <declname>full_name</declname>
@@ -616,6 +653,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_pb_destroy</definition>
         <argsstring>(void *msgptr)</argsstring>
         <name>clips_pb_destroy</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_destroy</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -633,6 +671,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_pb_set_field</definition>
         <argsstring>(void *msgptr, std::string field_name, clips::UDFValue value)</argsstring>
         <name>clips_pb_set_field</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_set_field</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -658,6 +697,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_pb_add_list</definition>
         <argsstring>(void *msgptr, std::string field_name, clips::UDFValue value)</argsstring>
         <name>clips_pb_add_list</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_add_list</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -683,6 +723,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_pb_send</definition>
         <argsstring>(long int client_id, void *msgptr)</argsstring>
         <name>clips_pb_send</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_send</qualifiedname>
         <param>
           <type>long int</type>
           <declname>client_id</declname>
@@ -704,6 +745,7 @@
         <definition>std::string protobuf_clips::ClipsProtobufCommunicator::clips_pb_tostring</definition>
         <argsstring>(void *msgptr)</argsstring>
         <name>clips_pb_tostring</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_tostring</qualifiedname>
         <param>
           <type>void *</type>
           <declname>msgptr</declname>
@@ -721,6 +763,7 @@
         <definition>long int protobuf_clips::ClipsProtobufCommunicator::clips_pb_client_connect</definition>
         <argsstring>(std::string host, int port)</argsstring>
         <name>clips_pb_client_connect</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_client_connect</qualifiedname>
         <param>
           <type>std::string</type>
           <declname>host</declname>
@@ -742,6 +785,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_pb_disconnect</definition>
         <argsstring>(long int client_id)</argsstring>
         <name>clips_pb_disconnect</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_disconnect</qualifiedname>
         <param>
           <type>long int</type>
           <declname>client_id</declname>
@@ -759,6 +803,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_pb_broadcast</definition>
         <argsstring>(long int peer_id, void *msgptr)</argsstring>
         <name>clips_pb_broadcast</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_broadcast</qualifiedname>
         <param>
           <type>long int</type>
           <declname>peer_id</declname>
@@ -780,6 +825,7 @@
         <definition>long int protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_create</definition>
         <argsstring>(std::string host, int port)</argsstring>
         <name>clips_pb_peer_create</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_create</qualifiedname>
         <param>
           <type>std::string</type>
           <declname>host</declname>
@@ -801,6 +847,7 @@
         <definition>long int protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_create_local</definition>
         <argsstring>(std::string host, int send_port, int recv_port)</argsstring>
         <name>clips_pb_peer_create_local</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_create_local</qualifiedname>
         <param>
           <type>std::string</type>
           <declname>host</declname>
@@ -826,6 +873,7 @@
         <definition>long int protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_create_crypto</definition>
         <argsstring>(std::string host, int port, std::string crypto_key=&quot;&quot;, std::string cipher=&quot;&quot;)</argsstring>
         <name>clips_pb_peer_create_crypto</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_create_crypto</qualifiedname>
         <param>
           <type>std::string</type>
           <declname>host</declname>
@@ -857,6 +905,7 @@
         <definition>long int protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_create_local_crypto</definition>
         <argsstring>(std::string host, int send_port, int recv_port, std::string crypto_key=&quot;&quot;, std::string cipher=&quot;&quot;)</argsstring>
         <name>clips_pb_peer_create_local_crypto</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_create_local_crypto</qualifiedname>
         <param>
           <type>std::string</type>
           <declname>host</declname>
@@ -892,6 +941,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_destroy</definition>
         <argsstring>(long int peer_id)</argsstring>
         <name>clips_pb_peer_destroy</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_destroy</qualifiedname>
         <param>
           <type>long int</type>
           <declname>peer_id</declname>
@@ -909,6 +959,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_setup_crypto</definition>
         <argsstring>(long int peer_id, std::string crypto_key, std::string cipher)</argsstring>
         <name>clips_pb_peer_setup_crypto</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_pb_peer_setup_crypto</qualifiedname>
         <param>
           <type>long int</type>
           <declname>peer_id</declname>
@@ -934,6 +985,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::clips_assert_message</definition>
         <argsstring>(std::pair&lt; std::string, unsigned short &gt; &amp;endpoint, uint16_t comp_id, uint16_t msg_type, std::shared_ptr&lt; google::protobuf::Message &gt; &amp;msg, ClientType ct, long int client_id=0)</argsstring>
         <name>clips_assert_message</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::clips_assert_message</qualifiedname>
         <param>
           <type>std::pair&lt; std::string, unsigned short &gt; &amp;</type>
           <declname>endpoint</declname>
@@ -972,6 +1024,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_server_client_connected</definition>
         <argsstring>(protobuf_comm::ProtobufStreamServer::ClientID client, boost::asio::ip::tcp::endpoint &amp;endpoint)</argsstring>
         <name>handle_server_client_connected</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_server_client_connected</qualifiedname>
         <param>
           <type>protobuf_comm::ProtobufStreamServer::ClientID</type>
           <declname>client</declname>
@@ -993,6 +1046,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_server_client_disconnected</definition>
         <argsstring>(protobuf_comm::ProtobufStreamServer::ClientID client, const boost::system::error_code &amp;error)</argsstring>
         <name>handle_server_client_disconnected</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_server_client_disconnected</qualifiedname>
         <param>
           <type>protobuf_comm::ProtobufStreamServer::ClientID</type>
           <declname>client</declname>
@@ -1014,6 +1068,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_server_client_msg</definition>
         <argsstring>(protobuf_comm::ProtobufStreamServer::ClientID client, uint16_t component_id, uint16_t msg_type, std::shared_ptr&lt; google::protobuf::Message &gt; msg)</argsstring>
         <name>handle_server_client_msg</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_server_client_msg</qualifiedname>
         <param>
           <type>protobuf_comm::ProtobufStreamServer::ClientID</type>
           <declname>client</declname>
@@ -1043,6 +1098,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_server_client_fail</definition>
         <argsstring>(protobuf_comm::ProtobufStreamServer::ClientID client, uint16_t component_id, uint16_t msg_type, std::string msg)</argsstring>
         <name>handle_server_client_fail</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_server_client_fail</qualifiedname>
         <param>
           <type>protobuf_comm::ProtobufStreamServer::ClientID</type>
           <declname>client</declname>
@@ -1072,6 +1128,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_peer_msg</definition>
         <argsstring>(long int peer_id, boost::asio::ip::udp::endpoint &amp;endpoint, uint16_t component_id, uint16_t msg_type, std::shared_ptr&lt; google::protobuf::Message &gt; msg)</argsstring>
         <name>handle_peer_msg</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_peer_msg</qualifiedname>
         <param>
           <type>long int</type>
           <declname>peer_id</declname>
@@ -1105,6 +1162,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_peer_recv_error</definition>
         <argsstring>(long int peer_id, boost::asio::ip::udp::endpoint &amp;endpoint, std::string msg)</argsstring>
         <name>handle_peer_recv_error</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_peer_recv_error</qualifiedname>
         <param>
           <type>long int</type>
           <declname>peer_id</declname>
@@ -1130,6 +1188,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_peer_send_error</definition>
         <argsstring>(long int peer_id, std::string msg)</argsstring>
         <name>handle_peer_send_error</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_peer_send_error</qualifiedname>
         <param>
           <type>long int</type>
           <declname>peer_id</declname>
@@ -1151,6 +1210,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_client_connected</definition>
         <argsstring>(long int client_id)</argsstring>
         <name>handle_client_connected</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_client_connected</qualifiedname>
         <param>
           <type>long int</type>
           <declname>client_id</declname>
@@ -1168,6 +1228,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_client_disconnected</definition>
         <argsstring>(long int client_id, const boost::system::error_code &amp;error)</argsstring>
         <name>handle_client_disconnected</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_client_disconnected</qualifiedname>
         <param>
           <type>long int</type>
           <declname>client_id</declname>
@@ -1189,6 +1250,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_client_msg</definition>
         <argsstring>(long int client_id, uint16_t comp_id, uint16_t msg_type, std::shared_ptr&lt; google::protobuf::Message &gt; msg)</argsstring>
         <name>handle_client_msg</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_client_msg</qualifiedname>
         <param>
           <type>long int</type>
           <declname>client_id</declname>
@@ -1218,6 +1280,7 @@
         <definition>void protobuf_clips::ClipsProtobufCommunicator::handle_client_receive_fail</definition>
         <argsstring>(long int client_id, uint16_t comp_id, uint16_t msg_type, std::string msg)</argsstring>
         <name>handle_client_receive_fail</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::handle_client_receive_fail</qualifiedname>
         <param>
           <type>long int</type>
           <declname>client_id</declname>
@@ -1242,13 +1305,14 @@
         </inbodydescription>
         <location file="include/cx_protobuf_plugin/communicator.hpp" line="158" column="8"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-static-func">
+    </sectiondef>
+    <sectiondef kind="private-static-func">
       <memberdef kind="function" id="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a0d8b42d582e05d67a2986e8a761d50f2" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::string</type>
         <definition>static std::string protobuf_clips::ClipsProtobufCommunicator::to_string</definition>
         <argsstring>(const clips::UDFValue &amp;v)</argsstring>
         <name>to_string</name>
+        <qualifiedname>protobuf_clips::ClipsProtobufCommunicator::to_string</qualifiedname>
         <param>
           <type>const clips::UDFValue &amp;</type>
           <declname>v</declname>
@@ -1261,7 +1325,7 @@
         </inbodydescription>
         <location file="include/cx_protobuf_plugin/communicator.hpp" line="161" column="22"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
@@ -1330,9 +1394,9 @@
       <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a9c92cc12d643b84f8a05d861d9632450" prot="private" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>sig_client_sent_</name></member>
       <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a84a731e90de29c7f9c123fa624a1dcd7" prot="private" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>sig_peer_sent_</name></member>
       <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a76a8f7262e59b5efdcfa38ceabda5e2a" prot="private" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>sig_server_sent_</name></member>
-      <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aed6d32a6c279205c7ec11124ab79cf4d" prot="public" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>signal_client_sent</name></member>
-      <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a6bbff2bbe9dccd8d89d14af480df9633" prot="public" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>signal_peer_sent</name></member>
-      <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a0e2f98f4562c5cdf22030c37092edce4" prot="public" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>signal_server_sent</name></member>
+      <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1af0cd4f4f1d5af8495c0dd955f8c97170" prot="public" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>signal_client_sent</name></member>
+      <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1aabee4aa597a5bc5f612c939c9267afea" prot="public" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>signal_peer_sent</name></member>
+      <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1ad9b1d71d6433c0f0f6fff5f556631d43" prot="public" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>signal_server_sent</name></member>
       <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1a0d8b42d582e05d67a2986e8a761d50f2" prot="private" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>to_string</name></member>
       <member refid="classprotobuf__clips_1_1ClipsProtobufCommunicator_1abc30ac62426556659a0ca76f9da141ac" prot="public" virt="non-virtual"><scope>protobuf_clips::ClipsProtobufCommunicator</scope><name>~ClipsProtobufCommunicator</name></member>
     </listofallmembers>

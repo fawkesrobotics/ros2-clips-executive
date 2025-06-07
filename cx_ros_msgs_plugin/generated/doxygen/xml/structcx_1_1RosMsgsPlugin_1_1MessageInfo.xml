@@ -1,13 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="structcx_1_1RosMsgsPlugin_1_1MessageInfo" kind="struct" language="C++" prot="private">
     <compoundname>cx::RosMsgsPlugin::MessageInfo</compoundname>
-      <sectiondef kind="public-attrib">
+    <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a97b712a771a26f4c6ec8918746fc9cd7" prot="public" static="no" mutable="no">
         <type>std::shared_ptr&lt; void &gt;</type>
         <definition>std::shared_ptr&lt;void&gt; cx::RosMsgsPlugin::MessageInfo::external_created_ptr</definition>
         <argsstring></argsstring>
         <name>external_created_ptr</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::external_created_ptr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -21,6 +22,7 @@
         <definition>void* cx::RosMsgsPlugin::MessageInfo::msg_ptr</definition>
         <argsstring></argsstring>
         <name>msg_ptr</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::msg_ptr</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -34,6 +36,7 @@
         <definition>const rosidl_typesupport_introspection_cpp::MessageMembers* cx::RosMsgsPlugin::MessageInfo::members</definition>
         <argsstring></argsstring>
         <name>members</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::members</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -47,6 +50,7 @@
         <definition>bool cx::RosMsgsPlugin::MessageInfo::is_sub_msg</definition>
         <argsstring></argsstring>
         <name>is_sub_msg</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::is_sub_msg</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -60,6 +64,7 @@
         <definition>rcutils_allocator_t cx::RosMsgsPlugin::MessageInfo::allocator</definition>
         <argsstring></argsstring>
         <name>allocator</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::allocator</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -68,13 +73,14 @@
         </inbodydescription>
         <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="45" column="25" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="45" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a7b1b9dfe4fa888d292969201cd71a3c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
         <definition>cx::RosMsgsPlugin::MessageInfo::MessageInfo</definition>
         <argsstring>(const rosidl_typesupport_introspection_cpp::MessageMembers *members, void *parent_ptr=nullptr)</argsstring>
         <name>MessageInfo</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::MessageInfo</qualifiedname>
         <param>
           <type>const rosidl_typesupport_introspection_cpp::MessageMembers *</type>
           <declname>members</declname>
@@ -97,6 +103,7 @@
         <definition>cx::RosMsgsPlugin::MessageInfo::MessageInfo</definition>
         <argsstring>(const rosidl_typesupport_introspection_cpp::MessageMembers *members, std::shared_ptr&lt; void &gt; external_created_ptr)</argsstring>
         <name>MessageInfo</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::MessageInfo</qualifiedname>
         <param>
           <type>const rosidl_typesupport_introspection_cpp::MessageMembers *</type>
           <declname>members</declname>
@@ -118,6 +125,7 @@
         <definition>cx::RosMsgsPlugin::MessageInfo::~MessageInfo</definition>
         <argsstring>()</argsstring>
         <name>~MessageInfo</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::~MessageInfo</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -131,6 +139,7 @@
         <definition>cx::RosMsgsPlugin::MessageInfo::MessageInfo</definition>
         <argsstring>(const MessageInfo &amp;)=delete</argsstring>
         <name>MessageInfo</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::MessageInfo</qualifiedname>
         <param>
           <type>const MessageInfo &amp;</type>
         </param>
@@ -142,11 +151,12 @@
         </inbodydescription>
         <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="86" column="5"/>
       </memberdef>
-      <memberdef kind="function" id="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1ac671e62dad6e2b91c5bccd3a6b46f6c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1af0566cbc5c9d63f92e568522bf90bf5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>MessageInfo &amp;</type>
-        <definition>MessageInfo&amp; cx::RosMsgsPlugin::MessageInfo::operator=</definition>
+        <definition>MessageInfo &amp; cx::RosMsgsPlugin::MessageInfo::operator=</definition>
         <argsstring>(const MessageInfo &amp;)=delete</argsstring>
         <name>operator=</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::operator=</qualifiedname>
         <param>
           <type>const MessageInfo &amp;</type>
         </param>
@@ -163,6 +173,7 @@
         <definition>cx::RosMsgsPlugin::MessageInfo::MessageInfo</definition>
         <argsstring>(MessageInfo &amp;&amp;other) noexcept</argsstring>
         <name>MessageInfo</name>
+        <qualifiedname>cx::RosMsgsPlugin::MessageInfo::MessageInfo</qualifiedname>
         <param>
           <type>MessageInfo &amp;&amp;</type>
           <declname>other</declname>
@@ -173,14 +184,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="90" column="5" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="90" bodyend="94"/>
+        <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="90" column="5" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="90" bodyend="99"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="40" column="3" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="40" bodyend="95"/>
+    <location file="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" line="40" column="3" bodyfile="include/cx_ros_msgs_plugin/ros_msgs_plugin.hpp" bodystart="40" bodyend="100"/>
     <listofallmembers>
       <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a11e61b22b9041966810ec518c3603729" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfo</scope><name>allocator</name></member>
       <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a97b712a771a26f4c6ec8918746fc9cd7" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfo</scope><name>external_created_ptr</name></member>
@@ -191,7 +202,7 @@
       <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a21ab9cf1b6f37879b00b2e44f07d46b6" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfo</scope><name>MessageInfo</name></member>
       <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a5f003287f70a90882b4a8253ca615a53" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfo</scope><name>MessageInfo</name></member>
       <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a873d64d3e1b99cc09d9dbecef4cc397e" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfo</scope><name>msg_ptr</name></member>
-      <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1ac671e62dad6e2b91c5bccd3a6b46f6c1" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfo</scope><name>operator=</name></member>
+      <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1af0566cbc5c9d63f92e568522bf90bf5c" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfo</scope><name>operator=</name></member>
       <member refid="structcx_1_1RosMsgsPlugin_1_1MessageInfo_1a1b77d2a6711f053e31fe217cb319b7ff" prot="public" virt="non-virtual"><scope>cx::RosMsgsPlugin::MessageInfo</scope><name>~MessageInfo</name></member>
     </listofallmembers>
   </compounddef>

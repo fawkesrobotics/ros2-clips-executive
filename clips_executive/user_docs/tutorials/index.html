@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tutorials &mdash; clips_executive 0.1.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=86f27845" />
+
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/doctools.js"></script>
+  
+        <script src="../../_static/jquery.js?v=8dae8fb0"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -22,23 +25,25 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> clips_executive
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            clips_executive
           </a>
               <div class="version">
                 0.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">ROS 2 Clips-Executive</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../fundamentals/index.html">Fundamentals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../plugins/index.html">CLIPS Plugins</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../plugin_generator/index.html">ROS Interface Plugin Generator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
@@ -57,8 +62,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Tutorials</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tutorials</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/user_docs/tutorials/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -68,25 +73,51 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="id1">
-<h1>Tutorials<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h1>
+  <section id="tutorials">
+<span id="id1"></span><h1>Tutorials<a class="headerlink" href="#tutorials" title="Link to this heading"></a></h1>
 <div class="admonition-todo admonition" id="id2">
 <p class="admonition-title">Todo</p>
 <p>Add tutorials here</p>
 </div>
 <section id="controlling-a-turtle-via-clips">
-<h2>Controlling a Turtle via CLIPS<a class="headerlink" href="#controlling-a-turtle-via-clips" title="Permalink to this headline"></a></h2>
+<h2>Controlling a Turtle via CLIPS<a class="headerlink" href="#controlling-a-turtle-via-clips" title="Link to this heading"></a></h2>
 </section>
 <section id="writing-a-plugin">
-<span id="id3"></span><h2>Writing a Plugin<a class="headerlink" href="#writing-a-plugin" title="Permalink to this headline"></a></h2>
+<span id="id3"></span><h2>Writing a Plugin<a class="headerlink" href="#writing-a-plugin" title="Link to this heading"></a></h2>
 <section id="callbacks-and-mutexes">
-<h3>Callbacks and Mutexes<a class="headerlink" href="#callbacks-and-mutexes" title="Permalink to this headline"></a></h3>
+<h3>Callbacks and Mutexes<a class="headerlink" href="#callbacks-and-mutexes" title="Link to this heading"></a></h3>
 <p>It can be tricky to interface between ROS callbacks and CLIPS environments, especially if locks are guarding said callbacks that are not visible to the end user.
 As CLIPS environment access must also guarded by locks (as access is not thread-safe), this can easily create deadlocks in situations, where other functions can be called from clips that also try to acquire the lock held by a callback.</p>
 <p>Example: The feedback callback for action clients is guarded by a mutex that is also used by client goal handles to access members in a thread-safe manner (such as get_status()).</p>
 <p>A CLIPS rule that calls ClientGoalHandle::get_status() will therefore attempt to lock such a mutex while the clips lock is being held by the thread running the clips environment.
 If a callback is received right before, then the clips environment will stall as the function call is stuck (mutex is held by the callback function), while the callback function is stuck because it tries to acquire the lock for the clips environment (because it wants to pass the callback content to the clips environment).</p>
 <p>In these cases special care must be taken, e.g., by deferring CLIPS access out of scope of the mutexes guarding the callbacks.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world.html">Hello World</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world.html#id1">Hello World</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ros_monitoring.html">Continuous Monitoring</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ros_monitoring.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ros_monitoring.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ros_monitoring.html#id1">Continuous Monitoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ros_monitoring.html#summary">Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ros_monitoring.html#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ros_monitoring.html#related-content">Related Content</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="writing_a_plugin.html">Writing a Plugin</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="writing_a_plugin.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="writing_a_plugin.html#prerequisites">Prerequisites</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </section>
 </section>
 </section>

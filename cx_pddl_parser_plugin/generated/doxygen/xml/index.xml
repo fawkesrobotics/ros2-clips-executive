@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
   <compound refid="classclips__pddl__parser_1_1ClipsPddlParser" kind="class"><name>clips_pddl_parser::ClipsPddlParser</name>
     <member refid="classclips__pddl__parser_1_1ClipsPddlParser_1a20076931d382ab329c7d37e532be94be" kind="variable"><name>clips_</name></member>
     <member refid="classclips__pddl__parser_1_1ClipsPddlParser_1a2ffcfccc15127a496f65ba113b6dd6f0" kind="variable"><name>clips_mutex_</name></member>
@@ -14,9 +14,9 @@
     <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1a79b3a895526f93818bc6f9968099b830" kind="variable"><name>pddl_operator_</name></member>
     <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1aa6d962f3922959ebe066c106aebedc8c" kind="variable"><name>positive_effect_</name></member>
     <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1ad6828f2459bb5296c085ed8909886936" kind="function"><name>EffectToCLIPSFactVisitor</name></member>
-    <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1a43c410cd039e3a0bd71e9bf343f485a6" kind="function"><name>operator()</name></member>
-    <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1ac35a9e88d9abda0211c0f89604a02880" kind="function"><name>operator()</name></member>
-    <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1a07009a97bfa32d282b09e69d11c9e85b" kind="function"><name>operator()</name></member>
+    <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1ade77a15d5303acbe6ab9fd0dbcf574f1" kind="function"><name>operator()</name></member>
+    <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1a27b757cfe9b0bf969a1c0848c01e0e14" kind="function"><name>operator()</name></member>
+    <member refid="classclips__pddl__parser_1_1EffectToCLIPSFactVisitor_1a9584af667db878a34612e6f70ae13e8a" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="classcx_1_1PddlParserPlugin" kind="class"><name>cx::PddlParserPlugin</name>
     <member refid="classcx_1_1PddlParserPlugin_1a522bc77195980fb8508fa23e157490ed" kind="variable"><name>pddl_parsers_</name></member>
@@ -33,9 +33,9 @@
     <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a62c14eda2811ff14b457997db5edd23c" kind="variable"><name>sub_counter_</name></member>
     <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1aea0a8e672806ae548fb5f2c53b960d2a" kind="variable"><name>is_main_</name></member>
     <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a701ac4fa898a02adfdc8a05195f303a3" kind="function"><name>PreconditionToCLIPSFactVisitor</name></member>
-    <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1af67e9c454ac0b34d5bd18fa2f99523bc" kind="function"><name>operator()</name></member>
-    <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a7899acc924f48e97115354ac40a7643e" kind="function"><name>operator()</name></member>
-    <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a42feeacc684bcafb811ad780c95bb658" kind="function"><name>operator()</name></member>
+    <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1afbc23c297464b353bd58c4b716b6b142" kind="function"><name>operator()</name></member>
+    <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1ae892d72bb265d9886cd514ffa2db7c75" kind="function"><name>operator()</name></member>
+    <member refid="classclips__pddl__parser_1_1PreconditionToCLIPSFactVisitor_1a5efdcd6bc5244b65973d36c9dcbce806" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="namespaceboost" kind="namespace"><name>boost</name>
   </compound>

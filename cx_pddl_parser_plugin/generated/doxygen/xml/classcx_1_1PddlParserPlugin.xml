@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classcx_1_1PddlParserPlugin" kind="class" language="C++" prot="public">
     <compoundname>cx::PddlParserPlugin</compoundname>
     <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
-      <sectiondef kind="private-attrib">
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classcx_1_1PddlParserPlugin_1a522bc77195980fb8508fa23e157490ed" prot="private" static="no" mutable="no">
         <type>std::map&lt; std::string, std::unique_ptr&lt; <ref refid="classclips__pddl__parser_1_1ClipsPddlParser" kindref="compound">clips_pddl_parser::ClipsPddlParser</ref> &gt; &gt;</type>
         <definition>std::map&lt;std::string, std::unique_ptr&lt;clips_pddl_parser::ClipsPddlParser&gt; &gt; cx::PddlParserPlugin::pddl_parsers_</definition>
         <argsstring></argsstring>
         <name>pddl_parsers_</name>
+        <qualifiedname>cx::PddlParserPlugin::pddl_parsers_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -22,6 +23,7 @@
         <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::PddlParserPlugin::logger_</definition>
         <argsstring></argsstring>
         <name>logger_</name>
+        <qualifiedname>cx::PddlParserPlugin::logger_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -35,6 +37,7 @@
         <definition>std::string cx::PddlParserPlugin::plugin_path_</definition>
         <argsstring></argsstring>
         <name>plugin_path_</name>
+        <qualifiedname>cx::PddlParserPlugin::plugin_path_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -43,13 +46,14 @@
         </inbodydescription>
         <location file="include/cx_pddl_parser_plugin/pddl_parser_plugin.hpp" line="51" column="15" bodyfile="include/cx_pddl_parser_plugin/pddl_parser_plugin.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classcx_1_1PddlParserPlugin_1acd6d6975e001357e40cc4eebdf3fe15d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>cx::PddlParserPlugin::PddlParserPlugin</definition>
         <argsstring>()</argsstring>
         <name>PddlParserPlugin</name>
+        <qualifiedname>cx::PddlParserPlugin::PddlParserPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -63,6 +67,7 @@
         <definition>cx::PddlParserPlugin::~PddlParserPlugin</definition>
         <argsstring>()</argsstring>
         <name>~PddlParserPlugin</name>
+        <qualifiedname>cx::PddlParserPlugin::~PddlParserPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -76,6 +81,7 @@
         <definition>void cx::PddlParserPlugin::initialize</definition>
         <argsstring>() override</argsstring>
         <name>initialize</name>
+        <qualifiedname>cx::PddlParserPlugin::initialize</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
         <briefdescription>
         </briefdescription>
@@ -90,6 +96,7 @@
         <definition>bool cx::PddlParserPlugin::clips_env_init</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_init</name>
+        <qualifiedname>cx::PddlParserPlugin::clips_env_init</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -108,6 +115,7 @@
         <definition>bool cx::PddlParserPlugin::clips_env_destroyed</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_destroyed</name>
+        <qualifiedname>cx::PddlParserPlugin::clips_env_destroyed</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -121,7 +129,7 @@
         </inbodydescription>
         <location file="include/cx_pddl_parser_plugin/pddl_parser_plugin.hpp" line="43" column="8"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

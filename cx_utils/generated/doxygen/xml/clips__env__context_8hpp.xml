@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="clips__env__context_8hpp" kind="file" language="C++">
     <compoundname>clips_env_context.hpp</compoundname>
     <includes local="no">rclcpp/rclcpp.hpp</includes>
@@ -7,17 +7,17 @@
     <includes refid="lock__shared__ptr_8hpp" local="yes">cx_utils/lock_shared_ptr.hpp</includes>
     <includes local="no">clips_ns/clips.h</includes>
     <incdepgraph>
-      <node id="8">
-        <label>clips_ns/clips.h</label>
-      </node>
-      <node id="2">
-        <label>rclcpp/rclcpp.hpp</label>
-      </node>
-      <node id="3">
-        <label>spdlog/spdlog.h</label>
-      </node>
-      <node id="7">
-        <label>utility</label>
+      <node id="1">
+        <label>include/cx_utils/clips_env_context.hpp</label>
+        <link refid="clips__env__context_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
       </node>
       <node id="4">
         <label>cx_utils/lock_shared_ptr.hpp</label>
@@ -31,23 +31,23 @@
         <childnode refid="2" relation="include">
         </childnode>
       </node>
-      <node id="6">
-        <label>mutex</label>
-      </node>
-      <node id="1">
-        <label>include/cx_utils/clips_env_context.hpp</label>
-        <link refid="clips__env__context_8hpp"/>
-        <childnode refid="2" relation="include">
-        </childnode>
-        <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="4" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
+      <node id="8">
+        <label>clips_ns/clips.h</label>
       </node>
       <node id="5">
         <label>memory</label>
+      </node>
+      <node id="6">
+        <label>mutex</label>
+      </node>
+      <node id="2">
+        <label>rclcpp/rclcpp.hpp</label>
+      </node>
+      <node id="3">
+        <label>spdlog/spdlog.h</label>
+      </node>
+      <node id="7">
+        <label>utility</label>
       </node>
     </incdepgraph>
     <innerclass refid="classcx_1_1CLIPSLogger" prot="public">cx::CLIPSLogger</innerclass>
@@ -58,7 +58,7 @@
     <detaileddescription>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024-2025<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Licensed<sp/>under<sp/>the<sp/>Apache<sp/>License,<sp/>Version<sp/>2.0<sp/>(the<sp/>&quot;License&quot;);</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>you<sp/>may<sp/>not<sp/>use<sp/>this<sp/>file<sp/>except<sp/>in<sp/>compliance<sp/>with<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
@@ -86,10 +86,10 @@
 <codeline lineno="26"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">cx<sp/>{</highlight></codeline>
 <codeline lineno="27" refid="classcx_1_1CLIPSLogger" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcx_1_1CLIPSLogger" kindref="compound">CLIPSLogger</ref><sp/>{</highlight></codeline>
 <codeline lineno="28"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">explicit</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1CLIPSLogger" kindref="compound">CLIPSLogger</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*component,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>log_to_file,</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>stdout_to_debug);</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/>~<ref refid="classcx_1_1CLIPSLogger" kindref="compound">CLIPSLogger</ref>();</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>log(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*logical_name,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*str);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">explicit</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1CLIPSLogger" kindref="compound">CLIPSLogger</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<ref refid="classcx_1_1LockSharedPtr" kindref="compound">component</ref>,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">log_to_file</ref>,</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">stdout_to_debug</ref>);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1CLIPSLogger" kindref="compound">~CLIPSLogger</ref>();</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>log(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<ref refid="classcx_1_1LockSharedPtr" kindref="compound">logical_name</ref>,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*<ref refid="classcx_1_1LockSharedPtr" kindref="compound">str</ref>);</highlight></codeline>
 <codeline lineno="33"><highlight class="normal"></highlight></codeline>
 <codeline lineno="34"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
 <codeline lineno="35"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*component_;</highlight></codeline>
@@ -106,7 +106,7 @@
 <codeline lineno="46"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;clips::Environment&gt;</ref><sp/>env_lock_ptr_;</highlight></codeline>
 <codeline lineno="47"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1CLIPSLogger" kindref="compound">CLIPSLogger</ref><sp/>logger_;</highlight></codeline>
 <codeline lineno="48"><highlight class="normal"></highlight></codeline>
-<codeline lineno="49"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1CLIPSEnvContext" kindref="compound">CLIPSEnvContext</ref><sp/>*get_context(clips::Environment<sp/>*env);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1CLIPSEnvContext" kindref="compound">CLIPSEnvContext</ref><sp/>*get_context(clips::Environment<sp/>*<ref refid="classcx_1_1LockSharedPtr" kindref="compound">env</ref>);</highlight></codeline>
 <codeline lineno="50"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="51"><highlight class="normal"></highlight></codeline>
 <codeline lineno="52"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>cx</highlight><highlight class="normal"></highlight></codeline>

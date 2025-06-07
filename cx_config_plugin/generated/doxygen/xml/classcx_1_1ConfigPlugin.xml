@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classcx_1_1ConfigPlugin" kind="class" language="C++" prot="public">
     <compoundname>cx::ConfigPlugin</compoundname>
     <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
-      <sectiondef kind="private-attrib">
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classcx_1_1ConfigPlugin_1adb4861c891599680bcefab6a4c2f42eb" prot="private" static="no" mutable="no">
         <type>std::unique_ptr&lt; rclcpp::Logger &gt;</type>
         <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::ConfigPlugin::logger_</definition>
         <argsstring></argsstring>
         <name>logger_</name>
+        <qualifiedname>cx::ConfigPlugin::logger_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -17,13 +18,14 @@
         </inbodydescription>
         <location file="include/cx_config_plugin/config_plugin.hpp" line="86" column="19" bodyfile="include/cx_config_plugin/config_plugin.hpp" bodystart="86" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classcx_1_1ConfigPlugin_1a9f6d97b75a0fd36e195d83daebee8d16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>cx::ConfigPlugin::ConfigPlugin</definition>
         <argsstring>()</argsstring>
         <name>ConfigPlugin</name>
+        <qualifiedname>cx::ConfigPlugin::ConfigPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -37,6 +39,7 @@
         <definition>cx::ConfigPlugin::~ConfigPlugin</definition>
         <argsstring>()</argsstring>
         <name>~ConfigPlugin</name>
+        <qualifiedname>cx::ConfigPlugin::~ConfigPlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -50,6 +53,7 @@
         <definition>void cx::ConfigPlugin::initialize</definition>
         <argsstring>() override</argsstring>
         <name>initialize</name>
+        <qualifiedname>cx::ConfigPlugin::initialize</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
         <briefdescription>
         </briefdescription>
@@ -64,6 +68,7 @@
         <definition>bool cx::ConfigPlugin::clips_env_init</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_init</name>
+        <qualifiedname>cx::ConfigPlugin::clips_env_init</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -82,6 +87,7 @@
         <definition>bool cx::ConfigPlugin::clips_env_destroyed</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
         <name>clips_env_destroyed</name>
+        <qualifiedname>cx::ConfigPlugin::clips_env_destroyed</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -95,13 +101,14 @@
         </inbodydescription>
         <location file="include/cx_config_plugin/config_plugin.hpp" line="71" column="8"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="private-func">
+    </sectiondef>
+    <sectiondef kind="private-func">
       <memberdef kind="function" id="classcx_1_1ConfigPlugin_1abc4c39d5def91dc249564e515533ef0f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void cx::ConfigPlugin::clips_config_load</definition>
         <argsstring>(clips::Environment *env, const std::string &amp;file, const std::string &amp;cfg_prefix)</argsstring>
         <name>clips_config_load</name>
+        <qualifiedname>cx::ConfigPlugin::clips_config_load</qualifiedname>
         <param>
           <type>clips::Environment *</type>
           <declname>env</declname>
@@ -127,6 +134,7 @@
         <definition>std::string cx::ConfigPlugin::getScalarType</definition>
         <argsstring>(const YAML::Node &amp;input_node)</argsstring>
         <name>getScalarType</name>
+        <qualifiedname>cx::ConfigPlugin::getScalarType</qualifiedname>
         <param>
           <type>const YAML::Node &amp;</type>
           <declname>input_node</declname>
@@ -144,6 +152,7 @@
         <definition>void cx::ConfigPlugin::iterateThroughYamlRecuresively</definition>
         <argsstring>(const YAML::Node &amp;current_level_node, std::string cfg_prefix, clips::Environment *env)</argsstring>
         <name>iterateThroughYamlRecuresively</name>
+        <qualifiedname>cx::ConfigPlugin::iterateThroughYamlRecuresively</qualifiedname>
         <param>
           <type>const YAML::Node &amp;</type>
           <declname>current_level_node</declname>
@@ -169,6 +178,7 @@
         <definition>void cx::ConfigPlugin::sequenceIterator</definition>
         <argsstring>(const YAML::Node &amp;input_node, std::string &amp;cfg_prefix, clips::Environment *env)</argsstring>
         <name>sequenceIterator</name>
+        <qualifiedname>cx::ConfigPlugin::sequenceIterator</qualifiedname>
         <param>
           <type>const YAML::Node &amp;</type>
           <declname>input_node</declname>
@@ -189,7 +199,7 @@
         </inbodydescription>
         <location file="include/cx_config_plugin/config_plugin.hpp" line="83" column="8"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

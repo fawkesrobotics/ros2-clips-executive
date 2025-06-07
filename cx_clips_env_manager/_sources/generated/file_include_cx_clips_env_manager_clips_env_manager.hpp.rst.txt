@@ -8,6 +8,7 @@ File clips_env_manager.hpp
 
 .. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
 
+
 .. contents:: Contents
    :local:
    :backlinks: none
@@ -31,11 +32,17 @@ Includes
 
 - ``algorithm``
 
+- ``bond/msg/constants.hpp``
+
+- ``bondcpp/bond.hpp``
+
 - ``cx_clips_env_manager/clips_plugin_manager.hpp`` (:ref:`file_include_cx_clips_env_manager_clips_plugin_manager.hpp`)
 
 - ``cx_msgs/srv/create_clips_env.hpp``
 
 - ``cx_msgs/srv/destroy_clips_env.hpp``
+
+- ``cx_msgs/srv/list_clips_envs.hpp``
 
 - ``cx_utils/lock_shared_ptr.hpp``
 

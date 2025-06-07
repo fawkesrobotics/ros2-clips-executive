@@ -1,14 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="classcx_1_1ExecutivePlugin" kind="class" language="C++" prot="public">
     <compoundname>cx::ExecutivePlugin</compoundname>
     <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
-      <sectiondef kind="private-attrib">
+    <sectiondef kind="private-attrib">
       <memberdef kind="variable" id="classcx_1_1ExecutivePlugin_1a732f16062fd7a2b2c235dc6bd1393131" prot="private" static="no" mutable="no">
         <type>int</type>
         <definition>int cx::ExecutivePlugin::refresh_rate_</definition>
         <argsstring></argsstring>
         <name>refresh_rate_</name>
+        <qualifiedname>cx::ExecutivePlugin::refresh_rate_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -22,6 +23,7 @@
         <definition>bool cx::ExecutivePlugin::assert_time_</definition>
         <argsstring></argsstring>
         <name>assert_time_</name>
+        <qualifiedname>cx::ExecutivePlugin::assert_time_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -35,6 +37,7 @@
         <definition>bool cx::ExecutivePlugin::publish_on_refresh_</definition>
         <argsstring></argsstring>
         <name>publish_on_refresh_</name>
+        <qualifiedname>cx::ExecutivePlugin::publish_on_refresh_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -48,6 +51,7 @@
         <definition>std::string cx::ExecutivePlugin::plugin_path_</definition>
         <argsstring></argsstring>
         <name>plugin_path_</name>
+        <qualifiedname>cx::ExecutivePlugin::plugin_path_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -61,6 +65,7 @@
         <definition>rclcpp::TimerBase::SharedPtr cx::ExecutivePlugin::agenda_refresh_timer_</definition>
         <argsstring></argsstring>
         <name>agenda_refresh_timer_</name>
+        <qualifiedname>cx::ExecutivePlugin::agenda_refresh_timer_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -74,6 +79,7 @@
         <definition>rclcpp_lifecycle::LifecyclePublisher&lt;std_msgs::msg::Empty&gt;::SharedPtr cx::ExecutivePlugin::clips_agenda_refresh_pub_</definition>
         <argsstring></argsstring>
         <name>clips_agenda_refresh_pub_</name>
+        <qualifiedname>cx::ExecutivePlugin::clips_agenda_refresh_pub_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -87,6 +93,7 @@
         <definition>std::chrono::nanoseconds cx::ExecutivePlugin::publish_rate_</definition>
         <argsstring></argsstring>
         <name>publish_rate_</name>
+        <qualifiedname>cx::ExecutivePlugin::publish_rate_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -100,6 +107,7 @@
         <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::ExecutivePlugin::logger_</definition>
         <argsstring></argsstring>
         <name>logger_</name>
+        <qualifiedname>cx::ExecutivePlugin::logger_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -113,6 +121,7 @@
         <definition>std::vector&lt;LockSharedPtr&lt;clips::Environment&gt; &gt; cx::ExecutivePlugin::managed_envs</definition>
         <argsstring></argsstring>
         <name>managed_envs</name>
+        <qualifiedname>cx::ExecutivePlugin::managed_envs</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -126,6 +135,7 @@
         <definition>std::mutex cx::ExecutivePlugin::envs_mutex_</definition>
         <argsstring></argsstring>
         <name>envs_mutex_</name>
+        <qualifiedname>cx::ExecutivePlugin::envs_mutex_</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -134,13 +144,14 @@
         </inbodydescription>
         <location file="include/cx_executive_plugin/executive_plugin.hpp" line="57" column="14" bodyfile="include/cx_executive_plugin/executive_plugin.hpp" bodystart="57" bodyend="-1"/>
       </memberdef>
-      </sectiondef>
-      <sectiondef kind="public-func">
+    </sectiondef>
+    <sectiondef kind="public-func">
       <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1acb40de58ad887327a054a1818c46d0f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>cx::ExecutivePlugin::ExecutivePlugin</definition>
         <argsstring>()</argsstring>
         <name>ExecutivePlugin</name>
+        <qualifiedname>cx::ExecutivePlugin::ExecutivePlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -154,6 +165,7 @@
         <definition>cx::ExecutivePlugin::~ExecutivePlugin</definition>
         <argsstring>()</argsstring>
         <name>~ExecutivePlugin</name>
+        <qualifiedname>cx::ExecutivePlugin::~ExecutivePlugin</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -167,6 +179,7 @@
         <definition>void cx::ExecutivePlugin::initialize</definition>
         <argsstring>() override</argsstring>
         <name>initialize</name>
+        <qualifiedname>cx::ExecutivePlugin::initialize</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
         <briefdescription>
         </briefdescription>
@@ -181,6 +194,7 @@
         <definition>void cx::ExecutivePlugin::finalize</definition>
         <argsstring>() override</argsstring>
         <name>finalize</name>
+        <qualifiedname>cx::ExecutivePlugin::finalize</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60">finalize</reimplements>
         <briefdescription>
         </briefdescription>
@@ -195,6 +209,7 @@
         <definition>bool cx::ExecutivePlugin::clips_env_init</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;clips) override</argsstring>
         <name>clips_env_init</name>
+        <qualifiedname>cx::ExecutivePlugin::clips_env_init</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -213,6 +228,7 @@
         <definition>bool cx::ExecutivePlugin::clips_env_destroyed</definition>
         <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;clips) override</argsstring>
         <name>clips_env_destroyed</name>
+        <qualifiedname>cx::ExecutivePlugin::clips_env_destroyed</qualifiedname>
         <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
         <param>
           <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
@@ -226,11 +242,12 @@
         </inbodydescription>
         <location file="include/cx_executive_plugin/executive_plugin.hpp" line="36" column="8"/>
       </memberdef>
-      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1ae2cd5af8a1f1cc43b1d11ce881252dbf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classcx_1_1ExecutivePlugin_1ab5dfb1b989dc4b9bcb5e865b1f7fcfd9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt;</type>
-        <definition>std::shared_ptr&lt;rclcpp_lifecycle::LifecycleNode&gt; cx::ExecutivePlugin::get_node</definition>
+        <definition>std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt; cx::ExecutivePlugin::get_node</definition>
         <argsstring>()</argsstring>
         <name>get_node</name>
+        <qualifiedname>cx::ExecutivePlugin::get_node</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -239,7 +256,7 @@
         </inbodydescription>
         <location file="include/cx_executive_plugin/executive_plugin.hpp" line="38" column="19"/>
       </memberdef>
-      </sectiondef>
+    </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
@@ -278,7 +295,7 @@
       <member refid="classcx_1_1ExecutivePlugin_1a469ff11c8f0923b65d8aee55c2394542" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>envs_mutex_</name></member>
       <member refid="classcx_1_1ExecutivePlugin_1acb40de58ad887327a054a1818c46d0f9" prot="public" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>ExecutivePlugin</name></member>
       <member refid="classcx_1_1ExecutivePlugin_1acb14d613c62ba47ab41edbc2749a2d6a" prot="public" virt="virtual"><scope>cx::ExecutivePlugin</scope><name>finalize</name></member>
-      <member refid="classcx_1_1ExecutivePlugin_1ae2cd5af8a1f1cc43b1d11ce881252dbf" prot="public" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>get_node</name></member>
+      <member refid="classcx_1_1ExecutivePlugin_1ab5dfb1b989dc4b9bcb5e865b1f7fcfd9" prot="public" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>get_node</name></member>
       <member refid="classcx_1_1ExecutivePlugin_1a05c41e5b7f22ea76d35870c7904cbe45" prot="public" virt="virtual"><scope>cx::ExecutivePlugin</scope><name>initialize</name></member>
       <member refid="classcx_1_1ExecutivePlugin_1a8f8400444d958aee6b58f82069f3875c" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>logger_</name></member>
       <member refid="classcx_1_1ExecutivePlugin_1a7af5f484cf51c499d7c44f680e66f122" prot="private" virt="non-virtual"><scope>cx::ExecutivePlugin</scope><name>managed_envs</name></member>

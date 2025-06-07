@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="protobuf__plugin_8hpp" kind="file" language="C++">
     <compoundname>protobuf_plugin.hpp</compoundname>
     <includes refid="communicator_8hpp" local="no">cx_protobuf_plugin/communicator.hpp</includes>
@@ -9,9 +9,6 @@
     <includes local="yes">cx_plugin/clips_plugin.hpp</includes>
     <includes local="yes">cx_utils/lock_shared_ptr.hpp</includes>
     <incdepgraph>
-      <node id="6">
-        <label>list</label>
-      </node>
       <node id="2">
         <label>cx_protobuf_plugin/communicator.hpp</label>
         <link refid="communicator_8hpp_source"/>
@@ -47,29 +44,32 @@
       <node id="5">
         <label>clips_ns/clips.h</label>
       </node>
-      <node id="10">
-        <label>string</label>
-      </node>
-      <node id="7">
-        <label>map</label>
-      </node>
-      <node id="4">
-        <label>protobuf_comm/server.h</label>
-      </node>
       <node id="11">
         <label>cx_plugin/clips_plugin.hpp</label>
-      </node>
-      <node id="8">
-        <label>mutex</label>
       </node>
       <node id="12">
         <label>cx_utils/lock_shared_ptr.hpp</label>
       </node>
-      <node id="3">
-        <label>rclcpp_lifecycle/lifecycle_node.hpp</label>
+      <node id="6">
+        <label>list</label>
+      </node>
+      <node id="7">
+        <label>map</label>
       </node>
       <node id="9">
         <label>memory</label>
+      </node>
+      <node id="8">
+        <label>mutex</label>
+      </node>
+      <node id="4">
+        <label>protobuf_comm/server.h</label>
+      </node>
+      <node id="3">
+        <label>rclcpp_lifecycle/lifecycle_node.hpp</label>
+      </node>
+      <node id="10">
+        <label>string</label>
       </node>
     </incdepgraph>
     <innerclass refid="classcx_1_1ProtobufPlugin" prot="public">cx::ProtobufPlugin</innerclass>
@@ -79,7 +79,7 @@
     <detaileddescription>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024-2025<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>This<sp/>program<sp/>is<sp/>free<sp/>software;<sp/>you<sp/>can<sp/>redistribute<sp/>it<sp/>and/or<sp/>modify</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>it<sp/>under<sp/>the<sp/>terms<sp/>of<sp/>the<sp/>GNU<sp/>General<sp/>Public<sp/>License<sp/>as<sp/>published<sp/>by</highlight><highlight class="normal"></highlight></codeline>
@@ -118,7 +118,7 @@
 <codeline lineno="37" refid="classcx_1_1ProtobufPlugin" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcx_1_1ProtobufPlugin" kindref="compound">ProtobufPlugin</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1ClipsPlugin" kindref="compound" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag">ClipsPlugin</ref><sp/>{</highlight></codeline>
 <codeline lineno="38"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
 <codeline lineno="39"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1ProtobufPlugin" kindref="compound">ProtobufPlugin</ref>();</highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/>~<ref refid="classcx_1_1ProtobufPlugin" kindref="compound">ProtobufPlugin</ref>();</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1ProtobufPlugin" kindref="compound">~ProtobufPlugin</ref>();</highlight></codeline>
 <codeline lineno="41"><highlight class="normal"></highlight></codeline>
 <codeline lineno="42"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>initialize()<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="43"><highlight class="normal"></highlight></codeline>

@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
   <compound refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4" kind="struct"><name>YAML::as_if&lt; std::string, std::optional&lt; std::string &gt; &gt;</name>
     <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1afcf20a28cbccab035bccae831205627d" kind="variable"><name>node</name></member>
     <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1a1d0298b9d118ee3106b3c2b6d6567d30" kind="function"><name>as_if</name></member>
-    <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1aa088b4f0b2c645aa3954108188dedf3c" kind="function"><name>operator()</name></member>
+    <member refid="structYAML_1_1as__if_3_01std_1_1string_00_01std_1_1optional_3_01std_1_1string_01_4_01_4_1aa07bd3dca9b66e9c030ef282599f71ca" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4" kind="struct"><name>YAML::as_if&lt; T, std::optional&lt; T &gt; &gt;</name>
     <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1ae14c0c7c49b2d3af7b679c6f856a4329" kind="variable"><name>node</name></member>
     <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a3445bdd4ed73d790ec557c60b0c01533" kind="function"><name>as_if</name></member>
-    <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a5401d0138162258d516b1d2123643c3c" kind="function"><name>operator()</name></member>
+    <member refid="structYAML_1_1as__if_3_01T_00_01std_1_1optional_3_01T_01_4_01_4_1a290f7c1d06e0a9c83028f262ed41e200" kind="function"><name>operator()</name></member>
   </compound>
   <compound refid="classcx_1_1ConfigPlugin" kind="class"><name>cx::ConfigPlugin</name>
     <member refid="classcx_1_1ConfigPlugin_1adb4861c891599680bcefab6a4c2f42eb" kind="variable"><name>logger_</name></member>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
   <compound refid="classcx_1_1ExecutivePlugin" kind="class"><name>cx::ExecutivePlugin</name>
     <member refid="classcx_1_1ExecutivePlugin_1a732f16062fd7a2b2c235dc6bd1393131" kind="variable"><name>refresh_rate_</name></member>
     <member refid="classcx_1_1ExecutivePlugin_1a1988b7afe7afdadd19c2b6cf816003ad" kind="variable"><name>assert_time_</name></member>
@@ -17,7 +17,7 @@
     <member refid="classcx_1_1ExecutivePlugin_1acb14d613c62ba47ab41edbc2749a2d6a" kind="function"><name>finalize</name></member>
     <member refid="classcx_1_1ExecutivePlugin_1a937771362f6c1d684f58da0c19835514" kind="function"><name>clips_env_init</name></member>
     <member refid="classcx_1_1ExecutivePlugin_1a63944b60c5fb30dac6b675344a2f1c41" kind="function"><name>clips_env_destroyed</name></member>
-    <member refid="classcx_1_1ExecutivePlugin_1ae2cd5af8a1f1cc43b1d11ce881252dbf" kind="function"><name>get_node</name></member>
+    <member refid="classcx_1_1ExecutivePlugin_1ab5dfb1b989dc4b9bcb5e865b1f7fcfd9" kind="function"><name>get_node</name></member>
   </compound>
   <compound refid="namespacecx" kind="namespace"><name>cx</name>
   </compound>

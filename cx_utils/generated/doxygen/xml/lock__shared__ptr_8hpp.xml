@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
   <compounddef id="lock__shared__ptr_8hpp" kind="file" language="C++">
     <compoundname>lock_shared_ptr.hpp</compoundname>
     <includes local="no">memory</includes>
@@ -8,12 +8,6 @@
     <includes local="yes">rclcpp/rclcpp.hpp</includes>
     <includedby refid="clips__env__context_8hpp" local="yes">include/cx_utils/clips_env_context.hpp</includedby>
     <incdepgraph>
-      <node id="5">
-        <label>rclcpp/rclcpp.hpp</label>
-      </node>
-      <node id="4">
-        <label>utility</label>
-      </node>
       <node id="1">
         <label>include/cx_utils/lock_shared_ptr.hpp</label>
         <link refid="lock__shared__ptr_8hpp"/>
@@ -26,23 +20,29 @@
         <childnode refid="5" relation="include">
         </childnode>
       </node>
-      <node id="3">
-        <label>mutex</label>
-      </node>
       <node id="2">
         <label>memory</label>
       </node>
+      <node id="3">
+        <label>mutex</label>
+      </node>
+      <node id="5">
+        <label>rclcpp/rclcpp.hpp</label>
+      </node>
+      <node id="4">
+        <label>utility</label>
+      </node>
     </incdepgraph>
     <invincdepgraph>
+      <node id="2">
+        <label>include/cx_utils/clips_env_context.hpp</label>
+        <link refid="clips__env__context_8hpp_source"/>
+      </node>
       <node id="1">
         <label>include/cx_utils/lock_shared_ptr.hpp</label>
         <link refid="lock__shared__ptr_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-      </node>
-      <node id="2">
-        <label>include/cx_utils/clips_env_context.hpp</label>
-        <link refid="clips__env__context_8hpp_source"/>
       </node>
     </invincdepgraph>
     <innerclass refid="classcx_1_1LockSharedPtr" prot="public">cx::LockSharedPtr</innerclass>
@@ -52,7 +52,7 @@
     <detaileddescription>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">//<sp/>Copyright<sp/>(c)<sp/>2024-2025<sp/>Carologistics</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Licensed<sp/>under<sp/>the<sp/>Apache<sp/>License,<sp/>Version<sp/>2.0<sp/>(the<sp/>&quot;License&quot;);</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="4"><highlight class="normal"></highlight><highlight class="comment">//<sp/>you<sp/>may<sp/>not<sp/>use<sp/>this<sp/>file<sp/>except<sp/>in<sp/>compliance<sp/>with<sp/>the<sp/>License.</highlight><highlight class="normal"></highlight></codeline>
@@ -80,19 +80,19 @@
 <codeline lineno="26" refid="classcx_1_1LockSharedPtr" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;<sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref><sp/>{</highlight></codeline>
 <codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
 <codeline lineno="28"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref>();</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/>~<ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref>();</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref>(std::shared_ptr&lt;T&gt;<sp/>&amp;&amp;ptr);</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;other);</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref>(<ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;&amp;other);</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;operator=(<ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;&amp;other);</highlight></codeline>
-<codeline lineno="34"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;other);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">~LockSharedPtr</ref>();</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref>(std::shared_ptr&lt;T&gt;<sp/>&amp;&amp;<ref refid="classcx_1_1LockSharedPtr" kindref="compound">ptr</ref>);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;<ref refid="classcx_1_1LockSharedPtr" kindref="compound">other</ref>);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr</ref>(<ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;&amp;<ref refid="classcx_1_1LockSharedPtr" kindref="compound">other</ref>);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;operator=(<ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;&amp;<ref refid="classcx_1_1LockSharedPtr" kindref="compound">other</ref>);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;operator=(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;</ref><sp/>&amp;<ref refid="classcx_1_1LockSharedPtr" kindref="compound">other</ref>);</highlight></codeline>
 <codeline lineno="35"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>LockSharedPtr&lt;T&gt;<sp/>&amp;operator=(T<sp/>ptr);</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="36" refid="classcx_1_1LockSharedPtr_1af04ac9428dff30c22056025d1f5f9578" refkind="member"><highlight class="normal"><sp/><sp/>std::shared_ptr&lt;T&gt;<sp/><ref refid="classcx_1_1LockSharedPtr_1af04ac9428dff30c22056025d1f5f9578" kindref="member">operator-&gt;</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="37"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>init_mutex();</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">operator</highlight><highlight class="normal"><sp/>bool()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">operator</highlight><highlight class="normal"><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">bool</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="39"><highlight class="normal"><sp/><sp/>std::mutex<sp/>*get_mutex_instance();</highlight></codeline>
 <codeline lineno="40"><highlight class="normal"><sp/><sp/>std::shared_ptr&lt;T&gt;<sp/>get_obj();</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_obj(std::shared_ptr&lt;T&gt;<sp/>new_obj);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_obj(std::shared_ptr&lt;T&gt;<sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">new_obj</ref>);</highlight></codeline>
 <codeline lineno="42"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Called<sp/>from<sp/>instances<sp/>to<sp/>lock<sp/>the<sp/>mutex<sp/>for<sp/>the<sp/>current<sp/>scope</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="43"><highlight class="normal"></highlight></codeline>
 <codeline lineno="44"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
@@ -103,7 +103,7 @@
 <codeline lineno="49"><highlight class="normal"></highlight></codeline>
 <codeline lineno="50"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;<sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;::LockSharedPtr</ref>()<sp/>{</highlight></codeline>
 <codeline lineno="51"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>obj<sp/>=<sp/>std::make_shared&lt;T&gt;();</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/>RCLCPP_DEBUG(rclcpp::get_logger(</highlight><highlight class="stringliteral">&quot;SharedPtrC&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;Constructor<sp/>NO<sp/>param&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">RCLCPP_DEBUG</ref>(rclcpp::get_logger(</highlight><highlight class="stringliteral">&quot;SharedPtrC&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;Constructor<sp/>NO<sp/>param&quot;</highlight><highlight class="normal">);</highlight></codeline>
 <codeline lineno="53"><highlight class="normal"></highlight></codeline>
 <codeline lineno="54"><highlight class="normal"><sp/><sp/>LockSharedPtr::numbers++;</highlight></codeline>
 <codeline lineno="55"><highlight class="normal">}</highlight></codeline>
@@ -163,11 +163,11 @@
 <codeline lineno="109"><highlight class="normal"></highlight><highlight class="comment">//<sp/>template<sp/>&lt;class<sp/>T&gt;<sp/>LockSharedPtr&lt;T&gt;<sp/>&amp;LockSharedPtr&lt;T&gt;::operator=(T<sp/>ptr)<sp/>{</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="110"><highlight class="normal"></highlight></codeline>
 <codeline lineno="111"><highlight class="normal"></highlight><highlight class="comment">//<sp/>}</highlight></codeline>
-<codeline lineno="115" refid="classcx_1_1LockSharedPtr_1af04ac9428dff30c22056025d1f5f9578" refkind="member"><highlight class="comment"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;<sp/>std::shared_ptr&lt;T&gt;<sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;::operator-&gt;</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="115" refid="classcx_1_1LockSharedPtr_1af04ac9428dff30c22056025d1f5f9578" refkind="member"><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;<sp/>std::shared_ptr&lt;T&gt;<sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;::operator-&gt;</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
 <codeline lineno="116"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>obj;</highlight></codeline>
 <codeline lineno="117"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="118"><highlight class="normal"></highlight></codeline>
-<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;<sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;::operator</ref><sp/>bool()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/>&lt;</highlight><highlight class="keyword">class</highlight><highlight class="normal"><sp/>T&gt;<sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">LockSharedPtr&lt;T&gt;::operator</ref><sp/><ref refid="classcx_1_1LockSharedPtr" kindref="compound">bool</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
 <codeline lineno="120"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(obj<sp/>!=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">);</highlight></codeline>
 <codeline lineno="121"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="122"><highlight class="normal"></highlight></codeline>
