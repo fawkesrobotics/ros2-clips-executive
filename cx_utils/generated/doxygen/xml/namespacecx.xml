@@ -16,6 +16,7 @@
     <innerclass refid="classcx_1_1PddlParserPlugin" prot="public">cx::PddlParserPlugin</innerclass>
     <innerclass refid="classcx_1_1ProtobufPlugin" prot="public">cx::ProtobufPlugin</innerclass>
     <innerclass refid="classcx_1_1RosMsgsPlugin" prot="public">cx::RosMsgsPlugin</innerclass>
+    <innerclass refid="classcx_1_1Tf2PoseTrackerPlugin" prot="public">cx::Tf2PoseTrackerPlugin</innerclass>
     <innernamespace refid="namespacecx_1_1cx__utils">cx::cx_utils</innernamespace>
     <sectiondef kind="var">
       <memberdef kind="variable" id="string__utils_8hpp_1a8d8a6edcb760b28dacf2804884ef1e62" prot="public" static="no" mutable="no">

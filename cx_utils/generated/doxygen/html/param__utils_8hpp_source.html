@@ -118,8 +118,8 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">const</span> rcl_interfaces::msg::ParameterDescriptor &amp;parameter_descriptor =</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        rcl_interfaces::msg::ParameterDescriptor()) {</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="keywordflow">if</span> (!node-&gt;has_parameter(param_name)) {</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    RCLCPP_INFO(rclcpp::get_logger(<span class="stringliteral">&quot;cx_utils&quot;</span>), <span class="stringliteral">&quot;Creating parameter: %s&quot;</span>,</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                param_name.c_str());</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    RCLCPP_DEBUG(rclcpp::get_logger(<span class="stringliteral">&quot;cx_utils&quot;</span>), <span class="stringliteral">&quot;Creating parameter: %s&quot;</span>,</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                 param_name.c_str());</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    node-&gt;declare_parameter(param_name, default_value, parameter_descriptor);</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  }</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>}</div>
@@ -139,8 +139,8 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keyword">const</span> rcl_interfaces::msg::ParameterDescriptor &amp;parameter_descriptor =</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        rcl_interfaces::msg::ParameterDescriptor()) {</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="keywordflow">if</span> (!node-&gt;has_parameter(param_name)) {</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    RCLCPP_INFO(rclcpp::get_logger(<span class="stringliteral">&quot;cx_utils&quot;</span>), <span class="stringliteral">&quot;Creating parameter: %s&quot;</span>,</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                param_name.c_str());</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    RCLCPP_DEBUG(rclcpp::get_logger(<span class="stringliteral">&quot;cx_utils&quot;</span>), <span class="stringliteral">&quot;Creating parameter: %s&quot;</span>,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                 param_name.c_str());</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    node-&gt;declare_parameter(param_name, param_type, parameter_descriptor);</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  }</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>}</div>

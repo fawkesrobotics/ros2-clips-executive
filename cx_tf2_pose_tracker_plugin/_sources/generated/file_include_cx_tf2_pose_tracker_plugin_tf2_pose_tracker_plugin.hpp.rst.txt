@@ -1,0 +1,66 @@
+
+.. _file_include_cx_tf2_pose_tracker_plugin_tf2_pose_tracker_plugin.hpp:
+
+File tf2_pose_tracker_plugin.hpp
+================================
+
+|exhale_lsh| :ref:`Parent directory <dir_include_cx_tf2_pose_tracker_plugin>` (``include/cx_tf2_pose_tracker_plugin``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp``)
+-------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_include_cx_tf2_pose_tracker_plugin_tf2_pose_tracker_plugin.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cx_plugin/clips_plugin.hpp``
+
+- ``cx_utils/lock_shared_ptr.hpp``
+
+- ``geometry_msgs/msg/transform_stamped.hpp``
+
+- ``string``
+
+- ``tf2_ros/buffer.h``
+
+- ``tf2_ros/transform_listener.h``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_cx`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker`
+
+- :ref:`exhale_class_classcx_1_1Tf2PoseTrackerPlugin`
+

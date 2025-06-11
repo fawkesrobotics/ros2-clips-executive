@@ -1,0 +1,274 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="classcx_1_1Tf2PoseTrackerPlugin" kind="class" language="C++" prot="public">
+    <compoundname>cx::Tf2PoseTrackerPlugin</compoundname>
+    <basecompoundref refid="classcx_1_1ClipsPlugin" prot="public" virt="non-virtual">cx::ClipsPlugin</basecompoundref>
+    <innerclass refid="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker" prot="private">cx::Tf2PoseTrackerPlugin::PoseTracker</innerclass>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classcx_1_1Tf2PoseTrackerPlugin_1aab175286a5d205b094764855de17dca3" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; rclcpp::Logger &gt;</type>
+        <definition>std::unique_ptr&lt;rclcpp::Logger&gt; cx::Tf2PoseTrackerPlugin::logger_</definition>
+        <argsstring></argsstring>
+        <name>logger_</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::logger_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="48" column="19" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1Tf2PoseTrackerPlugin_1a46a889ca61ad9f8dc90c9facd908479d" prot="private" static="no" mutable="no">
+        <type>std::shared_ptr&lt; tf2_ros::Buffer &gt;</type>
+        <definition>std::shared_ptr&lt;tf2_ros::Buffer&gt; cx::Tf2PoseTrackerPlugin::tf_buffer_</definition>
+        <argsstring></argsstring>
+        <name>tf_buffer_</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::tf_buffer_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="50" column="19" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1Tf2PoseTrackerPlugin_1af1440f60a7923a2b6a0e861e6340143c" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; tf2_ros::TransformListener &gt;</type>
+        <definition>std::unique_ptr&lt;tf2_ros::TransformListener&gt; cx::Tf2PoseTrackerPlugin::tf_listener_</definition>
+        <argsstring></argsstring>
+        <name>tf_listener_</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::tf_listener_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="51" column="19" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1Tf2PoseTrackerPlugin_1a99d45ec1717461c138c654be409279ac" prot="private" static="no" mutable="no">
+        <type>rclcpp::CallbackGroup::SharedPtr</type>
+        <definition>rclcpp::CallbackGroup::SharedPtr cx::Tf2PoseTrackerPlugin::cb_group_</definition>
+        <argsstring></argsstring>
+        <name>cb_group_</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::cb_group_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="53" column="36" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classcx_1_1Tf2PoseTrackerPlugin_1abdf2bcb4bc307f48797f680b4e861fae" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; std::shared_ptr&lt; PoseTracker &gt; &gt;</type>
+        <definition>std::vector&lt;std::shared_ptr&lt;PoseTracker&gt; &gt; cx::Tf2PoseTrackerPlugin::pose_trackers_</definition>
+        <argsstring></argsstring>
+        <name>pose_trackers_</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::pose_trackers_</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="55" column="15" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classcx_1_1Tf2PoseTrackerPlugin_1a6306ec5ce0e8171745eaf7f55545545f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::Tf2PoseTrackerPlugin::Tf2PoseTrackerPlugin</definition>
+        <argsstring>()</argsstring>
+        <name>Tf2PoseTrackerPlugin</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::Tf2PoseTrackerPlugin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="32" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Tf2PoseTrackerPlugin_1a86e11d80e0f1fda9867b8a82b537fb91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>cx::Tf2PoseTrackerPlugin::~Tf2PoseTrackerPlugin</definition>
+        <argsstring>()</argsstring>
+        <name>~Tf2PoseTrackerPlugin</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::~Tf2PoseTrackerPlugin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="33" column="3"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Tf2PoseTrackerPlugin_1ad245aab10e6779bf0545f7c3aa896016" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void cx::Tf2PoseTrackerPlugin::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::initialize</qualifiedname>
+        <reimplements refid="classcx_1_1ClipsPlugin_1a6bdb6ad84acf811daf6facf8a5497e2f">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="35" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Tf2PoseTrackerPlugin_1a0b088fd93e664152fb87850436869167" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void cx::Tf2PoseTrackerPlugin::finalize</definition>
+        <argsstring>() override</argsstring>
+        <name>finalize</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::finalize</qualifiedname>
+        <reimplements refid="classcx_1_1ClipsPlugin_1a3aa0e046356cc938b853e414c539cb60">finalize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="36" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Tf2PoseTrackerPlugin_1a499d5da891bcf608c23060d9de8404c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::Tf2PoseTrackerPlugin::clips_env_init</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
+        <name>clips_env_init</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::clips_env_init</qualifiedname>
+        <reimplements refid="classcx_1_1ClipsPlugin_1ae76613ee6d5866e5ffb7b8ac14aaaa03">clips_env_init</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="38" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Tf2PoseTrackerPlugin_1afe188fe1328dafb6ef8e1ea6eb391bf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool cx::Tf2PoseTrackerPlugin::clips_env_destroyed</definition>
+        <argsstring>(LockSharedPtr&lt; clips::Environment &gt; &amp;env) override</argsstring>
+        <name>clips_env_destroyed</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::clips_env_destroyed</qualifiedname>
+        <reimplements refid="classcx_1_1ClipsPlugin_1acd6b69af115c20027831a5014a43cbe0">clips_env_destroyed</reimplements>
+        <param>
+          <type>LockSharedPtr&lt; clips::Environment &gt; &amp;</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="39" column="8"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classcx_1_1Tf2PoseTrackerPlugin_1a7cfa5d7b5700898c07340508e96033ec" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void cx::Tf2PoseTrackerPlugin::start_periodic_lookup</definition>
+        <argsstring>(clips::Environment *env, const std::string &amp;parent, const std::string &amp;child, double frequency)</argsstring>
+        <name>start_periodic_lookup</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::start_periodic_lookup</qualifiedname>
+        <param>
+          <type>clips::Environment *</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>child</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>frequency</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="57" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classcx_1_1Tf2PoseTrackerPlugin_1af071854bbb4bb001a544436538462c27" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool cx::Tf2PoseTrackerPlugin::stop_periodic_lookup</definition>
+        <argsstring>(PoseTracker *pose_tracker)</argsstring>
+        <name>stop_periodic_lookup</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::stop_periodic_lookup</qualifiedname>
+        <param>
+          <type>PoseTracker *</type>
+          <declname>pose_tracker</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="59" column="8"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+      <node id="1">
+        <label>cx::Tf2PoseTrackerPlugin</label>
+        <link refid="classcx_1_1Tf2PoseTrackerPlugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>cx::ClipsPlugin</label>
+        <link refid="classcx_1_1ClipsPlugin" external="/home/runner/work/ros2-clips-executive/ros2-clips-executive/cross_reference/cx_plugin/cx_plugin.tag"/>
+      </node>
+      <node id="1">
+        <label>cx::Tf2PoseTrackerPlugin</label>
+        <link refid="classcx_1_1Tf2PoseTrackerPlugin"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="30" column="1" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="30" bodyend="60"/>
+    <listofallmembers>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a99d45ec1717461c138c654be409279ac" prot="private" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>cb_group_</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1afe188fe1328dafb6ef8e1ea6eb391bf3" prot="public" virt="virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>clips_env_destroyed</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a499d5da891bcf608c23060d9de8404c2" prot="public" virt="virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>clips_env_init</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a0b088fd93e664152fb87850436869167" prot="public" virt="virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>finalize</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1ad245aab10e6779bf0545f7c3aa896016" prot="public" virt="virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>initialize</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1aab175286a5d205b094764855de17dca3" prot="private" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>logger_</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1a5c9c64f5ab925a688f022554d3985342" prot="protected" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>parent_</name></member>
+      <member refid="classcx_1_1ClipsPlugin_1aace7c9a1941b76a19a23e6881ec26906" prot="protected" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>plugin_name_</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1abdf2bcb4bc307f48797f680b4e861fae" prot="private" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>pose_trackers_</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a7cfa5d7b5700898c07340508e96033ec" prot="private" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>start_periodic_lookup</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1af071854bbb4bb001a544436538462c27" prot="private" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>stop_periodic_lookup</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a6306ec5ce0e8171745eaf7f55545545f" prot="public" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>Tf2PoseTrackerPlugin</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a46a889ca61ad9f8dc90c9facd908479d" prot="private" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>tf_buffer_</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1af1440f60a7923a2b6a0e861e6340143c" prot="private" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>tf_listener_</name></member>
+      <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a86e11d80e0f1fda9867b8a82b537fb91" prot="public" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin</scope><name>~Tf2PoseTrackerPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

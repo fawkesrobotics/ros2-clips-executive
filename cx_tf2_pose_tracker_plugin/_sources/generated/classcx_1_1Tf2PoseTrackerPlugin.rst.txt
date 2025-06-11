@@ -1,0 +1,36 @@
+.. _exhale_class_classcx_1_1Tf2PoseTrackerPlugin:
+
+Class Tf2PoseTrackerPlugin
+==========================
+
+- Defined in :ref:`file_include_cx_tf2_pose_tracker_plugin_tf2_pose_tracker_plugin.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public cx::ClipsPlugin``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: cx::Tf2PoseTrackerPlugin
+   :project: cx_tf2_pose_tracker_plugin Doxygen Project
+   :members:
+   :protected-members:
+   :undoc-members:

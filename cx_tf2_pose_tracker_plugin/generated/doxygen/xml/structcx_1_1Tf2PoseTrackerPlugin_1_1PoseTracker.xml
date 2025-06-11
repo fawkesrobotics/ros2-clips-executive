@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker" kind="struct" language="C++" prot="private">
+    <compoundname>cx::Tf2PoseTrackerPlugin::PoseTracker</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a7486ce1e6e0bc5c33444695a709f84dd" prot="public" static="no" mutable="no">
+        <type>rclcpp::TimerBase::SharedPtr</type>
+        <definition>rclcpp::TimerBase::SharedPtr cx::Tf2PoseTrackerPlugin::PoseTracker::timer</definition>
+        <argsstring></argsstring>
+        <name>timer</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::PoseTracker::timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="43" column="34" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a2f5e3231d0dd30cb556ebb98cca8fcf8" prot="public" static="no" mutable="no">
+        <type>clips::Fact *</type>
+        <definition>clips::Fact* cx::Tf2PoseTrackerPlugin::PoseTracker::pose_fact</definition>
+        <argsstring></argsstring>
+        <name>pose_fact</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::PoseTracker::pose_fact</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="44" column="17" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a97aa40caf06e2c3024575e6c977762b4" prot="public" static="no" mutable="no">
+        <type>clips::Environment *</type>
+        <definition>clips::Environment* cx::Tf2PoseTrackerPlugin::PoseTracker::env</definition>
+        <argsstring></argsstring>
+        <name>env</name>
+        <qualifiedname>cx::Tf2PoseTrackerPlugin::PoseTracker::env</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="45" column="24" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" line="42" column="3" bodyfile="include/cx_tf2_pose_tracker_plugin/tf2_pose_tracker_plugin.hpp" bodystart="42" bodyend="46"/>
+    <listofallmembers>
+      <member refid="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a97aa40caf06e2c3024575e6c977762b4" prot="public" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin::PoseTracker</scope><name>env</name></member>
+      <member refid="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a2f5e3231d0dd30cb556ebb98cca8fcf8" prot="public" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin::PoseTracker</scope><name>pose_fact</name></member>
+      <member refid="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a7486ce1e6e0bc5c33444695a709f84dd" prot="public" virt="non-virtual"><scope>cx::Tf2PoseTrackerPlugin::PoseTracker</scope><name>timer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

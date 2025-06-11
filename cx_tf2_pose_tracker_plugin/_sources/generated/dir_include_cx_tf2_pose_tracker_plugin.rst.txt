@@ -1,0 +1,21 @@
+.. _dir_include_cx_tf2_pose_tracker_plugin:
+
+
+Directory cx_tf2_pose_tracker_plugin
+====================================
+
+
+|exhale_lsh| :ref:`Parent directory <dir_include>` (``include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+*Directory path:* ``include/cx_tf2_pose_tracker_plugin``
+
+
+Files
+-----
+
+- :ref:`file_include_cx_tf2_pose_tracker_plugin_tf2_pose_tracker_plugin.hpp`
+
+

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
+  <compound refid="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker" kind="struct"><name>cx::Tf2PoseTrackerPlugin::PoseTracker</name>
+    <member refid="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a7486ce1e6e0bc5c33444695a709f84dd" kind="variable"><name>timer</name></member>
+    <member refid="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a2f5e3231d0dd30cb556ebb98cca8fcf8" kind="variable"><name>pose_fact</name></member>
+    <member refid="structcx_1_1Tf2PoseTrackerPlugin_1_1PoseTracker_1a97aa40caf06e2c3024575e6c977762b4" kind="variable"><name>env</name></member>
+  </compound>
+  <compound refid="classcx_1_1Tf2PoseTrackerPlugin" kind="class"><name>cx::Tf2PoseTrackerPlugin</name>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1aab175286a5d205b094764855de17dca3" kind="variable"><name>logger_</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a46a889ca61ad9f8dc90c9facd908479d" kind="variable"><name>tf_buffer_</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1af1440f60a7923a2b6a0e861e6340143c" kind="variable"><name>tf_listener_</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a99d45ec1717461c138c654be409279ac" kind="variable"><name>cb_group_</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1abdf2bcb4bc307f48797f680b4e861fae" kind="variable"><name>pose_trackers_</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a6306ec5ce0e8171745eaf7f55545545f" kind="function"><name>Tf2PoseTrackerPlugin</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a86e11d80e0f1fda9867b8a82b537fb91" kind="function"><name>~Tf2PoseTrackerPlugin</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1ad245aab10e6779bf0545f7c3aa896016" kind="function"><name>initialize</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a0b088fd93e664152fb87850436869167" kind="function"><name>finalize</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a499d5da891bcf608c23060d9de8404c2" kind="function"><name>clips_env_init</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1afe188fe1328dafb6ef8e1ea6eb391bf3" kind="function"><name>clips_env_destroyed</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1a7cfa5d7b5700898c07340508e96033ec" kind="function"><name>start_periodic_lookup</name></member>
+    <member refid="classcx_1_1Tf2PoseTrackerPlugin_1af071854bbb4bb001a544436538462c27" kind="function"><name>stop_periodic_lookup</name></member>
+  </compound>
+  <compound refid="namespacecx" kind="namespace"><name>cx</name>
+  </compound>
+  <compound refid="tf2__pose__tracker__plugin_8hpp" kind="file"><name>tf2_pose_tracker_plugin.hpp</name>
+  </compound>
+  <compound refid="dir_5c361a313b48165ef0d7ee73097b4fde" kind="dir"><name>include/cx_tf2_pose_tracker_plugin</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+</doxygenindex>

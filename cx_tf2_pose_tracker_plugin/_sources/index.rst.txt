@@ -1,0 +1,23 @@
+.. GENERATED_CONTENT by rosdoc2.verbs.build.builders.sphinx_builder.
+
+cx_tf2_pose_tracker_plugin
+==========================
+
+Track poses via periodic tf lookups.
+
+.. toctree::
+   :maxdepth: 2
+
+
+   C++ API <generated/index>
+
+
+
+   Standard Documents <standards>
+
+.. include:: __readme_include.rst
+
+.. toctree::
+   :hidden:
+
+   genindex
